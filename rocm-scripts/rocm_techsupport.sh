@@ -53,6 +53,7 @@ LOGFILE_LSPCI=$DATE-lspci.log
 LOGFILE_ROCM_SMI=$DATE-rocm-smi.log
 LOGFILE_ROCMINFO=$DATE-rocminfo.log
 LOGFILE_DMIDECODE=$DATE-dmidecode.log
+LOGFILE_AMDGPU_PARAMS=$DATE-amdgpu-params.log
 CONFIG_ENABLE_HISTORY=1
 LOGFILE_HISTORY=$DATE-history.log
 LOGFILE_BOOTINFO=$DATE-bootinfo.log
@@ -195,8 +196,12 @@ fi
 # DMIdecode information - BIOS etc
 echo "===== Section: dmidecode Information   ==============="
 
-if [[ `which dmidecode` ]] ; then
+which dmidecode
+ret=$?
+if [[ $ret ]] ; then
     sudo dmidecode | sudo tee $LOG_FOLDER/$LOGFILE_DMIDECODE
+else
+    echo "dmidecode is not found " sudo tee $LOG_FOLDER/$LOGFILE_DMIDECODE
 fi
 
 # PCI peripheral information
@@ -317,8 +322,31 @@ echo "grub.cfg for efi mode: " | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/efi/EFI/centos/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/grub2/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 
+echo " ====== kmod /amdgpu/ driver parameters =================="
+kmod_params=`modinfo amdgpu | grep parm | tr -d ' ' | cut -d ':' -f2`
+
+for i in $kmod_params ; do
+    filename=`find /sys -name $i`
+    echo "filename : $filename"
+    sleep 3
+#    if [[ -f $filename ]] ; then
+    if  test  -f $filename ; then
+        value=`cat $filename`
+        echo $filename: $value1: $value | tee -a $LOG_FOLDER/$LOGFILE_AMDGPU_PARAMS 
+    else
+        echo "bypassing $i /not a file/"
+    fi
+
+done
+
 echo "Creating tar..."
 tar -cvf $DATE.tar $LOG_FOLDER/*
 
-echo "Watchdog info: /proc/sys/kernel/watchdog_thres: " | sudo tee -a $LOGFILE_CPU
-cat /proc/sys/kernel/watchdog_thresh | sudo tee -a $LOGFILE_CPU
+echo "Watchdog info: /proc/sys/kernel/watchdog_thres: " | sudo tee -a $LOG_FOLDER/$LOGFILE_CPU
+cat /proc/sys/kernel/watchdog_thresh | sudo tee -a $LOG_FOLDER/$LOGFILE_CPU
+
+echo "Gathering ipmi sel log:"
+
+# Check some info in bmc against something in dmidecode to make sure it is the right bmc.
+
+ipmitool -I lanplus -H $BMCIP  -U $BMCUSER -P $BMCPASSWORD sel elist
