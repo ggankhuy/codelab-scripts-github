@@ -31,6 +31,10 @@ if [ "$EUID" -ne 0 ]; then
         echo "ERROR: $0 must be run as root"
         exit 1
 fi
+
+echo "Start" > $LOG_L1
+echo "Start" > $LOG_L2
+
 for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
         # skip if it doesn't support ACS
         skip=0;
@@ -111,3 +115,4 @@ done
 
 echo "final status: all AER/SERR/PERR Rx-s:" | tee $LOG_FINAL
 lspci -vvv | egrep "PERR|SERR|[0-9a-f][0-9a-f]:[0-9a-f]|NonFatalErr.*FatalErr" | tee -a $LOG_FINAL
+echo "LOG_FOLDER: $LOG_FOLDER"
