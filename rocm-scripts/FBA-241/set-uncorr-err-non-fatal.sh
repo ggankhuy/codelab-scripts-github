@@ -3,6 +3,7 @@
 # Disable ACS on every device that supports it
 #
 PLATFORM=$(dmidecode --string system-product-name)
+DEBUG=0
 logger "PLATFORM=${PLATFORM}"
 # Enforce platform check here.
 #case "${PLATFORM}" in
@@ -21,27 +22,30 @@ fi
 for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
         # skip if it doesn't support ACS
         skip=0;
-        aer_cap=`lspci -s ${BDF} | grep -i "Advanced Error Reporting"`
+        dev_exist=`lspci -s ${BDF}`
 
-        if [ $aer_cap -eq "" ]; then
-                #echo "${BDF} does not support ACS, skipping"
+        if [[ -z dev_exist ]] ; then skip=1 ; fi
+        echo ---
+        if [[ $DEBUG -eq 1 ]] ; then  echo ${BDF} ; fi
+        aer_cap=`lspci -s ${BDF} -vvv | grep -i "Advanced Error Reporting"`
+
+        if [[ -z $aer_cap ]]; then
+                echo "${BDF} does not support AER, skipping"
                 skip=1;
         fi
+
         if [ $skip != 1 ]; then
-          logger "Disabling ACS on `lspci -s ${BDF}`"
+          echo "Readback of UESVrt on ${BDF}: "
+          lspci -s ${BDF} -vvv| grep -i UESvrt
+          echo "Setting all uncorr err as non-fatal on `lspci -s ${BDF}`"
           setpci -v -s ${BDF} ECAP01+C.L=00000000
-          #setpci -v -s ${BDF} ECAP_ACS+0x6.w=0000
+
           if [ $? -ne 0 ]; then
-                logger "Error disabling ACS on ${BDF}"
+                echo "!Error setting AER setting on ${BDF}"
                 continue
           fi
-          #NEW_VAL=`setpci -v -s ${BDF} ECAP01+C.L | awk '{print $NF}'`
-          lspci -s $i -vvv| grep -i UESvrt
-          #NEW_VAL=`setpci -v -s ${BDF} ECAP_ACS+0x6.w | awk '{print $NF}'`
-          #if [ "${NEW_VAL}" != "0000" ]; then
-          #      logger "Failed to disable ACS on ${BDF}"
-          #      continue
-          #fi
+          echo "Readback of UESVrt on ${BDF}: "
+          lspci -s ${BDF} -vvv| grep -i UESvrt
         fi
 done
 exit 0
