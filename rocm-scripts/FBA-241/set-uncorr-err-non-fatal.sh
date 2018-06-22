@@ -70,12 +70,19 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
           if [[ CONFIG_DISABLE_SERR_PERR -eq 1 ]] ; then
               A=`lspci -s ${BDF} -vvv | grep Control:`
               if [[ -z $A ]] ; then
-                  echo "${BDF}.Control.0x04: Bypassing SERR disable as I am not finding DevCtrl in PCIe CAP space." | tee -a $LOG_L1 | tee -a $LOG_L2
+                  echo "${BDF}.Control.0x04: Bypassing SERR/PERR disable as I am not finding DevCtrl in PCIe CAP space." | tee -a $LOG_L1 | tee -a $LOG_L2
               else
                   A=`setpci -s ${BDF} 04.W`
                   echo "${BDF}.Control.0x04: read:     $A" >> $LOG_L2
+                  lspci -s ${BDF} -vvv | grep Control: >> $LOG_L2
                   A=$(( 16#$A ))
-                  B=$((A & 16#FEFF))
+
+                  #SERR/PERR
+                  B=$((A & 16#FEBF))
+
+                  #SERR only.
+                  #B=$((A & 16#FEFF))
+
                   B=`printf '%x\n' $B`
                   echo "${BDF}.Control.0x04: write:    $B" >> $LOG_L2
                   setpci -s ${BDF} 04.W=$B
@@ -83,6 +90,7 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
                   A=`setpci -s ${BDF} 04.W`
                   echo "${BDF}.Control.0x04: readback: $A" >> $LOG_L2
                   A=$(( 16#$A ))
+                  lspci -s ${BDF} -vvv | grep Control: >> $LOG_L2
               fi
             
           else
@@ -96,6 +104,7 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
               else
                   A=`setpci -s ${BDF} CAP_EXP+08.W`
                   echo "${BDF}.DevCtl.0x08: read :    $A" >> $LOG_L2
+                  lspci -s ${BDF} -vvv | grep DevCtl: >> $LOG_L2
                   A=$(( 16#$A ))
                   B=$((A & 16#FFF0))
                   B=`printf '%x\n' $B`
@@ -105,6 +114,7 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
                   A=`setpci -s ${BDF} CAP_EXP+08.W`
                   echo "${BDF}.DevCtl.0x08: readback: $A" >> $LOG_L2
                   A=$(( 16#$A ))
+                  lspci -s ${BDF} -vvv | grep DevCtl: >> $LOG_L2
               fi
           else
               echo "${BDF}.DevCtl.CAP_EXP0x08: Bypassing disable of fatal/non-fatal/corr." | tee -a $LOG_L1 | tee -a $LOG_L2
@@ -118,8 +128,15 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
               else
                   A=`setpci -s ${BDF} 3E.W`
                   echo "${BDF}.BridgeCtl.0x3e: read :    $A" >> $LOG_L2
+                  lspci -s ${BDF} -vvv | grep BridgeCtl: >> $LOG_L2
                   A=$(( 16#$A ))
-                  B=$((A & 16#FFFD))
+
+                  #SERR/PERR both.
+                  B=$((A & 16#FFFC))
+
+                  #SERR only.
+                  #B=$((A & 16#FFFD))
+
                   B=`printf '%x\n' $B`
                   echo "${BDF}.BridgeCtl.0x3e: write:    $B" >> $LOG_L2
                   setpci -s ${BDF} 3E.W=$B
@@ -127,6 +144,7 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
                   A=`setpci -s ${BDF} 3E.W`
                   echo "${BDF}.BridgeCtl.0x3e: readback: $A" >> $LOG_L2
                   A=$(( 16#$A ))
+                  lspci -s ${BDF} -vvv | grep BridgeCtl: >> $LOG_L2
               fi
 
           else
