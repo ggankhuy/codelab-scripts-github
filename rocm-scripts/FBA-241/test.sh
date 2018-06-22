@@ -18,7 +18,9 @@ A=`setpci -s 2f:00.0 04.L`
 echo A1: $A
 A=$(( 16#$A ))
 echo A2: $A
-B=$((A & 16#FFFFFFFE))
+C=$(( ~ 0x01 ))
+echo C: $C
+B=$((A & 16#$C))
 echo B1: $B
 B=`printf '%x\n' $B`
 echo B2: $B
@@ -26,7 +28,7 @@ echo B2: $B
 # SET THE BIT
 
 echo ----
-echo clear the bit...
+echo set the bit...
 
 A=`setpci -s 2f:00.0 04.L`
 
