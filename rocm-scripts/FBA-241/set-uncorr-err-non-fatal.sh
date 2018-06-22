@@ -7,6 +7,13 @@ DEBUG=0
 
 # Controls disabling SERR/PERR on command register (04h)
 CONFIG_DISABLE_SERR_PERR=1
+DATE=`date +%Y%m%d-%H-%M-%S`
+LOG_FOLDER=./log/$DATE
+LOG_L1=$LOG_FOLDER/$DATE-set-uncorr-err-non-fatal.log
+LOG_L2=$LOG_FOLDER/$DATE-set-uncorr-err-non-fatal-L2.log
+LOG_INIT=$LOG_FOLDER/$DATE-init.log
+LOG_FINAL=$LOG_FOLDER/$DATE-final.log
+mkdir -p $LOG_FOLDER
 
 # Control disabling the fatal/non-fatal/corr err on device control register. (cap.exp.08h)
 CONFIG_DISABLE_AER_DEVCTL=1
@@ -16,19 +23,8 @@ CONFIG_DISABLE_AER_DEVCTL=1
 
 CONFIG_DISABLE_AER_BRIDGE=1
 
-logger "PLATFORM=${PLATFORM}"
-# Enforce platform check here.
-#case "${PLATFORM}" in
-        #"OAM"*)
-                #logger "INFO: Disabling ACS is no longer necessary for ${PLATFORM}"
-                #exit 0
-                #;;
-        #*)
-                #;;
-#esac
-
-echo "Final status: all AER/SERR/PERR Rx-s:"
-lspci -vvv | egrep "PERR|SERR|[0-9a-f][0-9a-f]:[0-9a-f]|NonFatalErr.*FatalErr"
+echo "init status: all AER/SERR/PERR Rx-s:" | tee $LOG_INIT
+lspci -vvv | egrep "PERR|SERR|[0-9a-f][0-9a-f]:[0-9a-f]|NonFatalErr.*FatalErr" | tee -a $LOG_INIT
 
 # must be root to access extended PCI config space
 if [ "$EUID" -ne 0 ]; then
@@ -41,55 +37,32 @@ for BDF in `lspci -d "*:*:*" | awk '{print $1}'`; do
         dev_exist=`lspci -s ${BDF}`
 
         if [[ -z dev_exist ]] ; then skip=1 ; fi
-        echo ---
+        echo --- | tee -a $LOG_L1 | tee -a $LOG_L2
         if [[ $DEBUG -eq 1 ]] ; then  echo ${BDF} ; fi
         aer_cap=`lspci -s ${BDF} -vvv | grep -i "Advanced Error Reporting"`
 
         if [[ -z $aer_cap ]]; then
-                echo "${BDF} does not support AER, skipping"
+                echo "${BDF}: does not support AER capability, bypassing." | tee -a $LOG_L1
                 skip=1;
         fi
 
         if [ $skip != 1 ]; then
-          echo "Readback of UESVrt on ${BDF}: "
+          echo "${BDF}: initread of UESVrt." | tee -a $LOG_L1
           lspci -s ${BDF} -vvv| grep -i UESvrt
-          echo "Setting all uncorr err as non-fatal on `lspci -s ${BDF}`"
+          echo "Setting all uncorr err as non-fatal on `lspci -s ${BDF}`" | tee -a $LOG_L1
           setpci -v -s ${BDF} ECAP01+C.L=00000000
 
-# CLEAR THE BIT  
-
-echo ----
-echo clear the bit...
-
-A=`setpci -s 2f:00.0 04.L`
-
-echo A1: $A
-A=$(( 16#$A ))
-echo A2: $A
-B=$((A & 16#FFFFFFFE))
-echo B1: $B
-B=`printf '%x\n' $B`
-echo B2: $B
-
-# SET THE BIT
-
-echo ----
-echo clear the bit...
-
-A=`setpci -s 2f:00.0 04.L`
-
-echo A1: $A
-A=$(( 16#$A ))
-echo A2: $A
-B=$((A | 16#FFFF))
-echo B1: $B
-B=`printf '%x\n' $B`
-echo B2: $B
+          if [ $? -ne 0 ]; then
+                echo "${BDF} !Error setting AER setting." | tee -a $LOG_L1
+                continue
+          fi
+          echo "${BDF}: Readback of UEsvrt: " | tee -a $LOG_L1
+          lspci -s ${BDF} -vvv| grep -i UESvrt
 
           if [[ CONFIG_DISABLE_SERR_PERR -eq 1 ]] ; then
               A=`lspci -s ${BDF} -vvv | grep Control:`
               if [[ -z $A ]] ; then
-                  echo "${BDF}: Bypassing SERR disable as I am not finding DevCtrl in PCIe CAP space."
+                  echo "${BDF}.Control.0x04: Bypassing SERR disable as I am not finding DevCtrl in PCIe CAP space." | tee -a $LOG_L1 | tee -a $LOG_L2
               else
                   A=`setpci -v -s ${BDF} 04.L`
                   A=$(( 16#$A ))
@@ -99,13 +72,13 @@ echo B2: $B
               fi
             
           else
-              echo "Bypassing disable of SERR/PERR on ${BDF}
+              echo "${BDF}.Control.0x04: Bypassing disable of SERR/PERR."
           fi
 
           if [[ CONFIG_DISABLE_AER_DEVCTL -eq 1 ]] ; then
               A=`lspci -s ${BDF} -vvv | grep DevCtl:`
               if [[ -z $A ]] ; then
-                  echo "${BDF}: Bypassing SERR disable as I am not finding DevCtrl in PCIe CAP space."
+                  echo "${BDF}.DevCtl.CAP_EXP0x08: Bypassing SERR disable as I am not finding DevCtrl in PCIe CAP space." | tee -a $LOG_L1 | tee -a $LOG_L2
               else
                   A=`setpci -v -s ${BDF} CAP_EXP+08.L`
                   A=$(( 16#$A ))
@@ -114,14 +87,14 @@ echo B2: $B
                   setpci -v -s ${BDF} CAP_EXP+08.L=$B
               fi
           else
-              echo "Bypassing disable of fatal/non-fatal/corr DevCtl on ${BDF}
+              echo "${BDF}.DevCtl.CAP_EXP0x08: Bypassing disable of fatal/non-fatal/corr." | tee -a $LOG_L1 | tee -a $LOG_L2
           fi
 
           if [[ CONFIG_DISABLE_AER_BRIDGE -eq 1 ]] ; then
               A=`lspci -s ${BDF} -vvv | grep BridgeCtl:`
 
               if [[ -z $A ]] ; then
-                  echo "${BDF}: Bypassing SERR disable as not a Type 1.bridge device"
+                  echo "${BDF}.T1.BridgeCtl.0x3e: Bypassing SERR disable as not a Type 1/bridge device." | tee -a $LOG_L1 | tee -a $LOG_L2
               else
                   A=`setpci -v -s ${BDF} 3E.L`
                   A=$(( 16#$A ))
@@ -131,18 +104,10 @@ echo B2: $B
               fi
 
           else
-              echo "Bypassing SERR disable on /Type 1/ ${BDF}
+              echo "${BDF}.T1.BridgeCtl.0x3e: Bypassing SERR disable." | tee -a $LOG_L1 | tee -a $LOG_L2
           fi
-
-          if [ $? -ne 0 ]; then
-                echo "!Error setting AER setting on ${BDF}"
-                continue
-          fi
-          echo "Readback of UESVrt on ${BDF}: "
-          lspci -s ${BDF} -vvv| grep -i UESvrt
         fi
 done
-exit 0
 
-echo "Final status: all AER/SERR/PERR Rx-s:"
-lspci -vvv | egrep "PERR|SERR|[0-9a-f][0-9a-f]:[0-9a-f]|NonFatalErr.*FatalErr"
+echo "final status: all AER/SERR/PERR Rx-s:" | tee $LOG_FINAL
+lspci -vvv | egrep "PERR|SERR|[0-9a-f][0-9a-f]:[0-9a-f]|NonFatalErr.*FatalErr" | tee -a $LOG_FINAL
