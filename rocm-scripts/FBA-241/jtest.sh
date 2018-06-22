@@ -1,5 +1,6 @@
 #!/bin/bash
 
+modprobe amdgpu
 
 pci_up_port=0000:2f:00.0
 echo "Capturing rocm_techsupport before SERR injection"
