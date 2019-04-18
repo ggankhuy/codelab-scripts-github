@@ -2,6 +2,8 @@
  	the auto test result generates long lines of log with summary is hard to see.
 	The grep filter application is hard as even within some of the scripts each loop prints out the 
 	test name. 
+	This script collapse all those repeated lines and generates summary with  test names, result and
+	separator bars.
 	 
 '''
 import sys
