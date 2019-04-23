@@ -1,6 +1,7 @@
 clear
 echo setting up Yeti on client machine...
 
+apt install -y libc++abi-dev
 export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 cd ~/yeti-eng-bundle/bin
 echo "Type, but do not execute the following command:"
