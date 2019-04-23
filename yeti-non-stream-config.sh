@@ -1,5 +1,6 @@
 clear
 echo setting up Yeti libraries...
+echo yeti 3dmark non-stream configuration run...
 sleep 3
 export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
