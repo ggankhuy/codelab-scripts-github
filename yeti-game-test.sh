@@ -1,3 +1,6 @@
+function printBar () {
+	echo "------------------------------------"
+}
 function usage() {
 	clear
 	echo "Usage: "
@@ -35,8 +38,11 @@ TERMINAL_T1=0
 TERMINAL_T2=1
 TERMINAL_CLIENT=2
 
-if [[ ! -f ~/yeti-eng-bundle ]] ; then
-	This script assumes the yeti-end-bundle is on ~. 
+if [[ ! -d ~/yeti-eng-bundle ]] ; then
+	clear
+	printBar
+	echo "This script assumes the yeti-end-bundle is on ~. "
+	printBar
 	exit 1
 fi 
 #	Process help request. 
