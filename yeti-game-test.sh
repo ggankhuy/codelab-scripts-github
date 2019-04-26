@@ -276,6 +276,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 			cd ~/yeti-eng-bundle/bin
+
+			if [[ $? -ne 0 ]] ; then
+				echo "Can not cd into ~/yet-end-bundle/bin"
+				exit 1
+			fi
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else 
