@@ -251,8 +251,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			if [[ -z `env | grep LD_LIBRARY_PATH` ]] || [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
 				echo "it appears LD_LIBRARY_PATH or YETI_DISABLE_FABRICATED_CONNECTED env variables are not set up. Manually run:"
-	                        	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
-					echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
+	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+				echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
 			fi
 
 			source ~/yeti-eng-bundle/env/vce.sh
@@ -269,10 +269,31 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
 			pulseaudio --start
+
+			if [[ $? != 0 ]] ; then 
+				echo "Failed to run pulseaudio, does it exist>"
+				exit 1
+			fi
+			
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+			if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
+				echo "it appears LD_LIBRARY_PATH variable is not set up. Manually run:"
+	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+			fi
+
 			cd ~/yeti-eng-bundle/bin
+
+			if [[ $? != 0 ]] ; then 
+				echo "Failed to run pulseaudio, does it exist>"
+				exit 1
+			fi
+
+			ipv4=`ifconfig | grep inet`
 			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -"
 			echo "external_ip=<IPv4 address of the Yeti computer>"
+			echo "IP address(es) of this system: "
+			echo $ipv4
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 			cd ~/yeti-eng-bundle/bin
