@@ -171,8 +171,9 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 			export YETI_DISABLE_FABRICATED_CONNECTED=1
 			source ~/yeti-eng-bundle/env/vce.sh
+			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
-			echo "Type, but do not execute the following command:"
+			echo "Type, but do not execute the following command from this directory ~/doom/yeti-release:"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
 			pulseaudio --start			
@@ -247,8 +248,23 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $p4 == "t1" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 			export YETI_DISABLE_FABRICATED_CONNECTED=1		
+
+			if [[ -z `env | grep LD_LIBRARY_PATH` ]] || [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
+				echo "it appears LD_LIBRARY_PATH or YETI_DISABLE_FABRICATED_CONNECTED env variables are not set up. Manually run:"
+	                        	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+					echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
+			fi
+
 			source ~/yeti-eng-bundle/env/vce.sh
-			cd ~/doom
+			mkdir -p ~/doom/yeti-release
+			cd ~/doom/yeti-release
+
+                        if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
+                                echo "the DOOM is not in ~/door/yeti-release, copy it first! "
+                                exit 1
+                        fi
+
+			echo "If after executing this script, you are in this directory and then manually go to this directory: ~/doom/yeti-release"
 			echo "Type, but do not execute the following command"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
