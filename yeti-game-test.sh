@@ -246,6 +246,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		if [[ $p4 == "t1" ]] ; then
+
+			if [[ ! "$(ls -A ~/yeti-end-bundle)" ]] ; then
+    			echo "<path> is empty!"
+			else
+    			echo "<path> is not empty"
+			fi
+
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 			export YETI_DISABLE_FABRICATED_CONNECTED=1		
 
