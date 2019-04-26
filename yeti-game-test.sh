@@ -296,6 +296,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo $ipv4
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+			if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
+				echo "it appears LD_LIBRARY_PATH variable is not set up. Manually run:"
+	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+			fi
+
 			cd ~/yeti-eng-bundle/bin
 
 			if [[ $? -ne 0 ]] ; then
