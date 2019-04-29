@@ -14,7 +14,36 @@ function usage() {
 	echo "where <terminal> is either t1, t2, client in case <options> is 2: stream with 2 pc"
 	exit 1
 }
+
+function setPathLdLibraryPath ()
+{
+	export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 	
+	if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
+		echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
+		echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+	fi
+}
+	
+function setVkLoaderDisableYetiExtWhitelist ()
+{
+	export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
+	
+	if [[ -z  `env | grep VK_LOADER_DISABLE_YETI_EXT_WHITELIST` ]] ; then
+		echo "it appears VK_LOADER_DISABLE_YETI_EXT_WHITELIST env variable is not set up. Manually run:"
+		echo "export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1"
+	fi
+}
+
+function setYetiDisableFabricatedConnected () {
+	export YETI_DISABLE_FABRICATED_CONNECTED=1
+
+	if [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
+		echo "YETI_DISABLE_FABRICATED_CONNECTED env variable is not set up. Manually run:"
+		echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
+	fi
+}
+
 p1=$1
 p2=$2	
 p3=$3
@@ -115,8 +144,9 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo setting up Yeti libraries...
 		echo yeti 3dmark non-stream configuration run...
 		sleep 3
-		export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-		export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
+
+		setPathLdLibraryPath
+		setVkLoaderDisableYetiExtWhitelist
 		
 		#echo For render+discard mode:
 		#source ~/yeti-eng-bundle/env/null.sh
@@ -130,7 +160,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo Run the 3dmark application the way you would for Linux XCB:
 		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo   doom does not support non-stream test option yet.
+		echo Doom does not support non-stream test option.
 		
 	else
 		echo "Invalid game: $game" 
@@ -147,9 +177,10 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		echo yeti 3dmark non-stream configuration run...
 		sleep 3
 		sudo uwf disable
-		export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-		export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
-		
+
+		setPathLdLibraryPath
+		setVkLoaderDisableYetiExtWhitelist
+
 		echo Setup the swapchain for render+encode+stream:
 		source ~/yeti-eng-bundle/env/vce.sh
 		cd ~/yeti-content-bundle/3dmark/bin/yeti
@@ -168,8 +199,10 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		if [[ $p4 == "t1"  ]] ; then
 			echo "Option 1 is partially implemented. Exiting..."
 			exit 1
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-			export YETI_DISABLE_FABRICATED_CONNECTED=1
+
+			setPathLdLibraryPath
+			setVkLoaderDisableYetiExtWhitelist
+
 			source ~/yeti-eng-bundle/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
@@ -177,14 +210,18 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
 			pulseaudio --start			
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+			setPathLdLibraryPath
+
 			cd ~/yeti-eng-bundle/bin
 			
 			echo "Type, but do not execute the following command:"
 			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -"
 			echo "external_ip=127.0.0.1"
-		elif [[ $p4 == "t3" ]] ; then
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+		elif [[ $p4 == "client" ]] ; then
+
+			setPathLdLibraryPath
+
 			cd ~/yeti-eng-bundle/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct 127.0.0.1:44700"
@@ -204,9 +241,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo terminal 1...
 			sleep 3
 			sudo uwf disable
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-			export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
-			
+
+			setPathLdLibraryPath
+			setVkLoaderDisableYetiExtWhitelist
+			#setYetiDisableFabricatedConnected
+
 			echo Setup the swapchain for render+encode+stream:
 			source ~/yeti-eng-bundle/env/vce.sh
 			cd ~/yeti-content-bundle/3dmark/bin/yeti
@@ -225,7 +264,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo terminal 2...
 			sleep 3
 			pulseaudio --start
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+			setPathLdLibraryPath
+
 			cd ~/yeti-eng-bundle/bin
 			
 			echo "Type, but do not execute the following command:"
@@ -236,7 +277,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo setting up Yeti on client machine...
 			
 			apt install -y libc++abi-dev
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+			setPathLdLibraryPath
+
 			cd ~/yeti-eng-bundle/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
@@ -253,21 +296,15 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
     			echo "<path> is not empty"
 			fi
 
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-			export YETI_DISABLE_FABRICATED_CONNECTED=1		
-
-			if [[ -z `env | grep LD_LIBRARY_PATH` ]] || [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
-				echo "it appears LD_LIBRARY_PATH or YETI_DISABLE_FABRICATED_CONNECTED env variables are not set up. Manually run:"
-	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
-				echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
-			fi
+			setPathLdLibraryPath
+			setYetiDisableFabricatedConnected
 
 			source ~/yeti-eng-bundle/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
-                                echo "the DOOM is not in ~/door/yeti-release, copy it first! "
+                                echo "the DOOM is not in ~/doom/yeti-release, copy it first! "
                                 exit 1
                         fi
 
@@ -282,12 +319,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				exit 1
 			fi
 			
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-
-			if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
-				echo "it appears LD_LIBRARY_PATH variable is not set up. Manually run:"
-	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
-			fi
+			setPathLdLibraryPath
 
 			cd ~/yeti-eng-bundle/bin
 
@@ -304,10 +336,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 
-			if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
-				echo "it appears LD_LIBRARY_PATH variable is not set up. Manually run:"
-	                       	echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
-			fi
+			setPathLdLibraryPath
 
 			cd ~/yeti-eng-bundle/bin
 
