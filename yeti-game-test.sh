@@ -99,13 +99,6 @@ TERMINAL_T1=0
 TERMINAL_T2=1
 TERMINAL_CLIENT=2
 
-if [[ ! -d ~/yeti-eng-bundle ]] ; then
-	clear
-	printBar
-	echo "This script assumes the yeti-eng-bundle is on ~. "
-	printBar
-	exit 1
-fi 
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
@@ -333,7 +326,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
@@ -397,7 +390,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
