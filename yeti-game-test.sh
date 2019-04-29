@@ -214,6 +214,16 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo "Type, but do not execute the following command:"
 			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=127.0.0.1"
 		elif [[ $p4 == "client" ]] ; then
+			clear
+			echo setting up Yeti on client machine...
+			
+			apt install -y libc++abi-dev
+
+			setPathLdLibraryPath
+
+			cd ~/yeti-eng-bundle/bin
+			echo "Type, but do not execute the following command:"
+			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else
 			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
