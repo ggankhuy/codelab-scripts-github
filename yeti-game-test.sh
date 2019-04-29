@@ -304,7 +304,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			clear
@@ -364,7 +364,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
