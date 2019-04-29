@@ -1,5 +1,10 @@
-DIR_YETI_ENG_BUNDLE=/root/yeti-eng-bundle
-DIR_YETI_CONTENT_BUNDLE=~/root/yeti-content-bundle
+DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+
+if [[ -z $GIB_DROP_ROOT ]] ; then
+	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
+	exit 1
+fi
 
 if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
 	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
