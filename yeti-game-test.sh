@@ -1,6 +1,26 @@
+#	Launcher scripts for 3DMARK and DOOM.
+#	To run the script simply provide root location of drop package in ~./bashrc
+#	This script has been tested with root account only and assumes everything is copied to root folder.
+#	Non-root account has not been tested.
+#	i.e. in ~/.bashrc:
+#	export GIB_DROP_ROOT=/work/drop-March-21-debian/
+
+#	After that ./yeti-game-setup.sh setup to run preliminary setup for either 3dmark or DOOM.
+#	After that from each of terminal 1,2 and 3 (client) 
+#	. ./yeti-game-setup doom yeti 2 t1
+#	. ./yeti-game-setup doom yeti 2 t2
+#	. ./yeti-game-setup doom yeti 2 client
+#	At the end of each run, the script will prompt with the last syntax to run the actual game for each terminals
+#	with seconds apart for easier copy and paste and launch (type but not run).
+
+#	print bar.
+
 function printBar () {
 	echo "------------------------------------"
 }
+
+#	Prints usage information.
+
 function usage() {
 	clear
 	echo "Usage: "
@@ -16,10 +36,15 @@ function usage() {
 	exit 1
 }
 
+#	Display local IPv4
+
 function displayIpv4 () {
 	ipv4=`ifconfig | grep inet`
 	echo $ipv4
 }
+
+#	Set paths
+
 function setPathLdLibraryPath ()
 {
 	export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
@@ -49,14 +74,16 @@ function setYetiDisableFabricatedConnected () {
 	fi
 }
 
+#	Actual scripts starts here.
+
 p1=$1
 p2=$2	
 p3=$3
 p4=$4
 
+game=0		# game
 mode=0		# 0 for yeti, 1 for linux
-option=0
-game=0
+option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
 
 GAME_3DMARK=0
 GAME_DOOM=1
