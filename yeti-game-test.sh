@@ -72,13 +72,6 @@ TERMINAL_T1=0
 TERMINAL_T2=1
 TERMINAL_CLIENT=2
 
-if [[ ! -d ~/yeti-eng-bundle ]] ; then
-	clear
-	printBar
-	echo "This script assumes the yeti-eng-bundle is on ~. "
-	printBar
-	exit 1
-fi 
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
