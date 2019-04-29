@@ -6,6 +6,7 @@ function usage() {
 	echo "Usage: "
 	echo "$0 <game> <mode> <option> <terminal>"
 	echo "where <game> is either 3dmark or doom"
+	echo "where <game> is setup then perform initial setup for either 3dmark or doom."
 	echo "where <mode>  is either yeti or linux"
 	echo "where <options> is either 0 1 2"
 	echo "0: - nostream"
@@ -99,6 +100,10 @@ if [[ $p1 == "3dmark" ]] ; then
 elif  [[ $p1 == "doom" ]] ; then
 	echo "doom is selected..."
 	game=$GAME_DOOM
+elif [[ $p1 == "setup" ]] ; then
+	source ./common.sh
+	echo "setting up the system for test."
+	common_setup
 else
 	echo "Invalid game selected: $p1"
 	exit 1
