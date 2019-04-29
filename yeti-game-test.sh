@@ -41,7 +41,7 @@ TERMINAL_CLIENT=2
 if [[ ! -d ~/yeti-eng-bundle ]] ; then
 	clear
 	printBar
-	echo "This script assumes the yeti-end-bundle is on ~. "
+	echo "This script assumes the yeti-eng-bundle is on ~. "
 	printBar
 	exit 1
 fi 
@@ -247,7 +247,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		if [[ $p4 == "t1" ]] ; then
 
-			if [[ ! "$(ls -A ~/yeti-end-bundle)" ]] ; then
+			if [[ ! "$(ls -A ~/yeti-eng-bundle)" ]] ; then
     			echo "<path> is empty!"
 			else
     			echo "<path> is not empty"
