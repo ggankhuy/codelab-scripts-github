@@ -15,6 +15,10 @@ function usage() {
 	exit 1
 }
 
+function displayIpv4 () {
+	ipv4=`ifconfig | grep inet`
+	echo $ipv4
+}
 function setPathLdLibraryPath ()
 {
 	export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
@@ -266,12 +270,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			pulseaudio --start
 
 			setPathLdLibraryPath
-
 			cd ~/yeti-eng-bundle/bin
-			
+			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc"
-			echo "\-external_ip=\<IPv4 address of the Yeti computer\>"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>
+
 		elif [[ $p4 == "client" ]] ; then
 			clear
 			echo setting up Yeti on client machine...
@@ -328,11 +331,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				exit 1
 			fi
 
-			ipv4=`ifconfig | grep inet`
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -"
-			echo "external_ip=<IPv4 address of the Yeti computer>"
-			echo "IP address(es) of this system: "
-			echo $ipv4
+			displayIpv4
+			echo "Type, but do not execute the following command:"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>
+
 		elif [[ $p4 == "client" ]] ; then
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 
