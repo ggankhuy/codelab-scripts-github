@@ -1,6 +1,7 @@
+
 function common_setup () {
 	clear
-	echo Setup Yeti system for 3dmark on ubuntu 1604 / 1803...
+	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 	
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
@@ -13,14 +14,15 @@ function common_setup () {
 	if [[ ! -d ~/doom/yeti-release/ ]] ; then
 		echo "~/doorm/pre-release is not created, creating now." 
 
-		if [[ ~! -d $GIB_DROP_ROOT/test-apps/Doom_Linux/ ]] ; then
+		if [[ ! -d $GIB_DROP_ROOT/test-apps/Doom_Linux/ ]] ; then
 			echo "Can not find DOOM source directory. Can not continue setup..."
 			exit 1
-			
+		fi	
 		mkdir -p ~/doom/yeti-release/
 
-		echo "Copying doom now to ~/doom/yeti-release/
+		echo "Copying doom now to ~/doom/yeti-release/"
 		cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
+	fi		
 	
 	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
         	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
@@ -36,8 +38,7 @@ function common_setup () {
         	echo "$DIR_YETI_CONTENT_BUNDLE already exist, skipping copy..."
 	fi
 	
-	
-	echo "Setup logging (Needed for streaming configurations only – but do it now, so you don't forget):"
+	echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
 	mkdir -p /usr/local/cloudcast/log
 	chmod -R a+rw /usr/local/cloudcast/
 	ln -s ~/yeti-eng-bundle/lib/ /usr/local/cloudcast/lib

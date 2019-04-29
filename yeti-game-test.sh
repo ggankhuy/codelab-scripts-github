@@ -81,16 +81,10 @@ if [[ ! -d ~/yeti-eng-bundle ]] ; then
 fi 
 #	Process help request. 
 
-if [[ $1 == "--help"  ]] ; then
+if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
 	usage
 	exit 1
 fi
-
-#	If p1 through p3 is empty, display usage. (I need to think about it regarding p4!)
-
-if [[ -z $p1 ]] || [[ -z $p2 ]]  || [[ -z $p3 ]]; then
-	usage
-fi 
 
 #	p1 is for either 3dmark or doom (unless more support added.
 
@@ -104,11 +98,17 @@ elif [[ $p1 == "setup" ]] ; then
 	source ./common.sh
 	echo "setting up the system for test."
 	common_setup
+	exit 0
 else
 	echo "Invalid game selected: $p1"
 	exit 1
 fi
 
+if [[ -z $2  ]] || [[ -z $3 ]] || [[ -z $4 ]] ; then
+	echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
+	usage
+	exit 1
+fi
 #	p2 is for either linux or yeti.
 
 if [[ $p2 == "linux" ]] ; then
