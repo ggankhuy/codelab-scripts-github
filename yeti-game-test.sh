@@ -174,30 +174,45 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	
 elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "Option 1 is partially implemented. Exiting..."
-		exit 1
-		clear
-		echo setting up Yeti libraries...
-		echo yeti 3dmark non-stream configuration run...
-		sleep 3
-		sudo uwf disable
-
-		setPathLdLibraryPath
-		setVkLoaderDisableYetiExtWhitelist
-
-		echo Setup the swapchain for render+encode+stream:
-		source ~/yeti-eng-bundle/env/vce.sh
-		cd ~/yeti-content-bundle/3dmark/bin/yeti
-		
-		echo "Type, but do not execute the following command:"
-		echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json"
-		
-		#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
-		#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
-		#command above, use:
-		
-		VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+		if [[ $p4 == "t1"  ]] ; then
 	
+			echo setting up Yeti libraries...
+			echo yeti 3dmark non-stream configuration run...
+			sleep 3
+			sudo uwf disable
+	
+			setPathLdLibraryPath
+			setVkLoaderDisableYetiExtWhitelist
+	
+			echo Setup the swapchain for render+encode+stream:
+			source ~/yeti-eng-bundle/env/vce.sh
+			cd ~/yeti-content-bundle/3dmark/bin/yeti
+			
+			echo "Type, but do not execute the following command:"
+			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json"
+			
+			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
+			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
+			#command above, use:
+			
+			VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+		elif [[ $p4 == "t2" ]] ; then
+			clear
+			echo setting up Yeti libraries...
+			echo yeti 3dmark non-stream configuration run...
+			echo terminal 2...
+			sleep 3
+			pulseaudio --start
+
+			setPathLdLibraryPath
+			cd ~/yeti-eng-bundle/bin
+			echo "Type, but do not execute the following command:"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=127.0.0.1"
+		elif [[ $p4 == "client" ]] ; then
+		else
+			echo "Invalid  p4 is slipped through: $p4."
+			exit 1
+		fi	
 
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		if [[ $p4 == "t1"  ]] ; then
@@ -223,9 +238,10 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -"
 			echo "external_ip=127.0.0.1"
 		elif [[ $p4 == "client" ]] ; then
-
+			clear
+			echo setting up Yeti on client machine...
+			apt install -y libc++abi-dev
 			setPathLdLibraryPath
-
 			cd ~/yeti-eng-bundle/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct 127.0.0.1:44700"
@@ -287,7 +303,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else
-			echo "Invalid  p3 is slipped through: $p4."
+			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] ; then
