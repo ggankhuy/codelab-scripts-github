@@ -15,64 +15,9 @@
 
 #	print bar.
 
-function printBar () {
-	echo "------------------------------------"
-}
-
 #	Prints usage information.
 
-function usage() {
-	clear
-	echo "Usage: "
-	echo "$0 <game> <mode> <option> <terminal>"
-	echo "where <game> is either 3dmark or doom"
-	echo "where <game> is setup then perform initial setup for either 3dmark or doom."
-	echo "where <mode>  is either yeti or linux"
-	echo "where <options> is either 0 1 2"
-	echo "0: - nostream"
-	echo "1: - stream with 1 pc"
-	echo "2: - stream with 2 pc"
-	echo "where <terminal> is either t1, t2, client in case <options> is 2: stream with 2 pc"
-	exit 1
-}
-
-#	Display local IPv4
-
-function displayIpv4 () {
-	ipv4=`ifconfig | grep inet`
-	echo $ipv4
-}
-
-#	Set paths
-
-function setPathLdLibraryPath ()
-{
-	export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
-	
-	if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
-		echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
-		echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
-	fi
-}
-	
-function setVkLoaderDisableYetiExtWhitelist ()
-{
-	export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
-	
-	if [[ -z  `env | grep VK_LOADER_DISABLE_YETI_EXT_WHITELIST` ]] ; then
-		echo "it appears VK_LOADER_DISABLE_YETI_EXT_WHITELIST env variable is not set up. Manually run:"
-		echo "export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1"
-	fi
-}
-
-function setYetiDisableFabricatedConnected () {
-	export YETI_DISABLE_FABRICATED_CONNECTED=1
-
-	if [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
-		echo "YETI_DISABLE_FABRICATED_CONNECTED env variable is not set up. Manually run:"
-		echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
-	fi
-}
+source ./common.sh
 
 #	Actual scripts starts here.
 
@@ -115,7 +60,6 @@ elif  [[ $p1 == "doom" ]] ; then
 	echo "doom is selected..."
 	game=$GAME_DOOM
 elif [[ $p1 == "setup" ]] ; then
-	source ./common.sh
 	echo "setting up the system for test."
 	common_setup
 	exit 0
@@ -225,9 +169,9 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			pulseaudio --start
 
 			setPathLdLibraryPath
-			cd ~/yeti-eng-bundle/bin
-			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+			cd ~/yeti-eng-bundle/bin	
+			prompt_t2_with_ip
+
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client"; sleep 2
 			clear
@@ -264,10 +208,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			setPathLdLibraryPath
 
 			cd ~/yeti-eng-bundle/bin
-			
-			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
-			echo "external_ip=127.0.0.1"
+			prompt_t2_with_ip
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3." ; sleep 2
 			clear
@@ -325,8 +266,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
-			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+			prompt_t2_with_ip			
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
@@ -389,8 +329,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 
 			displayIpv4
-			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+			prompt_t2_with_ip
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2

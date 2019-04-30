@@ -1,3 +1,58 @@
+function usage() {
+        clear
+        echo "Usage: "
+        echo "$0 <game> <mode> <option> <terminal>"
+        echo "where <game> is either 3dmark or doom"
+        echo "where <game> is setup then perform initial setup for either 3dmark or doom."
+        echo "where <mode>  is either yeti or linux"
+        echo "where <options> is either 0 1 2"
+        echo "0: - nostream"
+        echo "1: - stream with 1 pc"
+        echo "2: - stream with 2 pc"
+        echo "where <terminal> is either t1, t2, client in case <options> is 2: stream with 2 pc"
+        exit 1
+}
+
+function setPathLdLibraryPath ()
+{
+        export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+
+        if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
+                echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
+                echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+        fi
+}
+
+function setVkLoaderDisableYetiExtWhitelist ()
+{
+        export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1
+
+        if [[ -z  `env | grep VK_LOADER_DISABLE_YETI_EXT_WHITELIST` ]] ; then
+                echo "it appears VK_LOADER_DISABLE_YETI_EXT_WHITELIST env variable is not set up. Manually run:"
+                echo "export VK_LOADER_DISABLE_YETI_EXT_WHITELIST=1"
+        fi
+}
+
+function setYetiDisableFabricatedConnected () {
+        export YETI_DISABLE_FABRICATED_CONNECTED=1
+
+        if [[ -z  `env | grep YETI_DISABLE_FABRICATED_CONNECTED` ]] ; then
+                echo "YETI_DISABLE_FABRICATED_CONNECTED env variable is not set up. Manually run:"
+                echo "export YETI_DISABLE_FABRICATED_CONNECTED=1"
+        fi
+}
+
+#       Display local IPv4
+
+function displayIpv4 () {
+        ipv4=`ifconfig | grep inet`
+        echo $ipv4
+}
+
+function printBar () {
+        echo "------------------------------------"
+}
+
 
 function common_setup () {
 	clear
@@ -56,4 +111,9 @@ function common_setup () {
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
 	cp ~/yeti-eng-bundle/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 	
+}
+
+function prompt_t2_with_ip () {
+	echo "Type, but do not execute the following command:"
+	echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 }
