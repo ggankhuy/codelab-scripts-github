@@ -4,3 +4,8 @@ if [[ $? -ne 0 ]] ; then
 	echo "failed to download qt" ; exit 1
 fi
 
+apt-get update sudo apt-get install cmake
+apt-get install chrpath
+apt-get install git
+$ ./prebuild.sh
+
