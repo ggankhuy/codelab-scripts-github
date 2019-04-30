@@ -1,6 +1,26 @@
+#	Launcher scripts for 3DMARK and DOOM.
+#	To run the script simply provide root location of drop package in ~./bashrc
+#	This script has been tested with root account only and assumes everything is copied to root folder.
+#	Non-root account has not been tested.
+#	i.e. in ~/.bashrc:
+#	export GIB_DROP_ROOT=/work/drop-March-21-debian/
+
+#	After that ./yeti-game-setup.sh setup to run preliminary setup for either 3dmark or DOOM.
+#	After that from each of terminal 1,2 and 3 (client) 
+#	. ./yeti-game-setup doom yeti 2 t1
+#	. ./yeti-game-setup doom yeti 2 t2
+#	. ./yeti-game-setup doom yeti 2 client
+#	At the end of each run, the script will prompt with the last syntax to run the actual game for each terminals
+#	with seconds apart for easier copy and paste and launch (type but not run).
+
+#	print bar.
+
 function printBar () {
 	echo "------------------------------------"
 }
+
+#	Prints usage information.
+
 function usage() {
 	clear
 	echo "Usage: "
@@ -16,10 +36,15 @@ function usage() {
 	exit 1
 }
 
+#	Display local IPv4
+
 function displayIpv4 () {
 	ipv4=`ifconfig | grep inet`
 	echo $ipv4
 }
+
+#	Set paths
+
 function setPathLdLibraryPath ()
 {
 	export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
@@ -49,14 +74,16 @@ function setYetiDisableFabricatedConnected () {
 	fi
 }
 
+#	Actual scripts starts here.
+
 p1=$1
 p2=$2	
 p3=$3
 p4=$4
 
+game=0		# game
 mode=0		# 0 for yeti, 1 for linux
-option=0
-game=0
+option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
 
 GAME_3DMARK=0
 GAME_DOOM=1
@@ -72,13 +99,6 @@ TERMINAL_T1=0
 TERMINAL_T2=1
 TERMINAL_CLIENT=2
 
-if [[ ! -d ~/yeti-eng-bundle ]] ; then
-	clear
-	printBar
-	echo "This script assumes the yeti-eng-bundle is on ~. "
-	printBar
-	exit 1
-fi 
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
@@ -207,7 +227,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			setPathLdLibraryPath
 			cd ~/yeti-eng-bundle/bin
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=127.0.0.1"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client"; sleep 2
 			clear
@@ -306,7 +326,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
@@ -370,7 +390,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			displayIpv4
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=<ipv4>"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
