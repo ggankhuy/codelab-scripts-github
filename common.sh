@@ -76,7 +76,8 @@ function common_setup () {
 		mkdir -p ~/doom/yeti-release/
 
 		echo "Copying doom now to ~/doom/yeti-release/"
-		cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
+		#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
+		ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
 	fi		
 	
 	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
