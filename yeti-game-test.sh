@@ -266,7 +266,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			cd ~/yeti-eng-bundle/bin
 			
 			echo "Type, but do not execute the following command:"
-			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -"
+			echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
 			echo "external_ip=127.0.0.1"
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3." ; sleep 2
