@@ -66,20 +66,13 @@ function common_setup () {
         	exit 1
 	fi
 
-	if [[ ! -d ~/doom/yeti-release/ ]] ; then
-		echo "~/doorm/yeti-release is not created, creating now." 
+	rm -rf ~/doom/
+	mkdir -p ~/doom/
 
-		if [[ ! -d $GIB_DROP_ROOT/test-apps/Doom_Linux/ ]] ; then
-			echo "Can not find DOOM source directory. Can not continue setup..."
-			exit 1
-		fi	
-		mkdir -p ~/doom/
+	echo "Setting up symlink for ~/doom/yeti-release/"
+	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
+	ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
 
-		echo "Copying doom now to ~/doom/yeti-release/"
-		#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-		ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
-	fi		
-	
 	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
         	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
 		rm -rf ~/$DIR_YETI_ENG_BUNDLE
