@@ -67,29 +67,33 @@ function common_setup () {
 	fi
 
 	if [[ ! -d ~/doom/yeti-release/ ]] ; then
-		echo "~/doorm/pre-release is not created, creating now." 
+		echo "~/doorm/yeti-release is not created, creating now." 
 
 		if [[ ! -d $GIB_DROP_ROOT/test-apps/Doom_Linux/ ]] ; then
 			echo "Can not find DOOM source directory. Can not continue setup..."
 			exit 1
 		fi	
-		mkdir -p ~/doom/yeti-release/
+		mkdir -p ~/doom/
 
 		echo "Copying doom now to ~/doom/yeti-release/"
 		#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-		ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
+		ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
 	fi		
 	
 	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
         	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-        	cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~
+		rm -rf ~/$DIR_YETI_ENG_BUNDLE
+        	#cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~
+        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~/$DIR_YETI_ENG_BUNDLE
 	else
         	echo "$DIR_YETI_ENG_BUNDLE already exist, skipping copy..."
 	fi
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
         	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-        	cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~
+        	#cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~
+		rm -rf ~/$DIR_YETI_CONTENT_BUNDLE
+        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~/$DIR_YETI_CONTENT_BUNDLE
 	else
         	echo "$DIR_YETI_CONTENT_BUNDLE already exist, skipping copy..."
 	fi
