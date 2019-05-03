@@ -266,7 +266,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
-			prompt_t2_with_ip			
+			prompt_t2_with_ip 1
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
@@ -329,7 +329,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 
 			displayIpv4
-			prompt_t2_with_ip
+			prompt_t2_with_ip 1
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2

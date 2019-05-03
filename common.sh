@@ -113,5 +113,11 @@ function common_setup () {
 
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
-	echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+
+	if [[ -z $1 ]] ; then
+		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=127.0.0.1"
+	else
+		ifconfig | grep inet
+		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+	fi
 }
