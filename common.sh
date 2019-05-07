@@ -117,7 +117,13 @@ function common_setup () {
 	cp ~/yeti-eng-bundle/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
 	cp ~/yeti-eng-bundle/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
-	
+
+	echo "Soft links: "
+	ls -l ~/doom/
+	ls -l /usr/local/cloudcast/
+        ls -l ~/$DIR_YETI_ENG_BUNDLE
+        ls -l ~/$DIR_YETI_CONTENT_BUNDLE
+	ls -l /opt/cloudcast/lib/amdvlk64.so	
 }
 
 function prompt_t2_with_ip () {
