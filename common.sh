@@ -75,8 +75,8 @@ function common_setup () {
 
 	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
         	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
+		unlink ~/$DIR_YETI_ENG_BUNDLE
 		rm -rf ~/$DIR_YETI_ENG_BUNDLE
-        	#cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~
         	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~/$DIR_YETI_ENG_BUNDLE
 	else
         	echo "$DIR_YETI_ENG_BUNDLE already exist, skipping copy..."
@@ -84,7 +84,7 @@ function common_setup () {
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
         	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-        	#cp -vr $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~
+		unlink ~/$DIR_YETI_CONTENT_BUNDLE
 		rm -rf ~/$DIR_YETI_CONTENT_BUNDLE
         	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~/$DIR_YETI_CONTENT_BUNDLE
 	else
@@ -94,6 +94,8 @@ function common_setup () {
 	echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
 	mkdir -p /usr/local/cloudcast/log
 	chmod -R a+rw /usr/local/cloudcast/
+	unlink /usr/local/cloudcast/lib
+	rm -rf /usr/local/cloudcast/lib
 	ln -s ~/yeti-eng-bundle/lib/ /usr/local/cloudcast/lib
 	mkdir /log
 	chmod a+rw /log
@@ -101,10 +103,17 @@ function common_setup () {
 	apt-get install freeglut3 pulseaudio libpulse-dev
 	
 	mkdir -p /opt/cloudcast/lib
+
+	unlink /opt/cloudcast/lib/amdvlk64.so
+	rm -rf /opt/cloudcast/lib/amdvlk64.so
 	ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
 	mkdir -p /usr/local/cloudcast/
+
+	unlink /usr/local/cloudcast/lib
+	rm -rf /usr/local/cloudcast/lib
 	ln -s ~/yeti-eng-bundle/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
+
 	cp ~/yeti-eng-bundle/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
 	cp ~/yeti-eng-bundle/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
