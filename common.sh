@@ -57,7 +57,7 @@ function printBar () {
 function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
-	
+
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 	
@@ -65,6 +65,25 @@ function common_setup () {
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1
 	fi
+
+	#  inserting amdgpu module just in case, sometimes not loaded.
+
+	modprobe amdgpu
+	modprobe amdkfd
+	ret1=`lsmod | grep -u ^amdgpu`
+	ret2=`lsmod | grep -u ^amdgpu`
+
+	if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
+		echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+		exit 1
+		echo lsmod amdgpu: $ret1
+		echo lsmod amdkfd: $ret2
+	else
+		echo lsmod amdgpu: $ret1
+		echo lsmod amdkfd: $ret2
+	fi
+	
+	sleep 5
 
 	rm -rf ~/doom/
 	mkdir -p ~/doom/
