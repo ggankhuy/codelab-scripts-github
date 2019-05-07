@@ -20,8 +20,11 @@
 #		OS version
 #		OS kernel version
 #		drop version (/drop/<dropname>)
+echo " -----------------"
+uname -r
+echo " -----------------"
+lsb_release --all
+echo " -----------------"
+lsmod | grep -i amd
+echo " -----------------"
 
-import os
-import sys
-
-	
