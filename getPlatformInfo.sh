@@ -46,17 +46,19 @@ if [[ -z `virt-what` ]] ; then
         echo `hostname`
 	echo "HOST: "
 	echo $SINGLE_BAR
-	uname -r
+	echo "HOST IP:"		
+	echo `ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1`
 	echo $SINGLE_BAR
-	lsb_release --all
+	echo "HOST OS: 		"`lsb_release --all | grep -i description`
 	echo $SINGLE_BAR
-	lsmod | egrep "^amdkfd|^amdgpu"
+	echo "HOST KERNEL: 	"`uname -r`
 	echo $SINGLE_BAR
-	modinfo amdgpu | egrep "^filename|^version"
+	echo "HOST GPUDRIVER: 	"`lsmod | egrep "^amdkfd|^amdgpu"`
 	echo $SINGLE_BAR
-	dmidecode -t 0  | grep Version
+	echo "HOST GPUDRIVER INFO:"`modinfo amdgpu | egrep "^filename|^version"`
 	echo $SINGLE_BAR
-        echo BIOS version: `dmidecode -t 0  | grep Version`
+	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version`
+	echo $SINGLE_BAR
 
 	#  ssh to vm, vm number is specified in $1.
 	
@@ -67,19 +69,21 @@ if [[ -z `virt-what` ]] ; then
 		exit 1
 	fi
 	vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	echo "VM IP: " $vmIp
 fi
 
 echo $DOUBLE_BAR
-echo  "VM: $p1"
+echo "VM IP: 		$vmIp"
 echo $SINGLE_BAR
-sshpass -p amd1234 ssh root@$vmIp 'uname -r && lsb_release --all'
+echo "VM OS: 		"`sshpass -p amd1234 ssh root@$vmIp 'lsb_release --all | grep -i description'`
 echo $SINGLE_BAR
-sshpass -p amd1234 ssh root@$vmIp 'uname -r'
+echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'`
 echo $SINGLE_BAR
-sshpass -p amd1234 ssh root@$vmIp 'hostname'
+echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'`
 echo $SINGLE_BAR
-#sshpass -p amd1234 scp root@$vmIp '/work/drop*/debug-tool/amdvbflash -ai'
+echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd|^amdgpu"'`
+echo $SINGLE_BAR
+echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'`
+echo $SINGLE_BAR
 
 
 echo $DOUBLE_BAR
