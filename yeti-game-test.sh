@@ -61,7 +61,7 @@ elif  [[ $p1 == "doom" ]] ; then
 	game=$GAME_DOOM
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
-	common_setup
+	common_setup $2
 	exit 0
 else
 	echo "Invalid game selected: $p1"

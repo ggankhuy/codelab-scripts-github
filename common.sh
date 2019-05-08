@@ -58,6 +58,12 @@ function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 
+	if [[ !-z $2 ]] ; then
+		echo "Setting GIB_DROP_ROOT to $2..."
+		export GIB_DROP_ROOT=$2 | tee ~/.bashrc		
+		sleep 3
+	fi 
+
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 	
