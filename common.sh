@@ -148,10 +148,25 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
+	dhclient ens3
+	
+	if [[ $? -ne 0 ]] ; then
+        	echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+	fi
+	
+	external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+	echo "external IP: " $external_ip
+	
+	if [[ -z $external_ip ]] ; then
+        	echo "Failed to get external IP: "  $external_ip
+	fi
+	
+	sleep 5
+	
 	if [[ -z $1 ]] ; then
 		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=127.0.0.1"
 	else
-		ifconfig | grep inet
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=<ipv4>"
+		#ifconfig | grep inet
+		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip="$external_ip
 	fi
 }
