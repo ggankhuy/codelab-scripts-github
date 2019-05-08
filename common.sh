@@ -55,6 +55,12 @@ function printBar () {
         echo "------------------------------------"
 }
 
+#	Check if the calling script is running inside VM
+#	input: 	None
+#	return  exit 1 if not running on VM.
+
+function vm_check () {
+}
 #	Initialization function used by yeti-game-test.sh. 
 #	input: $1 - GIB_DROP_ROOT location.
 #	return: 1 - on any error.
