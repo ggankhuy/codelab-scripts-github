@@ -61,7 +61,9 @@ if [[ -z `virt-what` ]] ; then
 	#  ssh to vm, vm number is specified in $1.
 	
 	if [[ -z $1 ]] ; then
+		echo $DOUBLE_BAR
 		echo "ERROR: VM No. is not specified. Use virsh list to get index" 
+		echo $DOUBLE_BAR
 		exit 1
 	fi
 	vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
