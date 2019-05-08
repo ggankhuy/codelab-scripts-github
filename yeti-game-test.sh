@@ -257,6 +257,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep 2
 			clear
+
 			echo setting up Yeti libraries...
 			echo yeti 3dmark non-stream configuration run...
 			echo terminal 2...
@@ -266,11 +267,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			cd ~/yeti-eng-bundle/bin
 			displayIpv4
-			prompt_t2_with_ip 1
+			prompt_t2_with_ip 1 $external_ip
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep 2
 			clear
+
 			echo setting up Yeti on client machine...
 			
 			apt install -y libc++abi-dev
