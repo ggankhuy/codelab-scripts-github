@@ -1,3 +1,5 @@
+SLEEP_TIME=1
+
 function usage() {
         clear
         echo "Usage: "
@@ -77,7 +79,7 @@ function common_setup () {
 		fi
 	fi 
 
-	sleep 3
+	sleep $SLEEP_TIME
 
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
@@ -104,7 +106,7 @@ function common_setup () {
 		echo lsmod amdkfd: $ret2
 	fi
 	
-	sleep 5
+	sleep $SLEEP_TIME
 
 	rm -rf ~/doom/
 	mkdir -p ~/doom/
@@ -182,7 +184,7 @@ function prompt_t2_with_ip () {
         	echo "Failed to get external IP: "  $external_ip
 	fi
 	
-	sleep 5
+	sleep $SLEEP_TIME
 	
 	if [[ -z $1 ]] ; then
 		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=127.0.0.1"

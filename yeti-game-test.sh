@@ -44,6 +44,8 @@ TERMINAL_T1=0
 TERMINAL_T2=1
 TERMINAL_CLIENT=2
 
+SLEEP_TIME=1
+
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
@@ -117,7 +119,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		clear
 		echo setting up Yeti libraries...
 		echo yeti 3dmark non-stream configuration run...
-		sleep 3
+		sleep $SLEEP_TIME
 
 		setPathLdLibraryPath
 		setVkLoaderDisableYetiExtWhitelist
@@ -143,11 +145,11 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 
 	
 elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
-	echo "OPTION: STREAM 1PC ..." ; sleep 2
+	echo "OPTION: STREAM 1PC ..." ; sleep $SLEEP_TIME
 	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "GAME: 3DMARK ..." ; sleep 2
+		echo "GAME: 3DMARK ..." ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep 2
+			echo "Terminal1." ; sleep $LEEP_TIME
 			sudo uwf disable
 			setPathLdLibraryPath
 			setVkLoaderDisableYetiExtWhitelist
@@ -163,7 +165,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			#command above, use:
 			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2". ; sleep 2
+			echo "Terminal2". ; sleep $SLEEP_TIME
 			clear
 			echo setting up Yeti libraries...
 			echo yeti 3dmark non-stream configuration run...
@@ -174,7 +176,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			prompt_t2_with_ip
 
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client"; sleep 2
+			echo "Terminal3 / client"; sleep $SLEEP_TIME
 			clear
 			echo setting up Yeti on client machine...
 			
@@ -191,9 +193,9 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		fi	
 
 	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo "GAME: DOOM..." ; sleep 2
+		echo "GAME: DOOM..." ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep 2
+			echo "Terminal1." ; sleep $SLEEP_TIME
 			setPathLdLibraryPath
 			setVkLoaderDisableYetiExtWhitelist
 
@@ -203,7 +205,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo "Type, but do not execute the following command from this directory ~/doom/yeti-release:"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep 2
+			echo "Terminal2." ; sleep $SLEEP_TIME
 			pulseaudio --start			
 
 			setPathLdLibraryPath
@@ -211,7 +213,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			cd ~/yeti-eng-bundle/bin
 			prompt_t2_with_ip
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3." ; sleep 2
+			echo "Terminal3." ; sleep $SLEEP_TIME
 			clear
 			echo setting up Yeti on client machine...
 			apt install -y libc++abi-dev
@@ -227,17 +229,17 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		echo "Unsupport game: $game" ; exit 1
 	fi
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
-	echo "OPTION: STREAM 2 PC." ; sleep 2
+	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
 	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "GAME: 3DMARK." ; sleep 2
+		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1" ]] ; then
-			echo "Terminal1." ; sleep 2
+			echo "Terminal1." ; sleep $SLEEP_TIME
 			clear
 			echo setting up Yeti libraries...
 			echo yeti 3dmark non-stream configuration run...
 			echo terminal 1...
-			sleep 3
+			sleep $SLEEP_TIME
 			sudo uwf disable
 
 			setPathLdLibraryPath
@@ -256,13 +258,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo Type, but do not execute the following command:
 			echo ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep 2
+			echo "Terminal2." ; sleep $SLEEP_TIME
 			clear
 
 			echo setting up Yeti libraries...
 			echo yeti 3dmark non-stream configuration run...
 			echo terminal 2...
-			sleep 3
+			sleep $SLEEP_TIME
 			pulseaudio --start
 
 			setPathLdLibraryPath
@@ -271,7 +273,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			prompt_t2_with_ip 1 $external_ip
 
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep 2
+			echo "Terminal3 / client." ; sleep $SLEEP_TIME
 			clear
 
 			echo setting up Yeti on client machine...
@@ -288,9 +290,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			exit 1
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo "GAME: DOOM" ; sleep 2
+		echo "GAME: DOOM" ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1" ]] ; then			
-			echo "Terminal1." ; sleep 2
+			echo "Terminal1." ; sleep $SLEEP_TIME
 
 			if [[ ! "$(ls -A ~/yeti-eng-bundle)" ]] ; then
     			echo "<path> is empty!"
@@ -314,7 +316,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Type, but do not execute the following command"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep 2
+			echo "Terminal2." ; sleep $SLEEP_TIME
 			pulseaudio --start
 
 			if [[ $? != 0 ]] ; then 
@@ -335,7 +337,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			prompt_t2_with_ip 1
 
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep 2
+			echo "Terminal3 / client." ; sleep $SLEEP_TIME
 
 			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
 
