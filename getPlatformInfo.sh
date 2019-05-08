@@ -33,6 +33,8 @@ if [[ -z `which virt-what` ]] ; then
 	exit 1
 fi
 
+clear
+
 if [[ -z `virt-what` ]] ; then
         echo `hostname`
 	echo "HOST: "
@@ -51,8 +53,8 @@ if [[ -z `virt-what` ]] ; then
 		echo "ERROR: VM No. is not specified. Use virsh list to get index" 
 		exit 1
 	fi
-	vmIp=`virsh domifaddr $1 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	echo "VM IP: ", $vmIp
+	vmIp=`virsh domifaddr $1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	echo "VM IP: " $vmIp
 fi
 
 
