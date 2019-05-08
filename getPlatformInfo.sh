@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 #	Python 3 based script to collect information.
 
 #	HOST SYSTEMS: 
@@ -20,11 +18,41 @@
 #		OS version
 #		OS kernel version
 #		drop version (/drop/<dropname>)
-echo " -----------------"
-uname -r
-echo " -----------------"
-lsb_release --all
-echo " -----------------"
-lsmod | grep -i amd
-echo " -----------------"
+
+source common.sh
+p1=$1
+
+apt install virt-what -y
+
+function do_inside_vm () {
+	echo do_inside_vm
+}
+
+if [[ -z `which virt-what` ]] ; then
+	echo "Failed to install virt-what..."
+	exit 1
+fi
+
+if [[ -z `virt-what` ]] ; then
+        echo `hostname`
+	echo "HOST: "
+	echo " -----------------"
+	uname -r
+	echo " -----------------"
+	lsb_release --all
+	echo " -----------------"
+	lsmod | egrep "^amdkfd|^amdgpu"
+	echo " -----------------"
+	modinfo amdgpu | egrep "^filename|^version"
+
+	#  ssh to vm, vm number is specified in $1.
+	
+	if [[ -z $1 ]] ; then
+		echo "ERROR: VM No. is not specified. Use virsh list to get index" 
+		exit 1
+	fi
+	vmIp=`virsh domifaddr $1 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	echo "VM IP: ", $vmIp
+fi
+
 

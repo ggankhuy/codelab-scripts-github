@@ -46,6 +46,9 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
+vm_check
+sleep $SLEEP_TIME
+
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
