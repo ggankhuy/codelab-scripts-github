@@ -64,6 +64,25 @@ function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 
+	# Check if running in VM, if not, exit with error.
+
+	apt install virt-what -y 
+
+	if [[ -z `which virt-what` ]] ; then
+		echo "Failed to install virt-what..."
+		exit 1
+	fi
+
+	if [[ -z `virt-what` ]] ; then
+		echo "virt-what returns null, it is not running inside vm: hostname: "
+		echo `hostname`
+		exit 1
+	else
+		echo "OK, running inside VM..."
+	fi
+
+	sleep $SLEEP_TIME
+
 	if [[ -z $1 ]] ; then
 		echo "p1: $1 "
 	else
