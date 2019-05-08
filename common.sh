@@ -53,16 +53,31 @@ function printBar () {
         echo "------------------------------------"
 }
 
+#	Initialization function used by yeti-game-test.sh. 
+#	input: $1 - GIB_DROP_ROOT location.
+#	return: 1 - on any error.
+#	r	0 - on success.	
 
 function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 
-	if [[ !-z $2 ]] ; then
-		echo "Setting GIB_DROP_ROOT to $2..."
-		export GIB_DROP_ROOT=$2 | tee ~/.bashrc		
-		sleep 3
+	if [[ -z $1 ]] ; then
+		echo "p1: $1 "
+	else
+		echo "Setting GIB_DROP_ROOT to $1..."
+		export GIB_DROP_ROOT=$1
+		GIB_DROP_ROOT=$1
+
+		if [[ -z `cat ~/.bashrc | grep GIB_DROP_ROOT` ]] ; then
+			echo "adding GIB_DROP_ROOT to bashrc..."
+			echo "export GIB_DROP_ROOT=$1" >> ~/.bashrc
+		else
+			echo "GIB_DROP_ROOT already added to bash..."
+		fi
 	fi 
+
+	sleep 3
 
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
