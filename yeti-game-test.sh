@@ -128,13 +128,13 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		setVkLoaderDisableYetiExtWhitelist
 		
 		#echo For render+discard mode:
-		#source ~/yeti-eng-bundle/env/null.sh
+		#source ~/$DIR_YETI_ENG_BUNDLE/env/null.sh
 		#echo NOTE: It seems that render+discard mode is broken with the latest eng bundle (20180830)
 		
 		echo For render+encode+discard:
-		source ~/yeti-eng-bundle/env/vce_nostreamer.sh
+		source ~/$DIR_YETI_ENG_BUNDLE/env/vce_nostreamer.sh
 		
-		cd ~/yeti-content-bundle/3dmark/bin/yeti
+		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 		
 		echo Run the 3dmark application the way you would for Linux XCB:
 		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
@@ -157,8 +157,8 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			setPathLdLibraryPath
 			setVkLoaderDisableYetiExtWhitelist
 			echo Setup the swapchain for render+encode+stream:
-			source ~/yeti-eng-bundle/env/vce.sh
-			cd ~/yeti-content-bundle/3dmark/bin/yeti
+			source ~/$DIR_YETI_ENG_BUNDLE/env/vce.sh
+			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 			
 			echo "Type, but do not execute the following command:"
 			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json"
@@ -175,7 +175,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			pulseaudio --start
 
 			setPathLdLibraryPath
-			cd ~/yeti-eng-bundle/bin	
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin	
 			prompt_t2_with_ip
 
 		elif [[ $p4 == "client" ]] ; then
@@ -187,7 +187,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 
 			setPathLdLibraryPath
 
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else
@@ -202,7 +202,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			setPathLdLibraryPath
 			setVkLoaderDisableYetiExtWhitelist
 
-			source ~/yeti-eng-bundle/env/vce.sh
+			source ~/$DIR_YETI_ENG_BUNDLE/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
 			echo "Type, but do not execute the following command from this directory ~/doom/yeti-release:"
@@ -213,7 +213,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 
 			setPathLdLibraryPath
 
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 			prompt_t2_with_ip
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3." ; sleep $SLEEP_TIME
@@ -221,7 +221,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo setting up Yeti on client machine...
 			apt install -y libc++abi-dev
 			setPathLdLibraryPath
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct 127.0.0.1:44700"
 			
@@ -250,8 +250,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			#setYetiDisableFabricatedConnected
 
 			echo Setup the swapchain for render+encode+stream:
-			source ~/yeti-eng-bundle/env/vce.sh
-			cd ~/yeti-content-bundle/3dmark/bin/yeti
+			source ~/$DIR_YETI_ENG_BUNDLE/env/vce.sh
+			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 			
 			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
 			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
@@ -271,7 +271,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			pulseaudio --start
 
 			setPathLdLibraryPath
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 			displayIpv4
 			prompt_t2_with_ip 1 $external_ip
 
@@ -285,7 +285,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			setPathLdLibraryPath
 
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 			echo "Type, but do not execute the following command:"
 			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else
@@ -297,7 +297,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 
-			if [[ ! "$(ls -A ~/yeti-eng-bundle)" ]] ; then
+			if [[ ! "$(ls -A ~/$DIR_YETI_ENG_BUNDLE)" ]] ; then
     			echo "<path> is empty!"
 			else
     			echo "<path> is not empty"
@@ -306,7 +306,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			setYetiDisableFabricatedConnected
 
-			source ~/yeti-eng-bundle/env/vce.sh
+			source ~/$DIR_YETI_ENG_BUNDLE/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
 
@@ -329,7 +329,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			
 			setPathLdLibraryPath
 
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 
 			if [[ $? != 0 ]] ; then 
 				echo "Failed to run pulseaudio, does it exist>"
@@ -342,11 +342,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep $SLEEP_TIME
 
-			export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+			export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib
 
 			setPathLdLibraryPath
 
-			cd ~/yeti-eng-bundle/bin
+			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 
 			if [[ $? -ne 0 ]] ; then
 				echo "Can not cd into ~/yet-end-bundle/bin"

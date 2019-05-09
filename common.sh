@@ -17,11 +17,11 @@ function usage() {
 
 function setPathLdLibraryPath ()
 {
-        export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib
+        export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib
 
         if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
                 echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
-                echo "export LD_LIBRARY_PATH=~/yeti-eng-bundle/lib"
+                echo "export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib"
         fi
 }
 
@@ -161,7 +161,7 @@ function common_setup () {
 	chmod -R a+rw /usr/local/cloudcast/
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
-	ln -s ~/yeti-eng-bundle/lib/ /usr/local/cloudcast/lib
+	ln -s ~/$DIR_YETI_ENG_BUNDLE/lib/ /usr/local/cloudcast/lib
 	mkdir /log
 	chmod a+rw /log
 	
@@ -176,12 +176,12 @@ function common_setup () {
 
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
-	ln -s ~/yeti-eng-bundle/lib /usr/local/cloudcast/lib
+	ln -s ~/$DIR_YETI_ENG_BUNDLE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
-	cp ~/yeti-eng-bundle/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
+	cp ~/$DIR_YETI_ENG_BUNDLE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	cp ~/yeti-eng-bundle/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	cp ~/$DIR_YETI_ENG_BUNDLE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
 	ls -l ~/doom/
