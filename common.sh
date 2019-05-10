@@ -104,16 +104,16 @@ function common_setup () {
 		fi
 	fi 
 
-	if [[ -z `cat ~/.bashrc | grep "cd /git.co/ad-hog-scripts"` ]] ; then
+	if [[ -z $GIB_DROP_ROOT ]] ; then
+        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
+        	exit 1
+	fi
+
+	if [[ -z `cat ~/.bashrc | grep "cd /git.co/ad-hoc-scripts"` ]] ; then
 		echo "adding: cd /git.co/ad-hoc-scripts..."
 		echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
 	else
 		echo "already present: cd /git.co/ad-hoc-scripts..."
-	fi
-
-	if [[ -z $GIB_DROP_ROOT ]] ; then
-        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
-        	exit 1
 	fi
 
 	#  inserting amdgpu module just in case, sometimes not loaded.
