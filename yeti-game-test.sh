@@ -49,6 +49,9 @@ SLEEP_TIME=1
 vm_check
 sleep $SLEEP_TIME
 
+DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
@@ -124,11 +127,11 @@ else
 	echo "OK, DIR_YETI_ENG_BUNDLE: $DIR_YETI_ENG_BUNDLE"
 fi
 
-if [[ -z $DIR_CONTENT_ENG_BUNDLE ]] ; then
-	echo "ERROR: DIR_YETI_CONTENT_BUNDLE is not defined: $DIR_CONTENT_ENG_BUNDLE"
+if [[ -z $DIR_YETI_CONTENT_BUNDLE ]] ; then
+	echo "ERROR: DIR_YETI_CONTENT_BUNDLE is not defined: $DIR_YETI_CONTENT_BUNDLE"
 	exit 1
 else
-	echo "OK, DIR_YETI_ENG_BUNDLE: $DIR_CONTENT_ENG_BUNDLE"
+	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then

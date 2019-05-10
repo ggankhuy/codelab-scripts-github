@@ -116,9 +116,6 @@ function common_setup () {
         	exit 1
 	fi
 
-	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	
 	#  inserting amdgpu module just in case, sometimes not loaded.
 
 	modprobe amdgpu
