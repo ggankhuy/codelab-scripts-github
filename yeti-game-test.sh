@@ -46,6 +46,9 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
+DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+
 vm_check
 sleep $SLEEP_TIME
 
