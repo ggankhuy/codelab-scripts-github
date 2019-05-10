@@ -69,6 +69,9 @@ if [[ -z `virt-what` ]] ; then
 		exit 1
 	fi
 	vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+else
+	echo "ERROR: Please run from host..."
+	exit 1
 fi
 
 echo $DOUBLE_BAR
