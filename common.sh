@@ -104,6 +104,13 @@ function common_setup () {
 		fi
 	fi 
 
+	if [[ -z `cat ~/.bashrc | grep "cd /git.co/ad-hog-scripts"` ]] ; then
+		echo "adding: cd /git.co/ad-hoc-scripts..."
+		echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
+	else
+		echo "already present: cd /git.co/ad-hoc-scripts..."
+	fi
+
 	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 	
