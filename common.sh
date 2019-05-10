@@ -111,14 +111,14 @@ function common_setup () {
 		echo "already present: cd /git.co/ad-hoc-scripts..."
 	fi
 
-	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1
 	fi
 
+	DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+	DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+	
 	#  inserting amdgpu module just in case, sometimes not loaded.
 
 	modprobe amdgpu
