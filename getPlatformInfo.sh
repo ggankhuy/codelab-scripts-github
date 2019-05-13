@@ -52,10 +52,14 @@ if [[ -z `virt-what` ]] ; then
 	echo "HOST OS: 		"`lsb_release --all | grep -i description`
 	echo $SINGLE_BAR
 	echo "HOST KERNEL: 	"`uname -r`
-	echo $SINGLE_BAR
-	echo "HOST GPUDRIVER: 	"`lsmod | egrep "^amdkfd|^amdgpu"`
-	echo $SINGLE_BAR
-	echo "HOST GPUDRIVER INFO:"`modinfo amdgpu | egrep "^filename|^version"`
+
+        echo "HOST GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"`
+        echo $SINGLE_BAR
+        echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"`
+        echo $SINGLE_BAR
+        echo "HOST GIM?:        "`modinfo gim | egrep "^filename|^version"`
+        echo $SINGLE_BAR
+
 	echo $SINGLE_BAR
 	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version`
 	echo $SINGLE_BAR
@@ -73,6 +77,12 @@ fi
 
 echo $DOUBLE_BAR
 echo "VM IP: 		$vmIp"
+
+if [[ -z $vmIp ]] ; then
+	echo "Error: vmIp is empty. Failed to get address, did you specify VM index correctly?"
+	exit 1
+fi
+
 echo $SINGLE_BAR
 echo "VM OS: 		"`sshpass -p amd1234 ssh root@$vmIp 'lsb_release --all | grep -i description'`
 echo $SINGLE_BAR
@@ -80,7 +90,9 @@ echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'`
 echo $SINGLE_BAR
 echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'`
 echo $SINGLE_BAR
-echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd|^amdgpu"'`
+echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdgpu"'`
+echo $SINGLE_BAR
+echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd"'`
 echo $SINGLE_BAR
 echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'`
 echo $SINGLE_BAR
