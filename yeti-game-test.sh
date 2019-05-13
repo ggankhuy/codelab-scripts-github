@@ -49,6 +49,9 @@ SLEEP_TIME=1
 vm_check
 sleep $SLEEP_TIME
 
+DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+
 #	Process help request. 
 
 if [[ $1 == "--help"  ]] || [[ -z $1 ]] ; then
@@ -115,6 +118,20 @@ elif  [[ $p3 -eq 2 ]] ; then
 else
 	echo "Invalid option: $p3. Exiting..."
 	exit 1
+fi
+
+if [[ -z $DIR_YETI_ENG_BUNDLE ]] ; then
+	echo "ERROR: DIR_YETI_ENG_BUNDLE is not defined: $DIR_YETI_ENG_BUNDLE"
+	exit 1
+else
+	echo "OK, DIR_YETI_ENG_BUNDLE: $DIR_YETI_ENG_BUNDLE"
+fi
+
+if [[ -z $DIR_YETI_CONTENT_BUNDLE ]] ; then
+	echo "ERROR: DIR_YETI_CONTENT_BUNDLE is not defined: $DIR_YETI_CONTENT_BUNDLE"
+	exit 1
+else
+	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
@@ -323,7 +340,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			pulseaudio --start
 
 			if [[ $? != 0 ]] ; then 
-				echo "Failed to run pulseaudio, does it exist>"
+				echo "Failed to run pulseaudio, does it exist or some other problem? return code: $?"
 				exit 1
 			fi
 			
@@ -332,7 +349,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd ~/$DIR_YETI_ENG_BUNDLE/bin
 
 			if [[ $? != 0 ]] ; then 
-				echo "Failed to run pulseaudio, does it exist>"
+				echo "Failed to cd into ~/$DIR_YETI_ENG_BUNDLE, does it exist? return code: $?"
 				exit 1
 			fi
 
