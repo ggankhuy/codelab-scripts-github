@@ -154,7 +154,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 		
 		echo Run the 3dmark application the way you would for Linux XCB:
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+		./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output  <output_full_path>
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo Doom does not support non-stream test option.
 		
@@ -178,7 +178,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 			
 			echo "Type, but do not execute the following command:"
-			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json"
+			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 			
 			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
 			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
@@ -276,7 +276,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 			
 			echo Type, but do not execute the following command:
-			echo ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+			echo ./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 			clear
