@@ -174,7 +174,7 @@ function common_setup () {
 	chmod -R a+rw /usr/local/cloudcast/
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
-	ln -s ~/$DIR_YETI_ENG_BUNDLE/lib/ /usr/local/cloudcast/lib
+	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib/ /usr/local/cloudcast/lib
 	mkdir /log
 	chmod a+rw /log
 	
@@ -189,7 +189,7 @@ function common_setup () {
 
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
-	ln -s ~/$DIR_YETI_ENG_BUNDLE/lib /usr/local/cloudcast/lib
+	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
 	cp ~/$DIR_YETI_ENG_BUNDLE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
