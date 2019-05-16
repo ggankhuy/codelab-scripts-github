@@ -17,11 +17,11 @@ function usage() {
 
 function setPathLdLibraryPath ()
 {
-        export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib
+        export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
 
         if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
                 echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
-                echo "export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib"
+                echo "export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib"
         fi
 }
 
@@ -118,8 +118,13 @@ function common_setup () {
 
 	export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 	export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	export DIR_GGP_END_BUNDLE=ggp-eng-bundle
+	export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 	
+	#       Set either yeti or ggp  engineering bundle.
+	
+	#export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+	export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+		
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1
@@ -151,13 +156,13 @@ function common_setup () {
 	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
 	ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
 
-	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
-        	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-		unlink ~/$DIR_YETI_ENG_BUNDLE
-		rm -rf ~/$DIR_YETI_ENG_BUNDLE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~/$DIR_YETI_ENG_BUNDLE
+	if [[ ! -d  $DIR_ENG_BUNDLE_TO_USE ]] ; then
+        	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
+		unlink ~/$DIR_ENG_BUNDLE_TO_USE
+		rm -rf ~/$DIR_ENG_BUNDLE_TO_USE
+        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
 	else
-        	echo "$DIR_YETI_ENG_BUNDLE already exist, skipping copy..."
+        	echo "$DIR_ENG_BUNDLE_TO_USE already exist, skipping copy..."
 	fi
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
@@ -174,6 +179,8 @@ function common_setup () {
 	chmod -R a+rw /usr/local/cloudcast/
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
+	echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
+	sleep 10
 	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib/ /usr/local/cloudcast/lib
 	mkdir /log
 	chmod a+rw /log
@@ -192,14 +199,14 @@ function common_setup () {
 	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
-	cp ~/$DIR_YETI_ENG_BUNDLE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
+	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	cp ~/$DIR_YETI_ENG_BUNDLE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
 	ls -l ~/doom/
 	ls -l /usr/local/cloudcast/
-        ls -l ~/$DIR_YETI_ENG_BUNDLE
+        ls -l ~/$DIR_ENG_BUNDLE_TO_USE
         ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 }
