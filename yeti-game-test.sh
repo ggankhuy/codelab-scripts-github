@@ -53,7 +53,7 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 #	Set either yeti or ggp  engineering bundle.
 
 DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+#DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 vm_check
 sleep $SLEEP_TIME
@@ -163,7 +163,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 		
 		echo Run the 3dmark application the way you would for Linux XCB:
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output  <output_full_path>
+		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo Doom does not support non-stream test option.
 		
@@ -285,7 +285,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 			
 			echo Type, but do not execute the following command:
-			echo ./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>
+			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 			clear
