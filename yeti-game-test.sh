@@ -55,6 +55,8 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 #DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
 DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
+TR2_START_LOCATION=/usr/local/cloudcast/runit/
+
 vm_check
 sleep $SLEEP_TIME
 
@@ -236,9 +238,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 			pulseaudio --start			
-
 			setPathLdLibraryPath
-
 			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
 			prompt_t2_with_ip
 		elif [[ $p4 == "client" ]] ; then
@@ -306,9 +306,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep $SLEEP_TIME
 			clear
-
 			echo setting up Yeti on client machine...
-			
 			apt install -y libc++abi-dev
 
 			setPathLdLibraryPath
@@ -323,7 +321,35 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
+			rm -rf /usr/local/cloudcast/*
+			rm -rf  ~/.local/share/vulkan/icd.d/*
+
+			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
+				echo "Error: can not find /etc/vulkan/icd.d/amd_icd64.json..."
+			fi
+
+			sudo mkdir -p /usr/local/cloudcast
+			sudo chown -R $(id -u):$(id -g) /usr/local/cloudcast
+			sudo mkdir -p /var/game
+			sudo chown -R $(id -u):$(id -g) /var/game
+			sudo mkdir -p /srv/game
+			sudo chown -R $(id -u):$(id -g) /srv/game
+
+			# This static path will not work well!!!			
+			ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
+			
+			#tar -xf $1 -C /usr/local/cloudcast --strip-components=1
+
+			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
+			if  [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
+				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
+			else
+				echo "adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
+				echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+			fi	
+
 		elif [[ $p4 == "t2" ]] ; then
+			echo "Terminal2." ; sleep $SLEEP_TIME
 		elif [[ $p4 == "client" ]] ; then
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
