@@ -1,4 +1,4 @@
-#	Launcher scripts for 3DMARK and DOOM.
+#	Launcher scripts for 3DMARK, DOOM and TR2.
 #	To run the script simply provide root location of drop package in ~./bashrc
 #	This script has been tested with root account only and assumes everything is copied to root folder.
 #	Non-root account has not been tested.
@@ -14,7 +14,6 @@
 #	with seconds apart for easier copy and paste and launch (type but not run).
 
 #	print bar.
-
 #	Prints usage information.
 
 source ./common.sh
@@ -32,6 +31,7 @@ option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
 
 GAME_3DMARK=0
 GAME_DOOM=1
+GAME_TR2=2
 
 MODE_YETI=0
 MODE_LINUX=1
@@ -73,6 +73,9 @@ if [[ $p1 == "3dmark" ]] ; then
 elif  [[ $p1 == "doom" ]] ; then
 	echo "doom is selected..."
 	game=$GAME_DOOM
+elif [[ $p1 == "tr2" ]] ; then
+	echo "tr2 is selected..."
+	game=$GAME_TR2
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
 	echo "p2: $p2..."
@@ -161,8 +164,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		
 		echo Run the 3dmark application the way you would for Linux XCB:
 		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
-	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo Doom does not support non-stream test option.
+	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
+		echo Following game(s): Doom/TR2 does not support non-stream test option.
 		
 	else
 		echo "Invalid game: $game" 
@@ -251,8 +254,10 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 		else
 			echo "Unsupported terminal selection: $p4" ; exit 1
 		fi 
+	elif [[ $game -eq $GAME_TR2 ]] ; then
+		echo "1PC streaming for TR2 is not added yet or will not be added. Please use 2PC streaming option."
 	else
-		echo "Unsupport game: $game" ; exit 1
+		echo "Unsupported game was specified: $game" ; exit 1
 	fi
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
@@ -316,6 +321,17 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			exit 1
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] ; then
+		if [[ $p4 == "t1" ]] ; then			
+			echo "Terminal1." ; sleep $SLEEP_TIME
+		elif [[ $p4 == "t2" ]] ; then
+		elif [[ $p4 == "client" ]] ; then
+			echo "game client from Linux is dropped support. Please use windows version."
+			exit 0
+		else 
+			echo "Invalid terminal selected: $p4 " ; exit 1
+		fi
+
+	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
@@ -364,6 +380,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep $SLEEP_TIME
+			echo "game client from Linux is dropped support. Please use windows version."
+			exit 0
 
 			export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
 
