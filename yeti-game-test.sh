@@ -320,7 +320,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
 		fi
-	elif [[ $game -eq $GAME_DOOM ]] ; then
+	elif [[ $game -eq $GAME_TR2 ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 		elif [[ $p4 == "t2" ]] ; then
