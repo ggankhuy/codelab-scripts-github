@@ -52,6 +52,8 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
+REPO_SERVER="10.217.74.231"
+REPO_LOCATION="/repo/stadia/"
 
 vm_check
 sleep $SLEEP_TIME
@@ -337,7 +339,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
 			else
 				echo "adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
-				echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+
+				# 5.20.2019 Alan, this turned out to be wrong.
+				# Replaced with following.
+
+				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
 			source ./env/vce.sh
