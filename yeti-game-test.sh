@@ -57,6 +57,9 @@ DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
+REPO_SERVER_IP="10.217.74.78"
+REPO_SERVER_LOCATION=/repo/stadia
+
 vm_check
 sleep $SLEEP_TIME
 
@@ -173,7 +176,6 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo "Invalid game: $game" 
 		exit 1
 	fi
-
 	
 elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 	echo "OPTION: STREAM 1PC ..." ; sleep $SLEEP_TIME
@@ -336,16 +338,22 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo chown -R $(id -u):$(id -g) /srv/game
 
 			# This static path will not work well!!!			
-			ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
-			
-			#tar -xf $1 -C /usr/local/cloudcast --strip-components=1
+			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
+
+			scp -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 			if  [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
 				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
 			else
 				echo "adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
-				echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+
+				# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running 
+				# ok with Sam
+				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+
+				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
 		elif [[ $p4 == "t2" ]] ; then
