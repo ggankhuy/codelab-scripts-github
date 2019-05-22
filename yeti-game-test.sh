@@ -382,6 +382,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
                         displayIpv4
                         prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
+			cd /usr/local/cloudcast
 		elif [[ $p4 == "client" ]] ; then
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
