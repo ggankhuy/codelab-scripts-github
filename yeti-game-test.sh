@@ -52,10 +52,8 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
-REPO_SERVER="10.217.74.231"
-REPO_LOCATION="/repo/stadia/"
 
-REPO_SERVER_IP="10.217.74.78"
+REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_LOCATION=/repo/stadia
 
 vm_check
@@ -357,8 +355,15 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
-			source ./env/vce.sh
+			ln -s ~/tr2 /srv/game/assets
+			cd /usr/local/cloudcast	
+			echo "type the following to run the catching fire."
 			
+			# Slightly possible tweaked out content of ./runit/catchingfire.sh is below.
+			# No longer see in the instruction.
+
+			source ./env/vce.sh
+
 			if [[ ! -d /var/game ]]; then
 				echo "Create directory /var/game."
   				exit 1
@@ -372,20 +377,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			pushd /srv/game/assets/
 			./TR2_yeti_final &
 			popd
-			sleep 1
 
-                        displayIpv4
-                        prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
 
-			/yeti_streamer \
-  			--policy_config_file dev/bin/lan_policy.proto_ascii \
-  			-connect_to_game_on_start \
-  			-direct_webrtc_ws \
-  			-external_ip=127.0.0.1 -port 44750 \
-  			&> /var/game/streamer.log -null_audio=true
-			
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
+                        displayIpv4
+                        prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
 		elif [[ $p4 == "client" ]] ; then
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
