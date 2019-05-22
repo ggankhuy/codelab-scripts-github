@@ -29,10 +29,6 @@ game=0		# game
 mode=0		# 0 for yeti, 1 for linux
 option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
 
-GAME_3DMARK=0
-GAME_DOOM=1
-GAME_TR2=2
-
 MODE_YETI=0
 MODE_LINUX=1
 
@@ -56,6 +52,8 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
+REPO_SERVER="10.217.74.231"
+REPO_LOCATION="/repo/stadia/"
 
 REPO_SERVER_IP="10.217.74.78"
 REPO_SERVER_LOCATION=/repo/stadia
@@ -176,7 +174,6 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo "Invalid game: $game" 
 		exit 1
 	fi
-	
 elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 	echo "OPTION: STREAM 1PC ..." ; sleep $SLEEP_TIME
 	if [[ $game -eq $GAME_3DMARK ]] ; then
@@ -206,7 +203,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 
 			setPathLdLibraryPath
 			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin	
-			prompt_t2_with_ip
+			prompt_t2_with_ip $GAME_3DMARK $OPTION_LOCAL_IP
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client"; sleep $SLEEP_TIME
@@ -224,14 +221,12 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
 		fi	
-
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM..." ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1"  ]] ; then
 			echo "Terminal1." ; sleep $SLEEP_TIME
 			setPathLdLibraryPath
 			setVkLoaderDisableYetiExtWhitelist
-
 			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 			cd ~/doom/yeti-release
@@ -242,7 +237,7 @@ elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
 			pulseaudio --start			
 			setPathLdLibraryPath
 			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			prompt_t2_with_ip
+			prompt_t2_with_ip $GAME_DOOM $OPTION_LOCAL_IP
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3." ; sleep $SLEEP_TIME
 			clear
@@ -303,7 +298,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
 			displayIpv4
-			prompt_t2_with_ip 1 $external_ip
+			prompt_t2_with_ip $GAME_3DMARK $OPTION_EXTERNAL_IP
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep $SLEEP_TIME
@@ -344,18 +339,51 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
-			if  [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
+
+			if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
 				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
+				exit 1
 			else
-				echo "adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
+				echo "Adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
 
 				# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running 
 				# ok with Sam
 				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
 
+				# 5.20.2019 Alan, this turned out to be wrong.
+				# Replaced with following.
+
+				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
 				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
+			source ./env/vce.sh
+			
+			if [[ ! -d /var/game ]]; then
+				echo "Create directory /var/game."
+  				exit 1
+			fi
+			
+			if [[ ! -f /srv/game/assets/TR2_yeti_final ]]; then
+  				echo "Unpack the catching fire package to /srv/game/assets/ (or symlink)"
+	  			exit 1
+			fi
+			
+			pushd /srv/game/assets/
+			./TR2_yeti_final &
+			popd
+			sleep 1
+
+                        displayIpv4
+                        prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
+
+			/yeti_streamer \
+  			--policy_config_file dev/bin/lan_policy.proto_ascii \
+  			-connect_to_game_on_start \
+  			-direct_webrtc_ws \
+  			-external_ip=127.0.0.1 -port 44750 \
+  			&> /var/game/streamer.log -null_audio=true
+			
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 		elif [[ $p4 == "client" ]] ; then
@@ -410,7 +438,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 
 			displayIpv4
-			prompt_t2_with_ip 1
+			prompt_t2_with_ip $GAME_DOOM $OPTION_EXTERNAL_IP
 
 		elif [[ $p4 == "client" ]] ; then
 			echo "Terminal3 / client." ; sleep $SLEEP_TIME

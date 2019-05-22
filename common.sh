@@ -1,4 +1,9 @@
 SLEEP_TIME=1
+GAME_3DMARK=0
+GAME_DOOM=1
+GAME_TR2=2
+OPTION_EXTERNAL_IP=1
+OPTION_LOCAL_IP=2
 
 function usage() {
         clear
@@ -229,10 +234,20 @@ function prompt_t2_with_ip () {
 	
 	sleep $SLEEP_TIME
 	
-	if [[ -z $1 ]] ; then
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=127.0.0.1"
-	else
-		#ifconfig | grep inet
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip="$external_ip
+	if [[ -z $2 ]] || [[ $2 -eq $OPTION_LOCAL_IP ]] ; then
+		IP_TO_DISLAY=127.0.0.1
+	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]] 
+		IP_TO_DISLAY="$external_ip
 	fi
+
+	if [[ $1 == $GAME_DOOM ]] ; then
+		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip="$IP_TO_DISPLAY
+	elif  [[ $1 == $GAME_TR2 ]] ; then
+                echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start  -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 
+	else
+		echo "ERROR: prompt_t2_with_ip: Invalid game $1" 
+		exit 1
+	fi 
+
+
 }
