@@ -378,7 +378,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			./TR2_yeti_final &
 			popd
 
-
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
                         displayIpv4
