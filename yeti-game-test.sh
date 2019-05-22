@@ -166,7 +166,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo Run the 3dmark application the way you would for Linux XCB:
 		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
 	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
-		echo Following game(s): Doom/TR2 does not support non-stream test option.
+		echo Following games: Doom/TR2 does not support non-stream test option.
 		
 	else
 		echo "Invalid game: $game" 
