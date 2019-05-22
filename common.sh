@@ -235,10 +235,10 @@ function prompt_t2_with_ip () {
 	sleep $SLEEP_TIME
 	
 	if [[ -z $2 ]] || [[ $2 -eq $OPTION_LOCAL_IP ]] ; then
-		IP_TO_DISLAY=127.0.0.1
+		IP_TO_DISPLAY=127.0.0.1
 	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]] 
 		echo "External ip: $external_ip" ; then
-		IP_TO_DISLAY="$external_ip"
+		IP_TO_DISPLAY="$external_ip"
 	fi
 
 	if [[ $1 == $GAME_DOOM ]] ; then

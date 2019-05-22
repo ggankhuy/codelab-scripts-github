@@ -359,12 +359,16 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
-			if [[ ! -f ~/tr2 ]] ; then
+			if [[ ! -d ~/tr2 ]] ; then
 				echo "~/tr2 does not exist."
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-				sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+				#sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+			else
+				echo "~/tr2 exists, skipping."
 			fi
+
+			sleep 5 
 
 			ln -s ~/tr2 /srv/game/assets
 			cd /usr/local/cloudcast	
