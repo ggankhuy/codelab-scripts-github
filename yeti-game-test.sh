@@ -425,15 +425,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
 			mkdir -p ~/doom/yeti-release
-			cd ~/doom/yeti-release
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
                                 echo "the DOOM is not in ~/doom/yeti-release, copy it first..."
 				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ ~/doom/yeti/release/
-				tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
                         fi
 
-			echo "If after executing this script, you are in this directory and then manually go to this directory: ~/doom/yeti-release"
+			cd ~/doom/yeti-release
 			echo "Type, but do not execute the following command"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then

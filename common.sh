@@ -159,8 +159,9 @@ function common_setup () {
 
 	echo "Setting up symlink for ~/doom/yeti-release/"
 	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-	ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
-
+	#ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
+	mkdir ~/doom/yeti-release/
+	
 	if [[ ! -d  $DIR_ENG_BUNDLE_TO_USE ]] ; then
         	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
 		unlink ~/$DIR_ENG_BUNDLE_TO_USE
