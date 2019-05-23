@@ -53,7 +53,7 @@ DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
-REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP="10.217.73.160"
 REPO_SERVER_LOCATION=/repo/stadia
 
 vm_check
@@ -363,7 +363,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "~/tr2 does not exist."
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-				#sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+				sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
 			else
 				echo "~/tr2 exists, skipping."
 			fi
@@ -428,8 +428,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd ~/doom/yeti-release
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
-                                echo "the DOOM is not in ~/doom/yeti-release, copy it first! "
-                                exit 1
+                                echo "the DOOM is not in ~/doom/yeti-release, copy it first..."
+				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ ~/doom/yeti/release/
+				tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
                         fi
 
 			echo "If after executing this script, you are in this directory and then manually go to this directory: ~/doom/yeti-release"
