@@ -53,7 +53,7 @@ DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
-REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_LOCATION=/repo/stadia
 
 vm_check
@@ -428,7 +428,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
 				mkdir -p ~/doom/yeti-release/
-                                echo "the DOOM is not in ~/doom/yeti-release, copy it first..."
+                                echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
 				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
                         fi
 
