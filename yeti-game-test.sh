@@ -429,7 +429,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
 				mkdir -p ~/doom/yeti-release/
                                 echo "the DOOM is not in ~/doom/yeti-release, copy it first..."
-				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux ~/doom/yeti-release/
+				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
                         fi
 
 			cd ~/doom/yeti-release
