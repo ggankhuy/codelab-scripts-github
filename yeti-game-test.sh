@@ -337,8 +337,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
-			sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+			sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
+			#tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+
+			if [[ $? -ne 0 ]] ; then
+				echo "Failed to copy ggp-eng-bundle"
+				exit 1
+			fi
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
@@ -364,6 +369,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
 				sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+
+				if [[ $? -ne 0 ]] ; then
+					echo "Failed to copy tr2..."
+					exit 1
+				fi
 			else
 				echo "~/tr2 exists, skipping."
 			fi
@@ -430,6 +440,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				mkdir -p ~/doom/yeti-release/
                                 echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
 				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
+
+				if [[ $? -ne 0 ]] ; then
+					echo "Failed to copy DOOM"
+					exit 1
+				fi
+
                         fi
 
 			cd ~/doom/yeti-release
