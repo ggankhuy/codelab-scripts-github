@@ -33,7 +33,6 @@ MODE_YETI=0
 MODE_LINUX=1
 
 OPTION_NOSTREAM=0
-OPTION_STREAM_1PC=1
 OPTION_STREAM_2PC=2
 
 TERMINAL_T1=0
@@ -48,14 +47,19 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 
 #	Set either yeti or ggp  engineering bundle.
 
-#DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
 REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_IP="10.217.73.160"
 REPO_SERVER_LOCATION=/repo/stadia
+
+
+FILE_COPY_SCP=1
+FILE_COPY_WGET=2
+OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_WGET
 
 vm_check
 sleep $SLEEP_TIME
@@ -124,9 +128,6 @@ fi
 if [[ $p3 -eq  0 ]] ; then
 	echo "no stream option is selected."
 	option=$OPTION_NO_STREAM
-elif  [[ $p3 -eq 1 ]] ; then
-	echo "stream with 1 pc is selected."
-	option=$OPTION_STREAM_1PC
 elif  [[ $p3 -eq 2 ]] ; then
 	echo "stream with 2 pc is selected."
 	option=$OPTION_STREAM_2PC
@@ -176,88 +177,6 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	else
 		echo "Invalid game: $game" 
 		exit 1
-	fi
-elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
-	echo "OPTION: STREAM 1PC ..." ; sleep $SLEEP_TIME
-	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "GAME: 3DMARK ..." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep $LEEP_TIME
-			sudo uwf disable
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			echo Setup the swapchain for render+encode+stream:
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
-			
-			echo "Type, but do not execute the following command:"
-			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-			
-			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
-			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
-			#command above, use:
-			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2". ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			pulseaudio --start
-
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin	
-			prompt_t2_with_ip $GAME_3DMARK $OPTION_LOCAL_IP
-
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client"; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			
-			apt install -y libc++abi-dev
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
-		else
-			echo "Invalid  p4 is slipped through: $p4."
-			exit 1
-		fi	
-	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo "GAME: DOOM..." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep $SLEEP_TIME
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			mkdir -p ~/doom/yeti-release
-			cd ~/doom/yeti-release
-			echo "Type, but do not execute the following command from this directory ~/doom/yeti-release:"
-			echo "./DOOM"
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			pulseaudio --start			
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			prompt_t2_with_ip $GAME_DOOM $OPTION_LOCAL_IP
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			apt install -y libc++abi-dev
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct 127.0.0.1:44700"
-			
-		else
-			echo "Unsupported terminal selection: $p4" ; exit 1
-		fi 
-	elif [[ $game -eq $GAME_TR2 ]] ; then
-		echo "1PC streaming for TR2 is not added yet or will not be added. Please use 2PC streaming option."
-	else
-		echo "Unsupported game was specified: $game" ; exit 1
 	fi
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
@@ -338,7 +257,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
-			sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
+			echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
+			sleep 2
+			sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
 			#tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			if [[ $? -ne 0 ]] ; then
@@ -369,7 +290,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "~/tr2 does not exist."
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-				sshpass -p amd1234 scp -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
 
 				if [[ $? -ne 0 ]] ; then
 					echo "Failed to copy tr2..."
@@ -440,7 +361,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
 				mkdir -p ~/doom/yeti-release/
                                 echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
-				sshpass -p amd1234 scp -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
+				sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
 
 				if [[ $? -ne 0 ]] ; then
 					echo "Failed to copy DOOM"
