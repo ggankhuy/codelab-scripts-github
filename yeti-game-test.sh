@@ -48,8 +48,8 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 
 #	Set either yeti or ggp  engineering bundle.
 
-#DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
@@ -343,6 +343,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
+			echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
+			sleep 2
 			sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
 			#tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
