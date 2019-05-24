@@ -33,7 +33,6 @@ MODE_YETI=0
 MODE_LINUX=1
 
 OPTION_NOSTREAM=0
-OPTION_STREAM_1PC=1
 OPTION_STREAM_2PC=2
 
 TERMINAL_T1=0
@@ -129,9 +128,6 @@ fi
 if [[ $p3 -eq  0 ]] ; then
 	echo "no stream option is selected."
 	option=$OPTION_NO_STREAM
-elif  [[ $p3 -eq 1 ]] ; then
-	echo "stream with 1 pc is selected."
-	option=$OPTION_STREAM_1PC
 elif  [[ $p3 -eq 2 ]] ; then
 	echo "stream with 2 pc is selected."
 	option=$OPTION_STREAM_2PC
@@ -181,88 +177,6 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	else
 		echo "Invalid game: $game" 
 		exit 1
-	fi
-elif [[ $option -eq $OPTION_STREAM_1PC ]] ; then
-	echo "OPTION: STREAM 1PC ..." ; sleep $SLEEP_TIME
-	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "GAME: 3DMARK ..." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep $LEEP_TIME
-			sudo uwf disable
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			echo Setup the swapchain for render+encode+stream:
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
-			
-			echo "Type, but do not execute the following command:"
-			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-			
-			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
-			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
-			#command above, use:
-			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2". ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			pulseaudio --start
-
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin	
-			prompt_t2_with_ip $GAME_3DMARK $OPTION_LOCAL_IP
-
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client"; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			
-			apt install -y libc++abi-dev
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
-		else
-			echo "Invalid  p4 is slipped through: $p4."
-			exit 1
-		fi	
-	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo "GAME: DOOM..." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1"  ]] ; then
-			echo "Terminal1." ; sleep $SLEEP_TIME
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			mkdir -p ~/doom/yeti-release
-			cd ~/doom/yeti-release
-			echo "Type, but do not execute the following command from this directory ~/doom/yeti-release:"
-			echo "./DOOM"
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			pulseaudio --start			
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			prompt_t2_with_ip $GAME_DOOM $OPTION_LOCAL_IP
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			apt install -y libc++abi-dev
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct 127.0.0.1:44700"
-			
-		else
-			echo "Unsupported terminal selection: $p4" ; exit 1
-		fi 
-	elif [[ $game -eq $GAME_TR2 ]] ; then
-		echo "1PC streaming for TR2 is not added yet or will not be added. Please use 2PC streaming option."
-	else
-		echo "Unsupported game was specified: $game" ; exit 1
 	fi
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
