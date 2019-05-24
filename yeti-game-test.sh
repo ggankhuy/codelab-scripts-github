@@ -259,13 +259,15 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 			sleep 2
-			sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
-			#tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+			#sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
+			sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
 
 			if [[ $? -ne 0 ]] ; then
 				echo "Failed to copy ggp-eng-bundle"
 				exit 1
 			fi
+
+			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
