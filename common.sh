@@ -20,6 +20,24 @@ function usage() {
         exit 1
 }
 
+#	
+#	$2 - full path of file or directory to copy
+#	$3 - destination  on local  file system to copy to.
+	
+function scp_robust ()
+{
+	HOST_SCP_SERVER_1=10.217.75.230
+	HOST_SCP_SERVER_2=10.217.73.160
+	HOST_SCP_SERVERS=(\
+		$HOST_SCP_SERVER_1 \
+		$HOST_SCP_SERVER_2 \
+	)
+
+	for i in ${HOST_SCP_SERVERS[@]}
+	do
+		echo "copying from $i..."
+	done
+}
 function setPathLdLibraryPath ()
 {
         export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib

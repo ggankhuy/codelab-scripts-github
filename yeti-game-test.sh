@@ -53,8 +53,8 @@ DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
+#REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP="10.217.73.160"
 REPO_SERVER_LOCATION=/repo/stadia
 
 
@@ -343,7 +343,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
-			sshpass -p amd1234 scp -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
+			sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle/* /usr/local/cloudcast/
 			#tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			if [[ $? -ne 0 ]] ; then
@@ -374,7 +374,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "~/tr2 does not exist."
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-				sshpass -p amd1234 scp -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
 
 				if [[ $? -ne 0 ]] ; then
 					echo "Failed to copy tr2..."
@@ -445,7 +445,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
 				mkdir -p ~/doom/yeti-release/
                                 echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
-				sshpass -p amd1234 scp -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
+				sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
 
 				if [[ $? -ne 0 ]] ; then
 					echo "Failed to copy DOOM"
