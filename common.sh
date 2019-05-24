@@ -153,8 +153,8 @@ function common_setup () {
 	
 	#       Set either yeti or ggp  engineering bundle.
 	
-	#export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-	export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+	export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+	#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 		
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
