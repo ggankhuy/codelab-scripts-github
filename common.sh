@@ -21,8 +21,8 @@ function usage() {
 }
 
 #	
-#	$2 - full path of file or directory to copy
-#	$3 - destination  on local  file system to copy to.
+#	$1 - full path of file or directory to copy
+#	$2 - destination  on local  file system to copy to.
 	
 function scp_robust ()
 {
@@ -36,6 +36,14 @@ function scp_robust ()
 	for i in ${HOST_SCP_SERVERS[@]}
 	do
 		echo "copying from $i..."
+		scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+		
+		if [[ $? -eq 0 ]] ; then
+			echo "Copy is successful."
+			break
+		else
+			echo "Copy failed, trying next server."
+		fi
 	done
 }
 function setPathLdLibraryPath ()
