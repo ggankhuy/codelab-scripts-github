@@ -386,7 +386,15 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			
 			setPathLdLibraryPath
 
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
+                	if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
+				cd ~/$DIR_ENG_BUNDLE_TO_USE/dev/bin
+                	elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
+				cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
+                	else
+                        	echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE"
+                        	exit 1
+                	fi
+	
 
 			if [[ $? != 0 ]] ; then 
 				echo "Failed to cd into ~/$DIR_ENG_BUNDLE_TO_USE, does it exist? return code: $?"
