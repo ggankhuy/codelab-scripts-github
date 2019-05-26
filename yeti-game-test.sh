@@ -390,7 +390,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 					echo "Failed to copy DOOM"
 					exit 1
 				fi
-
                         fi
 
 			cd ~/doom/yeti-release
