@@ -203,7 +203,8 @@ function common_setup () {
                                 echo "Failed to copy ggp-eng-bundle"
                                 exit 1
                         fi
-
+			
+			mkdir -p ~/$DIR_ENG_BUNDLE_TO_USE
                         tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
 			
 		elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
