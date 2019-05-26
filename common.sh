@@ -4,6 +4,8 @@ GAME_DOOM=1
 GAME_TR2=2
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
+REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP="10.217.73.160"
 
 function usage() {
         clear
@@ -192,7 +194,25 @@ function common_setup () {
         	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
 		unlink ~/$DIR_ENG_BUNDLE_TO_USE
 		rm -rf ~/$DIR_ENG_BUNDLE_TO_USE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+
+		if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
+                        echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
+                        sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+
+                        if [[ $? -ne 0 ]] ; then
+                                echo "Failed to copy ggp-eng-bundle"
+                                exit 1
+                        fi
+
+                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+			
+		elif [[ $DIR_ENG_BUNDLE_TO_USE = = $DIR_YETI_ENG_BUNDLE ]] ; then
+	        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+		else
+			echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
+			exit 1
+		fi
+		
 	else
         	echo "$DIR_ENG_BUNDLE_TO_USE already exist, skipping copy..."
 	fi
