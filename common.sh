@@ -38,8 +38,16 @@ function scp_robust ()
 	for i in ${HOST_SCP_SERVERS[@]}
 	do
 		echo "copying from $i..."
-		scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
-		
+		#scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+
+                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+	       	        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$i:/$1 $2
+                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+			scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+                else
+                        echo "ERROR: Unknown or unsupported copy protocol."
+                fi
+
 		if [[ $? -eq 0 ]] ; then
 			echo "Copy is successful."
 			break
@@ -197,7 +205,8 @@ function common_setup () {
 
 		if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
                         echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
-                        sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+                        #sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
 
                         if [[ $? -ne 0 ]] ; then
                                 echo "Failed to copy ggp-eng-bundle"
