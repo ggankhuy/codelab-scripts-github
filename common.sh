@@ -7,6 +7,15 @@ OPTION_LOCAL_IP=2
 REPO_SERVER_IP="10.217.74.231"
 #REPO_SERVER_IP="10.217.73.160"
 
+export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
+
+#       Set either yeti or ggp  engineering bundle.
+
+export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
+
 function usage() {
         clear
         echo "Usage: "
@@ -157,15 +166,6 @@ function common_setup () {
 		echo "already present: cd /git.co/ad-hoc-scripts..."
 	fi
 
-	export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-	export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
-	
-	#       Set either yeti or ggp  engineering bundle.
-	
-	export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-	#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
-		
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1

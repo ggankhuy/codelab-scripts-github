@@ -47,7 +47,7 @@ DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 
 #	Set either yeti or ggp  engineering bundle.
 
-DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
 #DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
@@ -294,15 +294,15 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
 			fi	
 
-			if [[ ! -d ~/tr2 ]] ; then
+			if [[ ! "$(ls -A ~/tr2)" ]] ; then
 				echo "~/tr2 does not exist."
 				mkdir -p ~/tr2
 				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
 
                         	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2 /* ~/tr2/
+        	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2/* ~/tr2/
                         	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
                         	else
                                 	echo "ERROR: Unknown or unsupported copy protocol."
                         	fi
