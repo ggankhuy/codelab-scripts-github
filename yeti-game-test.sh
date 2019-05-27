@@ -255,6 +255,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo mkdir -p /srv/game
 			sudo chown -R $(id -u):$(id -g) /srv/game
 
+			''' Following code moved to common.sh, remove after test."
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
@@ -274,6 +275,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 
 			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+			'''
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
