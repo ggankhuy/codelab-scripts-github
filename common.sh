@@ -293,7 +293,7 @@ function prompt_t2_with_ip () {
 	
 	if [[ -z $2 ]] || [[ $2 -eq $OPTION_LOCAL_IP ]] ; then
 		IP_TO_DISPLAY=127.0.0.1
-	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]] 
+	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]]  ; then
 		IP_TO_DISPLAY="$external_ip"
 	fi
 	echo "IP to use: $external_ip" ; then
