@@ -204,9 +204,9 @@ function common_setup () {
 		echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 		
 		if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        		sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tm$
+        		sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
 		elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        		sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+        		sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
 		else
         		echo "ERROR: Unknown or unsupported copy protocol."
 		fi
@@ -223,37 +223,6 @@ function common_setup () {
 		echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
 		exit 1
 	fi
-	
-	''' this is an old way, keep it for a while and remove once ggp works.
-	if [[ ! -d  $DIR_ENG_BUNDLE_TO_USE ]] ; then
-        	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-		unlink ~/$DIR_ENG_BUNDLE_TO_USE
-		rm -rf ~/$DIR_ENG_BUNDLE_TO_USE
-
-		if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
-                        echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
-                        #sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
-                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-
-                        if [[ $? -ne 0 ]] ; then
-                                echo "Failed to copy ggp-eng-bundle"
-                                exit 1
-                        fi
-			
-			mkdir -p ~/$DIR_ENG_BUNDLE_TO_USE
-                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
-			
-		elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
-	        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
-		else
-			echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
-			exit 1
-		fi
-		
-	else
-        	echo "$DIR_ENG_BUNDLE_TO_USE already exist, skipping copy..."
-	fi
-	'''
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
         	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
