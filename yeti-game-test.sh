@@ -408,7 +408,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 
                 	if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
-				cd ~/$DIR_ENG_BUNDLE_TO_USE/dev/bin
+				cd /usr/local/cloudcast/dev/bin
                 	elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
 				cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
                 	else
