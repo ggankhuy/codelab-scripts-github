@@ -341,9 +341,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 			
 			echo "type the following to run the catching fire."
-			pushd /srv/game/assets/
-			./TR2_yeti_final
-			popd
+			cd /srv/game/assets/
+			echo ./TR2_yeti_final
 
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
