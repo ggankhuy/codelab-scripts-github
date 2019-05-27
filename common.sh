@@ -294,16 +294,9 @@ function prompt_t2_with_ip () {
 	if [[ -z $2 ]] || [[ $2 -eq $OPTION_LOCAL_IP ]] ; then
 		IP_TO_DISPLAY=127.0.0.1
 	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]] 
-		echo "External ip: $external_ip" ; then
 		IP_TO_DISPLAY="$external_ip"
 	fi
+	echo "IP to use: $external_ip" ; then
 
-	if [[ $1 == $GAME_DOOM ]] ; then
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=$IP_TO_DISPLAY"
-	elif  [[ $1 == $GAME_TR2 ]] ; then
-                echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
-	else
-		echo "ERROR: prompt_t2_with_ip: Invalid game $1" 
-		exit 1
-	fi 
+        echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
