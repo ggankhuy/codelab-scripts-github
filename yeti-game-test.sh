@@ -373,6 +373,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                         fi
 
 			cd ~/doom/yeti-release
+			chmod 755 ./*
 			echo "Type, but do not execute the following command"
 			echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
