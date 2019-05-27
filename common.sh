@@ -296,7 +296,7 @@ function prompt_t2_with_ip () {
 	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]]  ; then
 		IP_TO_DISPLAY="$external_ip"
 	fi
-	echo "IP to use: $external_ip" ; then
 
+	echo "IP to use: $external_ip" 
         echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
