@@ -4,6 +4,17 @@ GAME_DOOM=1
 GAME_TR2=2
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+
+export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
+
+#       Set either yeti or ggp  engineering bundle.
+
+export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 function usage() {
         clear
@@ -36,8 +47,16 @@ function scp_robust ()
 	for i in ${HOST_SCP_SERVERS[@]}
 	do
 		echo "copying from $i..."
-		scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
-		
+		#scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+
+                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+	       	        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$i:/$1 $2
+                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+			scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+                else
+                        echo "ERROR: Unknown or unsupported copy protocol."
+                fi
+
 		if [[ $? -eq 0 ]] ; then
 			echo "Copy is successful."
 			break
@@ -147,15 +166,6 @@ function common_setup () {
 		echo "already present: cd /git.co/ad-hoc-scripts..."
 	fi
 
-	export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-	export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
-	
-	#       Set either yeti or ggp  engineering bundle.
-	
-	export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-	#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
-		
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1
@@ -192,7 +202,27 @@ function common_setup () {
         	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
 		unlink ~/$DIR_ENG_BUNDLE_TO_USE
 		rm -rf ~/$DIR_ENG_BUNDLE_TO_USE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+
+		if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
+                        echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
+                        #sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+
+                        if [[ $? -ne 0 ]] ; then
+                                echo "Failed to copy ggp-eng-bundle"
+                                exit 1
+                        fi
+			
+			mkdir -p ~/$DIR_ENG_BUNDLE_TO_USE
+                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
+			
+		elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
+	        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+		else
+			echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
+			exit 1
+		fi
+		
 	else
         	echo "$DIR_ENG_BUNDLE_TO_USE already exist, skipping copy..."
 	fi
@@ -271,7 +301,7 @@ function prompt_t2_with_ip () {
 	if [[ $1 == $GAME_DOOM ]] ; then
 		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=$IP_TO_DISPLAY"
 	elif  [[ $1 == $GAME_TR2 ]] ; then
-                echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
+                echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 	else
 		echo "ERROR: prompt_t2_with_ip: Invalid game $1" 
 		exit 1
