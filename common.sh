@@ -217,6 +217,7 @@ function common_setup () {
         	exit 1
 	fi
 
+	mkdir -p /usr/local/cloudcast
 	tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
