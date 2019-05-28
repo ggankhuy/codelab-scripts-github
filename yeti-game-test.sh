@@ -166,7 +166,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		#echo NOTE: It seems that render+discard mode is broken with the latest eng bundle (20180830)
 		
 		echo For render+encode+discard:
-		source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce_nostreamer.sh
+		#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce_nostreamer.sh
+		source /usr/local/cloudcast/env/vce_nostreamer.sh
 		
 		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 		
@@ -198,7 +199,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			#setYetiDisableFabricatedConnected
 
 			echo Setup the swapchain for render+encode+stream:
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			source /usr/local/cloudcast/env/vce.sh
 			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 			
 			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
@@ -371,7 +373,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 			setYetiDisableFabricatedConnected
 
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			source /usr/local/cloudcast/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then

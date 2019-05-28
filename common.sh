@@ -214,7 +214,8 @@ function common_setup () {
                         fi
 			
 			mkdir -p ~/$DIR_ENG_BUNDLE_TO_USE
-                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
+                        #tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
+                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/usr/local/cloudcast --strip-components=1
 			
 		elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
 	        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
