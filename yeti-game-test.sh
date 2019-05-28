@@ -365,12 +365,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 
-			if [[ ! "$(ls -A ~/$DIR_ENG_BUNDLE_TO_USE)" ]] ; then
-    			echo "<path> is empty!"
-			else
-    			echo "<path> is not empty"
-			fi
-
 			setPathLdLibraryPath
 			setYetiDisableFabricatedConnected
 
