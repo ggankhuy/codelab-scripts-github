@@ -4,8 +4,8 @@ GAME_DOOM=1
 GAME_TR2=2
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
+#REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP="10.217.73.160"
 
 export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
@@ -202,29 +202,22 @@ function common_setup () {
 
 	# Setup ggp-eng-bundle in /usr/local/cloudcast.
 	
-	if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
-		echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
-		
-		if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        		sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-		elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        		sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-		else
-        		echo "ERROR: Unknown or unsupported copy protocol."
-		fi
-		
-		if [[ $? -ne 0 ]] ; then
-        		echo "Failed to rsync copy ggp-eng-bundle"
-        		exit 1
-		fi
+	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
-		tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
-	elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
-	        ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
 	else
-		echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
-		exit 1
+        	echo "ERROR: Unknown or unsupported copy protocol."
 	fi
+	
+	if [[ $? -ne 0 ]] ; then
+        	echo "Failed to rsync copy ggp-eng-bundle"
+        	exit 1
+	fi
+
+	tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
         	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
@@ -242,8 +235,8 @@ function common_setup () {
 	rm -rf /usr/local/cloudcast/lib
 	echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
 	sleep 3
-	rm -rf /usr/local/cloudcast/
-	ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
+	#rm -rf /usr/local/cloudcast/
+	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
 	mkdir /log
 	chmod a+rw /log
 	
