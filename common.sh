@@ -1,4 +1,20 @@
 SLEEP_TIME=1
+GAME_3DMARK=0
+GAME_DOOM=1
+GAME_TR2=2
+OPTION_EXTERNAL_IP=1
+OPTION_LOCAL_IP=2
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+
+export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
+export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
+
+#       Set either yeti or ggp  engineering bundle.
+
+export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
+#export DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 function usage() {
         clear
@@ -15,13 +31,47 @@ function usage() {
         exit 1
 }
 
+#	
+#	$1 - full path of file or directory to copy
+#	$2 - destination  on local  file system to copy to.
+	
+function scp_robust ()
+{
+	HOST_SCP_SERVER_1=10.217.75.230
+	HOST_SCP_SERVER_2=10.217.73.160
+	HOST_SCP_SERVERS=(\
+		$HOST_SCP_SERVER_1 \
+		$HOST_SCP_SERVER_2 \
+	)
+
+	for i in ${HOST_SCP_SERVERS[@]}
+	do
+		echo "copying from $i..."
+		#scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+
+                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+	       	        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$i:/$1 $2
+                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+			scp -C -v -o StrictHostKeyChecking=no -r root@$i:/$1 $2
+                else
+                        echo "ERROR: Unknown or unsupported copy protocol."
+                fi
+
+		if [[ $? -eq 0 ]] ; then
+			echo "Copy is successful."
+			break
+		else
+			echo "Copy failed, trying next server."
+		fi
+	done
+}
 function setPathLdLibraryPath ()
 {
-        export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib
+        export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
 
         if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
                 echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
-                echo "export LD_LIBRARY_PATH=~/$DIR_YETI_ENG_BUNDLE/lib"
+                echo "export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib"
         fi
 }
 
@@ -116,10 +166,6 @@ function common_setup () {
 		echo "already present: cd /git.co/ad-hoc-scripts..."
 	fi
 
-	export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-	export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-	export DIR_GGP_END_BUNDLE=ggp-eng-bundle
-	
 	if [[ -z $GIB_DROP_ROOT ]] ; then
         	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
         	exit 1
@@ -149,15 +195,36 @@ function common_setup () {
 
 	echo "Setting up symlink for ~/doom/yeti-release/"
 	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-	ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
+	#ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
+	mkdir ~/doom/yeti-release/
+	
+	if [[ ! -d  $DIR_ENG_BUNDLE_TO_USE ]] ; then
+        	echo "$DIR_ENG_BUNDLE_TO_USE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
+		unlink ~/$DIR_ENG_BUNDLE_TO_USE
+		rm -rf ~/$DIR_ENG_BUNDLE_TO_USE
 
-	if [[ ! -d  $DIR_YETI_ENG_BUNDLE ]] ; then
-        	echo "$DIR_YETI_ENG_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-		unlink ~/$DIR_YETI_ENG_BUNDLE
-		rm -rf ~/$DIR_YETI_ENG_BUNDLE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_ENG_BUNDLE ~/$DIR_YETI_ENG_BUNDLE
+		if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
+                        echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
+                        #sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
+                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+
+                        if [[ $? -ne 0 ]] ; then
+                                echo "Failed to copy ggp-eng-bundle"
+                                exit 1
+                        fi
+			
+			mkdir -p ~/$DIR_ENG_BUNDLE_TO_USE
+                        tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C ~/$DIR_ENG_BUNDLE_TO_USE --strip-components=1
+			
+		elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
+	        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_ENG_BUNDLE_TO_USE ~/$DIR_ENG_BUNDLE_TO_USE
+		else
+			echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE" 
+			exit 1
+		fi
+		
 	else
-        	echo "$DIR_YETI_ENG_BUNDLE already exist, skipping copy..."
+        	echo "$DIR_ENG_BUNDLE_TO_USE already exist, skipping copy..."
 	fi
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
@@ -174,6 +241,8 @@ function common_setup () {
 	chmod -R a+rw /usr/local/cloudcast/
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
+	echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
+	sleep 10
 	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib/ /usr/local/cloudcast/lib
 	mkdir /log
 	chmod a+rw /log
@@ -192,14 +261,14 @@ function common_setup () {
 	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
-	cp ~/$DIR_YETI_ENG_BUNDLE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
+	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	cp ~/$DIR_YETI_ENG_BUNDLE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
 	ls -l ~/doom/
 	ls -l /usr/local/cloudcast/
-        ls -l ~/$DIR_YETI_ENG_BUNDLE
+        ls -l ~/$DIR_ENG_BUNDLE_TO_USE
         ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 }
@@ -222,10 +291,19 @@ function prompt_t2_with_ip () {
 	
 	sleep $SLEEP_TIME
 	
-	if [[ -z $1 ]] ; then
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=127.0.0.1"
-	else
-		#ifconfig | grep inet
-		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip="$external_ip
+	if [[ -z $2 ]] || [[ $2 -eq $OPTION_LOCAL_IP ]] ; then
+		IP_TO_DISPLAY=127.0.0.1
+	elif [[ $2 -eq $OPTION_EXTERNAL_IP ]] 
+		echo "External ip: $external_ip" ; then
+		IP_TO_DISPLAY="$external_ip"
 	fi
+
+	if [[ $1 == $GAME_DOOM ]] ; then
+		echo "./yeti_streamer -policy_config_file lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc --console_stderr -external_ip=$IP_TO_DISPLAY"
+	elif  [[ $1 == $GAME_TR2 ]] ; then
+                echo "./dev/bin/yeti_streamer --policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
+	else
+		echo "ERROR: prompt_t2_with_ip: Invalid game $1" 
+		exit 1
+	fi 
 }
