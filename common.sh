@@ -144,8 +144,8 @@ function common_setup () {
 	
 	sleep $SLEEP_TIME
 
-	rm -rf ~/doom/
-	mkdir -p ~/doom/
+	#rm -rf ~/doom/
+	#mkdir -p ~/doom/
 
 	echo "Setting up symlink for ~/doom/yeti-release/"
 	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
