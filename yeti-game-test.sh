@@ -255,6 +255,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo mkdir -p /srv/game
 			sudo chown -R $(id -u):$(id -g) /srv/game
 
+			''' Following code moved to common.sh, remove after test."
 			# This static path will not work well!!!			
 			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
 
@@ -274,6 +275,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 
 			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+			'''
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
@@ -341,9 +343,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 			
 			echo "type the following to run the catching fire."
-			pushd /srv/game/assets/
-			./TR2_yeti_final
-			popd
+			cd /srv/game/assets/
+			echo ./TR2_yeti_final
 
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
@@ -408,7 +409,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			setPathLdLibraryPath
 
                 	if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
+<<<<<<< HEAD
 				cd /usr/local/cloudcast/
+=======
+				cd /usr/local/cloudcast/dev/bin
+>>>>>>> doom-ggp
                 	elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
 				cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
                 	else
