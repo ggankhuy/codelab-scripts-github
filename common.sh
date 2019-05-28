@@ -67,11 +67,13 @@ function scp_robust ()
 }
 function setPathLdLibraryPath ()
 {
-        export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
+        #export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
+        export LD_LIBRARY_PATH=/usr/local/cloudcast/lib
 
         if [[ -z `env | grep LD_LIBRARY_PATH` ]] ; then
                 echo "it appears LD_LIBRARY_PATH env variable is not set up. Manually run:"
-                echo "export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib"
+                #echo "export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib"
+                echo "export LD_LIBRARY_PATH=/usr/local/cloudcast/lib"
         fi
 }
 
@@ -190,8 +192,8 @@ function common_setup () {
 	
 	sleep $SLEEP_TIME
 
-	rm -rf ~/doom/
-	mkdir -p ~/doom/
+	#rm -rf ~/doom/
+	#mkdir -p ~/doom/
 
 	echo "Setting up symlink for ~/doom/yeti-release/"
 	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
@@ -258,14 +260,16 @@ function common_setup () {
 	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
-	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
+	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
+	cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
 	ls -l ~/doom/
 	ls -l /usr/local/cloudcast/
-        ls -l ~/$DIR_ENG_BUNDLE_TO_USE
+        #ls -l ~/$DIR_ENG_BUNDLE_TO_USE
         ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 }
