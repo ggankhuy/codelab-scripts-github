@@ -242,8 +242,9 @@ function common_setup () {
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
 	echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
-	sleep 10
-	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib/ /usr/local/cloudcast/lib
+	sleep 3
+	rm -rf /usr/local/cloudcast/
+	ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
 	mkdir /log
 	chmod a+rw /log
 	
@@ -258,7 +259,7 @@ function common_setup () {
 
 	unlink /usr/local/cloudcast/lib
 	rm -rf /usr/local/cloudcast/lib
-	ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
+	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
 	cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
