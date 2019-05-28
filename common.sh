@@ -228,13 +228,13 @@ function common_setup () {
         	echo "$DIR_YETI_CONTENT_BUNDLE already exist, skipping copy..."
 	fi
 	
-	echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
-	mkdir -p /usr/local/cloudcast/log
+	#echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
+	#mkdir -p /usr/local/cloudcast/log
 	chmod -R a+rw /usr/local/cloudcast/
-	unlink /usr/local/cloudcast/lib
-	rm -rf /usr/local/cloudcast/lib
-	echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
-	sleep 3
+	#unlink /usr/local/cloudcast/lib
+	#rm -rf /usr/local/cloudcast/lib
+	#echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
+	#sleep 3
 	#rm -rf /usr/local/cloudcast/
 	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
 	mkdir /log
@@ -247,10 +247,10 @@ function common_setup () {
 	unlink /opt/cloudcast/lib/amdvlk64.so
 	rm -rf /opt/cloudcast/lib/amdvlk64.so
 	ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
-	mkdir -p /usr/local/cloudcast/
+	#mkdir -p /usr/local/cloudcast/
 
-	unlink /usr/local/cloudcast/lib
-	rm -rf /usr/local/cloudcast/lib
+	#unlink /usr/local/cloudcast/lib
+	#rm -rf /usr/local/cloudcast/lib
 	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
