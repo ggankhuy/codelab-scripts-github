@@ -67,7 +67,7 @@ sleep $SLEEP_TIME
 
 #	apt packages 
 
-apt install sshpass -y
+apt install sshpass dstat -y
 
 #	Process help request. 
 
@@ -243,7 +243,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
-			rm -rf /usr/local/cloudcast/*
+			#rm -rf /usr/local/cloudcast/*
 			rm -rf  ~/.local/share/vulkan/icd.d/*
 
 			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
@@ -256,28 +256,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo chown -R $(id -u):$(id -g) /var/game
 			sudo mkdir -p /srv/game
 			sudo chown -R $(id -u):$(id -g) /srv/game
-
-			''' Following code moved to common.sh, remove after test."
-			# This static path will not work well!!!			
-			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
-
-			echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
-
-			if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-	                       	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-			elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-	                	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
-			else
-				echo "ERROR: Unknown or unsupported copy protocol."
-			fi
-
-			if [[ $? -ne 0 ]] ; then
-				echo "Failed to rsync copy ggp-eng-bundle"
-				exit 1
-			fi
-
-			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
-			'''
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
