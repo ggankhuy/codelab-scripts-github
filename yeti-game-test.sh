@@ -226,16 +226,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			prompt_t2_with_ip $GAME_3DMARK $OPTION_EXTERNAL_IP
 
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			apt install -y libc++abi-dev
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
+			echo "game client from Linux is dropped support. Please use windows version."
+			exit 0
 		else
 			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
@@ -392,24 +384,9 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			displayIpv4
 			prompt_t2_with_ip $GAME_DOOM $OPTION_EXTERNAL_IP
-
 		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep $SLEEP_TIME
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
-
-			export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-
-			if [[ $? -ne 0 ]] ; then
-				echo "Can not cd into ~/yet-end-bundle/bin"
-				exit 1
-			fi
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
 		else 
 			echo "Invalid terminal selected: $p4 " ; exit 1
 		fi
