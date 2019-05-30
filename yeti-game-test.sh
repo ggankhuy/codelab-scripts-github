@@ -151,6 +151,23 @@ else
 	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
+#	Load amdgpu, kfd driver:
+
+modprobe amdgpu
+modprobe amdkfd
+ret1=`lsmod | grep -u ^amdgpu`
+ret2=`lsmod | grep -u ^amdgpu`
+
+if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
+        echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+        exit 1
+        echo lsmod amdgpu: $ret1
+        echo lsmod amdkfd: $ret2
+else
+        echo lsmod amdgpu: $ret1
+        echo lsmod amdkfd: $ret2
+fi
+
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		clear
