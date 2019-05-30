@@ -173,23 +173,6 @@ function common_setup () {
         	exit 1
 	fi
 
-	#  inserting amdgpu module just in case, sometimes not loaded.
-
-	modprobe amdgpu
-	modprobe amdkfd
-	ret1=`lsmod | grep -u ^amdgpu`
-	ret2=`lsmod | grep -u ^amdgpu`
-
-	if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
-		echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
-		exit 1
-		echo lsmod amdgpu: $ret1
-		echo lsmod amdkfd: $ret2
-	else
-		echo lsmod amdgpu: $ret1
-		echo lsmod amdkfd: $ret2
-	fi
-	
 	sleep $SLEEP_TIME
 
 	#rm -rf ~/doom/
