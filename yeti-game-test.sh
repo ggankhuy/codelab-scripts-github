@@ -67,7 +67,7 @@ sleep $SLEEP_TIME
 
 #	apt packages 
 
-apt install sshpass -y
+apt install sshpass dstat -y
 
 #	Process help request. 
 
@@ -166,7 +166,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		#echo NOTE: It seems that render+discard mode is broken with the latest eng bundle (20180830)
 		
 		echo For render+encode+discard:
-		source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce_nostreamer.sh
+		#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce_nostreamer.sh
+		source /usr/local/cloudcast/env/vce_nostreamer.sh
 		
 		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 		
@@ -198,7 +199,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			#setYetiDisableFabricatedConnected
 
 			echo Setup the swapchain for render+encode+stream:
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			source /usr/local/cloudcast/env/vce.sh
 			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
 			
 			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
@@ -241,7 +243,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
-			rm -rf /usr/local/cloudcast/*
+			#rm -rf /usr/local/cloudcast/*
 			rm -rf  ~/.local/share/vulkan/icd.d/*
 
 			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
@@ -254,26 +256,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo chown -R $(id -u):$(id -g) /var/game
 			sudo mkdir -p /srv/game
 			sudo chown -R $(id -u):$(id -g) /srv/game
-
-			# This static path will not work well!!!			
-			# ln -s /cst_v320_test/drop-March-21-debian/test-apps/yeti/ggp-eng-bundle	 /usr/local/cloudcast
-
-			echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
-
-			if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-	                       	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
-			elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-	                	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp
-			else
-				echo "ERROR: Unknown or unsupported copy protocol."
-			fi
-
-			if [[ $? -ne 0 ]] ; then
-				echo "Failed to rsync copy ggp-eng-bundle"
-				exit 1
-			fi
-
-			tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
 
 			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
 
@@ -341,9 +323,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			fi
 			
 			echo "type the following to run the catching fire."
-			pushd /srv/game/assets/
-			./TR2_yeti_final
-			popd
+			cd /srv/game/assets/
+			echo ./TR2_yeti_final
 
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
@@ -362,16 +343,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 
-			if [[ ! "$(ls -A ~/$DIR_ENG_BUNDLE_TO_USE)" ]] ; then
-    			echo "<path> is empty!"
-			else
-    			echo "<path> is not empty"
-			fi
-
 			setPathLdLibraryPath
 			setYetiDisableFabricatedConnected
 
-			source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
+			source /usr/local/cloudcast/env/vce.sh
 			mkdir -p ~/doom/yeti-release
 
                         if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
@@ -407,15 +383,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			
 			setPathLdLibraryPath
 
-                	if [[ $DIR_ENG_BUNDLE_TO_USE  == $DIR_GGP_ENG_BUNDLE ]] ; then
-				cd ~/$DIR_ENG_BUNDLE_TO_USE/dev/bin
-                	elif [[ $DIR_ENG_BUNDLE_TO_USE == $DIR_YETI_ENG_BUNDLE ]] ; then
-				cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-                	else
-                        	echo "ERROR: It appears unknown ENGINEERING BUNDLE: $DIR_ENG_BUNDLE_TO_USE"
-                        	exit 1
-                	fi
-	
+			cd /usr/local/cloudcast/
 
 			if [[ $? != 0 ]] ; then 
 				echo "Failed to cd into ~/$DIR_ENG_BUNDLE_TO_USE, does it exist? return code: $?"
