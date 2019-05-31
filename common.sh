@@ -7,7 +7,6 @@ OPTION_LOCAL_IP=2
 #REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_IP="10.217.73.160"
 
-export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 

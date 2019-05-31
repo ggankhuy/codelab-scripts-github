@@ -41,14 +41,7 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
-DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
-
 #	Set either yeti or ggp  engineering bundle.
-
-#DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-#DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
 
