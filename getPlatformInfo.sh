@@ -53,6 +53,10 @@ if [[ -z `virt-what` ]] ; then
 	echo $SINGLE_BAR
 	echo "HOST KERNEL: 	"`uname -r`
 
+	echo $SINGLE_BAR
+	echo "HOST GPU: "	
+	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus"
+	cat /sys/bus/pci/drivers/gim/gpubios
         echo "HOST GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"`
         echo $SINGLE_BAR
         echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"`
