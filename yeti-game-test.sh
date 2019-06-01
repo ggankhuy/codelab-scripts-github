@@ -333,33 +333,34 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				mkdir -p $LOG_DIR
 				read -p "Press a key to start TR2..."
 				./TR2_yeti_final > $LOG_DIR/TR2-$DATE.log &
+
+        			dhclient ens3
+			
+        			if [[ $? -ne 0 ]] ; then
+                			echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        			fi
+			
+        			external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        			echo "external IP: " $external_ip
+			
+        			if [[ -z $external_ip ]] ; then
+                			echo "Failed to get external IP: "  $external_ip
+					exit 1
+        			fi
+			
+        			sleep $SLEEP_TIME
+               			IP_TO_DISPLAY="$external_ip"
+				cd /usr/local/cloudcast		
+				read -p "Press a key to start TR2 streaming server..."
+        			./dev/bin/yeti_streamer \
+					-policy_config_file dev/bin/lan_policy.proto_ascii \
+					-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+					-port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
+			
+				fi
 			else
 				echo ./TR2_yeti_final
-			fi
 
-        		dhclient ens3
-		
-        		if [[ $? -ne 0 ]] ; then
-                		echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
-        		fi
-		
-        		external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
-        		echo "external IP: " $external_ip
-		
-        		if [[ -z $external_ip ]] ; then
-                		echo "Failed to get external IP: "  $external_ip
-				exit 1
-        		fi
-		
-        		sleep $SLEEP_TIME
-               		IP_TO_DISPLAY="$external_ip"
-			cd /usr/local/cloudcast		
-			read -p "Press a key to start TR2 streaming server..."
-        		./dev/bin/yeti_streamer \
-				-policy_config_file dev/bin/lan_policy.proto_ascii \
-				-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
-				-port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
-		
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
                         displayIpv4
@@ -372,7 +373,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Invalid terminal selected: $p4 " ; exit 1
 		fi
 
-	elif [[ $game -eq $GAME_DOOM ]] ; then
+	elif [[ $game -eq $GAME_DOOM ]] || [[ $p4 == "t1t2" ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
 		if [[ $p4 == "t1" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
@@ -404,8 +405,41 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 			cd ~/doom/yeti-release
 			chmod 755 ./*
-			echo "Type, but do not execute the following command"
-			echo "./DOOM"
+
+			if  [[ $p4 == "t1t2" ]] ; then
+				DATE=`date +%Y%m%d-%H-%M-%S`
+				LOG_DIR=/g/$DATE
+				mkdir -p $LOG_DIR
+				read -p "Press a key to start TR2..."
+				./DOOM > $LOG_DIR/DOOM-$DATE.log &
+
+        			dhclient ens3
+			
+        			if [[ $? -ne 0 ]] ; then
+                			echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        			fi
+			
+        			external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        			echo "external IP: " $external_ip
+			
+        			if [[ -z $external_ip ]] ; then
+                			echo "Failed to get external IP: "  $external_ip
+					exit 1
+        			fi
+			
+        			sleep $SLEEP_TIME
+               			IP_TO_DISPLAY="$external_ip"
+				cd /usr/local/cloudcast		
+				read -p "Press a key to start TR2 streaming server..."
+        			./dev/bin/yeti_streamer \
+					-policy_config_file dev/bin/lan_policy.proto_ascii \
+					-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+					-port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
+			
+				fi
+			else
+				echo "Type, but do not execute the following command"
+				echo "./DOOM"
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 			pulseaudio --start
