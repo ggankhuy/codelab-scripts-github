@@ -243,7 +243,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			exit 1
 		fi
 	elif [[ $game -eq $GAME_TR2 ]] ; then
-		if [[ $p4 == "t1" ]] ; then			
+		if [[ $p4 == "t1" ]]  || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 			#rm -rf /usr/local/cloudcast/*
 			rm -rf  ~/.local/share/vulkan/icd.d/*
@@ -326,8 +326,38 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			
 			echo "type the following to run the catching fire."
 			cd /srv/game/assets/
-			echo ./TR2_yeti_final
 
+			if  [[ $p4 == "t1t2" ]] ; then
+				DATE=`date +%Y%m%d-%H-%M-%S`
+				LOG_DIR=/g/$DATE
+				mkdir -p $LOG_DIR
+				./TR2_yeti_final > $LOG_DIR/TR2-$DATE.log &
+			else
+				echo ./TR2_yeti_final
+			fi
+
+			sleep 5 
+
+        		dhclient ens3
+		
+        		if [[ $? -ne 0 ]] ; then
+                		echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        		fi
+		
+        		external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        		echo "external IP: " $external_ip
+		
+        		if [[ -z $external_ip ]] ; then
+                		echo "Failed to get external IP: "  $external_ip
+				exit 1
+        		fi
+		
+        		sleep $SLEEP_TIME
+               		IP_TO_DISPLAY="$external_ip"
+			cd /usr/local/cloudcast		
+        		"./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
+		}
+		
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
                         displayIpv4
