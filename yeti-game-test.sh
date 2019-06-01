@@ -243,7 +243,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			exit 1
 		fi
 	elif [[ $game -eq $GAME_TR2 ]] ; then
-		if [[ $p4 == "t1" ]]  || [[ $p4 == "t1t2" ]] ; then			
+		echo "TR2 is selected" ; sleep $SLEEP_TIME
+		sleep 30
+
+		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 			#rm -rf /usr/local/cloudcast/*
 			rm -rf  ~/.local/share/vulkan/icd.d/*
@@ -360,7 +363,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				fi
 			else
 				echo ./TR2_yeti_final
-
+			fi
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
                         displayIpv4
@@ -370,12 +373,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
 		else 
-			echo "Invalid terminal selected: $p4 " ; exit 1
+			echo "1. Invalid terminal selected: $p4 " ; exit 1
 		fi
 
-	elif [[ $game -eq $GAME_DOOM ]] || [[ $p4 == "t1t2" ]] ; then
+	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1" ]] ; then			
+		sleep 30
+		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 
 			setPathLdLibraryPath
@@ -440,6 +444,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			else
 				echo "Type, but do not execute the following command"
 				echo "./DOOM"
+			fi
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
 			pulseaudio --start
@@ -464,7 +469,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "game client from Linux is dropped support. Please use windows version."
 			exit 0
 		else 
-			echo "Invalid terminal selected: $p4 " ; exit 1
+			echo "2. Invalid terminal selected: $p4 " ; exit 1
 		fi
 	else
 		echo "Unsupported game: $game" ; exit 1
