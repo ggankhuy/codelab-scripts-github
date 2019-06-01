@@ -331,6 +331,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				DATE=`date +%Y%m%d-%H-%M-%S`
 				LOG_DIR=/g/$DATE
 				mkdir -p $LOG_DIR
+				read -p "Press a key to start TR2..."
 				./TR2_yeti_final > $LOG_DIR/TR2-$DATE.log &
 			else
 				echo ./TR2_yeti_final
@@ -355,6 +356,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
         		sleep $SLEEP_TIME
                		IP_TO_DISPLAY="$external_ip"
 			cd /usr/local/cloudcast		
+			read -p "Press a key to start TR2 streaming server..."
         		"./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
 		}
 		
