@@ -277,3 +277,43 @@ function prompt_t2_with_ip () {
 
         echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
+
+#	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
+#	input: $1 - name of the game executable.
+#	return: 1 - on any error.
+
+function process_t1t2 ()
+{
+	GAME=$1
+
+	DATE=`date +%Y%m%d-%H-%M-%S`
+        LOG_DIR=/g/$DATE
+        mkdir -p $LOG_DIR
+        read -p "Press a key to start $GAME..."
+        ./$GAME > $LOG_DIR/$GAME-$DATE.log &
+
+        dhclient ens3
+
+        if [[ $? -ne 0 ]] ; then
+                echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        fi
+
+        external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        echo "external IP: " $external_ip
+
+        if [[ -z $external_ip ]] ; then
+                echo "Failed to get external IP: "  $external_ip
+                exit 1
+        fi
+
+        sleep $SLEEP_TIME
+        IP_TO_DISPLAY="$external_ip"
+        cd /usr/local/cloudcast
+        read -p "Press a key to start $GAME streaming server..."
+        ./dev/bin/yeti_streamer \
+                -policy_config_file dev/bin/lan_policy.proto_ascii \
+                -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+                -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
+
+        fi
+}
