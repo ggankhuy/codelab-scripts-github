@@ -337,8 +337,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo ./TR2_yeti_final
 			fi
 
-			sleep 5 
-
         		dhclient ens3
 		
         		if [[ $? -ne 0 ]] ; then
@@ -357,8 +355,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                		IP_TO_DISPLAY="$external_ip"
 			cd /usr/local/cloudcast		
 			read -p "Press a key to start TR2 streaming server..."
-        		"./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
-		}
+        		./dev/bin/yeti_streamer \
+				-policy_config_file dev/bin/lan_policy.proto_ascii \
+				-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+				-port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
 		
 		elif [[ $p4 == "t2" ]] ; then
 			echo "Terminal2." ; sleep $SLEEP_TIME
