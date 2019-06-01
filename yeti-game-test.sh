@@ -244,7 +244,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
-		sleep 30
 
 		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
@@ -349,7 +348,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
-		sleep 30
 		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 

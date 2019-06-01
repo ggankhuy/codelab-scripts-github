@@ -314,6 +314,4 @@ function process_t1t2 ()
                 -policy_config_file dev/bin/lan_policy.proto_ascii \
                 -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
                 -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
-
-        fi
 }
