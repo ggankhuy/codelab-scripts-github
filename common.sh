@@ -267,6 +267,8 @@ function common_setup () {
         #ls -l ~/$DIR_ENG_BUNDLE_TO_USE
         ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
+
+	sudo usermod -a -G video nonroot
 }
 
 function prompt_t2_with_ip () {
