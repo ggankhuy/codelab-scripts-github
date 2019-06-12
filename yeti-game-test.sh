@@ -41,20 +41,6 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
-#	Set either yeti or ggp  engineering bundle.
-
-TR2_START_LOCATION=/usr/local/cloudcast/runit/
-
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
-
-
-FILE_COPY_SCP=1
-FILE_COPY_WGET=2
-FILE_COPY_RSYNC=3
-OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
-
 vm_check
 sleep $SLEEP_TIME
 

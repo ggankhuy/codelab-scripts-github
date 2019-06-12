@@ -12,6 +12,11 @@ export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 
+FILE_COPY_SCP=1
+FILE_COPY_WGET=2
+FILE_COPY_RSYNC=3
+OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
+
 #       Set either yeti or ggp  engineering bundle.
 
 export DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
