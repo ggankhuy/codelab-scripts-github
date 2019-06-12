@@ -9,6 +9,8 @@ REPO_SERVER_IP="10.217.73.160"
 
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
+export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
+export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 
 #       Set either yeti or ggp  engineering bundle.
 
@@ -187,9 +189,9 @@ function common_setup () {
 	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
 	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$GGP_BUNDLE_VERSION /tmp/
 	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$GGP_BUNDLE_VERSION /tmp/
 	else
         	echo "ERROR: Unknown or unsupported copy protocol."
 	fi
@@ -200,7 +202,7 @@ function common_setup () {
 	fi
 
 	mkdir -p /usr/local/cloudcast
-	tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
 	
 	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
         	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
