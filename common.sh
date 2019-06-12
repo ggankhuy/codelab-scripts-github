@@ -167,6 +167,27 @@ function vm_check () {
 	sleep $SLEEP_TIME
 }
 
+function common_runtime_setup ()
+{
+	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+	
+	#if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
+        #	echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
+        #	exit 1
+	#else
+        #	echo "Adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
+	
+        	# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running
+        	# ok with Sam
+        	#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+	
+        	# 5.20.2019 Alan, this turned out to be wrong.
+        	# Replaced with following.
+	
+        	#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
+        #	echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/co$
+	#fi
+}
 function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
@@ -190,25 +211,30 @@ function common_setup () {
         	exit 1
 	fi
 
-	mkdir -p /usr/local/cloudcast
+        sudo mkdir -p /usr/local/cloudcast
+        sudo chown -R $(id -u):$(id -g) /usr/local/cloudcast
+        sudo mkdir -p /var/game
+        sudo chown -R $(id -u):$(id -g) /var/game
+        sudo mkdir -p /srv/game
+        sudo chown -R $(id -u):$(id -g) /srv/game
+
 	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
 	
-	chmod -R a+rw /usr/local/cloudcast/
 	mkdir /log
 	chmod a+rw /log
 	
 	apt-get install freeglut3 pulseaudio libpulse-dev
 	
-	mkdir -p /opt/cloudcast/lib
+	#mkdir -p /opt/cloudcast/lib
 
-	unlink /opt/cloudcast/lib/amdvlk64.so
-	rm -rf /opt/cloudcast/lib/amdvlk64.so
-	ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
-	mkdir -p ~/.local/share/vulkan/icd.d
+	#unlink /opt/cloudcast/lib/amdvlk64.so
+	#rm -rf /opt/cloudcast/lib/amdvlk64.so
+	#ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
+	#mkdir -p ~/.local/share/vulkan/icd.d
 
-	cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
-	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
+	#cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
+	#mkdir -p /usr/local/cloudcast/etc/yetivlk
+	#cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
 	ls -l /usr/local/cloudcast/
