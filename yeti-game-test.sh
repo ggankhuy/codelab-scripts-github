@@ -231,88 +231,23 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
 
+		common_runtime_setup
+
 		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
-			#rm -rf /usr/local/cloudcast/*
-			rm -rf  ~/.local/share/vulkan/icd.d/*
 
-			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
-				echo "Error: can not find /etc/vulkan/icd.d/amd_icd64.json..."
-			fi
+			rm /srv/game/assets
+			ln -fs /srv/game/catchingfire /srv/game/assets
 
-			sudo mkdir -p /usr/local/cloudcast
-			sudo chown -R $(id -u):$(id -g) /usr/local/cloudcast
-			sudo mkdir -p /var/game
-			sudo chown -R $(id -u):$(id -g) /var/game
-			sudo mkdir -p /srv/game
-			sudo chown -R $(id -u):$(id -g) /srv/game
+                        copy_game_files tr2 /srv/game/catchingfire/
 
-			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
-
-			if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
-				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
-				exit 1
-			else
-				echo "Adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
-
-				# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running 
-				# ok with Sam
-				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-
-				# 5.20.2019 Alan, this turned out to be wrong.
-				# Replaced with following.
-
-				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
-			fi	
-
-			if [[ ! "$(ls -A ~/tr2)" ]] ; then
-				echo "~/tr2 does not exist."
-				mkdir -p ~/tr2
-				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-
-                        	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	else
-                                	echo "ERROR: Unknown or unsupported copy protocol."
-                        	fi
-	
-
-				if [[ $? -ne 0 ]] ; then
-					echo "Failed to copy tr2..."
-					exit 1
-				fi
-			else
-				echo "~/tr2 exists, skipping."
-			fi
-
-			sleep 5 
-
-			ln -s ~/tr2 /srv/game/assets
 			cd /usr/local/cloudcast	
-			
-			# Slightly possible tweaked out content of ./runit/catchingfire.sh is below.
-			# No longer see in the instruction.
-
-			#./runit/catchingfire.sh
-
-			source ./env/vce.sh
 
 			if [[ ! -d /var/game ]]; then
 				echo "Create directory /var/game."
   				exit 1
 			fi
 			
-			cd /srv/game/assets/
-
-			if [[ ! -f /srv/game/assets/TR2_yeti_final ]]; then
-  				echo "Unpack the catching fire package to /srv/game/assets/ (or symlink)"
-	  			exit 1
-			fi
-			
-			echo "type the following to run the catching fire."
 			cd /srv/game/assets/
 
 			if  [[ $p4 == "t1t2" ]] ; then
