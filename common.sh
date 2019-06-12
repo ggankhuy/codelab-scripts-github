@@ -171,23 +171,6 @@ function common_runtime_setup ()
 {
 	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
 	source /usr/local/cloudcast/env/vce.sh
-
-	#if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
-        #	echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
-        #	exit 1
-	#else
-        #	echo "Adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
-	
-        	# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running
-        	# ok with Sam
-        	#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-	
-        	# 5.20.2019 Alan, this turned out to be wrong.
-        	# Replaced with following.
-	
-        	#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-        #	echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/co$
-	#fi
 }
 function common_setup () {
 	clear
@@ -226,17 +209,6 @@ function common_setup () {
 	
 	apt-get install freeglut3 pulseaudio libpulse-dev
 	
-	#mkdir -p /opt/cloudcast/lib
-
-	#unlink /opt/cloudcast/lib/amdvlk64.so
-	#rm -rf /opt/cloudcast/lib/amdvlk64.so
-	#ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
-	#mkdir -p ~/.local/share/vulkan/icd.d
-
-	#cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
-	#mkdir -p /usr/local/cloudcast/etc/yetivlk
-	#cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
-
 	echo "Soft links: "
 	ls -l /usr/local/cloudcast/
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
@@ -306,3 +278,47 @@ function process_t1t2 ()
                 -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
                 -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
 }
+
+#       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION
+#       input:
+#       $1 - name of directory in $REPO_SERVER_LOCATION to copy
+
+function copy_game_files() {
+        game_dir_src=$1
+        game_dir_dest=$2
+
+        if [[ -z $game_dir_src ]] ; then
+                echo "Error: need to specify the game in p1"
+                exit 1
+        fi
+
+        if [[ -z $game_dir_dest ]] ; then
+                game_dir_dest="."
+        fi
+
+        echo "Destination path: $game_dir_dest"
+        sudo mkdir -p $game_dir_dest
+        sleep 3
+
+        if [[ ! "$(ls -A $game_dir_dest)" ]] ; then
+                echo "$game_dir_dest does not exist."
+                sudo mkdir -p $game_dir_dest
+                echo "Copying $game_dir_src from $REPO_SERVER_IP, will take some time..."
+
+                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+                        sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest
+                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+                        sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/
+                else
+                        echo "ERROR: Unknown or unsupported copy protocol."
+                fi
+
+                if [[ $? -ne 0 ]] ; then
+                        echo "Failed to copy $game_dir_src..."
+                        exit 1
+                fi
+        else
+                echo "$game_dir_dest exists, skipping."
+        fi
+}
+

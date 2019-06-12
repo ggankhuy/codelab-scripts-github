@@ -220,46 +220,18 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
 
+			rm /srv/game/assets
+			ln -fs /srv/game/catchingfire /srv/game/assets
 
-			if [[ ! "$(ls -A ~/tr2)" ]] ; then
-				echo "~/tr2 does not exist."
-				mkdir -p ~/tr2
-				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
+                        copy_game_files tr2 /srv/game/catchingfire/
 
-                        	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-	       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	else
-                                	echo "ERROR: Unknown or unsupported copy protocol."
-                        	fi
-	
-
-				if [[ $? -ne 0 ]] ; then
-					echo "Failed to copy tr2..."
-					exit 1
-				fi
-			else
-				echo "~/tr2 exists, skipping."
-			fi
-
-			ln -s ~/tr2 /srv/game/assets
 			cd /usr/local/cloudcast	
-			source ./env/vce.sh
 
 			if [[ ! -d /var/game ]]; then
 				echo "Create directory /var/game."
   				exit 1
 			fi
 			
-			cd /srv/game/assets/
-
-			if [[ ! -f /srv/game/assets/TR2_yeti_final ]]; then
-  				echo "Unpack the catching fire package to /srv/game/assets/ (or symlink)"
-	  			exit 1
-			fi
-			
-			echo "type the following to run the catching fire."
 			cd /srv/game/assets/
 
 			if  [[ $p4 == "t1t2" ]] ; then
