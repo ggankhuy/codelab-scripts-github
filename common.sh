@@ -170,7 +170,8 @@ function vm_check () {
 function common_runtime_setup ()
 {
 	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
-	
+	source /usr/local/cloudcast/env/vce.sh
+
 	#if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
         #	echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
         #	exit 1
