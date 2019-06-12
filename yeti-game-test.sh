@@ -25,36 +25,6 @@ p2=$2
 p3=$3
 p4=$4
 
-game=0		# game
-mode=0		# 0 for yeti, 1 for linux
-option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
-
-MODE_YETI=0
-MODE_LINUX=1
-
-OPTION_NOSTREAM=0
-OPTION_STREAM_2PC=2
-
-TERMINAL_T1=0
-TERMINAL_T2=1
-TERMINAL_CLIENT=2
-
-SLEEP_TIME=1
-
-#	Set either yeti or ggp  engineering bundle.
-
-TR2_START_LOCATION=/usr/local/cloudcast/runit/
-
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
-
-
-FILE_COPY_SCP=1
-FILE_COPY_WGET=2
-FILE_COPY_RSYNC=3
-OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
-
 vm_check
 sleep $SLEEP_TIME
 
@@ -247,7 +217,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 			echo "Terminal1." ; sleep $SLEEP_TIME
-			#rm -rf /usr/local/cloudcast/*
 			rm -rf  ~/.local/share/vulkan/icd.d/*
 
 			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
@@ -288,7 +257,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                         	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
         	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2/* ~/tr2/
                         	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
+	       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
                         	else
                                 	echo "ERROR: Unknown or unsupported copy protocol."
                         	fi
@@ -302,16 +271,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 				echo "~/tr2 exists, skipping."
 			fi
 
-			sleep 5 
-
 			ln -s ~/tr2 /srv/game/assets
 			cd /usr/local/cloudcast	
-			
-			# Slightly possible tweaked out content of ./runit/catchingfire.sh is below.
-			# No longer see in the instruction.
-
-			#./runit/catchingfire.sh
-
 			source ./env/vce.sh
 
 			if [[ ! -d /var/game ]]; then

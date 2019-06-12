@@ -7,6 +7,35 @@ OPTION_LOCAL_IP=2
 #REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_IP="10.217.73.160"
 
+game=0          # game
+mode=0          # 0 for yeti, 1 for linux
+option=0        # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+
+MODE_YETI=0
+MODE_LINUX=1
+
+OPTION_NOSTREAM=0
+OPTION_STREAM_2PC=2
+
+TERMINAL_T1=0
+TERMINAL_T2=1
+TERMINAL_CLIENT=2
+
+SLEEP_TIME=1
+
+#       Set either yeti or ggp  engineering bundle.
+
+TR2_START_LOCATION=/usr/local/cloudcast/runit/
+
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_LOCATION=/repo/stadia
+
+FILE_COPY_SCP=1
+FILE_COPY_WGET=2
+FILE_COPY_RSYNC=3
+OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
+
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
@@ -142,47 +171,7 @@ function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 
-	if [[ -z $1 ]] ; then
-		echo "p1: $1 "
-	else
-		echo "Setting GIB_DROP_ROOT to $1..."
-		export GIB_DROP_ROOT=$1
-		GIB_DROP_ROOT=$1
-
-		if [[ -z `cat ~/.bashrc | grep GIB_DROP_ROOT` ]] ; then
-			echo "adding GIB_DROP_ROOT to bashrc..."
-			echo "export GIB_DROP_ROOT=$1" >> ~/.bashrc
-		else
-			echo "GIB_DROP_ROOT already added to bash..."
-		fi
-	fi 
-
-	if [[ -z $GIB_DROP_ROOT ]] ; then
-        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
-        	exit 1
-	fi
-
-	if [[ -z `cat ~/.bashrc | grep "cd /git.co/ad-hoc-scripts"` ]] ; then
-		echo "adding: cd /git.co/ad-hoc-scripts..."
-		echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
-	else
-		echo "already present: cd /git.co/ad-hoc-scripts..."
-	fi
-
-	if [[ -z $GIB_DROP_ROOT ]] ; then
-        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
-        	exit 1
-	fi
-
 	sleep $SLEEP_TIME
-
-	#rm -rf ~/doom/
-	#mkdir -p ~/doom/
-
-	echo "Setting up symlink for ~/doom/yeti-release/"
-	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-	#ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
-	mkdir ~/doom/yeti-release/
 
 	# Setup ggp-eng-bundle in /usr/local/cloudcast.
 	
@@ -204,24 +193,7 @@ function common_setup () {
 	mkdir -p /usr/local/cloudcast
 	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
 	
-	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
-        	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-		unlink ~/$DIR_YETI_CONTENT_BUNDLE
-		rm -rf ~/$DIR_YETI_CONTENT_BUNDLE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~/$DIR_YETI_CONTENT_BUNDLE
-	else
-        	echo "$DIR_YETI_CONTENT_BUNDLE already exist, skipping copy..."
-	fi
-	
-	#echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
-	#mkdir -p /usr/local/cloudcast/log
 	chmod -R a+rw /usr/local/cloudcast/
-	#unlink /usr/local/cloudcast/lib
-	#rm -rf /usr/local/cloudcast/lib
-	#echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
-	#sleep 3
-	#rm -rf /usr/local/cloudcast/
-	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
 	mkdir /log
 	chmod a+rw /log
 	
@@ -232,24 +204,14 @@ function common_setup () {
 	unlink /opt/cloudcast/lib/amdvlk64.so
 	rm -rf /opt/cloudcast/lib/amdvlk64.so
 	ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
-	#mkdir -p /usr/local/cloudcast/
-
-	#unlink /usr/local/cloudcast/lib
-	#rm -rf /usr/local/cloudcast/lib
-	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
 	mkdir -p ~/.local/share/vulkan/icd.d
 
-	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
 	cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
 	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 	cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
 
 	echo "Soft links: "
-	ls -l ~/doom/
 	ls -l /usr/local/cloudcast/
-        #ls -l ~/$DIR_ENG_BUNDLE_TO_USE
-        ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 }
 
