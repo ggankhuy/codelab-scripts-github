@@ -150,7 +150,7 @@ function vm_check () {
 
 	# Check if running in VM, if not, exit with error.
 
-	apt install virt-what -y 
+	sudo apt install virt-what -y 
 
 	if [[ -z `which virt-what` ]] ; then
 		echo "Failed to install virt-what..."
@@ -214,7 +214,7 @@ function common_setup () {
 	ls -l /usr/local/cloudcast/
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 
-	echo "cd `pwd` >> ~/.bashrc
+	echo "cd `pwd`" >> ~/.bashrc
 }
 
 function prompt_t2_with_ip () {
