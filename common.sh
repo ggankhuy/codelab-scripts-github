@@ -254,7 +254,6 @@ function prompt_t2_with_ip () {
 function t1()
 {
 	echo "t1..."
-	sleep 10
 }
 #	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
 #	input: $1 - name of the game executable.
@@ -267,16 +266,17 @@ function process_t1t2 ()
 	DATE=`date +%Y%m%d-%H-%M-%S`
         LOG_DIR=/g/$DATE
         sudo mkdir -p $LOG_DIR
+	sudo chmod 777 $LOG_DIR
         read -p "Press a key to start $GAME..."
         ./$GAME > $LOG_DIR/$GAME-$DATE.log &
 
-        dhclient ens3
+        sudo dhclient ens3
 
         if [[ $? -ne 0 ]] ; then
                 echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
         fi
 
-        external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        external_ip=`sudo ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
         echo "external IP: " $external_ip
 
         if [[ -z $external_ip ]] ; then
@@ -313,7 +313,6 @@ function copy_game_files() {
 
         echo "Destination path: $game_dir_dest"
         sudo mkdir -p $game_dir_dest
-        sleep 3
 
         if [[ ! "$(ls -A $game_dir_dest)" ]] ; then
                 echo "$game_dir_dest does not exist."

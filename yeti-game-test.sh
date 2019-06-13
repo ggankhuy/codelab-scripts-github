@@ -287,7 +287,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		cd /srv/game/assets/
 	
 		if  [[ $p4 == "t1t2" ]] ; then
-			t1 
 			process_t1t2 $GAME_EXECUTABLE
 		else
 			echo ./$GAME_EXECUTABLE
