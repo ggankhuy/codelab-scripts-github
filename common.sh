@@ -242,6 +242,11 @@ function prompt_t2_with_ip () {
         echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
 
+function t1()
+{
+	echo "t1..."
+	sleep 10
+}
 #	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
 #	input: $1 - name of the game executable.
 #	return: 1 - on any error.

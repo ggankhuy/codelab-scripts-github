@@ -230,110 +230,56 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
-
-		common_runtime_setup
-
-		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
-			echo "Terminal1." ; sleep $SLEEP_TIME
-
-			rm /srv/game/assets
-			ln -fs /srv/game/catchingfire /srv/game/assets
-
-                        copy_game_files tr2 /srv/game/catchingfire/
-
-			cd /usr/local/cloudcast	
-
-			if [[ ! -d /var/game ]]; then
-				echo "Create directory /var/game."
-  				exit 1
-			fi
-			
-			cd /srv/game/assets/
-
-			if  [[ $p4 == "t1t2" ]] ; then
-				process_t1t2 TR2_yeti_final
-			else
-				echo ./TR2_yeti_final
-			fi
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-                        displayIpv4
-                        prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
-			cd /usr/local/cloudcast
-		elif [[ $p4 == "client" ]] ; then
-			echo "game client from Linux is dropped support. Please use windows version."
-			exit 0
-		else 
-			echo "1. Invalid terminal selected: $p4 " ; exit 1
-		fi
-
+		SOURCE_FOLDER=tr2
+		DESTINATION_FOLDER=catchingfire
+		GAME_EXECUTABLE=TR2_yeti_final
+		GAME_NAME=$GAME_TR2
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
-			echo "Terminal1." ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=Doom_Linux
+		DESTINATION_FOLDER=lincoln
+		GAME_EXECUTABLE=DOOM
+		GAME_NAME=$GAME_DOOM
 
-			setPathLdLibraryPath
-			setYetiDisableFabricatedConnected
-
-			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			source /usr/local/cloudcast/env/vce.sh
-			mkdir -p ~/doom/yeti-release
-
-                        if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
-				mkdir -p ~/doom/yeti-release/
-                                echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
-
-                                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        				sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
-                                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        				sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
-                                else
-                                        echo "ERROR: Unknown or unsupported copy protocol."
-                                fi
-        
-				if [[ $? -ne 0 ]] ; then
-					echo "Failed to copy DOOM"
-					exit 1
-				fi
-                        fi
-
-			cd ~/doom/yeti-release
-			chmod 755 ./*
-
-			if  [[ $p4 == "t1t2" ]] ; then
-				process_t1t2 DOOM 
-			else
-  				echo "Type, but do not execute the following command"
-				echo "./DOOM"
-			fi
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			pulseaudio --start
-
-			if [[ $? != 0 ]] ; then 
-				echo "Failed to run pulseaudio, does it exist or some other problem? return code: $?"
-				exit 1
-			fi
-			
-			setPathLdLibraryPath
-
-			cd /usr/local/cloudcast/
-
-			if [[ $? != 0 ]] ; then 
-				echo "Failed to cd into ~/$DIR_ENG_BUNDLE_TO_USE, does it exist? return code: $?"
-				exit 1
-			fi
-
-			displayIpv4
-			prompt_t2_with_ip $GAME_DOOM $OPTION_EXTERNAL_IP
-		elif [[ $p4 == "client" ]] ; then
-			echo "game client from Linux is dropped support. Please use windows version."
-			exit 0
-		else 
-			echo "2. Invalid terminal selected: $p4 " ; exit 1
-		fi
 	else
 		echo "Unsupported game: $game" ; exit 1
+	fi
+
+	common_runtime_setup
+	
+	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
+		echo "Terminal1." ; sleep $SLEEP_TIME
+	
+		rm /srv/game/assets
+		ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
+	
+        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+	
+		cd /usr/local/cloudcast	
+	
+		if [[ ! -d /var/game ]]; then
+			echo "Create directory /var/game."
+  			exit 1
+		fi
+		
+		cd /srv/game/assets/
+	
+		if  [[ $p4 == "t1t2" ]] ; then
+			t1 
+			process_t1t2 $GAME_EXECUTABLE
+		else
+			echo ./$GAME_EXECUTABLE
+		fi
+	elif [[ $p4 == "t2" ]] ; then
+		echo "Terminal2." ; sleep $SLEEP_TIME
+        	displayIpv4
+        	prompt_t2_with_ip $GAME_NAME $OPTION_EXTERNAL_IP
+		cd /usr/local/cloudcast
+	elif [[ $p4 == "client" ]] ; then
+		echo "game client from Linux is dropped support. Please use windows version."
+		exit 0
+	else 
+		echo "1. Invalid terminal selected: $p4 " ; exit 1
 	fi
 else
 	echo "Invalid option is slipped through."
