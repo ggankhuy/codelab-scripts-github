@@ -270,7 +270,7 @@ function process_t1t2 ()
 	sudo chmod 777 $LOG_DIR
         read -p "Press a key to start $GAME..."
 
-	if [[ $ENABLE_LOG -eq 0 ]] ; 
+	if [[ $ENABLE_LOG -eq 0 ]] ;  then
 	        ./$GAME &
 	else
 	        ./$GAME > $LOG_DIR/$GAME-$DATE.log &
@@ -295,7 +295,7 @@ function process_t1t2 ()
         cd /usr/local/cloudcast
         read -p "Press a key to start $GAME streaming server..."
 
-	if [[ $ENABLE_LOG -eq 0 ]] ; 
+	if [[ $ENABLE_LOG -eq 0 ]] ;  then
         	./dev/bin/yeti_streamer \
                 	-policy_config_file dev/bin/lan_policy.proto_ascii \
                 	-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
