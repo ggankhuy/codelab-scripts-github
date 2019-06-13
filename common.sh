@@ -222,6 +222,10 @@ function common_setup () {
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 
 	echo "cd `pwd`" >> ~/.bashrc
+	sudo usermod -aG video $LOGNAME
+	echo "video group: "
+	echo `sudo getent group video`
+	sleept $SLEEP_TIME
 }
 
 function prompt_t2_with_ip () {
