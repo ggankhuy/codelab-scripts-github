@@ -152,12 +152,12 @@ function vm_check () {
 
 	sudo apt install virt-what -y 
 
-	if [[ -z `which virt-what` ]] ; then
+	if [[ -z `sudo which virt-what` ]] ; then
 		echo "Failed to install virt-what..."
 		exit 1
 	fi
 
-	if [[ -z `virt-what` ]] ; then
+	if [[ -z `sudo virt-what` ]] ; then
 		echo "virt-what returns null, it is not running inside vm: hostname: "
 		echo `hostname`
 		exit 1
@@ -176,6 +176,13 @@ function common_runtime_setup ()
 function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
+
+	sudo apt install sshpass
+
+	if [[ $? -ne 0 ]] ; then
+		echo "Error: Failed to install sshpass."
+		exit 1
+	fi
 
 	sleep $SLEEP_TIME
 
