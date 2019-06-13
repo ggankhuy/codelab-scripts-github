@@ -225,7 +225,7 @@ function common_setup () {
 	sudo usermod -aG video $LOGNAME
 	echo "video group: "
 	echo `sudo getent group video`
-	sleept $SLEEP_TIME
+	sleep $SLEEP_TIME
 }
 
 function prompt_t2_with_ip () {
