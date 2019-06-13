@@ -135,8 +135,8 @@ fi
 
 #	Load amdgpu, kfd driver:
 
-modprobe amdgpu
-modprobe amdkfd
+sudo modprobe amdkfd
+sudo modprobe amdgpu
 ret1=`lsmod | grep -u ^amdgpu`
 ret2=`lsmod | grep -u ^amdgpu`
 
