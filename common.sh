@@ -212,8 +212,8 @@ function common_setup () {
 
 	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
 	
-	mkdir /log
-	chmod a+rw /log
+	sudo mkdir /log
+	sudo chmod a+rw /log
 	
 	apt-get install freeglut3 pulseaudio libpulse-dev
 	
@@ -266,7 +266,7 @@ function process_t1t2 ()
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
         LOG_DIR=/g/$DATE
-        mkdir -p $LOG_DIR
+        sudo mkdir -p $LOG_DIR
         read -p "Press a key to start $GAME..."
         ./$GAME > $LOG_DIR/$GAME-$DATE.log &
 
