@@ -261,6 +261,7 @@ function t1()
 
 function process_t1t2 ()
 {
+	ENABLE_LOG=0
 	GAME=$1
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
@@ -268,7 +269,12 @@ function process_t1t2 ()
         sudo mkdir -p $LOG_DIR
 	sudo chmod 777 $LOG_DIR
         read -p "Press a key to start $GAME..."
-        ./$GAME > $LOG_DIR/$GAME-$DATE.log &
+
+	if [[ $ENABLE_LOG -eq 0 ]] ; 
+	        ./$GAME &
+	else
+	        ./$GAME > $LOG_DIR/$GAME-$DATE.log &
+	fi
 
         sudo dhclient ens3
 
@@ -288,10 +294,18 @@ function process_t1t2 ()
         IP_TO_DISPLAY="$external_ip"
         cd /usr/local/cloudcast
         read -p "Press a key to start $GAME streaming server..."
-        ./dev/bin/yeti_streamer \
-                -policy_config_file dev/bin/lan_policy.proto_ascii \
-                -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
-                -port 44700 -null_audio=true > $LOG_DIR/TR2-stream-$DATE.log
+
+	if [[ $ENABLE_LOG -eq 0 ]] ; 
+        	./dev/bin/yeti_streamer \
+                	-policy_config_file dev/bin/lan_policy.proto_ascii \
+                	-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+                	-port 44700 -null_audio=true 
+	else
+        	./dev/bin/yeti_streamer \
+                	-policy_config_file dev/bin/lan_policy.proto_ascii \
+                	-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+                	-port 44700 -null_audio=true > $LOG_DIR/$GAME-stream-$DATE.log
+	fi
 }
 
 #       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION
