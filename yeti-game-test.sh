@@ -272,9 +272,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
                 	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
                 	sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
                 	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
+	                sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+		elif [[ $game -eq $GAME_DOOM ]] ; then
+			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
 		fi
-
-                sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
 
 		cd /usr/local/cloudcast	
 	

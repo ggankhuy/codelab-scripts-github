@@ -213,6 +213,8 @@ function common_setup () {
 	echo "Soft links: "
 	ls -l /usr/local/cloudcast/
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
+
+	echo "cd `pwd` >> ~/.bashrc
 }
 
 function prompt_t2_with_ip () {
