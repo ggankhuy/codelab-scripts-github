@@ -66,6 +66,9 @@ elif  [[ $p1 == "doom" ]] ; then
 elif [[ $p1 == "tr2" ]] ; then
 	echo "tr2 is selected..."
 	game=$GAME_TR2
+elif [[ $p1 == "quail" ]] ; then
+	echo "tr2 is selected..."
+	game=$GAME_QUAIL
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
 	echo "p2: $p2..."
@@ -228,6 +231,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Invalid  p4 is slipped through: $p4."
 			exit 1
 		fi
+	elif [[ $game -eq $GAME_QUAIL ]] ; then
+		echo "TR2 is selected" ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=Quail
+		DESTINATION_FOLDER=infiltrator
+		GAME_EXECUTABLE=InfiltratorDemo.elf
+		GAME_FOLDER=InfiltratorDemo/Binaries/Quail/
+		GAME_NAME=$GAME_QUAIL
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=tr2
@@ -254,7 +264,18 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
 	
         	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
-	
+
+		# infiltrator specific code.
+
+		if [[ $game -eq $GAME_QUAIL ]] ; then
+                	#sudo ln -fs /srv/game/infiltrator/ /srv/game/assets
+                	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
+                	sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
+                	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
+		fi
+
+                sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+
 		cd /usr/local/cloudcast	
 	
 		if [[ ! -d /var/game ]]; then
