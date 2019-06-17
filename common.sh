@@ -171,7 +171,7 @@ function vm_check () {
 function common_runtime_setup ()
 {
 	source /usr/local/cloudcast/env/vce.sh
-	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
 
 }
 function common_setup () {
@@ -192,9 +192,9 @@ function common_setup () {
 	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
 	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
+        	sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
+        	sudo sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	else
         	echo "ERROR: Unknown or unsupported copy protocol."
 	fi
