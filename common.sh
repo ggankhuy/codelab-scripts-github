@@ -221,7 +221,15 @@ function common_setup () {
 	ls -l /usr/local/cloudcast/
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 
-	echo "cd `pwd`" >> ~/.bashrc
+	# If logic is not working...After add, it adds again. 
+
+	if [[ -z `cat ~/.bashrc | grep "cd.*ad-hoc-scrits"` ]] ; then
+		echo "adding to bashrc: cd `pwd`"
+		echo "cd `pwd`" >> ~/.bashrc
+	else
+		echo "already in bashrc: cd `pwd`"
+	fi
+
 	sudo usermod -aG video $LOGNAME
 	echo "video group: "
 	echo `sudo getent group video`
