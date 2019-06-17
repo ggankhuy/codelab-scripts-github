@@ -225,9 +225,9 @@ function common_setup () {
 
 	if [[ -z `cat ~/.bashrc | grep "cd.*ad-hoc-scrits"` ]] ; then
 		echo "adding to bashrc: cd `pwd`"
-		echo "cd `pwd`" >> ~/.bashrc
+		sudo echo "cd `pwd`" >> ~/.bashrc
 	else
-		echo "already in bashrc: cd `pwd`"
+		sudo echo "already in bashrc: cd `pwd`"
 	fi
 
 	sudo usermod -aG video $LOGNAME
