@@ -172,6 +172,7 @@ function common_runtime_setup ()
 {
 	source /usr/local/cloudcast/env/vce.sh
 	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+
 }
 function common_setup () {
 	clear

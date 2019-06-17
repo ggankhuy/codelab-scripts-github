@@ -284,6 +284,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
   			exit 1
 		fi
 		
+        	sudo chmod -R g=u /usr/local/cloudcast/
+        	sudo chmod -R o=u /usr/local/cloudcast/
+        	sudo chmod -R g=u /srv/game/
+        	sudo chmod -R o=u /srv/game/
+	
 		cd /srv/game/assets/
 	
 		if  [[ $p4 == "t1t2" ]] ; then
