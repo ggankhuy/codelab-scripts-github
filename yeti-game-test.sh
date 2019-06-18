@@ -223,8 +223,16 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
 		echo "Terminal1." ; sleep $SLEEP_TIME
 	
-		rm /srv/game/assets
-		ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
+
+		if [[ $game -eq $GAME_QUAIL ]] ; then
+			sudo rm /srv/game/assets/
+			sudo mkdir -p /srv/game/assets/
+			sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
+		else
+			sudo rm /srv/game/assets
+			sudo mkdir -p /srv/game/assets/
+			sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
+		fi
 	
         	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
@@ -232,13 +240,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 		if [[ $game -eq $GAME_QUAIL ]] ; then
 			echo "Quail specific steps..."
-                	#sudo ln -fs /srv/game/infiltrator/ /srv/game/assets
-                	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
-                	#sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
-                	sudo ln -fs /srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
-                	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
-	                #sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
-	                sudo chmod a+x /srv/game/assets/InfiltratorDemo/Binaries/Quail/*
+			sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
+			suod ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak \
+			/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
+			sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
 		elif [[ $game -eq $GAME_DOOM ]] ; then
 			echo "DOOM specific steps..."
 			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
@@ -261,6 +266,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
 			cd /srv/game/assets/bin/yeti
+		elif [[ $game -eq $GAME_QUAIL ]] ; then
+			cd /srv/game/assets/Quail
 		fi
 
 		if  [[ $p4 == "t1t2" ]] ; then
