@@ -182,12 +182,14 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
+	GAME_PARAM="-"
+
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=3dmark
-		DESTINATION_FOLDER=3dmark
-		GAME_EXECUTABLE=./3dmark
-		GAME_FOLDER=3dmark
+		DESTINATION_FOLDER=./3dmark
+		GAME_EXECUTABLE=3dmark
+		GAME_FOLDER=./3dmark
 		GAME_NAME=$GAME_3DMARK
 		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 	elif [[ $game -eq $GAME_QUAIL ]] ; then
@@ -195,19 +197,21 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		SOURCE_FOLDER=Quail
 		DESTINATION_FOLDER=infiltrator
 		GAME_EXECUTABLE=InfiltratorDemo.elf
-		GAME_FOLDER=InfiltratorDemo/Binaries/Quail/
+		GAME_FOLDER=./InfiltratorDemo/Binaries/Quail/
 		GAME_NAME=$GAME_QUAIL
 	elif [[ $game -eq $GAME_TR2 ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=tr2
 		DESTINATION_FOLDER=catchingfire
 		GAME_EXECUTABLE=TR2_yeti_final
+		GAME_FOLDER="./"
 		GAME_NAME=$GAME_TR2
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=Doom_Linux
 		DESTINATION_FOLDER=lincoln
 		GAME_EXECUTABLE=DOOM
+		GAME_FOLDER="./"
 		GAME_NAME=$GAME_DOOM
 
 	else
@@ -230,9 +234,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			echo "Quail specific steps..."
                 	#sudo ln -fs /srv/game/infiltrator/ /srv/game/assets
                 	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
-                	sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
+                	#sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
+                	sudo ln -fs /srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
                 	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
-	                sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+	                #sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+	                sudo chmod a+x /srv/game/assets/InfiltratorDemo/Binaries/Quail/*
 		elif [[ $game -eq $GAME_DOOM ]] ; then
 			echo "DOOM specific steps..."
 			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
@@ -258,7 +264,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 
 		if  [[ $p4 == "t1t2" ]] ; then
-			process_t1t2 $GAME_EXECUTABLE $GAME_PARAM
+			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER $GAME_PARAM
 		else
 			echo ./$GAME_EXECUTABLE
 		fi
