@@ -1,7 +1,10 @@
 SLEEP_TIME=1
+
 GAME_3DMARK=0
 GAME_DOOM=1
 GAME_TR2=2
+GAME_QUAIL=3
+
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 #REPO_SERVER_IP="10.217.74.231"
@@ -269,13 +272,18 @@ function t1()
 	echo "t1..."
 }
 #	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
-#	input: $1 - name of the game executable.
+#	input: 	$1 - name of the game executable.
+#		$2 -parameter following game executable.
 #	return: 1 - on any error.
 
 function process_t1t2 ()
 {
 	ENABLE_LOG=0
 	GAME=$1
+	GAME_PARAM=$2
+
+	echo "GAME / GAME Params: $GAME / $GAME_PARAM"
+	sleep 5
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
         LOG_DIR=/g/$DATE

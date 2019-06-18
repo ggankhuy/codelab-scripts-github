@@ -184,53 +184,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1" ]] ; then
-			echo "Terminal1." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			echo terminal 1...
-			sleep $SLEEP_TIME
-			sudo uwf disable
-
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			#setYetiDisableFabricatedConnected
-
-			echo Setup the swapchain for render+encode+stream:
-			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			source /usr/local/cloudcast/env/vce.sh
-			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
-			
-			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
-			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
-			#command above, use:
-			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
-			
-			echo Type, but do not execute the following command:
-			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			clear
-
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			echo terminal 2...
-			sleep $SLEEP_TIME
-			pulseaudio --start
-
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			displayIpv4
-			prompt_t2_with_ip $GAME_3DMARK $OPTION_EXTERNAL_IP
-
-		elif [[ $p4 == "client" ]] ; then
-			echo "game client from Linux is dropped support. Please use windows version."
-			exit 0
-		else
-			echo "Invalid  p4 is slipped through: $p4."
-			exit 1
-		fi
+		SOURCE_FOLDER=3dmark
+		DESTINATION_FOLDER=3dmark
+		GAME_EXECUTABLE=./3dmark
+		GAME_FOLDER=3dmark
+		GAME_NAME=$GAME_3DMARK
+		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 	elif [[ $game -eq $GAME_QUAIL ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=Quail
@@ -268,12 +227,14 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		# infiltrator specific code.
 
 		if [[ $game -eq $GAME_QUAIL ]] ; then
+			echo "Quail specific steps..."
                 	#sudo ln -fs /srv/game/infiltrator/ /srv/game/assets
                 	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
                 	sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak  \
                 	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
 	                sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
 		elif [[ $game -eq $GAME_DOOM ]] ; then
+			echo "DOOM specific steps..."
 			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
 		fi
 
@@ -291,8 +252,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	
 		cd /srv/game/assets/
 	
+		if [[ $game -eq $GAME_3DMARK ]] ; then
+			echo "3dmark specific steps..."
+			cd /srv/game/assets/bin/yeti
+		fi
+
 		if  [[ $p4 == "t1t2" ]] ; then
-			process_t1t2 $GAME_EXECUTABLE
+			process_t1t2 $GAME_EXECUTABLE $GAME_PARAM
 		else
 			echo ./$GAME_EXECUTABLE
 		fi
