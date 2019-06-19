@@ -7,8 +7,9 @@ GAME_QUAIL=3
 
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-#REPO_SERVER_IP="10.217.74.231"
-REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_LOCATION=/repo/stadia
 
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
@@ -29,10 +30,6 @@ SLEEP_TIME=1
 #       Set either yeti or ggp  engineering bundle.
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
-
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
 
 FILE_COPY_SCP=1
 FILE_COPY_WGET=2
