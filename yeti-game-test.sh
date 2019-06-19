@@ -230,7 +230,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
 		else
 			sudo rm /srv/game/assets
-			sudo mkdir -p /srv/game/assets/
+			sudo mkdir -p /srv/game
 			sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
 		fi
 	
