@@ -371,3 +371,25 @@ function copy_game_files() {
         fi
 }
 
+#	Sends ssh command to host.
+#	prereq:	sshpass must have been installed.
+#	input: 	$1 host
+#		$2 user
+#		$3 password
+#		$4 command itself
+function send_ssh_command
+{
+	HOST=$1
+	USER=$2
+	PW=$3
+	CMD=$4
+
+	if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]] || [[ $4 == "" ]] ; then
+		echo "ERROR: One of the parameters are empty: p1: $1 p2: $2 p3: $3 p4: $4
+		exit 1
+	fi
+
+	sshpass -p $PW ssh -o StrictHostKeyChecking=no $USER@$HOST "$CMD"	
+	sleep 2
+}	
+
