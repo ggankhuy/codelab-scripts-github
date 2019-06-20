@@ -42,11 +42,11 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 p1=$1
 
 if [[ $p1 == "ixt39" ]] ; then
-	CONFIG_HOST_IP=$CONFIG_IXT39_HOST_IP	
-	CONFIG_GUEST_IP_RANGE=$CONFIG_IXT39_GUEST_IP_RANGE
+	CONFIG_HOST_IP=$CONFIG_IXT39_HOST_IP
+	CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT39_GUEST_IP_RANGE[@]})
 elif [[ $1 == "ixt70" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT70_HOST_IP
-	CONFIG_GUEST_IP_RANGE=$CONFIG_IXT70_GUEST_IP_RANGE
+	CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 else
 	echo "ERROR: Invalid parameter."
 	exit 1
@@ -65,7 +65,8 @@ fi
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
 echo "TOTAL_VMS: $TOTAL_VMS"
 
-
+echo ${#CONFIG_IXT39_GUEST_IP_RANGE[@]}
+echo ${#CONFIG_GUEST_IP_RANGE[@]}
 
 
 
