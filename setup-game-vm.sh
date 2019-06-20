@@ -4,7 +4,9 @@
 #  or absent, the result is unpredictable.
 #  This script assumes the VM name is structured as debian-drop-<month>-<date>-debian-gpu<No>-vf<No> format 
 #  using auto-test script. If the VM name is structured differently in any way, the result is unpredictable.
+#  If there are VMs that are created for multiple drops, either running or shutdown, the result is extremely unpredictable. 
 #  
+#  Steps this tool takes:
 #  Count all vms.
 #  Load gim.
 #  Start default network.
@@ -65,6 +67,9 @@ if [[ $? -ne 0 ]] ; then
 	exit 1
 fi
 
+#  Count all vms.
+#  
+#  ixt39  4vm-s / 4 gpu-s, 10.216.66.67-70.
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
 echo "TOTAL_VMS: $TOTAL_VMS"
 
@@ -80,4 +85,23 @@ if  [[ $TOTAL_IPS -ne  $TOTAL_VMS ]] ; then
 	echo "total IP-s: $TOTAL_IPS"
 fi
 
+#  Load gim.
+#  Start default network.
 
+sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
+sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
+
+#  Turn on all vms.
+
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+	echo n: $n
+	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list | grep gpu | head -$((n+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	echo VM_NAME: $VM_NAME
+done
+
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
+
+#  Log on to each vm through ssh (determine ip using virsh domifaddr <vmno>
+#  update /etc/network/interfaces with static ip from pool.
+#  IP address range: 10.216.66.67-78.
+#  Assignment:
