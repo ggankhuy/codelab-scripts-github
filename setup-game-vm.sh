@@ -23,6 +23,8 @@
 # Set vm vcpu-s to 8 as standard.
 # Turn on all VM-s 
 
+DOUBLE_BAR="========================================================"
+SINGLE_BAR="--------------------------------------------------------"
 CONFIG_IXT39_HOST_IP="10.216.66.54"
 CONFIG_IXT70_HOST_IP="10.216.66.51"
 CONFIG_HOST_IP=0
@@ -40,7 +42,23 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
-DEBUG=0
+
+CONFIG_GW="10.216.64.1"
+CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
+CONFIG_NETMASK="255.255.252.0"
+
+# The loopback network interface
+#auto lo
+#iface lo inet loopback
+
+#iface ens3 inet static
+#address 10.216.66.78
+#netmask 255.255.252.0
+#network 10.216.64.0
+#gateway 10.216.64.1
+#dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
+
+DEBUG=1
 
 p1=$1
 
@@ -94,9 +112,42 @@ sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh n
 #  Turn on all vms.
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+	echo $DOUBLE_BAR
 	echo n: $n
-	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list | grep gpu | head -$((n+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
-	echo VM_NAME: $VM_NAME
+	VM_INDEX=$(($n+1))
+	echo "VM_INDEX: $VM_INDEX"
+	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list | grep gpu | head -$(($VM_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list | grep gpu | head -$((n+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+
+	if [[ $DEBUG -eq 1 ]] ; then
+		echo "VM_NAME: $VM_NAME"
+		echo "VM_NO: $VM_NO"		
+	fi
+
+	echo "Turning on VM_NAME: $VM_NAME..."
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
+	echo "Done."	
+
+	# Assign static ips now
+
+	#CONFIG_IXT39_GUEST_IP_RANGE
+	#CONFIG_IXT70_GUEST_IP_RANGE
+	#CONFIG_GW="10.216.64.1"
+	#CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
+	#CONFIG_NETMASK="255.255.252.0"
+	
+	# The loopback network interface
+	#auto lo
+	#iface lo inet loopback
+	
+	#iface ens3 inet static
+	#address 10.216.66.78
+	#netmask 255.255.252.0
+	#network 10.216.64.0
+	#gateway 10.216.64.1
+	#dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
+	
+	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 done
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
