@@ -189,9 +189,10 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		SOURCE_FOLDER=3dmark
 		DESTINATION_FOLDER=./3dmark
 		GAME_EXECUTABLE=3dmark
-		GAME_FOLDER=./3dmark
+		GAME_FOLDER=./
 		GAME_NAME=$GAME_3DMARK
-		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
+		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
+		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
 	elif [[ $game -eq $GAME_QUAIL ]] ; then
 		echo "TR2 is selected" ; sleep $SLEEP_TIME
 		SOURCE_FOLDER=Quail
@@ -266,6 +267,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
 			cd /srv/game/assets/bin/yeti
+			#source /usr/local/cloudcast/env/vce_nostreamer.sh
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi

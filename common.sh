@@ -275,7 +275,7 @@ function t1()
 
 function process_t1t2 ()
 {
-	ENABLE_LOG=0
+	ENABLE_LOG=1
 	GAME=$1
 	GAME_FOLDER=$2
 	GAME_PARAM=$3
@@ -283,18 +283,19 @@ function process_t1t2 ()
 	echo "GAME: $GAME" 
 	echo "GAME Params: $GAME_PARAM"
 	echo "GAME folder: $GAME_FOLDER" 
-	sleep 5
+	sleep 3
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
         LOG_DIR=/g/$DATE
         sudo mkdir -p $LOG_DIR
 	sudo chmod 777 $LOG_DIR
+	echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
         read -p "Press a key to start $GAME..."
 
 	if [[ $ENABLE_LOG -eq 0 ]] ;  then
-	        ./$GAME_FOLDER/$GAME &
+	        ./$GAME_FOLDER/$GAME $GAME_PARAM &
 	else
-	        ./$GAME_FOLDER/$GAME > $LOG_DIR/$GAME-$DATE.log &
+	        ./$GAME_FOLDER/$GAME $GAME_PARAM > $LOG_DIR/$GAME-$DATE.log &
 	fi
 
         sudo dhclient ens3
