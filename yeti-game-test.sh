@@ -46,7 +46,7 @@ sleep $SLEEP_TIME
 
 #	apt packages 
 
-apt install sshpass dstat -y
+sudo apt install sshpass dstat -y
 
 #	Process help request. 
 
