@@ -9,8 +9,12 @@ OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP="10.217.74.231"
 #REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
+OPTION_DHCLIENT_ENS3=1
 
+# 	IXT70 GAME REPO
+REPO_SERVER_IP="192.168.0.27"
+
+REPO_SERVER_LOCATION=/repo/stadia
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
 option=0        # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
@@ -240,8 +244,6 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
-	dhclient ens3
-	
 	if [[ $? -ne 0 ]] ; then
         	echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
 	fi
@@ -289,7 +291,16 @@ function process_t1t2 ()
         LOG_DIR=/g/$DATE
         sudo mkdir -p $LOG_DIR
 	sudo chmod 777 $LOG_DIR
+
+	if [[ $OPTION_DHCLIENT_ENS3 -eq 1 ]] ;  then
+		echo "Configuring ens3..."
+		sudo dhclient ens3
+	else
+		echo "Not configuring ens3..."
+	fi
+
 	echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
+
         read -p "Press a key to start $GAME..."
 
 	if [[ $ENABLE_LOG -eq 0 ]] ;  then
@@ -297,8 +308,6 @@ function process_t1t2 ()
 	else
 	        ./$GAME_FOLDER/$GAME $GAME_PARAM > $LOG_DIR/$GAME-$DATE.log &
 	fi
-
-        sudo dhclient ens3
 
         if [[ $? -ne 0 ]] ; then
                 echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
