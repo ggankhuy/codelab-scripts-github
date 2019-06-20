@@ -21,8 +21,8 @@
 # Set vm vcpu-s to 8 as standard.
 # Turn on all VM-s 
 
-CONFIG_IXT39_HOST_IP="10.216.66.51"
-CONFIG_IXT70_HOST_IP="10.216.66.54"
+CONFIG_IXT39_HOST_IP="10.216.66.54"
+CONFIG_IXT70_HOST_IP="10.216.66.51"
 CONFIG_HOST_IP=0
 CONFIG_IXT39_GUEST_IP_RANGE=(\
 "10.216.66.67" \
@@ -38,6 +38,7 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
+DEBUG=0
 
 p1=$1
 
@@ -52,6 +53,8 @@ else
 	exit 1
 fi
 
+TOTAL_IPS=${#CONFIG_GUEST_IP_RANGE[@]}
+
 echo "HOST IP is set to: $CONFIG_HOST_IP"
 echo "GUEST IP RANGE is set to: $CONFIG_GUEST_IP_RANGE"
 apt install sshpass -y
@@ -65,8 +68,16 @@ fi
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
 echo "TOTAL_VMS: $TOTAL_VMS"
 
-echo ${#CONFIG_IXT39_GUEST_IP_RANGE[@]}
-echo ${#CONFIG_GUEST_IP_RANGE[@]}
+if [[ $DEBUG -eq 1 ]] ; then
+	echo ${#CONFIG_IXT39_GUEST_IP_RANGE[@]}
+	echo ${#CONFIG_GUEST_IP_RANGE[@]}
+fi
 
+
+if  [[ $TOTAL_IPS -ne  $TOTAL_VMS ]] ; then
+	echo "Error total VM found is not equal to CONFIG_GUEST_IP_RANGE."
+	echo "Total VMs found: $TOTAL_VMS"
+	echo "total IP-s: $TOTAL_IPS"
+fi
 
 
