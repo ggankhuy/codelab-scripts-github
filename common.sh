@@ -1,15 +1,46 @@
 SLEEP_TIME=1
+
 GAME_3DMARK=0
 GAME_DOOM=1
 GAME_TR2=2
+GAME_QUAIL=3
+
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-#REPO_SERVER_IP="10.217.74.231"
-REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_LOCATION=/repo/stadia
 
-export DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
+game=0          # game
+mode=0          # 0 for yeti, 1 for linux
+option=0        # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+
+MODE_YETI=0
+MODE_LINUX=1
+
+OPTION_NOSTREAM=0
+OPTION_STREAM_2PC=2
+
+TERMINAL_T1=0
+TERMINAL_T2=1
+TERMINAL_CLIENT=2
+
+SLEEP_TIME=1
+
+#       Set either yeti or ggp  engineering bundle.
+
+TR2_START_LOCATION=/usr/local/cloudcast/runit/
+
+FILE_COPY_SCP=1
+FILE_COPY_WGET=2
+FILE_COPY_RSYNC=3
+FILE_COPY_NONE=100
+OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
+
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
+export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
+export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 
 #       Set either yeti or ggp  engineering bundle.
 
@@ -119,14 +150,14 @@ function vm_check () {
 
 	# Check if running in VM, if not, exit with error.
 
-	apt install virt-what -y 
+	sudo apt install virt-what -y 
 
-	if [[ -z `which virt-what` ]] ; then
+	if [[ -z `sudo which virt-what` ]] ; then
 		echo "Failed to install virt-what..."
 		exit 1
 	fi
 
-	if [[ -z `virt-what` ]] ; then
+	if [[ -z `sudo virt-what` ]] ; then
 		echo "virt-what returns null, it is not running inside vm: hostname: "
 		echo `hostname`
 		exit 1
@@ -137,77 +168,33 @@ function vm_check () {
 	sleep $SLEEP_TIME
 }
 
+function common_runtime_setup ()
+{
+	source /usr/local/cloudcast/env/vce.sh
+	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+
+}
 function common_setup () {
 	clear
 	echo "Setup Yeti system for 3dmark on ubuntu 1604 / 1803..."
 
-	if [[ -z $1 ]] ; then
-		echo "p1: $1 "
-	else
-		echo "Setting GIB_DROP_ROOT to $1..."
-		export GIB_DROP_ROOT=$1
-		GIB_DROP_ROOT=$1
+	sudo apt install sshpass
 
-		if [[ -z `cat ~/.bashrc | grep GIB_DROP_ROOT` ]] ; then
-			echo "adding GIB_DROP_ROOT to bashrc..."
-			echo "export GIB_DROP_ROOT=$1" >> ~/.bashrc
-		else
-			echo "GIB_DROP_ROOT already added to bash..."
-		fi
-	fi 
-
-	if [[ -z $GIB_DROP_ROOT ]] ; then
-        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
-        	exit 1
-	fi
-
-	if [[ -z `cat ~/.bashrc | grep "cd /git.co/ad-hoc-scripts"` ]] ; then
-		echo "adding: cd /git.co/ad-hoc-scripts..."
-		echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
-	else
-		echo "already present: cd /git.co/ad-hoc-scripts..."
-	fi
-
-	if [[ -z $GIB_DROP_ROOT ]] ; then
-        	echo "GIB_DROP_ROOT is not defined. Please defined the root in ~/.bashrc"
-        	exit 1
-	fi
-
-	#  inserting amdgpu module just in case, sometimes not loaded.
-
-	modprobe amdgpu
-	modprobe amdkfd
-	ret1=`lsmod | grep -u ^amdgpu`
-	ret2=`lsmod | grep -u ^amdgpu`
-
-	if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
-		echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+	if [[ $? -ne 0 ]] ; then
+		echo "Error: Failed to install sshpass."
 		exit 1
-		echo lsmod amdgpu: $ret1
-		echo lsmod amdkfd: $ret2
-	else
-		echo lsmod amdgpu: $ret1
-		echo lsmod amdkfd: $ret2
 	fi
-	
+
 	sleep $SLEEP_TIME
-
-	#rm -rf ~/doom/
-	#mkdir -p ~/doom/
-
-	echo "Setting up symlink for ~/doom/yeti-release/"
-	#cp -vr $GIB_DROP_ROOT/test-apps/Doom_Linux/* ~/doom/yeti-release/
-	#ln -s $GIB_DROP_ROOT/test-apps/Doom_Linux/ ~/doom/yeti-release
-	mkdir ~/doom/yeti-release/
 
 	# Setup ggp-eng-bundle in /usr/local/cloudcast.
 	
 	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
 	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+        	sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/ggp-eng-bundle-20190413.tar.gz /tmp/
+        	sudo sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	else
         	echo "ERROR: Unknown or unsupported copy protocol."
 	fi
@@ -217,56 +204,37 @@ function common_setup () {
         	exit 1
 	fi
 
-	mkdir -p /usr/local/cloudcast
-	tar -xf /tmp/ggp-eng-bundle-20190413.tar.gz -C /usr/local/cloudcast --strip-components=1
+        sudo mkdir -p /usr/local/cloudcast
+        sudo chown -R $(id -u):$(id -g) /usr/local/cloudcast
+        sudo mkdir -p /var/game
+        sudo chown -R $(id -u):$(id -g) /var/game
+        sudo mkdir -p /srv/game
+        sudo chown -R $(id -u):$(id -g) /srv/game
+
+	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
 	
-	if [[ ! -d  $DIR_YETI_CONTENT_BUNDLE ]] ; then
-        	echo "$DIR_YETI_CONTENT_BUNDLE does not exist yet, copying from $GIB_DROP_ROOT/test-apps/yeti..."
-		unlink ~/$DIR_YETI_CONTENT_BUNDLE
-		rm -rf ~/$DIR_YETI_CONTENT_BUNDLE
-        	ln -s $GIB_DROP_ROOT/test-apps/yeti/$DIR_YETI_CONTENT_BUNDLE ~/$DIR_YETI_CONTENT_BUNDLE
-	else
-        	echo "$DIR_YETI_CONTENT_BUNDLE already exist, skipping copy..."
-	fi
-	
-	#echo "Setup logging Needed for streaming configurations only – but do it now, so you don't forget:"
-	#mkdir -p /usr/local/cloudcast/log
-	chmod -R a+rw /usr/local/cloudcast/
-	#unlink /usr/local/cloudcast/lib
-	#rm -rf /usr/local/cloudcast/lib
-	#echo "DIR_ENG_BUNDLE_TO_USE: $DIR_ENG_BUNDLE_TO_USE"
-	#sleep 3
-	#rm -rf /usr/local/cloudcast/
-	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE /usr/local/cloudcast
-	mkdir /log
-	chmod a+rw /log
+	sudo mkdir /log
+	sudo chmod a+rw /log
 	
 	apt-get install freeglut3 pulseaudio libpulse-dev
 	
-	mkdir -p /opt/cloudcast/lib
-
-	unlink /opt/cloudcast/lib/amdvlk64.so
-	rm -rf /opt/cloudcast/lib/amdvlk64.so
-	ln -s /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so /opt/cloudcast/lib/amdvlk64.so
-	#mkdir -p /usr/local/cloudcast/
-
-	#unlink /usr/local/cloudcast/lib
-	#rm -rf /usr/local/cloudcast/lib
-	#ln -s ~/$DIR_ENG_BUNDLE_TO_USE/lib /usr/local/cloudcast/lib
-	mkdir -p ~/.local/share/vulkan/icd.d
-
-	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/vulkan/icd.d/yetivlk.json ~/.local/share/vulkan/icd.d/
-	cp /usr/local/cloudcast/etc/vulkan/icd.d/ggpvlk.json ~/.local/share/vulkan/icd.d/
-	mkdir -p /usr/local/cloudcast/etc/yetivlk
-	#cp ~/$DIR_ENG_BUNDLE_TO_USE/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
-	cp /usr/local/cloudcast/etc/yetivlk/config.json /usr/local/cloudcast/etc/yetivlk
-
 	echo "Soft links: "
-	ls -l ~/doom/
 	ls -l /usr/local/cloudcast/
-        #ls -l ~/$DIR_ENG_BUNDLE_TO_USE
-        ls -l ~/$DIR_YETI_CONTENT_BUNDLE
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
+
+	# If logic is not working...After add, it adds again. 
+
+	if [[ -z `cat ~/.bashrc | grep "cd.*ad-hoc-scrits"` ]] ; then
+		echo "adding to bashrc: cd `pwd`"
+		sudo echo "cd `pwd`" >> ~/.bashrc
+	else
+		sudo echo "already in bashrc: cd `pwd`"
+	fi
+
+	sudo usermod -aG video $LOGNAME
+	echo "video group: "
+	echo `sudo getent group video`
+	sleep $SLEEP_TIME
 }
 
 function prompt_t2_with_ip () {
@@ -293,12 +261,113 @@ function prompt_t2_with_ip () {
 		IP_TO_DISPLAY="$external_ip"
 	fi
 
-	if [[ $1 == $GAME_DOOM ]] ; then
-		echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws --console_stderr -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
-	elif  [[ $1 == $GAME_TR2 ]] ; then
-                echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
-	else
-		echo "ERROR: prompt_t2_with_ip: Invalid game $1" 
-		exit 1
-	fi 
+        echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
+
+function t1()
+{
+	echo "t1..."
+}
+#	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
+#	input: 	$1 - name of the game executable.
+#		$2 -parameter following game executable.
+#	return: 1 - on any error.
+
+function process_t1t2 ()
+{
+	ENABLE_LOG=0
+	GAME=$1
+	GAME_FOLDER=$2
+	GAME_PARAM=$3
+
+	echo "GAME: $GAME" 
+	echo "GAME Params: $GAME_PARAM"
+	echo "GAME folder: $GAME_FOLDER" 
+	sleep 5
+
+	DATE=`date +%Y%m%d-%H-%M-%S`
+        LOG_DIR=/g/$DATE
+        sudo mkdir -p $LOG_DIR
+	sudo chmod 777 $LOG_DIR
+        read -p "Press a key to start $GAME..."
+
+	if [[ $ENABLE_LOG -eq 0 ]] ;  then
+	        ./$GAME_FOLDER/$GAME &
+	else
+	        ./$GAME_FOLDER/$GAME > $LOG_DIR/$GAME-$DATE.log &
+	fi
+
+        sudo dhclient ens3
+
+        if [[ $? -ne 0 ]] ; then
+                echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        fi
+
+        external_ip=`sudo ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        echo "external IP: " $external_ip
+
+        if [[ -z $external_ip ]] ; then
+                echo "Failed to get external IP: "  $external_ip
+                exit 1
+        fi
+
+        sleep $SLEEP_TIME
+        IP_TO_DISPLAY="$external_ip"
+        cd /usr/local/cloudcast
+        read -p "Press a key to start $GAME streaming server..."
+
+	if [[ $ENABLE_LOG -eq 0 ]] ;  then
+        	./dev/bin/yeti_streamer \
+                	-policy_config_file dev/bin/lan_policy.proto_ascii \
+                	-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+                	-port 44700 -null_audio=true 
+	else
+        	./dev/bin/yeti_streamer \
+                	-policy_config_file dev/bin/lan_policy.proto_ascii \
+                	-connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
+                	-port 44700 -null_audio=true > $LOG_DIR/$GAME-stream-$DATE.log
+	fi
+}
+
+#       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION
+#       input:
+#       $1 - name of directory in $REPO_SERVER_LOCATION to copy
+
+function copy_game_files() {
+        game_dir_src=$1
+        game_dir_dest=$2
+
+        if [[ -z $game_dir_src ]] ; then
+                echo "Error: need to specify the game in p1"
+                exit 1
+        fi
+
+        if [[ -z $game_dir_dest ]] ; then
+                game_dir_dest="."
+        fi
+
+        echo "Destination path: $game_dir_dest"
+        sudo mkdir -p $game_dir_dest
+
+        if [[ ! "$(ls -A $game_dir_dest)" ]] ; then
+                echo "$game_dir_dest does not exist."
+                sudo mkdir -p $game_dir_dest
+                echo "Copying $game_dir_src from $REPO_SERVER_IP, will take some time..."
+
+                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+                        sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest
+                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+                        sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/
+                else
+                        echo "ERROR: Unknown or unsupported copy protocol."
+                fi
+
+                if [[ $? -ne 0 ]] ; then
+                        echo "Failed to copy $game_dir_src..."
+                        exit 1
+                fi
+        else
+                echo "$game_dir_dest exists, skipping."
+        fi
+}
+

@@ -41,27 +41,6 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
-DIR_YETI_ENG_BUNDLE=yeti-eng-bundle
-DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
-DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
-
-#	Set either yeti or ggp  engineering bundle.
-
-#DIR_ENG_BUNDLE_TO_USE=$DIR_GGP_ENG_BUNDLE
-#DIR_ENG_BUNDLE_TO_USE=$DIR_YETI_ENG_BUNDLE
-
-TR2_START_LOCATION=/usr/local/cloudcast/runit/
-
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
-
-
-FILE_COPY_SCP=1
-FILE_COPY_WGET=2
-FILE_COPY_RSYNC=3
-OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
-
 vm_check
 sleep $SLEEP_TIME
 
@@ -87,6 +66,9 @@ elif  [[ $p1 == "doom" ]] ; then
 elif [[ $p1 == "tr2" ]] ; then
 	echo "tr2 is selected..."
 	game=$GAME_TR2
+elif [[ $p1 == "quail" ]] ; then
+	echo "tr2 is selected..."
+	game=$GAME_QUAIL
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
 	echo "p2: $p2..."
@@ -151,6 +133,23 @@ else
 	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
+#	Load amdgpu, kfd driver:
+
+sudo modprobe amdkfd
+sudo modprobe amdgpu
+ret1=`lsmod | grep -u ^amdgpu`
+ret2=`lsmod | grep -u ^amdgpu`
+
+if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
+        echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+        exit 1
+        echo lsmod amdgpu: $ret1
+        echo lsmod amdkfd: $ret2
+else
+        echo lsmod amdgpu: $ret1
+        echo lsmod amdkfd: $ret2
+fi
+
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		clear
@@ -183,238 +182,109 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
+	GAME_PARAM="-"
+
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1" ]] ; then
-			echo "Terminal1." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			echo terminal 1...
-			sleep $SLEEP_TIME
-			sudo uwf disable
-
-			setPathLdLibraryPath
-			setVkLoaderDisableYetiExtWhitelist
-			#setYetiDisableFabricatedConnected
-
-			echo Setup the swapchain for render+encode+stream:
-			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			source /usr/local/cloudcast/env/vce.sh
-			cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
-			
-			#NOTE: you can run a Yeti application with some debug output from the Vulkan loader and layers. To
-			#do so, add VK_LOADER_DEBUG=all ahead of the application name. For example, for the 3dmark
-			#command above, use:
-			#VK_LOADER_DEBUG=all ./3dmark --asset_root=../../assets -i ../../configs/gt1.json
-			
-			echo Type, but do not execute the following command:
-			echo "./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			clear
-
-			echo setting up Yeti libraries...
-			echo yeti 3dmark non-stream configuration run...
-			echo terminal 2...
-			sleep $SLEEP_TIME
-			pulseaudio --start
-
-			setPathLdLibraryPath
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			displayIpv4
-			prompt_t2_with_ip $GAME_3DMARK $OPTION_EXTERNAL_IP
-
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep $SLEEP_TIME
-			clear
-			echo setting up Yeti on client machine...
-			apt install -y libc++abi-dev
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
-		else
-			echo "Invalid  p4 is slipped through: $p4."
-			exit 1
-		fi
+		SOURCE_FOLDER=3dmark
+		DESTINATION_FOLDER=./3dmark
+		GAME_EXECUTABLE=3dmark
+		GAME_FOLDER=./3dmark
+		GAME_NAME=$GAME_3DMARK
+		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
+	elif [[ $game -eq $GAME_QUAIL ]] ; then
+		echo "TR2 is selected" ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=Quail
+		DESTINATION_FOLDER=infiltrator
+		GAME_EXECUTABLE=InfiltratorDemo.elf
+		GAME_FOLDER=./InfiltratorDemo/Binaries/Quail/
+		GAME_NAME=$GAME_QUAIL
 	elif [[ $game -eq $GAME_TR2 ]] ; then
-		if [[ $p4 == "t1" ]] ; then			
-			echo "Terminal1." ; sleep $SLEEP_TIME
-			#rm -rf /usr/local/cloudcast/*
-			rm -rf  ~/.local/share/vulkan/icd.d/*
-
-			if [[  -z /etc/vulkan/icd.d/amd_icd64.json ]] ; then
-				echo "Error: can not find /etc/vulkan/icd.d/amd_icd64.json..."
-			fi
-
-			sudo mkdir -p /usr/local/cloudcast
-			sudo chown -R $(id -u):$(id -g) /usr/local/cloudcast
-			sudo mkdir -p /var/game
-			sudo chown -R $(id -u):$(id -g) /var/game
-			sudo mkdir -p /srv/game
-			sudo chown -R $(id -u):$(id -g) /srv/game
-
-			FILE_CLOUDCAST_COMMON=/usr/local/cloudcast/env/common.sh
-
-			if [[ -z $FILE_CLOUDCAST_COMMON ]] ; then
-				echo "Error: Can not find $FILE_CLOUDCAST_COMMON"
-				exit 1
-			else
-				echo "Adding export variable VK_ICD_FILESNAMES to $FILE_CLOUDCAST_COMMON"
-
-				# Alan mentioned this line is wrong on e-mail  5/20/2019 and use the line below, however it was running 
-				# ok with Sam
-				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-
-				# 5.20.2019 Alan, this turned out to be wrong.
-				# Replaced with following.
-
-				#echo "export VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json" >>  /usr/local/cloudcast/env/common.sh
-				echo "export GGP_INTERNAL_VK_ICD_DELEGATE=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so" >>  /usr/local/cloudcast/env/common.sh
-			fi	
-
-			if [[ ! "$(ls -A ~/tr2)" ]] ; then
-				echo "~/tr2 does not exist."
-				mkdir -p ~/tr2
-				echo "Copying tr2 from $REPO_SERVER_IP, will take some time..."
-
-                        	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	                        sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-       				sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/tr2/* ~/tr2/
-                        	else
-                                	echo "ERROR: Unknown or unsupported copy protocol."
-                        	fi
-	
-
-				if [[ $? -ne 0 ]] ; then
-					echo "Failed to copy tr2..."
-					exit 1
-				fi
-			else
-				echo "~/tr2 exists, skipping."
-			fi
-
-			sleep 5 
-
-			ln -s ~/tr2 /srv/game/assets
-			cd /usr/local/cloudcast	
-			
-			# Slightly possible tweaked out content of ./runit/catchingfire.sh is below.
-			# No longer see in the instruction.
-
-			#./runit/catchingfire.sh
-
-			source ./env/vce.sh
-
-			if [[ ! -d /var/game ]]; then
-				echo "Create directory /var/game."
-  				exit 1
-			fi
-			
-			cd /srv/game/assets/
-
-			if [[ ! -f /srv/game/assets/TR2_yeti_final ]]; then
-  				echo "Unpack the catching fire package to /srv/game/assets/ (or symlink)"
-	  			exit 1
-			fi
-			
-			echo "type the following to run the catching fire."
-			cd /srv/game/assets/
-			echo ./TR2_yeti_final
-
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-                        displayIpv4
-                        prompt_t2_with_ip $GAME_TR2 $OPTION_EXTERNAL_IP
-			cd /usr/local/cloudcast
-		elif [[ $p4 == "client" ]] ; then
-			echo "game client from Linux is dropped support. Please use windows version."
-			exit 0
-		else 
-			echo "Invalid terminal selected: $p4 " ; exit 1
-		fi
-
+		echo "TR2 is selected" ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=tr2
+		DESTINATION_FOLDER=catchingfire
+		GAME_EXECUTABLE=TR2_yeti_final
+		GAME_FOLDER="./"
+		GAME_NAME=$GAME_TR2
 	elif [[ $game -eq $GAME_DOOM ]] ; then
 		echo "GAME: DOOM" ; sleep $SLEEP_TIME
-		if [[ $p4 == "t1" ]] ; then			
-			echo "Terminal1." ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=Doom_Linux
+		DESTINATION_FOLDER=lincoln
+		GAME_EXECUTABLE=DOOM
+		GAME_FOLDER="./"
+		GAME_NAME=$GAME_DOOM
 
-			setPathLdLibraryPath
-			setYetiDisableFabricatedConnected
-
-			#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce.sh
-			source /usr/local/cloudcast/env/vce.sh
-			mkdir -p ~/doom/yeti-release
-
-                        if [[ ! -f ~/doom/yeti-release/DOOM ]] ; then
-				mkdir -p ~/doom/yeti-release/
-                                echo "the DOOM is not in ~/doom/yeti-release, copying, will take some time..."
-
-                                if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        				sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
-                                elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        				sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/Doom_Linux/* ~/doom/yeti-release/
-                                else
-                                        echo "ERROR: Unknown or unsupported copy protocol."
-                                fi
-        
-				if [[ $? -ne 0 ]] ; then
-					echo "Failed to copy DOOM"
-					exit 1
-				fi
-                        fi
-
-			cd ~/doom/yeti-release
-			chmod 755 ./*
-			echo "Type, but do not execute the following command"
-			echo "./DOOM"
-		elif [[ $p4 == "t2" ]] ; then
-			echo "Terminal2." ; sleep $SLEEP_TIME
-			pulseaudio --start
-
-			if [[ $? != 0 ]] ; then 
-				echo "Failed to run pulseaudio, does it exist or some other problem? return code: $?"
-				exit 1
-			fi
-			
-			setPathLdLibraryPath
-
-			cd /usr/local/cloudcast/
-
-			if [[ $? != 0 ]] ; then 
-				echo "Failed to cd into ~/$DIR_ENG_BUNDLE_TO_USE, does it exist? return code: $?"
-				exit 1
-			fi
-
-			displayIpv4
-			prompt_t2_with_ip $GAME_DOOM $OPTION_EXTERNAL_IP
-
-		elif [[ $p4 == "client" ]] ; then
-			echo "Terminal3 / client." ; sleep $SLEEP_TIME
-			echo "game client from Linux is dropped support. Please use windows version."
-			exit 0
-
-			export LD_LIBRARY_PATH=~/$DIR_ENG_BUNDLE_TO_USE/lib
-
-			setPathLdLibraryPath
-
-			cd ~/$DIR_ENG_BUNDLE_TO_USE/bin
-
-			if [[ $? -ne 0 ]] ; then
-				echo "Can not cd into ~/yet-end-bundle/bin"
-				exit 1
-			fi
-			echo "Type, but do not execute the following command:"
-			echo "./game_client run-direct <IPv4 address of the Yeti computer>:44700"
-		else 
-			echo "Invalid terminal selected: $p4 " ; exit 1
-		fi
 	else
 		echo "Unsupported game: $game" ; exit 1
+	fi
+
+	common_runtime_setup
+	
+	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
+		echo "Terminal1." ; sleep $SLEEP_TIME
+	
+
+		if [[ $game -eq $GAME_QUAIL ]] ; then
+			sudo rm /srv/game/assets/
+			sudo mkdir -p /srv/game/assets/
+			sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
+		else
+			sudo rm /srv/game/assets
+			sudo mkdir -p /srv/game
+			sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
+		fi
+	
+        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+		# infiltrator specific code.
+
+		if [[ $game -eq $GAME_QUAIL ]] ; then
+			echo "Quail specific steps..."
+			sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
+			sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak \
+			/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
+			sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+		elif [[ $game -eq $GAME_DOOM ]] ; then
+			echo "DOOM specific steps..."
+			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
+		fi
+
+		cd /usr/local/cloudcast	
+	
+		if [[ ! -d /var/game ]]; then
+			echo "Create directory /var/game."
+  			exit 1
+		fi
+		
+        	sudo chmod -R g=u /usr/local/cloudcast/
+        	sudo chmod -R o=u /usr/local/cloudcast/
+        	sudo chmod -R g=u /srv/game/
+        	sudo chmod -R o=u /srv/game/
+	
+		cd /srv/game/assets/
+	
+		if [[ $game -eq $GAME_3DMARK ]] ; then
+			echo "3dmark specific steps..."
+			cd /srv/game/assets/bin/yeti
+		elif [[ $game -eq $GAME_QUAIL ]] ; then
+			cd /srv/game/assets/Quail
+		fi
+
+		if  [[ $p4 == "t1t2" ]] ; then
+			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER $GAME_PARAM
+		else
+			echo ./$GAME_EXECUTABLE
+		fi
+	elif [[ $p4 == "t2" ]] ; then
+		echo "Terminal2." ; sleep $SLEEP_TIME
+        	displayIpv4
+        	prompt_t2_with_ip $GAME_NAME $OPTION_EXTERNAL_IP
+		cd /usr/local/cloudcast
+	elif [[ $p4 == "client" ]] ; then
+		echo "game client from Linux is dropped support. Please use windows version."
+		exit 0
+	else 
+		echo "1. Invalid terminal selected: $p4 " ; exit 1
 	fi
 else
 	echo "Invalid option is slipped through."
