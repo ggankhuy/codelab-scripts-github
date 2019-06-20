@@ -123,7 +123,9 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo "VM_INDEX: $VM_INDEX"
 	
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($VM_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	sleep $SLEEP_TIME_2
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$((n+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+	sleep $SLEEP_TIME_2
 
 	echo "Turning off VM_NAME: $VM_NAME..."
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
@@ -131,10 +133,10 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 	echo "Setting vCPUs to 8..."
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-	sleep 3
+	sleep $SLEEP_TIME_2
 
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
-	sleep 3
+	sleep $SLEEP_TIME_2
 	
 	VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
 	echo $VCPU_COUNT
@@ -147,7 +149,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 	echo "Turning on VM_NAME: $VM_NAME..."
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-	sleep 3
+	sleep $SLEEP_TIME_2
 	echo "Done."	
 
 	# Assign static ips now
@@ -171,7 +173,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 
-	sleep 3
+	sleep $SLEEP_TIME_2
 done
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
