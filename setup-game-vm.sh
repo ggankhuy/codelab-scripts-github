@@ -24,12 +24,12 @@
 CONFIG_IXT39_HOST_IP="10.216.66.51"
 CONFIG_IXT70_HOST_IP="10.216.66.54"
 CONFIG_HOST_IP=0
-CONFIG_IXT38_GUEST_IP_START=(\
+CONFIG_IXT39_GUEST_IP_RANGE=(\
 "10.216.66.67" \
 "10.216.66.68" \
 "10.216.66.69" \
 "10.216.66.70")
-CONFIG_IXT70_GUEST_IP_START=(\
+CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.71" \
 "10.216.66.72" \
 "10.216.66.73" \
@@ -43,14 +43,28 @@ p1=$1
 
 if [[ $p1 == "ixt39" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT39_HOST_IP	
-elif [[ $1 == "IXT70" ]] ; then
-	CONFIG_HOST_IP=$CONFIG_IXT79_HOST_IP
+	CONFIG_GUEST_IP_RANGE=$CONFIG_IXT39_GUEST_IP_RANGE
+elif [[ $1 == "ixt70" ]] ; then
+	CONFIG_HOST_IP=$CONFIG_IXT70_HOST_IP
+	CONFIG_GUEST_IP_RANGE=$CONFIG_IXT70_GUEST_IP_RANGE
 else
 	echo "ERROR: Invalid parameter."
 	exit 1
 fi
 
 echo "HOST IP is set to: $CONFIG_HOST_IP"
+echo "GUEST IP RANGE is set to: $CONFIG_GUEST_IP_RANGE"
+apt install sshpass -y
+
+if [[ $? -ne 0 ]] ; then
+	echo "ERROR. Failed to install sshpass package."
+	echo "return code: $?"
+	exit 1
+fi
+
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
+echo "TOTAL_VMS: $TOTAL_VMS"
+
 
 
 
