@@ -297,6 +297,7 @@ function process_t1t2 ()
 		sudo dhclient ens3
 	else
 		echo "Not configuring ens3..."
+		sudo ifup ens3
 	fi
 
 	echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
