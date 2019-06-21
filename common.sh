@@ -11,8 +11,6 @@ REPO_SERVER_IP="10.217.74.231"
 
 #REPO_SERVER_IP="10.217.73.160"
 
-OPTION_DHCLIENT_ENS3=1
-
 # 	IXT70 GAME REPO
 
 REPO_SERVER_IP="192.168.0.27"
@@ -250,17 +248,14 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
-<<<<<<< HEAD
-=======
 	if [[ $OPTION_DHCLIENT_ENS3 -eq 1 ]] ; then
 		sudo dhclient ens3
 	else
 		sudo ifup ens3
 	fi
-	
->>>>>>> c41b202280b230ab11c1d0f633e98db1753cd3f1
+
 	if [[ $? -ne 0 ]] ; then
-        	echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        	echo "Warning: dhclient or ifup ens3 failed. ens3 interface might not have been able to get DHCP IP..."
 	fi
 	
 	external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
