@@ -314,6 +314,8 @@ function process_t1t2 ()
 
         read -p "Press a key to start $GAME..."
 
+	sudo chmod 755 ./$GAME_FOLDER/$GAME
+
 	if [[ $ENABLE_LOG -eq 0 ]] ;  then
 	        ./$GAME_FOLDER/$GAME $GAME_PARAM &
 	else
