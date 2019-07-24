@@ -1,12 +1,20 @@
 SLEEP_TIME=1
+SLEEP_TIME_2=2
 GAME_3DMARK=0
 GAME_DOOM=1
 GAME_TR2=2
+GAME_QUAIL=3
+
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-#REPO_SERVER_IP="10.217.74.231"
-REPO_SERVER_IP="10.217.73.160"
+REPO_SERVER_IP="10.217.74.231"
+#REPO_SERVER_IP="10.217.73.160"
+OPTION_DHCLIENT_ENS3=1
 
+# 	IXT70 GAME REPO
+REPO_SERVER_IP="192.168.0.27"
+
+REPO_SERVER_LOCATION=/repo/stadia
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
 option=0        # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
@@ -26,10 +34,6 @@ SLEEP_TIME=1
 #       Set either yeti or ggp  engineering bundle.
 
 TR2_START_LOCATION=/usr/local/cloudcast/runit/
-
-REPO_SERVER_IP="10.217.74.231"
-#REPO_SERVER_IP="10.217.73.160"
-REPO_SERVER_LOCATION=/repo/stadia
 
 FILE_COPY_SCP=1
 FILE_COPY_WGET=2
@@ -171,7 +175,8 @@ function vm_check () {
 function common_runtime_setup ()
 {
 	source /usr/local/cloudcast/env/vce.sh
-	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+
 }
 function common_setup () {
 	clear
@@ -191,9 +196,9 @@ function common_setup () {
 	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
 	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
-        	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
+        	sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-        	sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
+        	sudo sshpass -p amd1234 scp -C -v -o StrictHostKeyChecking=no -r root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	else
         	echo "ERROR: Unknown or unsupported copy protocol."
 	fi
@@ -221,7 +226,15 @@ function common_setup () {
 	ls -l /usr/local/cloudcast/
 	ls -l /opt/cloudcast/lib/amdvlk64.so	
 
-	echo "cd `pwd`" >> ~/.bashrc
+	# If logic is not working...After add, it adds again. 
+
+	if [[ -z `cat ~/.bashrc | grep "cd.*ad-hoc-scrits"` ]] ; then
+		echo "adding to bashrc: cd `pwd`"
+		sudo echo "cd `pwd`" >> ~/.bashrc
+	else
+		sudo echo "already in bashrc: cd `pwd`"
+	fi
+
 	sudo usermod -aG video $LOGNAME
 	echo "video group: "
 	echo `sudo getent group video`
@@ -231,8 +244,6 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
-	dhclient ens3
-	
 	if [[ $? -ne 0 ]] ; then
         	echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
 	fi
@@ -260,27 +271,44 @@ function t1()
 	echo "t1..."
 }
 #	Function used to process both terminal 1 (game itself) and terminal 2 (streaming server) from same shell window.
-#	input: $1 - name of the game executable.
+#	input: 	$1 - name of the game executable.
+#		$2 -parameter following game executable.
 #	return: 1 - on any error.
 
 function process_t1t2 ()
 {
-	ENABLE_LOG=0
+	ENABLE_LOG=1
 	GAME=$1
+	GAME_FOLDER=$2
+	GAME_PARAM=$3
+
+	echo "GAME: $GAME" 
+	echo "GAME Params: $GAME_PARAM"
+	echo "GAME folder: $GAME_FOLDER" 
+	sleep 3
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
         LOG_DIR=/g/$DATE
         sudo mkdir -p $LOG_DIR
 	sudo chmod 777 $LOG_DIR
+
+	if [[ $OPTION_DHCLIENT_ENS3 -eq 1 ]] ;  then
+		echo "Configuring ens3..."
+		sudo dhclient ens3
+	else
+		echo "Not configuring ens3..."
+		sudo ifup ens3
+	fi
+
+	echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
+
         read -p "Press a key to start $GAME..."
 
 	if [[ $ENABLE_LOG -eq 0 ]] ;  then
-	        ./$GAME &
+	        ./$GAME_FOLDER/$GAME $GAME_PARAM &
 	else
-	        ./$GAME > $LOG_DIR/$GAME-$DATE.log &
+	        ./$GAME_FOLDER/$GAME $GAME_PARAM > $LOG_DIR/$GAME-$DATE.log &
 	fi
-
-        sudo dhclient ens3
 
         if [[ $? -ne 0 ]] ; then
                 echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
@@ -353,4 +381,26 @@ function copy_game_files() {
                 echo "$game_dir_dest exists, skipping."
         fi
 }
+
+#	Sends ssh command to host.
+#	prereq:	sshpass must have been installed.
+#	input: 	$1 host
+#		$2 user
+#		$3 password
+#		$4 command itself
+function send_ssh_command
+{
+	HOST=$1
+	USER=$2
+	PW=$3
+	CMD=$4
+
+	if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]] || [[ $4 == "" ]] ; then
+		echo "ERROR: One of the parameters are empty: p1: $1 p2: $2 p3: $3 p4: $4
+		exit 1
+	fi
+
+	sshpass -p $PW ssh -o StrictHostKeyChecking=no $USER@$HOST "$CMD"	
+	sleep 2
+}	
 
