@@ -273,7 +273,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 
 		if  [[ $p4 == "t1t2" ]] ; then
-			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER $GAME_PARAM
+			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
 		else
 			echo ./$GAME_EXECUTABLE
 		fi
