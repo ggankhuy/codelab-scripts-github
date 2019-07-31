@@ -48,6 +48,11 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
+CONFIG_SET_VCPUCOUNT=0
+
+#	If set, use the static ip assigned by QTS admin, otherwise use DHCP IP.
+
+CONFIG_USE_STATIC_IP=0
 
 # The loopback network interface
 #auto lo
@@ -90,14 +95,14 @@ fi
 #  Count all vms.
 #  
 #  ixt39  4vm-s / 4 gpu-s, 10.216.66.67-70.
-TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
+
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | grep running | wc -l"`
 echo "TOTAL_VMS: $TOTAL_VMS"
 
 if [[ $DEBUG -eq 1 ]] ; then
 	echo ${#CONFIG_IXT39_GUEST_IP_RANGE[@]}
 	echo ${#CONFIG_GUEST_IP_RANGE[@]}
 fi
-
 
 if  [[ $TOTAL_IPS -ne  $TOTAL_VMS ]] ; then
 	echo "Error total VM found is not equal to CONFIG_GUEST_IP_RANGE."
@@ -119,36 +124,42 @@ sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh n
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo $DOUBLE_BAR
 	echo n: $n
+	GPU_INDEX=$n
 	VM_INDEX=$(($n+1))
 	echo "VM_INDEX: $VM_INDEX"
 	
-	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($VM_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
-	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$((n+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 
-	echo "Turning off VM_NAME: $VM_NAME..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
-	echo "Done."	
+	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX
+	sleep 2
 
-	echo "Setting vCPUs to 8..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-	sleep 3
-
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
-	sleep 3
+	if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
+		echo "Turning off VM_NAME: $VM_NAME..."
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
+		echo "Done."	
 	
-	VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
-	echo $VCPU_COUNT
-	echo "Done."	
-
-	if [[ $DEBUG -eq 1 ]] ; then
-		echo "VM_NAME: $VM_NAME"
-		echo "VM_NO: $VM_NO"		
-	fi
-
-	echo "Turning on VM_NAME: $VM_NAME..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-	sleep 3
-	echo "Done."	
+		echo "Setting vCPUs to 8..."
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
+		sleep 3
+	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
+		sleep 3
+		
+		VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
+		echo $VCPU_COUNT
+		echo "Done."	
+	
+		if [[ $DEBUG -eq 1 ]] ; then
+			echo "VM_NAME: $VM_NAME"
+			echo "VM_NO: $VM_NO"		
+		fi
+	
+		echo "Turning on VM_NAME: $VM_NAME..."
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
+		sleep 3
+		echo "Done."	
+	fi 
 
 	# Assign static ips now
 
@@ -170,6 +181,9 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	#dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 	
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
+	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "echo -e "'amd1234b'\n'amd1234b'\n" | passwd  nonroot"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "adduser --disabled-password --gecos \"\" nonroot"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "echo -e \"'amd1234c'\n'amd1234c'\n\" | passwd  nonroot"
 
 	sleep 3
 done
@@ -180,3 +194,5 @@ TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_
 #  update /etc/network/interfaces with static ip from pool.
 #  IP address range: 10.216.66.67-78.
 #  Assignment:
+
+#echo -e "'amd1234b'\n'amd1234b'\n" | passwd  nonroot
