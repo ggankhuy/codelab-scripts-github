@@ -50,6 +50,13 @@ CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
 CONFIG_SET_VCPUCOUNT=0
 
+#	Following setting requires great diligence from user of this script. When running flag is set 
+#	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
+#	which is irrelevant to current drop being worked on. That is because non-running VM could be left over
+#	from other drop that was previosly worked on.
+
+CONFIG_COUNT_ONLY_RUNNING_VM=1
+
 #	If set, use the static ip assigned by QTS admin, otherwise use DHCP IP.
 
 CONFIG_USE_STATIC_IP=0
@@ -183,7 +190,12 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "echo -e "'amd1234b'\n'amd1234b'\n" | passwd  nonroot"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "adduser --disabled-password --gecos \"\" nonroot"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "echo -e \"'amd1234c'\n'amd1234c'\n\" | passwd  nonroot"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "echo -e \"'amd1234'\n'amd1234'\n\" | passwd  nonroot"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$CONFIG_HOST_IP "echo -e \"amd1234'\n\" | sudo mkdir git.co && /git.co"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$CONFIG_HOST_IP "echo -e \"g00db0y'\n\" | sudo git clone ssh://ixt-rack-85@10.216.64.102:32029/home/ixt-rack-85/gg-git-repo/"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$CONFIG_HOST_IP "cd gg-git-repo"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$CONFIG_HOST_IP "sudo git checkout dev"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$CONFIG_HOST_IP "./yeti-game-test.sh setup"
 
 	sleep 3
 done
