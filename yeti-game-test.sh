@@ -41,6 +41,10 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
+#	Used for remote initialization of game environment in addition to setup.
+
+CONFIG_ABORT_GAME=1
+
 vm_check
 sleep $SLEEP_TIME
 
@@ -273,7 +277,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		fi
 
 		if  [[ $p4 == "t1t2" ]] ; then
-			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
+			if [[ $CONFIG_ABORT_GAME -ne 0 ]] ; then
+				process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
+			else
+				echo "Aborting the game launch."
+			fi
 		else
 			echo ./$GAME_EXECUTABLE
 		fi
