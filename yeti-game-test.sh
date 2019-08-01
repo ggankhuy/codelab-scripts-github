@@ -275,13 +275,13 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi
+		
+		if [[ $p4 == "nolaunch]] ; then
+			echo "No launch..."
+		fi 
 
-		if  [[ $p4 == "t1t2" ]] ; then
-			if [[ $CONFIG_ABORT_GAME -ne 0 ]] ; then
-				process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
-			else
-				echo "Aborting the game launch."
-			fi
+		if [[ $p4 == "t1t2" ]] ; then
+			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
 		else
 			echo ./$GAME_EXECUTABLE
 		fi
