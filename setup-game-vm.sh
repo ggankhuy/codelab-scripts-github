@@ -49,7 +49,7 @@ CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
 CONFIG_SET_VCPUCOUNT=0
-
+SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
 #	which is irrelevant to current drop being worked on. That is because non-running VM could be left over
@@ -73,6 +73,7 @@ CONFIG_USE_STATIC_IP=0
 #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 
 DEBUG=1
+VM_IPS=""
 
 p1=$1
 
@@ -138,8 +139,9 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	VM_IPS=`echo ${VM_IPS[@]} $VM_IP`
 	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
-	sleep 2
+	sleep 1
 
 	if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
 		echo "Turning off VM_NAME: $VM_NAME..."
@@ -148,10 +150,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 		echo "Setting vCPUs to 8..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-		sleep 3
-	
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
-		sleep 3
 		
 		VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
 		echo $VCPU_COUNT
@@ -164,7 +163,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 		echo "Turning on VM_NAME: $VM_NAME..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-		sleep 3
+		sleep 1
 		echo "Done."	
 	fi 
 
@@ -192,8 +191,8 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass"	
 	
-	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./setup-game-vm-client.sh nonroot@$VM_IP:/home/nonroot/
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "/home/nonroot/setup-game-vm-client.sh"	
+	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
+	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
 done
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
@@ -204,3 +203,6 @@ TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_
 #  Assignment:
 
 #echo -e "'amd1234b'\n'amd1234b'\n" | passwd  nonroot
+
+echo "Finished copying $SETUP_GAME_VM_CLIENT. VM IP addresses:"
+echo ${VM_IPS[@]}
