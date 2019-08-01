@@ -50,6 +50,7 @@ CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
 CONFIG_SET_VCPUCOUNT=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
+
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
 #	which is irrelevant to current drop being worked on. That is because non-running VM could be left over
@@ -136,36 +137,6 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	VM_INDEX=$(($n+1))
 	echo "VM_INDEX: $VM_INDEX"
 	
-	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu$n | tr -s ' ' | cut -d ' ' -f3"`
-	sleep $SLEEP_TIME_2
-	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu$n | tr -s ' ' | cut -d ' ' -f2"`
-	sleep $SLEEP_TIME_2
-
-	echo "Turning off VM_NAME: $VM_NAME..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
-	echo "Done."	
-
-	echo "Setting vCPUs to 8..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-	sleep $SLEEP_TIME_2
-
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
-	sleep $SLEEP_TIME_2
-	
-	VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
-	echo $VCPU_COUNT
-	echo "Done."	
-
-	if [[ $DEBUG -eq 1 ]] ; then
-		echo "VM_NAME: $VM_NAME"
-		echo "VM_NO: $VM_NO"		
-	fi
-
-	echo "Turning on VM_NAME: $VM_NAME..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-	sleep $SLEEP_TIME_2
-	echo "Done."	
-
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
@@ -215,10 +186,10 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	#network 10.216.64.0
 	#gateway 10.216.64.1
 	#dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
+	
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 
-	sleep $SLEEP_TIME_2
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos nonroot"	
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass"	
