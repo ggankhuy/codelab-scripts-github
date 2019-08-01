@@ -41,6 +41,10 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
+#	Used for remote initialization of game environment in addition to setup.
+
+CONFIG_ABORT_GAME=1
+
 vm_check
 sleep $SLEEP_TIME
 
@@ -221,7 +225,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 	common_runtime_setup
 	
-	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
+	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then			
 		echo "Terminal1." ; sleep $SLEEP_TIME
 	
 
@@ -271,8 +275,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi
+		
+		if [[ $p4 == "nolaunch" ]] ; then
+			echo "No launch..."
+		fi 
 
-		if  [[ $p4 == "t1t2" ]] ; then
+		if [[ $p4 == "t1t2" ]] ; then
 			process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM"
 		else
 			echo ./$GAME_EXECUTABLE
