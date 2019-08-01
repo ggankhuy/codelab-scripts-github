@@ -187,31 +187,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	#gateway 10.216.64.1
 	#dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 	
-	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
-
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos \"\" nonroot"
-	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"'amd1234'\n'amd1234'\n\" | passwd  nonroot"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "export SUDO_ASKPASS=`which ssh-askpass`"
-	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo %admin  ALL=(ALL) NOPASSWD:ALL >> /etc/sudoers"
-	echo "mkdir git.co directory..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "echo -e \"amd1234\n\" | sudo mkdir git.co && /git.co"
-	if [[ $? -ne 0 ]] ; then 
-		echo "Error creating /git.co, can not continue..."
-		exit 1
-	fi
-	echo "git clone..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "echo -e \"g00db0y\n\" | sudo git clone ssh://ixt-rack-85@10.216.64.102:32029/home/ixt-rack-85/gg-git-repo/"
-	echo "cd to repo..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "cd gg-git-repo"
-	echo "checkout dev branch..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "sudo git checkout dev"
-	echo "yeti setup..."
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "./yeti-game-test.sh setup"
-
-	sleep 3
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass"	
+	
+	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./setup-game-vm-client.sh nonroot@$VM_IP:/home/nonroot/
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "/home/nonroot/setup-game-vm-client.sh"	
 done
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
