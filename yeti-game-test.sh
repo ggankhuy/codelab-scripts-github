@@ -225,7 +225,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
 	common_runtime_setup
 	
-	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] ; then			
+	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then			
 		echo "Terminal1." ; sleep $SLEEP_TIME
 	
 
@@ -276,7 +276,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 			cd /srv/game/assets/Quail
 		fi
 		
-		if [[ $p4 == "nolaunch]] ; then
+		if [[ $p4 == "nolaunch" ]] ; then
 			echo "No launch..."
 		fi 
 
