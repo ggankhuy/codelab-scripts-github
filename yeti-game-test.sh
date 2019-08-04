@@ -176,6 +176,9 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		GAME_NAME=$GAME_3DMARK
 		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 		sudo mkdir -p /log/3dmark/
+        	sudo chmod -R g=u /log/3dmark
+        	sudo chmod -R o=u /log/3dmark
+
 		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
 
 		if [[ $game -eq $GAME_3DMARK ]] ; then
@@ -194,7 +197,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
 	for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
-		echo Running 3dmark for $CONFIG_ITERATION_3DMARK th time.
+		echo Running 3dmark for $n th time.
 		DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
 		sleep 3
 		./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output /log/3dmark/3dmark.$DATE_3DMARK_LOOP.log
