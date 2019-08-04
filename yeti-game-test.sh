@@ -84,11 +84,17 @@ else
 	exit 1
 fi
 
-if [[ -z $2  ]] || [[ -z $3 ]] || [[ -z $4 ]] ; then
-	echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
-	usage
-	exit 1
+if [[ -z $2  ]] || [[ -z $3 ]] ; then
+        echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
+        usage
+        exit 1
+
+        if [[ -z $4 ]] && [[ $3 -ne "0" ]] ; then
+                echo "if p3 is not zero, then p4 must be selected."
+                exit 1
+        fi
 fi
+
 #	p2 is for either linux or yeti.
 
 if [[ $p2 == "linux" ]] ; then
