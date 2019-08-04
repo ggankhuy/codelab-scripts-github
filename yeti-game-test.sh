@@ -184,7 +184,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
-			cd /srv/game/3dmark/bin/yeti
+			#cd /srv/game/3dmark/bin/yeti
 			source /usr/local/cloudcast/env/vce_nostreamer.sh
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
@@ -198,8 +198,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
 	if [[ $game -eq $GAME_3DMARK ]] ; then
-		cd /srv/game/3dmark/bin/yeti
-
+		cd /srv/game/assets/bin/yeti
 		for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
 			echo Running 3dmark for $n th time.
 			DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
@@ -311,7 +310,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
 			cd /srv/game/assets/bin/yeti
-			#source /usr/local/cloudcast/env/vce_nostreamer.sh
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi
