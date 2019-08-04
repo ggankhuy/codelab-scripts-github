@@ -173,7 +173,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		GAME_FOLDER=./
 		GAME_NAME=$GAME_3DMARK
 		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
+		sudo mkdir -p /log/3dmark/
+		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
 
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
