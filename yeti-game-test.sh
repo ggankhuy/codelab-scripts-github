@@ -197,7 +197,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo Running 3dmark for $CONFIG_ITERATION_3DMARK th time.
 		DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
 		sleep 3
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json -output /log/3dmark/3dmark.$DATE_3DMARK_LOOP.log
+		./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output /log/3dmark/3dmark.$DATE_3DMARK_LOOP.log
 	done
 
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
