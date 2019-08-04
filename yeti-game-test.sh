@@ -175,6 +175,11 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
 
+		if [[ $game -eq $GAME_3DMARK ]] ; then
+			echo "3dmark specific steps..."
+			cd /srv/game/assets/bin/yeti
+			source /usr/local/cloudcast/env/vce_nostreamer.sh
+		fi
 	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
 		echo Following games: Doom/TR2 does not support non-stream test option.
 		
