@@ -46,8 +46,9 @@ SLEEP_TIME=1
 #	Used for remote initialization of game environment in addition to setup.
 
 CONFIG_ABORT_GAME=1
-CONFIG_ITERATION_3DMARK=100
 
+CONFIG_ITERATION_3DMARK=5
+CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
 
@@ -183,7 +184,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
-			cd /srv/game/assets/bin/yeti
+			cd /srv/game/3dmark/bin/yeti
 			source /usr/local/cloudcast/env/vce_nostreamer.sh
 		fi
 	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
@@ -196,13 +197,32 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	common_runtime_setup
        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
-	for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
-		echo Running 3dmark for $n th time.
-		DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
-		sleep 3
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json --output /log/3dmark/3dmark.$DATE_3DMARK_LOOP.log
-	done
+	if [[ $game -eq $GAME_3DMARK ]] ; then
+		cd /srv/game/3dmark/bin/yeti
 
+		for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+			echo Running 3dmark for $n th time.
+			DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
+			sleep 3
+	
+    			sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.1080p.$DATE_3DMARK_LOOP.log
+    			sudo sed -i '/encode_width/c \ \encode_width: 1280' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 720' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "1280x720",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "1208x720",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.720p.$DATE_3DMARK_LOOP.log
+    			sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.$DATE_3DMARK_LOOP.log
+		done
+	fi
+	
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
