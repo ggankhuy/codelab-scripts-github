@@ -7,5 +7,7 @@ echo "checkout dev branch and run yeti setup..."
 cd /git.co/gg-git-repo 
 sudo git checkout dev
 ./yeti-game-test.sh setup
-./yeti-game-test.sh doom yeti 2 nolaunch
-./yeti-game-test.sh tr2 yeti 2 nolaunch
+./yeti-game-test.sh doom yeti 2 nolaunch 
+./yeti-game-test.sh tr2 yeti 2 nolaunch 
+./yeti-game-test.sh quail yeti 2 nolaunch 
+./yeti-game-test.sh 3dmark yeti 2 nolaunch 
