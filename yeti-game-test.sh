@@ -46,7 +46,7 @@ SLEEP_TIME=1
 #	Used for remote initialization of game environment in addition to setup.
 
 CONFIG_ABORT_GAME=1
-CONFIG_ITERATION_3DMARK=10
+CONFIG_ITERATION_3DMARK=100
 
 vm_check
 sleep $SLEEP_TIME
@@ -193,12 +193,11 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	common_runtime_setup
        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
-	echo "Run the 3dmark application the way you would for Linux XCB:"
-
 	for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
 		echo Running 3dmark for $CONFIG_ITERATION_3DMARK th time.
+		DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
 		sleep 3
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+		./3dmark --asset_root=../../assets -i ../../configs/gt1.json -output /log/3dmark/3dmark.$DATE_3DMARK_LOOP.log
 	done
 
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
