@@ -29,6 +29,7 @@ p4=$4		# t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 for b
 game=0		# game
 mode=0		# 0 for yeti, 1 for linux
 option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+n=0
 
 MODE_YETI=0
 MODE_LINUX=1
@@ -45,6 +46,7 @@ SLEEP_TIME=1
 #	Used for remote initialization of game environment in addition to setup.
 
 CONFIG_ABORT_GAME=1
+CONFIG_ITERATION_3DMARK=10
 
 vm_check
 sleep $SLEEP_TIME
@@ -192,7 +194,12 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
        	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
 	echo "Run the 3dmark application the way you would for Linux XCB:"
-	./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+
+	for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+		echo Running 3dmark for $CONFIG_ITERATION_3DMARK th time.
+		sleep 3
+		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+	done
 
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
