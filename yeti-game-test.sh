@@ -47,7 +47,7 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=5
+CONFIG_ITERATION_3DMARK=3
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -208,17 +208,20 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
     			sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
     			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt1.json
     			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt2.json 
-			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.1080p.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.1080p.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.1080p.gt2.$DATE_3DMARK_LOOP.log
     			sudo sed -i '/encode_width/c \ \encode_width: 1280' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
     			sudo sed -i '/encode_height/c \ \encode_height: 720' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
     			sudo sed -i '/resolution/c \ \"resolution" : "1280x720",' ../../configs/gt1.json
     			sudo sed -i '/resolution/c \ \"resolution" : "1208x720",' ../../configs/gt2.json 
-			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.720p.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.720p.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.720p.gt2.$DATE_3DMARK_LOOP.log
     			sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
     			sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
     			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt1.json
     			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
-			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
 		done
 	fi
 	
