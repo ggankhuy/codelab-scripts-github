@@ -147,6 +147,15 @@ else
 	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
+#	In bashrc, cd into /git.co/gg-git-repo/
+
+ret=`cat ~/.bashrc  | grep "cd /git.co/gg-git-repo"`
+
+if [[ -z $ret  ]] ; then
+        echo "Inserting cd /git.co/gg-git-repo to bash..."
+        echo "cd /git.co/gg-git-repo" >> ~/.bashrc
+fi
+
 #	Load amdgpu, kfd driver:
 
 sudo modprobe amdkfd
