@@ -9,7 +9,7 @@
 #	After that from each of terminal 1,2 and 3 (client) 
 #	. ./yeti-game-setup doom yeti 2 t1
 #	. ./yeti-game-setup doom yeti 2 t2
-#	. ./yeti-game-setup doom yeti 2 client
+#	. ./yeti-game-setup doom yeti 2 t1t2
 #	At the end of each run, the script will prompt with the last syntax to run the actual game for each terminals
 #	with seconds apart for easier copy and paste and launch (type but not run).
 
@@ -20,14 +20,16 @@ source ./common.sh
 
 #	Actual scripts starts here.
 
-p1=$1
-p2=$2	
-p3=$3
-p4=$4
+p1=$1		# game name	
+p2=$2		# yeti or linux.
+p3=$3		# 0 - non-stream, 1 for 1 pc stream , 2 for 2 pc stream.
+p4=$4		# t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 for both terminal in one terminal.
+		# $4 is not applicable if $3 is non streaming.
 
 game=0		# game
 mode=0		# 0 for yeti, 1 for linux
 option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+n=0
 
 MODE_YETI=0
 MODE_LINUX=1
@@ -45,6 +47,8 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
+CONFIG_ITERATION_3DMARK=3
+CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
 
@@ -83,11 +87,17 @@ else
 	exit 1
 fi
 
-if [[ -z $2  ]] || [[ -z $3 ]] || [[ -z $4 ]] ; then
-	echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
-	usage
-	exit 1
+if [[ -z $2  ]] || [[ -z $3 ]] ; then
+        echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
+        usage
+        exit 1
+
+        if [[ -z $4 ]] && [[ $3 -ne "0" ]] ; then
+                echo "if p3 is not zero, then p4 must be selected."
+                exit 1
+        fi
 fi
+
 #	p2 is for either linux or yeti.
 
 if [[ $p2 == "linux" ]] ; then
@@ -137,6 +147,15 @@ else
 	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
+#	In bashrc, cd into /git.co/gg-git-repo/
+
+ret=`cat ~/.bashrc  | grep "cd /git.co/gg-git-repo"`
+
+if [[ -z $ret  ]] ; then
+        echo "Inserting cd /git.co/gg-git-repo to bash..."
+        echo "cd /git.co/gg-git-repo" >> ~/.bashrc
+fi
+
 #	Load amdgpu, kfd driver:
 
 sudo modprobe amdkfd
@@ -155,27 +174,28 @@ else
 fi
 
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
-	if [[ $game -eq $GAME_3DMARK ]] ; then
-		clear
-		echo setting up Yeti libraries...
-		echo yeti 3dmark non-stream configuration run...
-		sleep $SLEEP_TIME
+	echo "OPTION: NON-STREAM." ; sleep $SLEEP_TIME
 
-		setPathLdLibraryPath
-		setVkLoaderDisableYetiExtWhitelist
-		
-		#echo For render+discard mode:
-		#source ~/$DIR_ENG_BUNDLE_TO_USE/env/null.sh
-		#echo NOTE: It seems that render+discard mode is broken with the latest eng bundle (20180830)
-		
-		echo For render+encode+discard:
-		#source ~/$DIR_ENG_BUNDLE_TO_USE/env/vce_nostreamer.sh
-		source /usr/local/cloudcast/env/vce_nostreamer.sh
-		
-		cd ~/$DIR_YETI_CONTENT_BUNDLE/3dmark/bin/yeti
-		
-		echo Run the 3dmark application the way you would for Linux XCB:
-		./3dmark --asset_root=../../assets -i ../../configs/gt1.json
+	if [[ $game -eq $GAME_3DMARK ]] ; then
+
+		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
+		SOURCE_FOLDER=3dmark
+		DESTINATION_FOLDER=./3dmark
+		GAME_EXECUTABLE=3dmark
+		GAME_FOLDER=./
+		GAME_NAME=$GAME_3DMARK
+		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
+		sudo mkdir -p /log/3dmark/
+        	sudo chmod -R g=u /log/3dmark
+        	sudo chmod -R o=u /log/3dmark
+
+		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
+
+		if [[ $game -eq $GAME_3DMARK ]] ; then
+			echo "3dmark specific steps..."
+			#cd /srv/game/3dmark/bin/yeti
+			source /usr/local/cloudcast/env/vce_nostreamer.sh
+		fi
 	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
 		echo Following games: Doom/TR2 does not support non-stream test option.
 		
@@ -183,6 +203,37 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 		echo "Invalid game: $game" 
 		exit 1
 	fi
+	common_runtime_setup
+       	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+	if [[ $game -eq $GAME_3DMARK ]] ; then
+		cd /srv/game/assets/bin/yeti
+		for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+			echo Running 3dmark for $n th time.
+			DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
+			sleep 3
+	
+    			sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.1080p.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.1080p.gt2.$DATE_3DMARK_LOOP.log
+    			sudo sed -i '/encode_width/c \ \encode_width: 1280' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 720' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "1280x720",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "1208x720",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.720p.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.720p.gt2.$DATE_3DMARK_LOOP.log
+    			sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt1.json
+    			sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
+			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
+			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
+		done
+	fi
+	
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
@@ -271,7 +322,6 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
 			cd /srv/game/assets/bin/yeti
-			#source /usr/local/cloudcast/env/vce_nostreamer.sh
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi
