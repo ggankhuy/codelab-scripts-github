@@ -180,9 +180,11 @@ function vm_check () {
 
 function common_runtime_setup ()
 {
+	echo commont_runtime_setup
 	source /usr/local/cloudcast/env/vce.sh
 	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
-
+	sudo export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+	sleep 5
 }
 function common_setup () {
 	clear
