@@ -6,8 +6,10 @@ chmod 755  $CONFIG_MEMCAT_PATH
 dpkg -i  $CONFIG_MEMCAT_LOC/grtev4-x86-runtimes_1.0-145370904_amd64.deb
 cd $CONFIG_MEMCAT_LOC
 modprobe amdkfd
-modproeb amdgpu
+modprobe amdgpu
 common_runtime_setup
+sudo chmod -R g=u /usr/local/cloudcast/
+sudo chmod -R o=u /usr/local/cloudcast/
 
 for (( i=0 ; i < 1000; i ++ )) 
 do
