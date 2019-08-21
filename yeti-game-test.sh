@@ -47,7 +47,7 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=3
+CONFIG_ITERATION_3DMARK=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -183,7 +183,6 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
 	GAME_EXECUTABLE=3dmark
 	GAME_FOLDER=./
 	GAME_NAME=$GAME_3DMARK
-	#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
 	GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
 elif [[ $game -eq $GAME_QUAIL ]] ; then
 	echo "TR2 is selected" ; sleep $SLEEP_TIME
@@ -275,7 +274,7 @@ cd /srv/game/assets/
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
 	echo "3dmark specific steps..."
-	cd /srv/game/assets/bin/yeti
+	cd /srv/game/assets/3dmark/bin/yeti
 elif [[ $game -eq $GAME_QUAIL ]] ; then
 	cd /srv/game/assets/Quail
 fi
@@ -283,14 +282,12 @@ fi
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	echo "OPTION: NON-STREAM." ; sleep $SLEEP_TIME
 
-        sudo chmod 755 ./$GAME_FOLDER/$GAME
+        sudo chmod 755 ./$GAME_FOLDER/$GAME_EXECUTABLE	
+        echo chmod 755 ./$GAME_FOLDER/$GAME_EXECUTABLE
 
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		echo "3dmark specific steps..."
-		#source /usr/local/cloudcast/env/vce_nostreamer.sh
 		common_runtime_setup novce
-
-		cd /srv/game/assets/bin/yeti
 
 		for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
 			echo Running 3dmark for $n th time.
