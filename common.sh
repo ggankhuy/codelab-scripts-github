@@ -181,7 +181,20 @@ function vm_check () {
 function common_runtime_setup ()
 {
 	echo commont_runtime_setup
-	source /usr/local/cloudcast/env/vce.sh
+
+	if [[ $1 == "vce" ]] ; then
+		echo "setting vce..."
+		sleep 3
+		source /usr/local/cloudcast/env/vce.sh
+	elif [[ $2 == "novce" ]] ; then
+		echo "setting non vce..."
+		sleep 3
+		/usr/local/cloudcast/env/vce_nostreamer.sh
+	else
+		echo "common_runtime_setup: invalid p1: $1, supported values are vce and novce."
+		exit 1
+	fi
+
 	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
 	sudo export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
 	sleep 5
