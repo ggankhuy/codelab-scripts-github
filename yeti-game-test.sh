@@ -274,7 +274,7 @@ cd /srv/game/assets/
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
 	echo "3dmark specific steps..."
-	cd /srv/game/assets/3dmark/bin/yeti
+	cd /srv/game/assets/bin/yeti
 elif [[ $game -eq $GAME_QUAIL ]] ; then
 	cd /srv/game/assets/Quail
 fi
@@ -325,6 +325,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	
         	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
+		if [[ $game -eq $GAME_3DMARK ]] ; then
+			echo "3dmark specific steps..."
+			cd /srv/game/assets/bin/yeti
+		elif [[ $game -eq $GAME_QUAIL ]] ; then
+			cd /srv/game/assets/Quail
+		fi
 		if [[ $p4 == "nolaunch" ]] ; then
 			echo "No launch..."
 		fi 
