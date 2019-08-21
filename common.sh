@@ -187,7 +187,7 @@ function common_runtime_setup ()
 		source /usr/local/cloudcast/env/vce.sh
 	elif [[ $1 == "novce" ]] ; then
 		echo "setting non vce..."
-		/usr/local/cloudcast/env/vce_nostreamer.sh
+		source /usr/local/cloudcast/env/vce_nostreamer.sh
 	else
 		echo "common_runtime_setup: invalid p1: $1, supported values are vce and novce."
 		exit 1
