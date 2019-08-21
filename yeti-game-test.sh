@@ -283,6 +283,8 @@ fi
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	echo "OPTION: NON-STREAM." ; sleep $SLEEP_TIME
 
+        sudo chmod 755 ./$GAME_FOLDER/$GAME
+
 	if [[ $game -eq $GAME_3DMARK ]] ; then
 		echo "3dmark specific steps..."
 		#source /usr/local/cloudcast/env/vce_nostreamer.sh
