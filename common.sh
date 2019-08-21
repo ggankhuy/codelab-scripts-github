@@ -186,7 +186,7 @@ function common_runtime_setup ()
 		echo "setting vce..."
 		sleep 3
 		source /usr/local/cloudcast/env/vce.sh
-	elif [[ $2 == "novce" ]] ; then
+	elif [[ $1 == "novce" ]] ; then
 		echo "setting non vce..."
 		sleep 3
 		/usr/local/cloudcast/env/vce_nostreamer.sh
