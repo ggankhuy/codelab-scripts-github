@@ -16,8 +16,8 @@ REPO_SERVER_IP="10.217.74.231"
 
 REPO_SERVER_IP="192.168.0.27"
 REPO_SERVER_IP="192.168.0.20"
-REPO_SERVER_IP="192.168.122.1"
 REPO_SERVER_IP="10.217.75.124"
+REPO_SERVER_IP="192.168.122.1"
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_ENS3=1
@@ -194,9 +194,9 @@ function common_runtime_setup ()
 		exit 1
 	fi
 
-	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
-	sudo export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
-	sleep 5
+	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+	#export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+	sleep 1
 }
 function common_setup () {
 	clear
