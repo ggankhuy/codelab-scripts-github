@@ -192,10 +192,19 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass"	
-	
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"	
+
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep TCPKeepAlive` ]] ; then echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config"
+
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveInterval` ]] ; then echo "ClientAliveInterval" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config"
+
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveCountMax` ]] ; then echo "ClientAliveCountMax 10800" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/\\ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config"
+
 	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
-	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
 done
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
