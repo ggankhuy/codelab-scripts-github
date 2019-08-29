@@ -194,13 +194,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"	
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep TCPKeepAlive` ]] ; then echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep TCPKeepAlive\` ]] ; then echo TCPKeepAlive yes >> /etc/ssh/sshd_config ; fi;"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config"
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveInterval` ]] ; then echo "ClientAliveInterval" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveInterval\` ]] ; then echo ClientAliveInterval >> /etc/ssh/sshd_config ; fi;"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config"
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveCountMax` ]] ; then echo "ClientAliveCountMax 10800" >> /etc/ssh/sshd_config ; fi;"
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveCountMax\` ]] ; then echo ClientAliveCountMax 10800 >> /etc/ssh/sshd_config ; fi;"
 	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/\\ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config"
 
 	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
