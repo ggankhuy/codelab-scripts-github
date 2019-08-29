@@ -218,3 +218,26 @@ TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_
 
 echo "Finished copying $SETUP_GAME_VM_CLIENT. VM IP addresses:"
 echo ${VM_IPS[@]}
+
+echo "Setup /etc/ssh/sshd_config timeout settings on host."
+sleep 5
+
+apt install -y ssh
+
+sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config
+if [[ -z `cat /etc/ssh/sshd_config | grep TCPKeepAlive` ]] ; then echo "TCPKeelAlive yes" >> /etc/ssh/sshd_config ; fi;
+
+sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config
+if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveInterval` ]] ; then echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config ; fi;
+
+sed -i '/ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config
+if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveCountMax` ]] ; then echo "ClientAliveCountMax 10800" >> /etc/ssh/sshd_config ; fi;
+
+echo "Setup /etc/ssh/ssh_config timeout settings on host."
+sleep 5
+
+sed -i '/ServerAliveInterval/c \\ServerAliveInterval 60' /etc/ssh/ssh_config
+if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveInterval` ]] ; then echo "ServerAliveInterval 60" >> /etc/ssh/ssh_config ; fi;
+
+sed -i '/ServerAliveCountMax/c \\ServerAliveCountMax 10800' /etc/ssh/ssh_config
+if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveCountMax` ]] ; then echo "ServerAliveCountMax 10800" >> /etc/ssh/ssh_config ; fi;
