@@ -224,14 +224,14 @@ sleep 5
 
 apt install -y ssh
 
-sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config
-if [[ -z `cat /etc/ssh/sshd_config | grep TCPKeepAlive` ]] ; then echo "TCPKeelAlive yes" >> /etc/ssh/sshd_config ; fi;
+#sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config
+#if [[ -z `cat /etc/ssh/sshd_config | grep TCPKeepAlive` ]] ; then echo "TCPKeelAlive yes" >> /etc/ssh/sshd_config ; fi;
 
-sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config
-if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveInterval` ]] ; then echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config ; fi;
+#sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config
+#if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveInterval` ]] ; then echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config ; fi;
 
-sed -i '/ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config
-if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveCountMax` ]] ; then echo "ClientAliveCountMax 10800" >> /etc/ssh/sshd_config ; fi;
+#sed -i '/ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config
+#if [[ -z `cat /etc/ssh/sshd_config | grep ClientAliveCountMax` ]] ; then echo "ClientAliveCountMax 10800" >> /etc/ssh/sshd_config ; fi;
 
 echo "Setup /etc/ssh/ssh_config timeout settings on host."
 sleep 5
