@@ -221,6 +221,11 @@ done
 #	Exit if p2 is dmesg,
 
 if [[ $2 == "dmesg" ]] ; then
+
+	if [[ $2 == "dmesg" ]]; then
+		dmesg"	> /log/dmesg/$DATE/$p1.host.dmesg.$DATE.log
+	fi
+
 	echo "dmesg for each VM is collected in /log/dmesg/$DATE."
 	exit 0
 fi
