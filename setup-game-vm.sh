@@ -50,6 +50,7 @@ CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
 CONFIG_SET_VCPUCOUNT=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
+DATE=`date +%Y%m%d-%H-%M-%S`
 
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
@@ -75,7 +76,7 @@ CONFIG_USE_STATIC_IP=0
 
 DEBUG=1
 VM_IPS=""
-
+p2=$2
 p1=$1
 
 if [[ $p1 == "ixt39" ]] ; then
@@ -127,7 +128,6 @@ sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh n
 
 #   Set vCPUs to 8.
 
-
 #  Turn on all vms.
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
@@ -168,7 +168,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		echo "Done."	
 	fi 
 
-	# Assign static ips now
+	# Assign static ips now (halted development for now...)
 
 	#CONFIG_IXT39_GUEST_IP_RANGE
 	#CONFIG_IXT70_GUEST_IP_RANGE
@@ -189,23 +189,41 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 	#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"	
+	# setup sshd and ssh client settings on guest VM-s.
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep TCPKeepAlive\` ]] ; then echo TCPKeepAlive yes >> /etc/ssh/sshd_config ; fi;"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config"
+	if [[ $2 == "ssh" ]] || [[ $2 == "" ]] ; then
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"	
+	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep TCPKeepAlive\` ]] ; then echo TCPKeepAlive yes >> /etc/ssh/sshd_config ; fi;"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config"
+	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveInterval\` ]] ; then echo ClientAliveInterval >> /etc/ssh/sshd_config ; fi;"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config"
+	
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveCountMax\` ]] ; then echo ClientAliveCountMax 10800 >> /etc/ssh/sshd_config ; fi;"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/\\ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config"
+	
+		sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
+	fi
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveInterval\` ]] ; then echo ClientAliveInterval >> /etc/ssh/sshd_config ; fi;"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/ClientAliveInterval/c \\ClientAliveInterval 60' /etc/ssh/sshd_config"
+	# collect dmesg only.
 
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep ClientAliveCountMax\` ]] ; then echo ClientAliveCountMax 10800 >> /etc/ssh/sshd_config ; fi;"
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/\\ClientAliveCountMax/c \\ClientAliveCountMax 10800' /etc/ssh/sshd_config"
-
-	sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
+	if [[ $2 == "dmesg" ]]; then
+		mkdir -p /log/dmesg/$DATE
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg"	> /log/dmesg/$DATE/$p1.VM$n.dmesg.$DATE.log
+	fi
 done
+
+#	Exit if p2 is dmesg,
+
+if [[ $2 == "dmesg" ]] ; then
+	echo "dmesg for each VM is collected in /log/dmesg/$DATE."
+	exit 0
+fi
 
 TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
 
