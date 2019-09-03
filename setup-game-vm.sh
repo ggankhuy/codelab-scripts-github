@@ -213,20 +213,36 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	# collect dmesg only.
 
 	if [[ $2 == "dmesg" ]]; then
+		echo "Saving dmesg on VM$n..."
 		mkdir -p /log/dmesg/$DATE
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg"	> /log/dmesg/$DATE/$p1.VM$n.dmesg.$DATE.log
+	fi
+
+	if [[ $2 == "dmesg-clear" ]]; then
+		echo "Clearing dmesg on VM$n..."
+		sleep 3
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg --clear"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg | wc -l"
+		echo "No. of lines in VM$n dmesg after clear: $lines"
 	fi
 done
 
 #	Exit if p2 is dmesg,
 
 if [[ $2 == "dmesg" ]] ; then
-
 	if [[ $2 == "dmesg" ]]; then
-		dmesg"	> /log/dmesg/$DATE/$p1.host.dmesg.$DATE.log
+		dmesg	> /log/dmesg/$DATE/$p1.host.dmesg.$DATE.log
 	fi
 
 	echo "dmesg for each VM is collected in /log/dmesg/$DATE."
+	exit 0
+fi
+
+if [[ $2 == "dmesg-clear" ]]; then
+	dmesg --clear
+	lines=`dmesg | wc -l`
+	echo "dmesg for host is cleared"
+	echo "No. of dmesg line in host: $lines"
 	exit 0
 fi
 
