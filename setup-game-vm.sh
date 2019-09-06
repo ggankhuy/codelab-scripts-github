@@ -29,6 +29,8 @@ DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
 CONFIG_IXT39_HOST_IP="10.216.66.54"
 CONFIG_IXT70_HOST_IP="10.216.66.51"
+CONFIG_IXT21_HOST_IP="10.216.66.52"
+CONFIG_IXT25_HOST_IP="10.216.66.53"
 CONFIG_HOST_IP=0
 CONFIG_IXT39_GUEST_IP_RANGE=(\
 "10.216.66.67" \
@@ -85,6 +87,12 @@ if [[ $p1 == "ixt39" ]] ; then
 elif [[ $1 == "ixt70" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT70_HOST_IP
 	CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
+elif [[ $1 == "ixt21" ]] ; then
+	CONFIG_HOST_IP=$CONFIG_IXT21_HOST_IP
+	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
+elif [[ $1 == "ixt25" ]] ; then
+	CONFIG_HOST_IP=$CONFIG_IXT25_HOST_IP
+	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 else
 	echo "ERROR: Invalid parameter."
 	exit 1
@@ -192,11 +200,15 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	# setup sshd and ssh client settings on guest VM-s.
 
 	if [[ $2 == "ssh" ]] || [[ $2 == "" ]] ; then
+		echo "adding user nonroot"
+		sleep 3
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"	
 	
+		echo "setting ssh..."
+		sleep 3
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep TCPKeepAlive\` ]] ; then echo TCPKeepAlive yes >> /etc/ssh/sshd_config ; fi;"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "sed -i '/TCPKeepAlive/c \\TCPKeepAlive yes' /etc/ssh/sshd_config"
 	
