@@ -1,5 +1,11 @@
+# 	Runs a series of non-interactive test runs for agt, amdvbflash and atitool.
+# 	It does not check for appropraite tool version, instead merely calls each
+#	command based on 3 variables defined below that points to path: 
+#	ATITOOL, AGTTOOL and AMDVBFLASH.
+#	Tester is responsible for placing appropriate tools under the paths defined.
+
 ATITOOL=/root/tools/atitool/tool-test/atitool
-AGTTOOL=/root/tools/agt/agt
+AGTTOOL=/root/tools/agt/tool-test/agt
 AMDVBFLASH=/root/tools/amdbvflash/tool-test/amdvbflash
 AMDVBFLASH=/root/tools/amdvbflash/tool-test/amdvbflash
 DATE=`date +%Y%m%d-%H-%M-%S`
