@@ -150,6 +150,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	sleep 3
 done
 
+if [[ ! -z $1  ]] ; then
+	CONIG_LOOP_TEST_NO=$1
+	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
+fi
+
+sleep 3
+
 for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	echo "Loop No. $i"
 
@@ -227,6 +234,15 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-$hostname.log'
 		fi
 	done
+	
+	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
+	echo "No. of lines containing TRN pattern: $stat"
+
+	if [[ $stat -ne 0 ]] ; then
+		echo "FOUND THE PATTERN TRN IN DMESG..."
+		exit 0
+	fi
+
 done
 
 clear_arrs
