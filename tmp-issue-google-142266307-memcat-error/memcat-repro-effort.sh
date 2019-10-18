@@ -1,4 +1,4 @@
-#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
+6#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
 #  runtest 6 from autotest.
 #  This script assumes the ens3 interface is used for streaming client and server. If the interface name is different
 #  or absent, the result is unpredictable.
@@ -27,7 +27,7 @@ source ./common.sh
 
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
-CONFIG_SUPPORT_MEMCAT=1
+CONFIG_SUPPORT_MEMCAT=0
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONIG_LOOP_TEST_NO=3
@@ -136,8 +136,8 @@ function get_vm_info()
 
 echo "Setup memcat on VM-s..."
 
-clear_arrs
 wait_till_ip_read
+clear_arrs
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	get_vm_info $i $n
 	echo "clear dmesg"
@@ -170,7 +170,7 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	for m in ${ARR_VM_NAME[@]}  ; do
 		#get_vm_info $i $n
 		echo "Turning off VM_NAME: $m..."
-		virsh destroy $m &
+		virsh shutdown $m &
 	done
 
 	sleep 3
