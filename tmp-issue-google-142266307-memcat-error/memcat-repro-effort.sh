@@ -214,7 +214,7 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 
 		TIME=`date +%H-%M-%S`
 		echo "load AMD gpu" 
-		ssj root@$VM_IP 'modprobe amdgpu'
+		ssh root@$VM_IP 'modprobe amdgpu'
 		ssh root@$VM_IP 'dmesg > /tmp/dmesg'
 		echo "Copy dmesg to host..."
 		TEST_DIR=/g-tracker-142266307/$DATE
