@@ -145,6 +145,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	ssh root@$VM_IP 'mkdir /memcat'
 	scp -r $CONFIG_MEMCAT_SRC_DIR/* root@$VM_IP:/memcat/
 	ssh root@$VM_IP 'dpkg -i /memcat/grtev4-x86-runtimes_1.0-145370904_amd64.deb'
+	ssh root@$VM_IP 'chmod 755 /memcat/*'
 	echo "grtev4-x86-runtimes_1.0-145370904_amd64.deb installation status: $?"
 	sleep 3
 done
@@ -222,6 +223,7 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		scp -r root@$VM_IP:/tmp/dmesg $TEST_DIR/dmesg-$VM_NAME-$TIME.log
 
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+			echo "Running memcat on $VM_IP..."
 			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-$hostname.log'
 		fi
 	done
