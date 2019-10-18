@@ -27,7 +27,7 @@ source ./common.sh
 
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
-CONFIG_SUPPORT_MEMCAT=0
+CONFIG_SUPPORT_MEMCAT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONIG_LOOP_TEST_NO=3
@@ -93,7 +93,7 @@ function wait_till_ip_read()
 				echo "Can ping $tmpIp now..."
 				break
 			fi
-			sleep 5
+			sleep 30
 		done
 
 		if [[ $stat -ne 0 ]] ; then
@@ -141,7 +141,7 @@ clear_arrs
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	get_vm_info $i $n
 	echo "clear dmesg"
-	ssh root@$VM_IP 'rm -rf /tmp/memcat-$hostname.log'
+	ssh root@$VM_IP 'rm -rf /tmp/memcat-`hostname`.log'
 	ssh root@$VM_IP 'mkdir /memcat'
 	scp -r $CONFIG_MEMCAT_SRC_DIR/* root@$VM_IP:/memcat/
 	ssh root@$VM_IP 'dpkg -i /memcat/grtev4-x86-runtimes_1.0-145370904_amd64.deb'
@@ -169,6 +169,8 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		ssh root@$VM_IP 'dmesg --clear'
 		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
 		echo "Done."
+		echo "1. checking memcat on $VM_IP..."
+		ssh root@$VM_IP 'ls -l /memcat/'
 	done
 
 	print_arrs 
@@ -177,7 +179,9 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	for m in ${ARR_VM_NAME[@]}  ; do
 		#get_vm_info $i $n
 		echo "Turning off VM_NAME: $m..."
+
 		virsh shutdown $m &
+		#ssh root@$VM_IP 'shutdown now'
 	done
 
 	sleep 3
@@ -221,18 +225,29 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
 
 		TIME=`date +%H-%M-%S`
+
+		# Load guest driver.
+
 		echo "load AMD gpu" 
 		ssh root@$VM_IP 'modprobe amdgpu'
-		ssh root@$VM_IP 'dmesg > /tmp/dmesg'
+
+		# Run memcat.
+
+		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+			echo "memcat directory content on guest..."
+			ssh root@$VM_IP 'ls -l /memcat/'
+			echo "Running memcat on $VM_IP..."
+			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+		fi
+
+		# Copy dmesg to host.
+
 		echo "Copy dmesg to host..."
+		ssh root@$VM_IP 'dmesg > /tmp/dmesg'
 		TEST_DIR=/g-tracker-142266307/$DATE
 		mkdir -p $TEST_DIR
 		scp -r root@$VM_IP:/tmp/dmesg $TEST_DIR/dmesg-$VM_NAME-$TIME.log
-
-		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "Running memcat on $VM_IP..."
-			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-$hostname.log'
-		fi
+		scp root@$VM_IP:/tmp/memcat*.log /$TEST_DIR/
 	done
 	
 	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
@@ -242,13 +257,11 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		echo "FOUND THE PATTERN TRN IN DMESG..."
 		exit 0
 	fi
-
 done
 
 clear_arrs
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	get_vm_info $i $n
-	echo "clear dmesg"
 	ssh root@$VM_IP 'mkdir /memcat'
-	scp root@$VM_IP:/tmp/memcat-$hostname.log /$TEST_DIR/
+	scp root@$VM_IP:/tmp/memcat*.log /$TEST_DIR/
 done
