@@ -228,7 +228,6 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	done
 
 	for m in ${ARR_VM_NAME[@]}  ; do
-		#get_vm_info $n
 		echo "Turning on VM_NAME: $m..."
 		virsh start $m &
 	done
@@ -239,56 +238,68 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	wait_till_ips_read
 	sleep 5
 
+	TIME=`date +%H-%M-%S`
+
+	# Run memcat without loading guest driver, deliberate error. 
+
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-		get_vm_info $n
-		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-
-		TIME=`date +%H-%M-%S`
-
-		# Run memcat without loading guest driver, deliberate error. 
-
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest $VM_IP..."
-			ssh root@$VM_IP 'ls -l /memcat/'
-			echo "Running memcat on $VM_IP..."
-			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+			echo "memcat directory content on guest ${ARR_VM_IP[$n]}..."
+			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
+			echo "Running memcat on ${ARR_VM_IP[$n]}..."
+			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
 		fi
+	done
 
-		# Load guest driver.
+	# Load guest driver.
 	
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		echo "load AMD gpu..." 
-		ssh root@$VM_IP 'modprobe amdgpu'
+		ssh root@${ARR_VM_IP[$n]} 'modprobe amdgpu' &
+	done
 
-		# Run memcat.
+	# Run memcat.
 
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
 			echo "memcat directory content on guest..."
-			ssh root@$VM_IP 'ls -l /memcat/'
-			echo "Running memcat on $VM_IP..."
-			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
+			echo "Running memcat on ${ARR_VM_IP[$n]}..."
+			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
 		fi
+	done
 
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		echo "unload AMD gpu"... 
-		ssh root@$VM_IP 'modprobe -r amdgpu'
+		ssh root@${ARR_VM_IP[$n]} 'modprobe -r amdgpu' &
+	done
 
-		# Run memcat after unload guest driver again, deliberate error.
+	# Run memcat after unload guest driver again, deliberate error.
+
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
 			echo "memcat directory content on guest..."
-			ssh root@$VM_IP 'ls -l /memcat/'
-			echo "Running memcat on $VM_IP..."
-			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
+			echo "Running memcat on ${ARR_VM_IP[$n]}..."
+			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
 		fi
+	done
 
+	sleep 5
 
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		# Copy dmesg to host.
-
-		echo "Copy dmesg to host..."
-		ssh root@$VM_IP 'dmesg > /tmp/dmesg'
+	
+		TIME=`date +%H-%M-%S`
+		DMESG_DST_FILENAME=dmesg-${VM_NAME[$n]}-$TIME.log
+		echo "Copy dmesg to host... as $DMESG_DST_FILENAME"
+		ssh root@${ARR_VM_IP[$n]} 'dmesg > /tmp/dmesg'
 		TEST_DIR=/g-tracker-142266307/$DATE
 		mkdir -p $TEST_DIR
-		scp -r root@$VM_IP:/tmp/dmesg $TEST_DIR/dmesg-$VM_NAME-$TIME.log
-		scp root@$VM_IP:/tmp/memcat*.log /$TEST_DIR/
+		
+		scp root@${ARR_VM_IP[$n]}:/tmp/dmesg $TEST_DIR/$DMESG_DST_FILENAME
+		scp root@${ARR_VM_IP[$n]}:/tmp/memcat*.log /$TEST_DIR/
 	done
 	
 	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
@@ -301,8 +312,3 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 done
 
 clear_arrs
-for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-	get_vm_info $n
-	ssh root@$VM_IP 'mkdir /memcat'
-	scp root@$VM_IP:/tmp/memcat*.log /$TEST_DIR/
-done
