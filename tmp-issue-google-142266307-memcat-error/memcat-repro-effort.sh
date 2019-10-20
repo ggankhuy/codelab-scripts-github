@@ -1,4 +1,4 @@
-6#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
+#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
 #  runtest 6 from autotest.
 #  This script assumes the ens3 interface is used for streaming client and server. If the interface name is different
 #  or absent, the result is unpredictable.
@@ -23,7 +23,7 @@
 # Set vm vcpu-s to 8 as standard.
 # Turn on all VM-s 
 
-source ./common.sh
+#source ./common.sh
 
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
@@ -62,16 +62,12 @@ fi
 TOTAL_VMS=`virsh list --all | grep -i gpu | grep running | wc -l`
 echo "TOTAL_VMS: $TOTAL_VMS"
 
-#  Load gim.
-#  Start default network.
-
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
+if [[ $TOTAL_VMS -eq 0 ]] ; then 
+	echo "TOTAL_VMs are zero...Need running VMs to operate this script on..."
+	exit 1
+fi
 
 #   Set vCPUs to 8.
-
-echo "Starting loop..."
-sleep 2
 
 ARR_VM_IP=( )
 ARR_VM_NO=()
@@ -79,37 +75,43 @@ ARR_VM_NAME=()
 
 function wait_till_ip_read()
 {
+	p=$1
+	echo waiting for $p to become pingable...
+	for s in {0..50} ; do
+		echo issuing virsh domifaddr $r
+		tmpIp=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+
+		ping -q -c 4  $tmpIp
+		stat=$?
+
+		if [[ $stat -eq 0 ]] ; then
+			echo "Can ping $tmpIp now..."
+			break
+		fi
+		sleep 30
+	done
+
+	if [[ $stat -ne 0 ]] ; then
+		echo "Error: Can not ping $tmpIp for long time with 10 retries..."
+		exit 1	
+	fi
+}
+
+function wait_till_ips_read()
+{
 	for r in ${ARR_VM_NAME[@]} 
 	do 
-		echo waiting for $r to become pingable...
-		for s in {0..50} ; do
-			echo issuing virsh domifaddr $r
-			tmpIp=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-
-			ping -q -c 4  $tmpIp
-			stat=$?
-
-			if [[ $stat -eq 0 ]] ; then
-				echo "Can ping $tmpIp now..."
-				break
-			fi
-			sleep 30
-		done
-
-		if [[ $stat -ne 0 ]] ; then
-			echo "Error: Can not ping $tmpIp for long time with 10 retries..."
-			exit 1	
-		fi
+		wait_till_ip_read $r
 	done
 }
 
 function print_arrs()
 {
-	echo --------------------------------------
+	echo $SINGLE_BAR
 	echo ${ARR_VM_IP[@]} 
 	echo ${ARR_VM_NO[@]} 
-	for i in ${ARR_VM_NAME[@]} ; do echo $i; done;
-	echo --------------------------------------
+	for o in ${ARR_VM_NAME[@]} ; do echo $o; done;
+	echo $SINGLE_BAR
 }
 function clear_arrs()
 {
@@ -120,42 +122,53 @@ function clear_arrs()
 
 function get_vm_info()
 {
-	vmNo=$2
-	loopNo=$1
-	GPU_INDEX=$vmNo
-	VM_INDEX=$(($vmNo+1))
-	VM_NAME=`virsh list --all | grep gpu | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
-	VM_NO=`virsh list --all | grep gpu | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
+	indexNo=$1
+	GPU_INDEX=$indexNo
+	VM_INDEX=$(($indexNo+1))
+	echo "VM_INDEX: $VM_INDEX..."
+	sleep 3
+	VM_NAME=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
+	VM_NO=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+
+	wait_till_ip_read $VM_NAME
 	ARR_VM_IP+=( $VM_IP ) 
 	ARR_VM_NO+=( $VM_NO )
 	ARR_VM_NAME+=( $VM_NAME ) 
 	DMESG_FILE_NAME=/tmp/dmesg-loop-$loopNo-vm-$vmNo.log
 }
 
+if [[ ! -z $p1  ]] ; then
+	CONIG_LOOP_TEST_NO=$p1
+	echo "CONFIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
+else
+	echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
+fi
+
+sleep 3
 
 echo "Setup memcat on VM-s..."
 
-wait_till_ip_read
 clear_arrs
+
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+	echo $SINGLE_BAR
 	get_vm_info $i $n
-	echo "clear dmesg"
+	echo "Setup memcat on $n VM: $VM_IP $VM_NAME..."
+	echo "Remove memcat log from guest."
 	ssh root@$VM_IP 'rm -rf /tmp/memcat-`hostname`.log'
+	echo "Create /memcat directory."
 	ssh root@$VM_IP 'mkdir /memcat'
 	scp -r $CONFIG_MEMCAT_SRC_DIR/* root@$VM_IP:/memcat/
 	ssh root@$VM_IP 'dpkg -i /memcat/grtev4-x86-runtimes_1.0-145370904_amd64.deb'
 	ssh root@$VM_IP 'chmod 755 /memcat/*'
 	echo "grtev4-x86-runtimes_1.0-145370904_amd64.deb installation status: $?"
-	sleep 3
+	echo "DONE..."
+	echo $SINGLE_BAR
 done
 
-if [[ ! -z $1  ]] ; then
-	CONIG_LOOP_TEST_NO=$1
-	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
-fi
-
-sleep 3
+echo "Starting loop..."
+sleep 2
 
 for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	echo "Loop No. $i"
@@ -184,28 +197,34 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		#ssh root@$VM_IP 'shutdown now'
 	done
 
-	sleep 3
+	sleep 10
 	echo "shutdown/stopped all VM-s..."
 	echo "virsh list after shutting down all VM-s: "
 	virsh list 
 
-	for (( k=0 ; k < 10; k++)) ; do
-		stat=`virsh list | grep running | wc -l`
-		echo "Total vms still running after shutdown: $stat"
-		if [[ $stat -ne 0 ]] ; then
-			echo "Waiting more..."
-			sleep 10
-		else
-			echo "Done. All VM-s are off."
-			break
+	for m in ${ARR_VM_NAME[@]} 
+	do
+		for (( k=0 ; k < 10; k++)) 
+		do
+			stat=`virsh list --all | grep $m | grep "shut off" | wc -l`
+			stat1=`virsh list --all | grep $m | grep "shut off" | wc -l`
+			echo $stat1
+			echo "VM: $m running status: $stat"
+			if [[ $stat -ne 1 ]] ; then
+				echo "Waiting more..."
+				sleep 10
+			else
+				echo "VM $m has shut off. Moving on..."
+				break
+			fi
+		done
+
+		if [[ $stat -ne 1 ]] ; then
+			echo "Error, VM $m can not be shutdown...!!"
+			virsh list 
+			exit 1
 		fi
 	done
-
-	if [[ $stat -ne 0 ]] ; then
-		echo "Error, not all VMs can be shutdown...!!"
-		exit 1
-	fi
-		
 
 	for m in ${ARR_VM_NAME[@]}  ; do
 		#get_vm_info $i $n
@@ -216,9 +235,8 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	print_arrs 
 	echo "virsh list after starting all VM-s:"
 	virsh list
-	sleep 10
-
-	wait_till_ip_read
+	wait_till_ips_read
+	sleep 5
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		get_vm_info $i $n
@@ -226,9 +244,18 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 
 		TIME=`date +%H-%M-%S`
 
-		# Load guest driver.
+		# Run memcat without loading guest driver, deliberate error. 
 
-		echo "load AMD gpu" 
+		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+			echo "memcat directory content on guest $VM_IP..."
+			ssh root@$VM_IP 'ls -l /memcat/'
+			echo "Running memcat on $VM_IP..."
+			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+		fi
+
+		# Load guest driver.
+	
+		echo "load AMD gpu..." 
 		ssh root@$VM_IP 'modprobe amdgpu'
 
 		# Run memcat.
@@ -239,6 +266,19 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 			echo "Running memcat on $VM_IP..."
 			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
 		fi
+
+		echo "unload AMD gpu"... 
+		ssh root@$VM_IP 'modprobe -r amdgpu'
+
+		# Run memcat after unload guest driver again, deliberate error.
+
+		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+			echo "memcat directory content on guest..."
+			ssh root@$VM_IP 'ls -l /memcat/'
+			echo "Running memcat on $VM_IP..."
+			ssh root@$VM_IP '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+		fi
+
 
 		# Copy dmesg to host.
 
