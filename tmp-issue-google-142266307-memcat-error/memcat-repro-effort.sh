@@ -125,17 +125,16 @@ function get_vm_info()
 	indexNo=$1
 	GPU_INDEX=$indexNo
 	VM_INDEX=$(($indexNo+1))
-	echo "VM_INDEX: $VM_INDEX..."
+	echo "get_vm_info: p1: $1. VM_INDEX: $VM_INDEX..."
 	sleep 3
 	VM_NAME=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
 	VM_NO=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-
-	wait_till_ip_read $VM_NAME
 	ARR_VM_IP+=( $VM_IP ) 
 	ARR_VM_NO+=( $VM_NO )
 	ARR_VM_NAME+=( $VM_NAME ) 
 	DMESG_FILE_NAME=/tmp/dmesg-loop-$loopNo-vm-$vmNo.log
+	wait_till_ip_read $VM_NAME
 }
 
 if [[ ! -z $p1  ]] ; then
@@ -153,7 +152,7 @@ clear_arrs
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo $SINGLE_BAR
-	get_vm_info $i $n
+	get_vm_info $n
 	echo "Setup memcat on $n VM: $VM_IP $VM_NAME..."
 	echo "Remove memcat log from guest."
 	ssh root@$VM_IP 'rm -rf /tmp/memcat-`hostname`.log'
@@ -169,15 +168,18 @@ done
 
 echo "Starting loop..."
 sleep 2
+print_arrs 
 
 for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
+	echo $DOUBLE_BAR
 	echo "Loop No. $i"
+	echo $DOUBLE_BAR
 
 	sleep 1
-
 	clear_arrs
+
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-		get_vm_info $i $n
+		get_vm_info $n
 		echo "clear dmesg"
 		ssh root@$VM_IP 'dmesg --clear'
 		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
@@ -186,11 +188,10 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 		ssh root@$VM_IP 'ls -l /memcat/'
 	done
 
-	print_arrs 
 	sleep 1
 
 	for m in ${ARR_VM_NAME[@]}  ; do
-		#get_vm_info $i $n
+		#get_vm_info $n
 		echo "Turning off VM_NAME: $m..."
 
 		virsh shutdown $m &
@@ -227,7 +228,7 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	done
 
 	for m in ${ARR_VM_NAME[@]}  ; do
-		#get_vm_info $i $n
+		#get_vm_info $n
 		echo "Turning on VM_NAME: $m..."
 		virsh start $m &
 	done
@@ -239,7 +240,7 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	sleep 5
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-		get_vm_info $i $n
+		get_vm_info $n
 		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
 
 		TIME=`date +%H-%M-%S`
@@ -301,7 +302,7 @@ done
 
 clear_arrs
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-	get_vm_info $i $n
+	get_vm_info $n
 	ssh root@$VM_IP 'mkdir /memcat'
 	scp root@$VM_IP:/tmp/memcat*.log /$TEST_DIR/
 done
