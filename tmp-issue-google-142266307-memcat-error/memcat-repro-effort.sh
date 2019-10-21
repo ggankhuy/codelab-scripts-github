@@ -1,4 +1,4 @@
-6#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
+#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
 #  runtest 6 from autotest.
 #  This script assumes the ens3 interface is used for streaming client and server. If the interface name is different
 #  or absent, the result is unpredictable.
@@ -23,13 +23,14 @@
 # Set vm vcpu-s to 8 as standard.
 # Turn on all VM-s 
 
-source ./common.sh
-
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
 CONFIG_SUPPORT_MEMCAT=0
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
+CONFIG_USE_DURATION=1
+CONFIG_DURATION_HR=10
+CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
 CONIG_LOOP_TEST_NO=3
 CONFIG_SET_VCPUCOUNT=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
@@ -65,13 +66,9 @@ echo "TOTAL_VMS: $TOTAL_VMS"
 #  Load gim.
 #  Start default network.
 
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
-
 #   Set vCPUs to 8.
 
 echo "Starting loop..."
-sleep 2
 
 ARR_VM_IP=( )
 ARR_VM_NO=()
@@ -133,6 +130,17 @@ function get_vm_info()
 	DMESG_FILE_NAME=/tmp/dmesg-loop-$loopNo-vm-$vmNo.log
 }
 
+if [[ ! -z $1  ]] ; then
+	CONIG_LOOP_TEST_NO=$1
+	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
+fi
+
+sleep 1
+TIME_LOOP_START=`date +%s`
+if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
+	echo "Test loop will continue $CONFIG_DURATION_HR hours..."
+	sleep 3
+fi
 
 echo "Setup memcat on VM-s..."
 
@@ -150,14 +158,8 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	sleep 3
 done
 
-if [[ ! -z $1  ]] ; then
-	CONIG_LOOP_TEST_NO=$1
-	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
-fi
-
-sleep 3
-
 for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
+	
 	echo "Loop No. $i"
 
 	sleep 1
@@ -241,6 +243,21 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 	if [[ $stat -ne 0 ]] ; then
 		echo "FOUND THE PATTERN TRN IN DMESG..."
 		exit 0
+	fi
+
+	if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
+		i=$((i-1))
+		echo "loop variable i: $i"
+		TIME_LOOP_CURRENT=`date +%s`
+		loopDurationSec=$((TIME_LOOP_CURRENT-TIME_LOOP_START)
+		loopDurationHr=$((loopDurationSec/3600))
+		loopDurationMin=$((loopDurationSec/60))
+		echo "Test run duration: $loopDurationMin minutes..."	
+
+		if [[ $loopDurationSec -gt $CONFIG_DURATION_SEC ]] ; then
+			echo "End of test loop.  Test ran for $loopDurationSec seconds, or $loopDurationHr hours..."
+			break
+		fi
 	fi
 
 done
