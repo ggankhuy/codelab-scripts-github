@@ -348,7 +348,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		i=$((i-1))
 		echo "loop variable i: $i"
 		TIME_LOOP_CURRENT=`date +%s`
-		loopDurationSec=$((TIME_LOOP_CURRENT-TIME_LOOP_START)
+		loopDurationSec=$((TIME_LOOP_CURRENT-TIME_LOOP_START))
 		loopDurationHr=$((loopDurationSec/3600))
 		loopDurationMin=$((loopDurationSec/60))
 		echo "Test run duration: $loopDurationMin minutes..."	
