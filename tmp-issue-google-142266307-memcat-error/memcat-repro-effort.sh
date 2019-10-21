@@ -30,7 +30,7 @@ SINGLE_BAR="--------------------------------------------------------"
 CONFIG_SUPPORT_MEMCAT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
-CONIG_LOOP_TEST_NO=3
+CONFIG_LOOP_TEST_NO=3
 CONFIG_SET_VCPUCOUNT=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -138,8 +138,8 @@ function get_vm_info()
 }
 
 if [[ ! -z $p1  ]] ; then
-	CONIG_LOOP_TEST_NO=$p1
-	echo "CONFIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
+	CONFIG_LOOP_TEST_NO=$p1
+	echo "CONFIG_LOOP_TEST_NO is set to $CONFIG_LOOP_TEST_NO..."
 else
 	echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
 fi
@@ -170,7 +170,7 @@ echo "Starting loop..."
 sleep 2
 print_arrs 
 
-for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
+for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 	echo $DOUBLE_BAR
 	echo "Loop No. $i"
 	echo $DOUBLE_BAR
