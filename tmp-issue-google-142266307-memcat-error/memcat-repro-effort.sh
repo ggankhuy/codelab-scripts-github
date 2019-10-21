@@ -190,10 +190,11 @@ done
 echo "Starting loop..."
 sleep 2
 print_arrs 
+counter=0
 
 for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 	echo $DOUBLE_BAR
-	echo "Loop No. $i"
+	echo "Loop No. $counter"
 	echo $DOUBLE_BAR
 
 	sleep 1
@@ -358,6 +359,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			break
 		fi
 	fi
+	counter=$((counter+1))
 done
 
 clear_arrs
