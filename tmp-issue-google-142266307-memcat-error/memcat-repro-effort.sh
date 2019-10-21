@@ -28,6 +28,7 @@
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
 CONFIG_SUPPORT_MEMCAT=1
+CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONIG_LOOP_TEST_NO=3
@@ -146,6 +147,10 @@ fi
 
 sleep 3
 
+echo "Host config..."
+echo "clear dmesg on host..."
+dmesg --clear
+
 echo "Setup memcat on VM-s..."
 
 clear_arrs
@@ -192,48 +197,57 @@ for (( i=0; i < $CONIG_LOOP_TEST_NO; i++)) ; do
 
 	for m in ${ARR_VM_NAME[@]}  ; do
 		#get_vm_info $n
-		echo "Turning off VM_NAME: $m..."
 
-		virsh shutdown $m &
+		if [[ $CONFIG_REBOOT -eq 1 ]] ; then
+			echo "Rebooting VM_NAME $m..."
+			virsh reboot $m &
+		else
+			echo "Turning off VM_NAME: $m..."
+			virsh shutdown $m &
+		fi
 		#ssh root@$VM_IP 'shutdown now'
 	done
 
-	sleep 10
-	echo "shutdown/stopped all VM-s..."
-	echo "virsh list after shutting down all VM-s: "
-	virsh list 
+	if [[ $CONFIG_REBOOT -ne 1 ]] ; then
 
-	for m in ${ARR_VM_NAME[@]} 
-	do
-		for (( k=0 ; k < 10; k++)) 
+		sleep 10
+		echo "shutdown/stopped all VM-s..."
+		echo "virsh list after shutting down all VM-s: "
+		virsh list 
+	
+		for m in ${ARR_VM_NAME[@]} 
 		do
-			stat=`virsh list --all | grep $m | grep "shut off" | wc -l`
-			stat1=`virsh list --all | grep $m | grep "shut off" | wc -l`
-			echo $stat1
-			echo "VM: $m running status: $stat"
+			for (( k=0 ; k < 10; k++)) 
+			do
+				stat=`virsh list --all | grep $m | grep "shut off" | wc -l`
+				stat1=`virsh list --all | grep $m | grep "shut off" | wc -l`
+				echo $stat1
+				echo "VM: $m running status: $stat"
+				if [[ $stat -ne 1 ]] ; then
+					echo "Waiting more..."
+					sleep 10
+				else
+					echo "VM $m has shut off. Moving on..."
+					break
+				fi
+			done
+	
 			if [[ $stat -ne 1 ]] ; then
-				echo "Waiting more..."
-				sleep 10
-			else
-				echo "VM $m has shut off. Moving on..."
-				break
+				echo "Error, VM $m can not be shutdown...!!"
+				virsh list 
+				exit 1
 			fi
 		done
+	
+		for m in ${ARR_VM_NAME[@]}  ; do
+			echo "Turning on VM_NAME: $m..."
+			virsh start $m &
+		done
 
-		if [[ $stat -ne 1 ]] ; then
-			echo "Error, VM $m can not be shutdown...!!"
-			virsh list 
-			exit 1
-		fi
-	done
+		print_arrs 
+		echo "virsh list after starting all VM-s:"
+	fi
 
-	for m in ${ARR_VM_NAME[@]}  ; do
-		echo "Turning on VM_NAME: $m..."
-		virsh start $m &
-	done
-
-	print_arrs 
-	echo "virsh list after starting all VM-s:"
 	virsh list
 	wait_till_ips_read
 	sleep 5
