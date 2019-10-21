@@ -247,7 +247,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			echo "memcat directory content on guest ${ARR_VM_IP[$n]}..."
 			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
 			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
+			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
 		fi
 	done
 
@@ -265,7 +265,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			echo "memcat directory content on guest..."
 			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
 			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
+			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done '
+			#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
 		fi
 	done
 
@@ -273,8 +274,10 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		echo "unload AMD gpu"... 
 		ssh root@${ARR_VM_IP[$n]} 'modprobe -r amdgpu' &
 	done
-
+	
 	# Run memcat after unload guest driver again, deliberate error.
+
+	sleep 10
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
@@ -282,7 +285,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			echo "memcat directory content on guest..."
 			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
 			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log'
+			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
+			#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
 		fi
 	done
 
@@ -299,7 +303,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		mkdir -p $TEST_DIR
 		
 		scp root@${ARR_VM_IP[$n]}:/tmp/dmesg $TEST_DIR/$DMESG_DST_FILENAME
-		scp root@${ARR_VM_IP[$n]}:/tmp/memcat*.log /$TEST_DIR/
+		scp root@${ARR_VM_IP[$n]}:/tmp/memcat-`hostname`.log /$TEST_DIR/
 	done
 	
 	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
