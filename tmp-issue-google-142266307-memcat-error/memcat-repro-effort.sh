@@ -32,7 +32,8 @@ CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONFIG_USE_DURATION=1
-CONFIG_DURATION_HR=10
+CONFIG_DURATION_HR=240
+CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU=0
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
 CONFIG_LOOP_TEST_NO=3
 CONFIG_SET_VCPUCOUNT=0
@@ -273,14 +274,16 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 	# Run memcat without loading guest driver, deliberate error. 
 
-	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
-			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
-		fi
-	done
+	if [[ $CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU  -eq 1 ]] ; then
+		for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+			if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+				echo "memcat directory content on guest ${ARR_VM_IP[$n]}..."
+				ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
+				echo "Running memcat on ${ARR_VM_IP[$n]}..."
+				ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
+			fi
+		done
+	fi
 
 	# Load guest driver.
 	
@@ -308,18 +311,21 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 	
 	# Run memcat after unload guest driver again, deliberate error.
 
+
 	sleep 10
 
-	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-
-		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest..."
-			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
-			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
-			#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
-		fi
-	done
+	if [[ $CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU -eq 1 ]] ; then
+		for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+	
+			if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
+				echo "memcat directory content on guest..."
+				ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
+				echo "Running memcat on ${ARR_VM_IP[$n]}..."
+				ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
+				#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
+			fi
+		done
+	fi
 
 	sleep 5
 
