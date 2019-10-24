@@ -51,7 +51,6 @@ CONFIG_COUNT_ONLY_RUNNING_VM=1
 
 #	If set, use the static ip assigned by QTS admin, otherwise use DHCP IP.
 
-DEBUG=1
 VM_IPS=""
 p2=$2
 p1=$1
@@ -209,8 +208,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		ssh root@$VM_IP 'dmesg --clear'
 		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
 		echo "Done."
-		echo "1. checking memcat on $VM_IP..."
-		ssh root@$VM_IP 'ls -l /memcat/'
+
+		if [[ $DEBUG -eq 1 ]] ; then echo "1. checking memcat on $VM_IP..." ;ssh root@$VM_IP 'ls -l /memcat/' ; fi;
 	done
 
 	sleep 1
