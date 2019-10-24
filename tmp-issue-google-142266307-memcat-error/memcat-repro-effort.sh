@@ -31,13 +31,15 @@ CONFIG_SUPPORT_MEMCAT=1
 CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
-CONFIG_USE_DURATION=1
+CONFIG_USE_DURATION=0
 CONFIG_DURATION_HR=10
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
 CONFIG_LOOP_TEST_NO=3
 CONFIG_SET_VCPUCOUNT=0
+CONFIG_CLEAR_HOST_DMESG_ON_LOOP=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
+DEBUG=0
 
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
@@ -275,10 +277,9 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
-			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
+			if [[ $DEBUG -eq 1 ]] ; then echo "memcat directory content on guest..." ; ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/' ; fi ;
+			if [[ $DEBUG -eq 1 ]] ; then echo "Running memcat on ${ARR_VM_IP[$n]}..." ; fi ;
+			ssh root@${ARR_VM_IP[$n]} "for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-${ARR_VM_NAME[$n]}-loop-$n.log ; done"
 		fi
 	done
 
@@ -293,11 +294,10 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest..."
-			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
-			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done '
-			#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
+
+			if [[ $DEBUG -eq 1 ]] ; then echo "memcat directory content on guest..." ; ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/' ; fi ;
+			if [[ $DEBUG -eq 1 ]] ; then echo "Running memcat on ${ARR_VM_IP[$n]}..." ; fi ;
+			ssh root@${ARR_VM_IP[$n]} "for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-${ARR_VM_NAME[$n]}-loop-$n.log ; done"
 		fi
 	done
 
@@ -313,11 +313,9 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 		if [[ $CONFIG_SUPPORT_MEMCAT -eq 1 ]] ; then
-			echo "memcat directory content on guest..."
-			ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
-			echo "Running memcat on ${ARR_VM_IP[$n]}..."
-			ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
-			#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
+			if [[ $DEBUG -eq 1 ]] ; then echo "memcat directory content on guest..." ; ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/' ; fi ;
+			if [[ $DEBUG -eq 1 ]] ; then echo "Running memcat on ${ARR_VM_IP[$n]}..." ; fi ;
+			ssh root@${ARR_VM_IP[$n]} "for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-${ARR_VM_NAME[$n]}-loop-$n.log ; done"
 		fi
 	done
 
@@ -327,14 +325,14 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		# Copy dmesg to host.
 	
 		TIME=`date +%H-%M-%S`
-		DMESG_DST_FILENAME=dmesg-${VM_NAME[$n]}-$TIME.log
-		echo "Copy dmesg to host... as $DMESG_DST_FILENAME"
+		DMESG_GUEST_DST_FILENAME=dmesg-guest-${ARR_VM_NAME[$n]}-$TIME.log
+		echo "Copy dmesg to host... as $DMESG_GUEST_DST_FILENAME"
 		ssh root@${ARR_VM_IP[$n]} 'dmesg > /tmp/dmesg'
 		TEST_DIR=/g-tracker-142266307/$DATE
 		mkdir -p $TEST_DIR
 		
-		scp root@${ARR_VM_IP[$n]}:/tmp/dmesg $TEST_DIR/$DMESG_DST_FILENAME
-		scp root@${ARR_VM_IP[$n]}:/tmp/memcat-`hostname`.log /$TEST_DIR/
+		scp root@${ARR_VM_IP[$n]}:/tmp/dmesg $TEST_DIR/$DMESG_GUEST_DST_FILENAME
+		scp root@${ARR_VM_IP[$n]}:/tmp/memcat-${ARR_VM_NAME[$n]}-loop-$n.log /$TEST_DIR/
 	done
 	
 	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
@@ -359,7 +357,18 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			break
 		fi
 	fi
+
+	if [[ $CONFIG_CLEAR_HOST_DMESG_ON_LOOP -eq 1 ]] ; then
+		dmesg  > /$TEST_DIR/dmesg-host-loop-$counter.log
+		dmesg --clear
+	fi
+	
+
 	counter=$((counter+1))
 done
+
+if [[ $CONFIG_CLEAR_HOST_DMESG_ON_LOOP -ne 1 ]] ; then
+	dmesg  > /$TEST_DIR/dmesg-host.log
+fi
 
 clear_arrs
