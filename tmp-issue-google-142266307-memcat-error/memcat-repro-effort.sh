@@ -322,8 +322,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 				ssh root@${ARR_VM_IP[$n]} "for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-${ARR_VM_NAME[$n]}-loop-$n.log ; done"
 			fi
 		done
-	done
-	
+	fi
+
 	sleep 5
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
