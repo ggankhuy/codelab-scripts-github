@@ -32,7 +32,7 @@ CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONFIG_USE_DURATION=1
-CONFIG_DURATION_HR=240
+CONFIG_DURATION_HR=1200
 CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU=0
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
 CONFIG_LOOP_TEST_NO=3
@@ -74,7 +74,7 @@ if [[ $TOTAL_VMS -eq 0 ]] ; then
 	exit 1
 fi
 
-ARR_VM_IP=( )
+ARR_VM_IP=()
 ARR_VM_NO=()
 ARR_VM_NAME=()
 
@@ -322,7 +322,6 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 				ssh root@${ARR_VM_IP[$n]} 'ls -l /memcat/'
 				echo "Running memcat on ${ARR_VM_IP[$n]}..."
 				ssh root@${ARR_VM_IP[$n]} 'for i in {0..10}; do /memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log ; done'
-				#ssh root@${ARR_VM_IP[$n]} '/memcat/amd_memcat.stripped --action write --byte 0x55 >> /tmp/memcat-`hostname`.log' &
 			fi
 		done
 	fi
@@ -340,7 +339,11 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		mkdir -p $TEST_DIR
 		
 		scp root@${ARR_VM_IP[$n]}:/tmp/dmesg $TEST_DIR/$DMESG_DST_FILENAME
-		scp root@${ARR_VM_IP[$n]}:/tmp/memcat-`hostname`.log /$TEST_DIR/
+		echo "dmesg scp result: $?"
+		sleep 5
+		scp root@${ARR_VM_IP[$n]}:/tmp/memcat-*.log /$TEST_DIR/
+		echo "memcat scp result: $?"
+		sleep 5
 	done
 	
 	stat=`egrep -irn "TRN" $TEST_DIR/dmesg*.log | wc -l`
