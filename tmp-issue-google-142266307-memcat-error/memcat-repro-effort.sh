@@ -78,7 +78,28 @@ fi
 ARR_VM_IP=()
 ARR_VM_NO=()
 ARR_VM_NAME=()
+ARR_VM_VF=()
+ARR_VM_PF=()
 
+#	Get pcie address (bdf) of a VM.
+#	This function needs to be called with ARR_VM_NAME is filled with running VM-s otherwise result is invalid.
+
+function get_bdf()
+{
+	
+
+	for w in ${ARR_VM_NAME[@]} ; do
+		bus=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f4 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
+		dev=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f5 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
+		fcn=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f6 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
+		vf=$bus:$dev.$fcn
+		ARR_VM_VF+=( $vf ) 
+		pf=`lspci | grep -i $vf -B 1 | head -1 | cut -d ' ' -f1`
+		ARR_VM_PF+=( $pf )
+	
+		if [[ $DEBUG -eq 1 ]] ; then echo "PF/VF obtained for VM: ${VM_NAME[$i]}: $pf/$vf" ; fi ; 
+	done 
+}
 function wait_till_ip_read()
 {
 	p=$1
@@ -116,14 +137,18 @@ function print_arrs()
 	echo $SINGLE_BAR
 	echo ${ARR_VM_IP[@]} 
 	echo ${ARR_VM_NO[@]} 
+	echo ${ARR_VM_PF[@]} 
+	echo ${ARR_VM_VF[@]} 
 	for o in ${ARR_VM_NAME[@]} ; do echo $o; done;
 	echo $SINGLE_BAR
 }
 function clear_arrs()
 {
-	ARR_VM_IP=( )
+	ARR_VM_IP=()
 	ARR_VM_NO=()
 	ARR_VM_NAME=()
+	ARR_VM_VF=()
+	ARR_VM_PF=()
 }
 
 function get_vm_info()
@@ -191,7 +216,11 @@ done
 
 echo "Starting loop..."
 sleep 2
+get_bdf
 print_arrs 
+
+exit 0
+
 counter=0
 
 for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
