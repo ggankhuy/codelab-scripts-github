@@ -312,8 +312,28 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
-			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf 
+			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf  &
 		done 
+
+		for  counter1 in {0..10} ; do 
+			echo "Waiting for all relvf process to finihs..."
+			stat=`ps -ax | grep relvf | grep -v grep | grep -v Done | wc -l`
+			stat1=`ps -ax | grep relvf | grep -v grep | grep -v Done`
+
+			if [[ $stat -ne 0 ]] ; then
+				echo "$counter1..."
+				sleep 2
+			else
+				echo "All relvf processes are finished..."
+				break
+			fi
+		done
+
+		if [[ $counter -eq  10 ]] ; then 
+			echo "Not all relvf process finished, timeout?..."
+			echo $stat1
+			exit 1
+		fi
 
 		# getvf calls on all VM.
 
@@ -321,10 +341,30 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]]; then echo "32 2048 1 to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf" ; fi ; 
-			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf
+			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf &
 		done
+
+		for  counter1 in {0..10} ; do 
+			echo "Waiting for all getvf process to finihs..."
+			stat=`ps -ax | grep getvf | grep -v grep | grep -v Done | wc -l`
+			stat1=`ps -ax | grep getvf | grep -v grep | grep -v Done`
+
+			if [[ $stat -ne 0 ]] ; then
+				echo "$counter1..."
+				sleep 2
+			else
+				echo "All getvf processes are finished..."
+				break
+			fi
+		done
+
+		if [[ $counter -eq  10 ]] ; then 
+			echo "Not all getvf process finished, timeout?..."
+			echo $stat1
+			exit 1
+		fi
 	
-		for m in ${ARR_VM_NAME[@]}  ; do
+		for m in ${ARR_VM_NAME[@]} ; do
 			echo "Turning on VM_NAME: $m..."
 			virsh start $m &
 		done
