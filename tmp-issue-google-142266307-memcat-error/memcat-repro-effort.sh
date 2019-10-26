@@ -28,19 +28,20 @@
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
 CONFIG_SUPPORT_MEMCAT=1
-CONFIG_REBOOT=1
+CONFIG_REBOOT=0
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
-CONFIG_USE_DURATION=0
-CONFIG_DURATION_HR=1200
+CONFIG_USE_DURATION=1
+CONFIG_DURATION_HR=72
 CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU=0
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
-CONFIG_LOOP_TEST_NO=3
+CONFIG_LOOP_TEST_NO=1
 CONFIG_SET_VCPUCOUNT=0
 CONFIG_CLEAR_HOST_DMESG_ON_LOOP=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 DEBUG=0
+DEBUG_SYSFS=1
 
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
@@ -83,6 +84,7 @@ ARR_VM_PF=()
 
 #	Get pcie address (bdf) of a VM.
 #	This function needs to be called with ARR_VM_NAME is filled with running VM-s otherwise result is invalid.
+#	input: None.
 
 function get_bdf()
 {
@@ -100,6 +102,11 @@ function get_bdf()
 		if [[ $DEBUG -eq 1 ]] ; then echo "PF/VF obtained for VM: ${VM_NAME[$i]}: $pf/$vf" ; fi ; 
 	done 
 }
+
+#	Wait untill specified VM becomes pingable.
+#	input - 
+#	$1 - VM_NAME to wait for until it becomes pingable.
+
 function wait_till_ip_read()
 {
 	p=$1
@@ -124,6 +131,10 @@ function wait_till_ip_read()
 	fi
 }
 
+#	Wait untill all VMs running VM becomes pingable. 
+#	For this function, ARR_VM_NAME must be populated properly.
+#	input: None.
+
 function wait_till_ips_read()
 {
 	for r in ${ARR_VM_NAME[@]} 
@@ -131,6 +142,9 @@ function wait_till_ips_read()
 		wait_till_ip_read $r
 	done
 }
+
+#	Prints all arrays. All arrays must populated properly prior to calling this function.
+#	input: None.
 
 function print_arrs()
 {
@@ -142,6 +156,10 @@ function print_arrs()
 	for o in ${ARR_VM_NAME[@]} ; do echo $o; done;
 	echo $SINGLE_BAR
 }
+
+#	Clear all arrays. Mostly needed since ARR_VM_NO which holds the VM index changes after reboot or power recycle.
+#	input:
+
 function clear_arrs()
 {
 	ARR_VM_IP=()
@@ -150,6 +168,11 @@ function clear_arrs()
 	ARR_VM_VF=()
 	ARR_VM_PF=()
 }
+
+#	Populates the arrays ARR_VM_IP, ARR_VM_NO, ARR_VM_NAME respectively.
+#	input: 0-based nth VM number. Note that this is not the VM index shows in virsh list.
+#	All VM-s must be running prior to calling this function.
+#	input: None.
 
 function get_vm_info()
 {
@@ -219,8 +242,6 @@ sleep 2
 get_bdf
 print_arrs 
 
-exit 0
-
 counter=0
 
 for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
@@ -241,11 +262,11 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		if [[ $DEBUG -eq 1 ]] ; then echo "1. checking memcat on $VM_IP..." ;ssh root@$VM_IP 'ls -l /memcat/' ; fi;
 	done
 
+	get_bdf
+
 	sleep 1
 
 	for m in ${ARR_VM_NAME[@]}  ; do
-		#get_vm_info $n
-
 		if [[ $CONFIG_REBOOT -eq 1 ]] ; then
 			echo "Rebooting VM_NAME $m..."
 			virsh reboot $m &
@@ -253,11 +274,9 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			echo "Turning off VM_NAME: $m..."
 			virsh shutdown $m &
 		fi
-		#ssh root@$VM_IP 'shutdown now'
 	done
 
 	if [[ $CONFIG_REBOOT -ne 1 ]] ; then
-
 		sleep 10
 		echo "shutdown/stopped all VM-s..."
 		echo "virsh list after shutting down all VM-s: "
@@ -285,6 +304,24 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 				virsh list 
 				exit 1
 			fi
+		done
+
+		# relvf calls on all VM.
+
+		counter1=0
+
+		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
+			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
+			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf  &
+		done 
+
+		# getvf calls on all VM.
+
+		counter1=0
+
+		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
+			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]]; then echo "32 2048 1 to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf" ; fi ; 
+			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf &
 		done
 	
 		for m in ${ARR_VM_NAME[@]}  ; do
