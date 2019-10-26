@@ -312,7 +312,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
-			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf  &
+			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf 
 		done 
 
 		# getvf calls on all VM.
@@ -321,7 +321,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]]; then echo "32 2048 1 to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf" ; fi ; 
-			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf &
+			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf
 		done
 	
 		for m in ${ARR_VM_NAME[@]}  ; do
