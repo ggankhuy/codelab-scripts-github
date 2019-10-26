@@ -38,6 +38,7 @@ CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
 CONFIG_LOOP_TEST_NO=1
 CONFIG_SET_VCPUCOUNT=0
 CONFIG_CLEAR_HOST_DMESG_ON_LOOP=1
+CONFIG_GET_REL_VF_BACKGROUND=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 DEBUG=0
@@ -312,7 +313,12 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
-			echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf  &
+		
+			if [[ $CONFIG_GET_REL_VF_BACKGROUND -eq 0 ]] ; then
+				echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf 
+			else
+				echo 0000:${ARR_VM_VF[$counter1]} > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf  &
+			fi
 		done 
 
 		for  counter1 in {0..10} ; do 
@@ -341,7 +347,12 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
 			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]]; then echo "32 2048 1 to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf" ; fi ; 
-			echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf &
+
+			if [[ $CONFIG_GET_REL_VF_BACKGROUND -eq 0 ]] ; then
+				echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf
+			else
+				echo 32 2048 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/getvf &
+			fi
 		done
 
 		for  counter1 in {0..10} ; do 
