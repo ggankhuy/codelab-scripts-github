@@ -16,7 +16,10 @@ REPO_SERVER_IP="10.217.74.231"
 
 REPO_SERVER_IP="192.168.0.27"
 REPO_SERVER_IP="192.168.0.20"
+REPO_SERVER_IP="10.217.75.124"
 REPO_SERVER_IP="192.168.122.1"
+
+REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "192.168.122.1" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_ENS3=1
@@ -181,9 +184,41 @@ function vm_check () {
 function common_runtime_setup ()
 {
 	echo commont_runtime_setup
-	source /usr/local/cloudcast/env/vce.sh
-	sudo export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
-	sudo export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+
+	if [[ $1 == "vce" ]] ; then
+		echo "setting vce..."
+		source /usr/local/cloudcast/env/vce.sh
+	elif [[ $1 == "novce" ]] ; then
+		echo "setting non vce..."
+		source /usr/local/cloudcast/env/vce_nostreamer.sh
+	else
+		echo "common_runtime_setup: invalid p1: $1, supported values are vce and novce."
+		exit 1
+	fi
+
+	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
+	#export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+	sleep 1
+}
+
+function set_repo_server() {
+	# Setup ggp-eng-bundle in /usr/local/cloudcast.
+
+	echo "Determining reachable repo server..."
+
+	for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ )) 
+	do
+		ping -c 4 ${REPO_SERVER_IPS[$i]}
+ 		stat=$?
+
+		if [[ $stat -eq 0 ]] ; then
+			echo "Found reachable repo server: ${REPO_SERVER_IPS[$i]}"
+			REPO_SERVER_IP=${REPO_SERVER_IPS[$i]}
+			break
+		fi
+	done
+
+	echo "repo server is set to: $REPO_SERVER_IP"
 	sleep 5
 }
 function common_setup () {
@@ -199,10 +234,10 @@ function common_setup () {
 
 	sleep $SLEEP_TIME
 
-	# Setup ggp-eng-bundle in /usr/local/cloudcast.
-	
 	echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
 	
+	set_repo_server 
+
 	if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
         	sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
 	elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
@@ -373,6 +408,8 @@ function copy_game_files() {
                 game_dir_dest="."
         fi
 
+	set_repo_server
+	
         echo "Destination path: $game_dir_dest"
         sudo mkdir -p $game_dir_dest
 
@@ -405,19 +442,21 @@ function copy_game_files() {
 #		$3 password
 #		$4 command itself
 
+
 function send_ssh_command
 {
-	HOST=$1
-	USER=$2
-	PW=$3
-	CMD=$4
+       HOST=$1
+       USER=$2
+       PW=$3
+       CMD=$4
 
-	if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]] || [[ $4 == "" ]] ; then
-		echo "ERROR: One of the parameters are empty: p1: $1 p2: $2 p3: $3 p4: $4"
-		exit 1
-	fi
+       if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]] || [[ $4 == "" ]] ; then
+               echo "ERROR: One of the parameters are empty: p1: $1 p2: $2 p3: $3 p4: $4"
+               exit 1
+       fi
 
-	#sshpass -p $PW ssh -o StrictHostKeyChecking=no $USER@$HOST $CMD
-	sleep 2
-}	
+       #sshpass p $PW ssh o StrictHostKeyChecking=no $USER@$HOST $CMD
+       sleep 2
+}
+
 

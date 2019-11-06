@@ -47,7 +47,7 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=3
+CONFIG_ITERATION_3DMARK=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -173,41 +173,122 @@ else
         echo lsmod amdkfd: $ret2
 fi
 
+
+GAME_PARAM="-"
+
+if [[ $game -eq $GAME_3DMARK ]] ; then
+	echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=3dmark
+	DESTINATION_FOLDER=./3dmark
+	GAME_EXECUTABLE=3dmark
+	GAME_FOLDER=./
+	GAME_NAME=$GAME_3DMARK
+	GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
+elif [[ $game -eq $GAME_QUAIL ]] ; then
+	echo "TR2 is selected" ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=Quail
+	DESTINATION_FOLDER=infiltrator
+	GAME_EXECUTABLE=InfiltratorDemo.elf
+	GAME_FOLDER=./InfiltratorDemo/Binaries/Quail/
+	GAME_NAME=$GAME_QUAIL
+elif [[ $game -eq $GAME_TR2 ]] ; then
+	echo "TR2 is selected" ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=tr2
+	DESTINATION_FOLDER=catchingfire
+	GAME_EXECUTABLE=TR2_yeti_final
+	GAME_FOLDER="./"
+	GAME_NAME=$GAME_TR2
+elif [[ $game -eq $GAME_DOOM ]] ; then
+	echo "GAME: DOOM" ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=Doom_Linux
+	DESTINATION_FOLDER=lincoln
+	GAME_EXECUTABLE=DOOM
+	GAME_FOLDER="./"
+	GAME_NAME=$GAME_DOOM
+
+else
+	echo "Unsupported game: $game" ; exit 1
+fi
+
+if [[ $game -eq $GAME_3DMARK ]] ; then
+
+	echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=3dmark
+	DESTINATION_FOLDER=./3dmark
+	GAME_EXECUTABLE=3dmark
+	GAME_FOLDER=./
+	GAME_NAME=$GAME_3DMARK
+	#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
+	sudo mkdir -p /log/3dmark/
+        sudo chmod -R g=u /log/3dmark
+        sudo chmod -R o=u /log/3dmark
+
+	GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
+
+elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
+	echo Following games: Doom/TR2 does not support non-stream test option.
+	
+else
+	echo "Invalid game: $game" 
+	exit 1
+fi
+
+if [[ $game -eq $GAME_QUAIL ]] ; then
+	sudo rm /srv/game/assets/
+	sudo mkdir -p /srv/game/assets/
+	sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
+else
+	sudo rm /srv/game/assets
+	sudo mkdir -p /srv/game
+	sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
+fi
+
+copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+# infiltrator specific code.
+
+if [[ $game -eq $GAME_QUAIL ]] ; then
+	echo "Quail specific steps..."
+	sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
+	sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak \
+	/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
+	sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
+elif [[ $game -eq $GAME_DOOM ]] ; then
+	echo "DOOM specific steps..."
+	sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
+fi
+
+cd /usr/local/cloudcast	
+
+if [[ ! -d /var/game ]]; then
+	echo "Create directory /var/game."
+  	exit 1
+fi
+
+sudo chmod -R g=u /usr/local/cloudcast/
+sudo chmod -R o=u /usr/local/cloudcast/
+sudo chmod -R g=u /srv/game/
+sudo chmod -R o=u /srv/game/
+
+cd /srv/game/assets/
+
+if [[ $game -eq $GAME_3DMARK ]] ; then
+	echo "3dmark specific steps..."
+	cd /srv/game/assets/bin/yeti
+elif [[ $game -eq $GAME_QUAIL ]] ; then
+	cd /srv/game/assets/Quail
+fi
+
 if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 	echo "OPTION: NON-STREAM." ; sleep $SLEEP_TIME
 
-	if [[ $game -eq $GAME_3DMARK ]] ; then
-
-		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
-		SOURCE_FOLDER=3dmark
-		DESTINATION_FOLDER=./3dmark
-		GAME_EXECUTABLE=3dmark
-		GAME_FOLDER=./
-		GAME_NAME=$GAME_3DMARK
-		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-		sudo mkdir -p /log/3dmark/
-        	sudo chmod -R g=u /log/3dmark
-        	sudo chmod -R o=u /log/3dmark
-
-		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
-
-		if [[ $game -eq $GAME_3DMARK ]] ; then
-			echo "3dmark specific steps..."
-			#cd /srv/game/3dmark/bin/yeti
-			source /usr/local/cloudcast/env/vce_nostreamer.sh
-		fi
-	elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
-		echo Following games: Doom/TR2 does not support non-stream test option.
-		
-	else
-		echo "Invalid game: $game" 
-		exit 1
-	fi
-	common_runtime_setup
-       	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+        sudo chmod 755 ./$GAME_FOLDER/$GAME_EXECUTABLE	
+        echo chmod 755 ./$GAME_FOLDER/$GAME_EXECUTABLE
 
 	if [[ $game -eq $GAME_3DMARK ]] ; then
-		cd /srv/game/assets/bin/yeti
+		echo "3dmark specific steps..."
+		common_runtime_setup novce
+
 		for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
 			echo Running 3dmark for $n th time.
 			DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
@@ -237,95 +318,19 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 	echo "OPTION: STREAM 2 PC." ; sleep $SLEEP_TIME
 
-	GAME_PARAM="-"
-
-	if [[ $game -eq $GAME_3DMARK ]] ; then
-		echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
-		SOURCE_FOLDER=3dmark
-		DESTINATION_FOLDER=./3dmark
-		GAME_EXECUTABLE=3dmark
-		GAME_FOLDER=./
-		GAME_NAME=$GAME_3DMARK
-		#GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
-		GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
-	elif [[ $game -eq $GAME_QUAIL ]] ; then
-		echo "TR2 is selected" ; sleep $SLEEP_TIME
-		SOURCE_FOLDER=Quail
-		DESTINATION_FOLDER=infiltrator
-		GAME_EXECUTABLE=InfiltratorDemo.elf
-		GAME_FOLDER=./InfiltratorDemo/Binaries/Quail/
-		GAME_NAME=$GAME_QUAIL
-	elif [[ $game -eq $GAME_TR2 ]] ; then
-		echo "TR2 is selected" ; sleep $SLEEP_TIME
-		SOURCE_FOLDER=tr2
-		DESTINATION_FOLDER=catchingfire
-		GAME_EXECUTABLE=TR2_yeti_final
-		GAME_FOLDER="./"
-		GAME_NAME=$GAME_TR2
-	elif [[ $game -eq $GAME_DOOM ]] ; then
-		echo "GAME: DOOM" ; sleep $SLEEP_TIME
-		SOURCE_FOLDER=Doom_Linux
-		DESTINATION_FOLDER=lincoln
-		GAME_EXECUTABLE=DOOM
-		GAME_FOLDER="./"
-		GAME_NAME=$GAME_DOOM
-
-	else
-		echo "Unsupported game: $game" ; exit 1
-	fi
-
-	common_runtime_setup
+	common_runtime_setup vce
 	
 	if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then			
 		echo "Terminal1." ; sleep $SLEEP_TIME
 	
-
-		if [[ $game -eq $GAME_QUAIL ]] ; then
-			sudo rm /srv/game/assets/
-			sudo mkdir -p /srv/game/assets/
-			sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
-		else
-			sudo rm /srv/game/assets
-			sudo mkdir -p /srv/game
-			sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
-		fi
-	
         	copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
-		# infiltrator specific code.
-
-		if [[ $game -eq $GAME_QUAIL ]] ; then
-			echo "Quail specific steps..."
-			sudo mkdir -p /srv/game/assets/InfiltratorDemo/Content/Paks
-			sudo ln -fs /srv/game/assets/Quail/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak \
-			/srv/game/assets/InfiltratorDemo/Content/Paks/InfiltratorDemo-Quail.pak
-			sudo chmod a+x /srv/game/assets/Quail/InfiltratorDemo/Binaries/Quail/*
-		elif [[ $game -eq $GAME_DOOM ]] ; then
-			echo "DOOM specific steps..."
-			sudo chmod 755 /srv/game/$DESTINATION_FOLDER/DOOM
-		fi
-
-		cd /usr/local/cloudcast	
-	
-		if [[ ! -d /var/game ]]; then
-			echo "Create directory /var/game."
-  			exit 1
-		fi
-		
-        	sudo chmod -R g=u /usr/local/cloudcast/
-        	sudo chmod -R o=u /usr/local/cloudcast/
-        	sudo chmod -R g=u /srv/game/
-        	sudo chmod -R o=u /srv/game/
-	
-		cd /srv/game/assets/
-	
 		if [[ $game -eq $GAME_3DMARK ]] ; then
 			echo "3dmark specific steps..."
 			cd /srv/game/assets/bin/yeti
 		elif [[ $game -eq $GAME_QUAIL ]] ; then
 			cd /srv/game/assets/Quail
 		fi
-		
 		if [[ $p4 == "nolaunch" ]] ; then
 			echo "No launch..."
 		fi 
