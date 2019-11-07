@@ -1,5 +1,9 @@
 import sys
 fileName=None
+COL_PRIORITY=1
+COL_TYPE=2
+COL_ISSUE_ID=6
+COL_STATUS=5
 
 import numpy as np
 from numpy import *
@@ -18,7 +22,7 @@ except Exception as msg:
 	
 with open(fileName) as f:
 	reader = csv.reader(f, delimiter=',')
-	#headers = next(reader)
+	headers = next(reader)
 	data = list(reader)
 	data=np.array(data)
 
@@ -30,9 +34,12 @@ if debug:
 	print("------------------")
 
 # 	Extract priorit column and count priorities and display.
-	
-priority=list(data[:,1])
-type=list(data[:,2])
+
+
+priority=list(data[:,COL_PRIORITY])
+type=list(data[:,COL_TYPE])
+issueId=list(data[:, COL_ISSUE_ID])
+statuses=list(data[:, COL_STATUS])
 
 if debug:
 	print(type(priority), priority)
@@ -63,25 +70,74 @@ for file in glob.glob("*"):
 		
 print(fileList)
 
+hotListPriority=[]
+hotListType=[]
+hotListIssueId=[]
+hotListStatuses=[]
+
 for currFileName in fileList:
-	print("------------------")
-	print(currFileName)
 
 	with open(currFileName) as f1:
 		reader = csv.reader(f1, delimiter=',')
-		#headers = next(reader)
+		headers = next(reader)
 		data1 = list(reader)
 		data1=np.array(data1)
 	
-	if debug or 1:
+	if debug:
+		print("------------------")
+		print(currFileName)
 		print("data dimension: ", data1.shape)
 		#print("data type: ", type(data1))
 		print("------------------")
 
 	# 	Extract priorit column and count priorities and display.
 		
-	priority=list(data1[:,1])
-	type=list(data1[:,2])
+	currPriority=list(data1[:,COL_PRIORITY])
+	currType=list(data1[:,COL_TYPE])
+	currIssueId=list(data1[:, COL_ISSUE_ID])
+	currStatuses=list(data1[:, COL_STATUS])
+
+	hotListPriority+=currPriority
+	hotListType+=currType
+	hotListIssueId+=currIssueId
+	hotListStatuses+=currStatuses
+
+print("------------------")
+
+print(hotListPriority)
+print(hotListType)
+print(hotListIssueId)
+
+if debug:
+	print(priority)
+	print(type)
+	print(issueId)
+	print(statuses)
+
+print("------------------")
+
+mismatchIssueIds=[]
+mismatchStatuses=[]
+
+
+for i in range(0, len(priority)):
+	if not issueId[i] in hotListIssueId:
+		mismatchIssueIds.append(issueId[i])
+		mismatchStatuses.append(statuses[i])
+
+print("Mismatch issue ID not assigned to hot list: ")
+
+for i in range(0, len(mismatchIssueIds)):
+	print(mismatchIssueIds[i], ", ", mismatchStatuses[i])
+
+
+	
+	
+	
+	
+	
+	
+	
 		
 		
 
