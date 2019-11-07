@@ -10,13 +10,18 @@ headers=None
 debug=0
 colIndices=None
 
+def printSingleBar():
+	print("-----------------------------------------------")
+
 #	Given headers, populate the dictionary type column based on header read from csv file.
 #	Input:
 #		pHeaders: header read from csv file (1st row)
+#		pListExclude: name of the column to exclude from header.
 #	Output:
 #		<dict> - dictionary object with keys column name and values column indexes in headers.
 #		None - for any errors.
-def setColumnIndices(pHeaders):
+def setColumnIndices(pHeaders, pListExclude=[]):
+	debug=0
 	COL_PRIORITY=1
 	COL_TYPE=2
 	COL_ISSUE_ID=6
@@ -34,12 +39,20 @@ def setColumnIndices(pHeaders):
 	"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
 	"TITLE": COL_TITLE \
 	}
+
 	
 	for i in range(0, len(COL_INDICES)):
 		keys=list(COL_INDICES.keys())
 		values=list(COL_INDICES.values())
-		print(keys)
-		print(values)
+		
+		if debug:
+			print(keys)
+			print(values)
+
+		if keys[i] in pListExclude:
+			print("(setColumnIndices) set to exclude: ", keys[i])
+			continue
+		
 		if not keys[i] in pHeaders:
 			print("(setColumnIndices) Error: ", keys[i], " is not in the header")
 			print("(setColumnIndices)headers: ", pHeaders)
@@ -47,11 +60,14 @@ def setColumnIndices(pHeaders):
 		else:
 			try:
 				values[i] = pHeaders.index(keys[i])
+				COL_INDICES[keys[i]] = values[i]
 			except Exception as msg:
 				print("(setColumnIndices)Fatal error: Can not find the index of ", keys[i], " in headers. ")
 				print("(setColumnIndices)headers: ", pHeaders)
 				return None
-			print("(setColumnIndices)Column index of ", keys[i], " is set to ", values[i])
+			
+			if debug:
+				print("(setColumnIndices)Column index of ", keys[i], " is set to ", values[i])
 
 	return COL_INDICES
 	
@@ -71,6 +87,9 @@ with open(fileName) as f:
 	f.close()
 
 colIndices=setColumnIndices(headers)
+print("Error: colIndices failed to populate for ", fileName)
+
+print("colIndices: ", colIndices)
 
 if not colIndices:
 	print("Error: setting column indices...")
@@ -79,20 +98,22 @@ if not colIndices:
 if debug:
 	print("data dimension: ", data.shape)
 	print("data type: ", type(data))
-	print("------------------")
+	printSingleBar()
 
-# 	Extract priorit column and count priorities and display.
+# 	Extract priority column and count priorities and display.
 
 priority=list(data[:,colIndices["PRIORITY"]])
 type=list(data[:,colIndices["TYPE"]])
 issueId=list(data[:, colIndices["ISSUE_ID"]])
 statuses=list(data[:, colIndices["STATUS"]])
 titles=list(data[:, colIndices["TITLE"]])
+createDate=list(data[:, colIndices["CREATED_TIME (UTC)"]])
+modifyDate=list(data[:, colIndices["MODIFIED_TIME (UTC)"]])
 
 if debug:
 	print(type(priority), priority)
 
-print("Total tickets: ", len(priority) )
+print("Total tickets: ", len(priority), priority )
 for i in range(0, 7):
 	priority_index='P' + str(i)
 	print(priority_index, ": ", priority.count(priority_index))
@@ -116,13 +137,17 @@ fileList=[]
 for file in glob.glob("*"):
 	fileList.append(file)
 		
-print(fileList)
+if debug:
+	print(fileList)
 
 hotListPriority=[]
 hotListType=[]
 hotListIssueId=[]
 hotListStatuses=[]
+# hotListCreateDate=[]
+hotListModifyDate=[]
 hotListTitles=[]
+
 
 for currFileName in fileList:
 
@@ -132,12 +157,18 @@ for currFileName in fileList:
 		data1 = list(reader)
 		data1=np.array(data1)
 	
-	if debug:
-		print("------------------")
-		print(currFileName)
-		print("data dimension: ", data1.shape)
-		#print("data type: ", type(data1))
-		print("------------------")
+	colIndices=None
+	colIndices=setColumnIndices(headers, ["CREATED_TIME (UTC)"])
+		
+	print("colIndices for ", currFileName, ": ", colIndices)
+
+	if not colIndices:
+		print("Error: colIndices failed to populate for ", currFileName)
+		quit(1)
+		
+	printSingleBar()
+	print(currFileName)
+	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
 
 	# 	Extract priorit column and count priorities and display.
 		
@@ -146,19 +177,24 @@ for currFileName in fileList:
 	currIssueId=list(data1[:, colIndices["ISSUE_ID"]])
 	currStatuses=list(data1[:, colIndices["STATUS"]])
 	currTitles=list(data1[:, colIndices["TITLE"]])
+	#currCreateDate=list(data1[:, colIndices["CREATED_TIME (UTC)"]])
+	currModifiedDate=list(data1[:, colIndices["MODIFIED_TIME (UTC)"]])
 
 	hotListPriority+=currPriority
 	hotListType+=currType
 	hotListIssueId+=currIssueId
 	hotListStatuses+=currStatuses
 	hotListTitles+=currTitles
+	#hotListCreateDate+=currCreateDate
+	hotListModifyDate+=currModifiedDate
 
 
-print("------------------")
+printSingleBar()
 
-print(hotListPriority)
-print(hotListType)
-print(hotListIssueId)
+if debug:
+	print(hotListPriority)
+	print(hotListType)
+	print(hotListIssueId)
 
 if debug:
 	print(priority)
@@ -166,7 +202,7 @@ if debug:
 	print(issueId)
 	print(statuses)
 
-print("------------------")
+printSingleBar()
 
 mismatchIssueIds=[]
 mismatchStatuses=[]
@@ -177,14 +213,20 @@ mismatchTitles=[]
 
 for i in range(0, len(priority)):
 	if not issueId[i] in hotListIssueId:
+
 		mismatchIssueIds.append(issueId[i])
 		mismatchStatuses.append(statuses[i])
-		mismatchTitles.append(title[i])
+		mismatchTitles.append(titles[i])
+		mismatchCreate.append(titles[i])
+		mismatchModified.append(titles[i])
 
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(mismatchIssueIds)):
-	print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ", mismatchCreate[i], ", ", mismatchModified[i], ", ", mismatchTitles[i])
+	print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ", mismatchCreate[i], ", ", mismatchModified[i], ", ", \
+	mismatchTitles[i][0:10])
+	#print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ",mismatchModified[i], ", ", \
+	#mismatchTitles[i][0:10])
 
 
 	
