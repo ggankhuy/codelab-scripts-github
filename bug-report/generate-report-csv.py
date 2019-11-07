@@ -1,20 +1,5 @@
 import sys
 fileName=None
-COL_PRIORITY=1
-COL_TYPE=2
-COL_ISSUE_ID=6
-COL_STATUS=5
-COL_CREATE_DATETIME=6
-COL_MODIFY_DATETIME=7
-
-COL_INDICES={\
-"PRIORITY": COL_PRIORITY, \
-"TYPE": COL_TYPE, \
-"ISSUE_ID": COL_ISSUE_ID, \
-"STATUS": COL_STATUS, \
-"CREATED_TIME (UTC)": COL_CREATE_DATETIME, \
-"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
-}
 
 import numpy as np
 from numpy import *
@@ -23,7 +8,51 @@ import glob, os
 
 headers=None
 debug=0
+colIndices=None
 
+#	Given headers, populate the dictionary type column based on header read from csv file.
+#	Input:
+#		pHeaders: header read from csv file (1st row)
+#	Output:
+#		<dict> - dictionary object with keys column name and values column indexes in headers.
+#		None - for any errors.
+def setColumnIndices(pHeaders):
+	COL_PRIORITY=1
+	COL_TYPE=2
+	COL_ISSUE_ID=6
+	COL_STATUS=5
+	COL_CREATE_DATETIME=6
+	COL_MODIFY_DATETIME=7
+
+	COL_INDICES={\
+	"PRIORITY": COL_PRIORITY, \
+	"TYPE": COL_TYPE, \
+	"ISSUE_ID": COL_ISSUE_ID, \
+	"STATUS": COL_STATUS, \
+	"CREATED_TIME (UTC)": COL_CREATE_DATETIME, \
+	"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
+	}
+	
+	for i in range(0, len(COL_INDICES)):
+		keys=list(COL_INDICES.keys())
+		values=list(COL_INDICES.values())
+		print(keys)
+		print(values)
+		if not keys[i] in pHeaders:
+			print("(setColumnIndices) Error: ", keys[i], " is not in the header")
+			print("(setColumnIndices)headers: ", pHeaders)
+			return None
+		else:
+			try:
+				values[i] = pHeaders.index(keys[i])
+			except Exception as msg:
+				print("(setColumnIndices)Fatal error: Can not find the index of ", keys[i], " in headers. ")
+				print("(setColumnIndices)headers: ", pHeaders)
+				return None
+			print("(setColumnIndices)Column index of ", keys[i], " is set to ", values[i])
+
+	return COL_INDICES
+	
 try:
 	fileName=sys.argv[1]
 except Exception as msg:
@@ -39,37 +68,24 @@ with open(fileName) as f:
 
 	f.close()
 
-	
-for i in range(0, len(COL_INDICES)):
-	keys=list(COL_INDICES.keys())
-	values=list(COL_INDICES.values())
-	print(keys)
-	print(values)
-	if not keys[i] in headers:
-		print("Error: ", keys[i], " is not in the header")
-		print("headers: ", headers)
-		quit(1)
-	else:
-		try:
-			values[i] = headers.index(keys[i])
-		except Exception as msg:
-			print("Fatal error: Can not find the index of ", keys[i], " in headers. ")
-			print("headers: ", headers)
-			quit(1)
-		print("Column index of ", keys[i], " is set to ", values[i])
+colIndices=setColumnIndices(headers)
 
-		if debug:
-			print("data dimension: ", data.shape)
-			print("data type: ", type(data))
-			print("------------------")
+if not colIndices:
+	print("Error: setting column indices...")
+	quit(1)
+	
+if debug:
+	print("data dimension: ", data.shape)
+	print("data type: ", type(data))
+	print("------------------")
 
 # 	Extract priorit column and count priorities and display.
 
 
-priority=list(data[:,COL_PRIORITY])
-type=list(data[:,COL_TYPE])
-issueId=list(data[:, COL_ISSUE_ID])
-statuses=list(data[:, COL_STATUS])
+priority=list(data[:,colIndices["PRIORITY"]])
+type=list(data[:,colIndices["TYPE"]])
+issueId=list(data[:, colIndices["ISSUE_ID"]])
+statuses=list(data[:, colIndices["STATUS"]])
 
 if debug:
 	print(type(priority), priority)
@@ -122,10 +138,10 @@ for currFileName in fileList:
 
 	# 	Extract priorit column and count priorities and display.
 		
-	currPriority=list(data1[:,COL_PRIORITY])
-	currType=list(data1[:,COL_TYPE])
-	currIssueId=list(data1[:, COL_ISSUE_ID])
-	currStatuses=list(data1[:, COL_STATUS])
+	currPriority=list(data1[:,colIndices["PRIORITY"]])
+	currType=list(data1[:,colIndices["TYPE"]])
+	currIssueId=list(data1[:, colIndices["ISSUE_ID"]])
+	currStatuses=list(data1[:, colIndices["STATUS"]])
 
 	hotListPriority+=currPriority
 	hotListType+=currType
