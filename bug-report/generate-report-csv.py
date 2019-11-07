@@ -4,6 +4,17 @@ COL_PRIORITY=1
 COL_TYPE=2
 COL_ISSUE_ID=6
 COL_STATUS=5
+COL_CREATE_DATETIME=6
+COL_MODIFY_DATETIME=7
+
+COL_INDICES={\
+"PRIORITY": COL_PRIORITY, \
+"TYPE": COL_TYPE, \
+"ISSUE_ID": COL_ISSUE_ID, \
+"STATUS": COL_STATUS, \
+"CREATED_TIME (UTC)": COL_CREATE_DATETIME, \
+"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
+}
 
 import numpy as np
 from numpy import *
@@ -22,16 +33,35 @@ except Exception as msg:
 	
 with open(fileName) as f:
 	reader = csv.reader(f, delimiter=',')
-	headers = next(reader)
+	headers = list(next(reader))
 	data = list(reader)
 	data=np.array(data)
 
 	f.close()
+
 	
-if debug:
-	print("data dimension: ", data.shape)
-	print("data type: ", type(data))
-	print("------------------")
+for i in range(0, len(COL_INDICES)):
+	keys=list(COL_INDICES.keys())
+	values=list(COL_INDICES.values())
+	print(keys)
+	print(values)
+	if not keys[i] in headers:
+		print("Error: ", keys[i], " is not in the header")
+		print("headers: ", headers)
+		quit(1)
+	else:
+		try:
+			values[i] = headers.index(keys[i])
+		except Exception as msg:
+			print("Fatal error: Can not find the index of ", keys[i], " in headers. ")
+			print("headers: ", headers)
+			quit(1)
+		print("Column index of ", keys[i], " is set to ", values[i])
+
+		if debug:
+			print("data dimension: ", data.shape)
+			print("data type: ", type(data))
+			print("------------------")
 
 # 	Extract priorit column and count priorities and display.
 
