@@ -16,7 +16,7 @@ def printSingleBar():
 #	Given headers, populate the dictionary type column based on header read from csv file.
 #	Input:
 #		pHeaders: header read from csv file (1st row)
-#		pListExclude: name of the column to exclude from header.
+#		pListExclude <list>: name of the column(s) to exclude from header.
 #	Output:
 #		<dict> - dictionary object with keys column name and values column indexes in headers.
 #		None - for any errors.
@@ -87,7 +87,10 @@ with open(fileName) as f:
 	f.close()
 
 colIndices=setColumnIndices(headers)
-print("Error: colIndices failed to populate for ", fileName)
+
+if not colIndices:
+	print("Error: colIndices failed to populate for ", fileName)
+	quit(1)
 
 print("colIndices: ", colIndices)
 
@@ -102,6 +105,14 @@ if debug:
 
 # 	Extract priority column and count priorities and display.
 
+listColumns=["PRIORITY", "TYPE", "ISSUE_ID", "STATUS", "TITLE", "CREATED_TIME (UTC)", "MODIFIED_TIME (UTC)"]
+list2D={}
+
+for i in range(0, len(listColumns)):
+	list2D[listColumns[i]] = list(data[:,colIndices[listColumns[i]]])
+	printSingleBar()
+	print(listColumns[i], list2D[listColumns[i]])
+'''
 priority=list(data[:,colIndices["PRIORITY"]])
 type=list(data[:,colIndices["TYPE"]])
 issueId=list(data[:, colIndices["ISSUE_ID"]])
@@ -109,19 +120,23 @@ statuses=list(data[:, colIndices["STATUS"]])
 titles=list(data[:, colIndices["TITLE"]])
 createDate=list(data[:, colIndices["CREATED_TIME (UTC)"]])
 modifyDate=list(data[:, colIndices["MODIFIED_TIME (UTC)"]])
+'''
 
 if debug:
-	print(type(priority), priority)
+	print(type(list2D["PRIORITY"]), \
+	list2D["PRIORITY"])
 
-print("Total tickets: ", len(priority), priority )
+print(list2D["PRIORITY"])
+print("Total tickets: ", len(list2D["PRIORITY"]), \
+	list2D["PRIORITY"] )
 for i in range(0, 7):
 	priority_index='P' + str(i)
-	print(priority_index, ": ", priority.count(priority_index))
+	print(priority_index, ": ", list2D["PRIORITY"].count(priority_index))
 	
 priority_bugs=[]
-for i in range(0, len(priority)):
-	if type[i]=='BUG':
-		priority_bugs.append(priority[i])
+for i in range(0, len(list2D["PRIORITY"])):
+	if list2D["PRIORITY"][i]=='BUG':
+		priority_bugs.append(list2D["PRIORITY"][i])
 
 print("Total bugs: ", len(priority_bugs))
 	
@@ -211,20 +226,20 @@ mismatchModified=[]
 mismatchTitles=[]
 
 
-for i in range(0, len(priority)):
-	if not issueId[i] in hotListIssueId:
+for i in range(0, len(list2D["PRIORITY"])):
+	if not list2D["ISSUE_ID"][i] in hotListIssueId:
 
-		mismatchIssueIds.append(issueId[i])
-		mismatchStatuses.append(statuses[i])
-		mismatchTitles.append(titles[i])
-		mismatchCreate.append(titles[i])
-		mismatchModified.append(titles[i])
+		mismatchIssueIds.append(list2D["ISSUE_ID"][i])
+		mismatchStatuses.append(list2D["STATUS"][i])
+		mismatchTitles.append(list2D["TITLE"][i])
+		mismatchCreate.append(list2D["CREATED_TIME (UTC)"][i])
+		mismatchModified.append(list2D["MODIFIED_TIME (UTC)"][i])
 
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(mismatchIssueIds)):
 	print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ", mismatchCreate[i], ", ", mismatchModified[i], ", ", \
-	mismatchTitles[i][0:10])
+	mismatchTitles[i][0:50])
 	#print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ",mismatchModified[i], ", ", \
 	#mismatchTitles[i][0:10])
 
