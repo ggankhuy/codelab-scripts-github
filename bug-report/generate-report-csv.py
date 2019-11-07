@@ -71,7 +71,7 @@ for currFileName in fileList:
 		reader = csv.reader(f1, delimiter=',')
 		#headers = next(reader)
 		data1 = list(reader)
-		data1=np.array(data)
+		data1=np.array(data1)
 	
 	if debug or 1:
 		print("data dimension: ", data1.shape)
