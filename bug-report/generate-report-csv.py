@@ -10,6 +10,18 @@ headers=None
 debug=0
 colIndices=None
 
+COL_NAME_PRIORITY="PRIORITY"
+COL_NAME_TYPE="TYPE"
+COL_NAME_ISSUE_ID="ISSUE_ID"
+COL_NAME_STATUS="STATUS"
+COL_NAME_TITLE="TITLE"
+COL_NAME_CREATED_TIME="CREATED_TIME (UTC)"
+COL_NAME_MODIFIED_TIME="MODIFIED_TIME (UTC)"
+
+listColumns=[\
+	COL_NAME_PRIORITY, COL_NAME_TYPE, COL_NAME_ISSUE_ID, \
+	COL_NAME_STATUS, COL_NAME_TITLE, COL_NAME_CREATED_TIME, COL_NAME_MODIFIED_TIME]
+
 def printSingleBar():
 	print("-----------------------------------------------")
 
@@ -33,11 +45,11 @@ def setColumnIndices(pHeaders, pListExclude=[]):
 	COL_INDICES={\
 	"PRIORITY": COL_PRIORITY, \
 	"TYPE": COL_TYPE, \
-	"ISSUE_ID": COL_ISSUE_ID, \
-	"STATUS": COL_STATUS, \
-	"CREATED_TIME (UTC)": COL_CREATE_DATETIME, \
-	"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
-	"TITLE": COL_TITLE \
+	COL_NAME_ISSUE_ID: COL_ISSUE_ID, \
+	COL_NAME_STATUS: COL_STATUS, \
+	COL_NAME_CREATED_TIME: COL_CREATE_DATETIME, \
+	COL_NAME_MODIFIED_TIME: COL_MODIFY_DATETIME, \
+	COL_NAME_TITLE: COL_TITLE \
 	}
 
 	
@@ -105,38 +117,37 @@ if debug:
 
 # 	Extract priority column and count priorities and display.
 
-listColumns=["PRIORITY", "TYPE", "ISSUE_ID", "STATUS", "TITLE", "CREATED_TIME (UTC)", "MODIFIED_TIME (UTC)"]
-list2D={}
+list2DAllTickets={}
 
 for i in range(0, len(listColumns)):
-	list2D[listColumns[i]] = list(data[:,colIndices[listColumns[i]]])
+	list2DAllTickets[listColumns[i]] = list(data[:,colIndices[listColumns[i]]])
 	printSingleBar()
-	print(listColumns[i], list2D[listColumns[i]])
+	print(listColumns[i], list2DAllTickets[listColumns[i]])
 '''
 priority=list(data[:,colIndices["PRIORITY"]])
 type=list(data[:,colIndices["TYPE"]])
-issueId=list(data[:, colIndices["ISSUE_ID"]])
-statuses=list(data[:, colIndices["STATUS"]])
-titles=list(data[:, colIndices["TITLE"]])
-createDate=list(data[:, colIndices["CREATED_TIME (UTC)"]])
-modifyDate=list(data[:, colIndices["MODIFIED_TIME (UTC)"]])
+issueId=list(data[:, colIndices[COL_NAME_ISSUE_ID]])
+statuses=list(data[:, colIndices[COL_NAME_STATUS]])
+titles=list(data[:, colIndices[COL_NAME_TITLE]])
+createDate=list(data[:, colIndices[COL_NAME_CREATED_TIME]])
+modifyDate=list(data[:, colIndices[COL_NAME_MODIFIED_TIME]])
 '''
 
 if debug:
-	print(type(list2D["PRIORITY"]), \
-	list2D["PRIORITY"])
+	print(type(list2DAllTickets["PRIORITY"]), \
+	list2DAllTickets["PRIORITY"])
 
-print(list2D["PRIORITY"])
-print("Total tickets: ", len(list2D["PRIORITY"]), \
-	list2D["PRIORITY"] )
+print(list2DAllTickets["PRIORITY"])
+print("Total tickets: ", len(list2DAllTickets["PRIORITY"]), \
+	list2DAllTickets["PRIORITY"] )
 for i in range(0, 7):
 	priority_index='P' + str(i)
-	print(priority_index, ": ", list2D["PRIORITY"].count(priority_index))
+	print(priority_index, ": ", list2DAllTickets["PRIORITY"].count(priority_index))
 	
 priority_bugs=[]
-for i in range(0, len(list2D["PRIORITY"])):
-	if list2D["PRIORITY"][i]=='BUG':
-		priority_bugs.append(list2D["PRIORITY"][i])
+for i in range(0, len(list2DAllTickets["PRIORITY"])):
+	if list2DAllTickets["PRIORITY"][i]=='BUG':
+		priority_bugs.append(list2DAllTickets["PRIORITY"][i])
 
 print("Total bugs: ", len(priority_bugs))
 	
@@ -173,7 +184,7 @@ for currFileName in fileList:
 		data1=np.array(data1)
 	
 	colIndices=None
-	colIndices=setColumnIndices(headers, ["CREATED_TIME (UTC)"])
+	colIndices=setColumnIndices(headers, [COL_NAME_CREATED_TIME])
 		
 	print("colIndices for ", currFileName, ": ", colIndices)
 
@@ -189,11 +200,11 @@ for currFileName in fileList:
 		
 	currPriority=list(data1[:,colIndices["PRIORITY"]])
 	currType=list(data1[:,colIndices["TYPE"]])
-	currIssueId=list(data1[:, colIndices["ISSUE_ID"]])
-	currStatuses=list(data1[:, colIndices["STATUS"]])
-	currTitles=list(data1[:, colIndices["TITLE"]])
-	#currCreateDate=list(data1[:, colIndices["CREATED_TIME (UTC)"]])
-	currModifiedDate=list(data1[:, colIndices["MODIFIED_TIME (UTC)"]])
+	currIssueId=list(data1[:, colIndices[COL_NAME_ISSUE_ID]])
+	currStatuses=list(data1[:, colIndices[COL_NAME_STATUS]])
+	currTitles=list(data1[:, colIndices[COL_NAME_TITLE]])
+	#currCreateDate=list(data1[:, colIndices[COL_NAME_CREATED_TIME]])
+	currModifiedDate=list(data1[:, colIndices[COL_NAME_MODIFIED_TIME]])
 
 	hotListPriority+=currPriority
 	hotListType+=currType
@@ -226,14 +237,14 @@ mismatchModified=[]
 mismatchTitles=[]
 
 
-for i in range(0, len(list2D["PRIORITY"])):
-	if not list2D["ISSUE_ID"][i] in hotListIssueId:
+for i in range(0, len(list2DAllTickets["PRIORITY"])):
+	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in hotListIssueId:
 
-		mismatchIssueIds.append(list2D["ISSUE_ID"][i])
-		mismatchStatuses.append(list2D["STATUS"][i])
-		mismatchTitles.append(list2D["TITLE"][i])
-		mismatchCreate.append(list2D["CREATED_TIME (UTC)"][i])
-		mismatchModified.append(list2D["MODIFIED_TIME (UTC)"][i])
+		mismatchIssueIds.append(list2DAllTickets[COL_NAME_ISSUE_ID][i])
+		mismatchStatuses.append(list2DAllTickets[COL_NAME_STATUS][i])
+		mismatchTitles.append(list2DAllTickets[COL_NAME_TITLE][i])
+		mismatchCreate.append(list2DAllTickets[COL_NAME_CREATED_TIME][i])
+		mismatchModified.append(list2DAllTickets[COL_NAME_MODIFIED_TIME][i])
 
 print("Mismatch issue ID not assigned to hot list: ")
 
