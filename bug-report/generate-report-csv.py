@@ -23,6 +23,7 @@ def setColumnIndices(pHeaders):
 	COL_STATUS=5
 	COL_CREATE_DATETIME=6
 	COL_MODIFY_DATETIME=7
+	COL_TITLE=3
 
 	COL_INDICES={\
 	"PRIORITY": COL_PRIORITY, \
@@ -31,6 +32,7 @@ def setColumnIndices(pHeaders):
 	"STATUS": COL_STATUS, \
 	"CREATED_TIME (UTC)": COL_CREATE_DATETIME, \
 	"MODIFIED_TIME (UTC)": COL_MODIFY_DATETIME, \
+	"TITLE": COL_TITLE \
 	}
 	
 	for i in range(0, len(COL_INDICES)):
@@ -81,11 +83,11 @@ if debug:
 
 # 	Extract priorit column and count priorities and display.
 
-
 priority=list(data[:,colIndices["PRIORITY"]])
 type=list(data[:,colIndices["TYPE"]])
 issueId=list(data[:, colIndices["ISSUE_ID"]])
 statuses=list(data[:, colIndices["STATUS"]])
+titles=list(data[:, colIndices["TITLE"]])
 
 if debug:
 	print(type(priority), priority)
@@ -120,6 +122,7 @@ hotListPriority=[]
 hotListType=[]
 hotListIssueId=[]
 hotListStatuses=[]
+hotListTitles=[]
 
 for currFileName in fileList:
 
@@ -142,11 +145,14 @@ for currFileName in fileList:
 	currType=list(data1[:,colIndices["TYPE"]])
 	currIssueId=list(data1[:, colIndices["ISSUE_ID"]])
 	currStatuses=list(data1[:, colIndices["STATUS"]])
+	currTitles=list(data1[:, colIndices["TITLE"]])
 
 	hotListPriority+=currPriority
 	hotListType+=currType
 	hotListIssueId+=currIssueId
 	hotListStatuses+=currStatuses
+	hotListTitles+=currTitles
+
 
 print("------------------")
 
@@ -164,17 +170,21 @@ print("------------------")
 
 mismatchIssueIds=[]
 mismatchStatuses=[]
+mismatchCreate=[]
+mismatchModified=[]
+mismatchTitles=[]
 
 
 for i in range(0, len(priority)):
 	if not issueId[i] in hotListIssueId:
 		mismatchIssueIds.append(issueId[i])
 		mismatchStatuses.append(statuses[i])
+		mismatchTitles.append(title[i])
 
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(mismatchIssueIds)):
-	print(mismatchIssueIds[i], ", ", mismatchStatuses[i])
+	print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ", mismatchCreate[i], ", ", mismatchModified[i], ", ", mismatchTitles[i])
 
 
 	
