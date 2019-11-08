@@ -66,7 +66,7 @@ def setColumnIndices(pHeaders, pListExclude=[]):
 			print(values)
 
 		if keys[i] in pListExclude:
-			print("(setColumnIndices) set to exclude: ", keys[i])
+			print("--- INFO: (setColumnIndices) set to exclude: ", keys[i])
 			continue
 		
 		if not keys[i] in pHeaders:
@@ -189,8 +189,9 @@ for currFileName in fileList:
 	
 	colIndices=None
 	colIndices=setColumnIndices(headers, [COL_NAME_CREATED_TIME])
-		
-	print("colIndices for ", currFileName, ": ", colIndices)
+	
+	if debug:
+		print("colIndices for ", currFileName, ": ", colIndices)
 
 	if not colIndices:
 		print("Error: colIndices failed to populate for ", currFileName)
@@ -198,22 +199,25 @@ for currFileName in fileList:
 
 	#	Filter the assigned list.
 
-	print(data1[:,colIndices["STATUS"]])
-	print(data1)
+	if debug:
+		print(data1[:,colIndices[COL_NAME_STATUS]])
+		print(data1)
 	
 	rowsToDel=[]
 	
-	for i in range(0, len(data1[:,colIndices["STATUS"]])):
-		print(i, ":")
-		
-		if not data1[i, colIndices["STATUS"]] in validStats:
-			print("WARNING: Removing the row with status: ", data1[i,:])
+	for i in range(0, len(data1[:,colIndices[COL_NAME_STATUS]])):
+		if debug:
+			print(i, ":")
+			
+		if not data1[i, colIndices[COL_NAME_STATUS]] in validStats:
+			print("--- INFO: Removing the row with status: ", ", ID: ", data1[i,colIndices[COL_NAME_ISSUE_ID]], ", STATUS: ", data1[i,colIndices[COL_NAME_STATUS]])
 			rowsToDel.append(i)
 	
 	data1 = np.delete(data1, rowsToDel, 0)		
 	
-	print(data1[:,colIndices["STATUS"]])
-	print(data1)
+	if debug:
+		print(data1[:,colIndices[COL_NAME_STATUS]])
+		print(data1)
 	
 	printSingleBar()
 	print(currFileName)
