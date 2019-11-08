@@ -125,24 +125,28 @@ list2DAllTickets={}
 
 for i in range(0, len(listColumns)):
 	list2DAllTickets[listColumns[i]] = list(data[:,colIndices[listColumns[i]]])
-	printSingleBar()
-	print(listColumns[i], list2DAllTickets[listColumns[i]])
+
+	if debug:
+		printSingleBar()
+		print(listColumns[i], list2DAllTickets[listColumns[i]])
 
 if debug:
-	print(type(list2DAllTickets["PRIORITY"]), \
-	list2DAllTickets["PRIORITY"])
+	print(type(list2DAllTickets[COL_NAME_PRIORITY]), \
+	list2DAllTickets[COL_NAME_PRIORITY])
 
-print(list2DAllTickets["PRIORITY"])
-print("Total tickets: ", len(list2DAllTickets["PRIORITY"]), \
-	list2DAllTickets["PRIORITY"] )
+if debug:
+	print(list2DAllTickets[COL_NAME_PRIORITY])
+
+print("Total tickets: ", len(list2DAllTickets[COL_NAME_PRIORITY]))
+
 for i in range(0, 7):
 	priority_index='P' + str(i)
-	print(priority_index, ": ", list2DAllTickets["PRIORITY"].count(priority_index))
+	print(priority_index, ": ", list2DAllTickets[COL_NAME_PRIORITY].count(priority_index))
 	
 priority_bugs=[]
-for i in range(0, len(list2DAllTickets["PRIORITY"])):
-	if list2DAllTickets["PRIORITY"][i]=='BUG':
-		priority_bugs.append(list2DAllTickets["PRIORITY"][i])
+for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
+	if list2DAllTickets[COL_NAME_TYPE][i]=='BUG':
+		priority_bugs.append(list2DAllTickets[COL_NAME_PRIORITY][i])
 
 print("Total bugs: ", len(priority_bugs))
 	
@@ -240,7 +244,7 @@ list2DMisMatchList={}
 for i in range(0, len(listColumns)):
 	list2DMisMatchList[listColumns[i]] = []
 
-for i in range(0, len(list2DAllTickets["PRIORITY"])):
+for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
 	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID]:
 		for j in range(0, len(listColumns)):
 			try:
