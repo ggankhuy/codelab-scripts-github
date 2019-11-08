@@ -1,14 +1,18 @@
 import sys
+import csv
+import glob
+import os 
+import time
+
 fileName=None
 
 import numpy as np
 from numpy import *
-import csv
-import glob, os
 
 headers=None
 debug=0
 colIndices=None
+validStats=["NEW","ACCEPTED","ASSIGNED"]
 
 COL_NAME_PRIORITY="PRIORITY"
 COL_NAME_TYPE="TYPE"
@@ -82,6 +86,8 @@ def setColumnIndices(pHeaders, pListExclude=[]):
 				print("(setColumnIndices)Column index of ", keys[i], " is set to ", values[i])
 
 	return COL_INDICES
+
+# 	Start of script execution entry. 
 	
 try:
 	fileName=sys.argv[1]
@@ -98,6 +104,8 @@ with open(fileName) as f:
 
 	f.close()
 
+# 	Construct a column indices from headers. 
+	
 colIndices=setColumnIndices(headers)
 
 if not colIndices:
@@ -105,17 +113,13 @@ if not colIndices:
 	quit(1)
 
 print("colIndices: ", colIndices)
-
-if not colIndices:
-	print("Error: setting column indices...")
-	quit(1)
 	
 if debug:
 	print("data dimension: ", data.shape)
 	print("data type: ", type(data))
 	printSingleBar()
 
-# 	Extract priority column and count priorities and display.
+# 	Extract priority column and count priorities and display them for 1. all tickets and 2. bugs only.
 
 list2DAllTickets={}
 
@@ -145,10 +149,14 @@ print("Total bugs: ", len(priority_bugs))
 for i in range(0, 7):
 	priority_index='P' + str(i)
 	print(priority_index, ": ", priority_bugs.count(priority_index))
+
+#	Look for unclassified tickets (not in host list)
 	
 print("Looking for unclassified hotlist tickets:")
 print("Gathering tickets in hotlist directory...")
 os.chdir(".\hotlist")
+
+#	Scan files in hotlist directory. 
 
 fileList=[]
 for file in glob.glob("*"):
@@ -157,11 +165,18 @@ for file in glob.glob("*"):
 if debug:
 	print(fileList)
 
+#	Construct 2-d array of hotlist in dict format: 
+#	{<string>: <list>}
+#	{"<COL_NAME>": [<COL_DATA>]} 
+#	Initialize all list empty at first. 
+
 list2DHotList={}
 
 for i in range(0, len(listColumns)):
 	list2DHotList[listColumns[i]] = []
 
+#	Iterate through all files in hotlist directory.	
+	
 for currFileName in fileList:
 
 	with open(currFileName) as f1:
@@ -169,6 +184,8 @@ for currFileName in fileList:
 		headers = next(reader)
 		data1 = list(reader)
 		data1=np.array(data1)
+	
+	#	For scanned file, construct col names list.
 	
 	colIndices=None
 	colIndices=setColumnIndices(headers, [COL_NAME_CREATED_TIME])
@@ -178,17 +195,42 @@ for currFileName in fileList:
 	if not colIndices:
 		print("Error: colIndices failed to populate for ", currFileName)
 		quit(1)
+
+	#	Filter the assigned list.
+
+	print(data1[:,colIndices["STATUS"]])
+	print(data1)
+	
+	rowsToDel=[]
+	
+	for i in range(0, len(data1[:,colIndices["STATUS"]])):
+		print(i, ":")
 		
+		if not data1[i, colIndices["STATUS"]] in validStats:
+			print("WARNING: Removing the row with status: ", data1[i,:])
+			rowsToDel.append(i)
+	
+	data1 = np.delete(data1, rowsToDel, 0)		
+	
+	print(data1[:,colIndices["STATUS"]])
+	print(data1)
+	
 	printSingleBar()
 	print(currFileName)
 	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
 
-	# 	Extract priorit column and count priorities and display.
+	# 	Iterate through each column and append to hostList.
 	
 	for i in range(0, len(listColumns)):
 		list2DHotList[listColumns[i]] += list(data1[:,colIndices[listColumns[i]]])
 	
 printSingleBar()
+
+#	Construct mismatch list. The list contains any ticket that is not assigned to any of the hotlist.
+#	For that loop will iterate through all tickets and then iterate through list2DHotList which contains
+#	cumulative list of all tickets assigned to hotlist. 
+#	Therefore: list2DMisMatchList = list2DAllTickets - list2DHotList.
+
 list2DMisMatchList={}
 
 for i in range(0, len(listColumns)):
@@ -206,7 +248,9 @@ for i in range(0, len(list2DAllTickets["PRIORITY"])):
 			except Exception as msg:
 				print("Error: Can not append: ", list2DAllTickets[j][i])
 				continue
-		
+
+#	Print the list of mismatched tickets.
+				
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
