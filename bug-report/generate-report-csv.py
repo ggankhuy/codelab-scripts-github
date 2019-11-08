@@ -123,15 +123,6 @@ for i in range(0, len(listColumns)):
 	list2DAllTickets[listColumns[i]] = list(data[:,colIndices[listColumns[i]]])
 	printSingleBar()
 	print(listColumns[i], list2DAllTickets[listColumns[i]])
-'''
-priority=list(data[:,colIndices["PRIORITY"]])
-type=list(data[:,colIndices["TYPE"]])
-issueId=list(data[:, colIndices[COL_NAME_ISSUE_ID]])
-statuses=list(data[:, colIndices[COL_NAME_STATUS]])
-titles=list(data[:, colIndices[COL_NAME_TITLE]])
-createDate=list(data[:, colIndices[COL_NAME_CREATED_TIME]])
-modifyDate=list(data[:, colIndices[COL_NAME_MODIFIED_TIME]])
-'''
 
 if debug:
 	print(type(list2DAllTickets["PRIORITY"]), \
@@ -166,14 +157,10 @@ for file in glob.glob("*"):
 if debug:
 	print(fileList)
 
-hotListPriority=[]
-hotListType=[]
-hotListIssueId=[]
-hotListStatuses=[]
-# hotListCreateDate=[]
-hotListModifyDate=[]
-hotListTitles=[]
+list2DHotList={}
 
+for i in range(0, len(listColumns)):
+	list2DHotList[listColumns[i]] = []
 
 for currFileName in fileList:
 
@@ -197,60 +184,44 @@ for currFileName in fileList:
 	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
 
 	# 	Extract priorit column and count priorities and display.
-		
-	currPriority=list(data1[:,colIndices["PRIORITY"]])
-	currType=list(data1[:,colIndices["TYPE"]])
-	currIssueId=list(data1[:, colIndices[COL_NAME_ISSUE_ID]])
-	currStatuses=list(data1[:, colIndices[COL_NAME_STATUS]])
-	currTitles=list(data1[:, colIndices[COL_NAME_TITLE]])
-	#currCreateDate=list(data1[:, colIndices[COL_NAME_CREATED_TIME]])
-	currModifiedDate=list(data1[:, colIndices[COL_NAME_MODIFIED_TIME]])
-
-	hotListPriority+=currPriority
-	hotListType+=currType
-	hotListIssueId+=currIssueId
-	hotListStatuses+=currStatuses
-	hotListTitles+=currTitles
-	#hotListCreateDate+=currCreateDate
-	hotListModifyDate+=currModifiedDate
-
-
+	
+	for i in range(0, len(listColumns)):
+		list2DHotList[listColumns[i]] += list(data1[:,colIndices[listColumns[i]]])
+	
 printSingleBar()
 
-if debug:
-	print(hotListPriority)
-	print(hotListType)
-	print(hotListIssueId)
+list2DMisMatchList={}
 
-if debug:
-	print(priority)
-	print(type)
-	print(issueId)
-	print(statuses)
-
-printSingleBar()
-
-mismatchIssueIds=[]
-mismatchStatuses=[]
-mismatchCreate=[]
-mismatchModified=[]
-mismatchTitles=[]
+for i in range(0, len(listColumns)):
+	list2DMisMatchList[listColumns[i]] = []
 
 
 for i in range(0, len(list2DAllTickets["PRIORITY"])):
-	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in hotListIssueId:
-
+	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID]:
+		for j in range(0, len(listColumns)):
+			try:
+				if listColumns[j] in list2DAllTickets.keys():
+					list2DMisMatchList[listColumns[j]].\
+						append(list2DAllTickets[listColumns[j]][i])	
+				else:
+					print("Skipping to append: ", listColumns[j])
+			except Exception as msg:
+				print("Error: Can not append: ", list2DAllTickets[j][i])
+				continue
+		
+		'''
 		mismatchIssueIds.append(list2DAllTickets[COL_NAME_ISSUE_ID][i])
 		mismatchStatuses.append(list2DAllTickets[COL_NAME_STATUS][i])
 		mismatchTitles.append(list2DAllTickets[COL_NAME_TITLE][i])
 		mismatchCreate.append(list2DAllTickets[COL_NAME_CREATED_TIME][i])
 		mismatchModified.append(list2DAllTickets[COL_NAME_MODIFIED_TIME][i])
+		'''
 
 print("Mismatch issue ID not assigned to hot list: ")
 
-for i in range(0, len(mismatchIssueIds)):
-	print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ", mismatchCreate[i], ", ", mismatchModified[i], ", ", \
-	mismatchTitles[i][0:50])
+for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
+	print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
+	list2DMisMatchList[COL_NAME_TITLE][i][0:50])
 	#print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ",mismatchModified[i], ", ", \
 	#mismatchTitles[i][0:10])
 
