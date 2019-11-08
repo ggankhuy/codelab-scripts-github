@@ -189,12 +189,10 @@ for currFileName in fileList:
 		list2DHotList[listColumns[i]] += list(data1[:,colIndices[listColumns[i]]])
 	
 printSingleBar()
-
 list2DMisMatchList={}
 
 for i in range(0, len(listColumns)):
 	list2DMisMatchList[listColumns[i]] = []
-
 
 for i in range(0, len(list2DAllTickets["PRIORITY"])):
 	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID]:
@@ -209,21 +207,11 @@ for i in range(0, len(list2DAllTickets["PRIORITY"])):
 				print("Error: Can not append: ", list2DAllTickets[j][i])
 				continue
 		
-		'''
-		mismatchIssueIds.append(list2DAllTickets[COL_NAME_ISSUE_ID][i])
-		mismatchStatuses.append(list2DAllTickets[COL_NAME_STATUS][i])
-		mismatchTitles.append(list2DAllTickets[COL_NAME_TITLE][i])
-		mismatchCreate.append(list2DAllTickets[COL_NAME_CREATED_TIME][i])
-		mismatchModified.append(list2DAllTickets[COL_NAME_MODIFIED_TIME][i])
-		'''
-
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
 	print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
 	list2DMisMatchList[COL_NAME_TITLE][i][0:50])
-	#print(mismatchIssueIds[i], ", ", mismatchStatuses[i], ", ",mismatchModified[i], ", ", \
-	#mismatchTitles[i][0:10])
 
 
 	
