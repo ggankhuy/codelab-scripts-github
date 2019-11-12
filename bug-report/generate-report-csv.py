@@ -154,7 +154,7 @@ with open(fileName) as f:
 	data=np.array(data)
 
 	f.close()
-
+	
 # 	Construct a column indices from headers. 
 	
 colIndicesMain=setColumnIndices(headers)
@@ -169,6 +169,20 @@ if debug:
 	print("data dimension: ", data.shape)
 	print("data type: ", type(data))
 	printBarSingle()
+
+#	Filter out tickets with invalid status
+
+rowsToDel=[]
+
+for i in range(0, len(data[:,colIndicesMain[COL_NAME_STATUS]])):
+	if debug:
+		print(i, ":")
+		
+	if not data[i, colIndicesMain[COL_NAME_STATUS]] in validStats:
+		print("--- INFO: Removing the row with status: ", ", ID: ", data[i,colIndicesMain[COL_NAME_ISSUE_ID]], ", STATUS: ", data[i,colIndicesMain[COL_NAME_STATUS]])
+		rowsToDel.append(i)
+
+data = np.delete(data, rowsToDel, 0)		
 
 # 	Extract priority column and count priorities and display them for 1. all tickets and 2. bugs only.
 
@@ -232,7 +246,10 @@ for i in range(0, len(listColumns)):
 
 #	Iterate through all files in hotlist directory.	
 	
+priority_bugs_from_hotlist=0
 for currFileName in fileList:
+	printBarSingle()
+	print(currFileName)
 
 	with open(currFileName) as f1:
 		reader = csv.reader(f1, delimiter=',')
@@ -267,6 +284,14 @@ for currFileName in fileList:
 		if not data1[i, colIndices[COL_NAME_STATUS]] in validStats:
 			print("--- INFO: Removing the row with status: ", ", ID: ", data1[i,colIndices[COL_NAME_ISSUE_ID]], ", STATUS: ", data1[i,colIndices[COL_NAME_STATUS]])
 			rowsToDel.append(i)
+		
+		if not data1[i, colIndices[COL_NAME_ISSUE_ID]] in list2DAllTickets[COL_NAME_ISSUE_ID]:
+			print("--- INFO: Removing the row with as it is not in ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]])
+			
+			if not i in rowsToDel:
+				rowsToDel.append(i)
+			else:
+				print("--- WARNING: already marked for delete: ", i)
 	
 	data1 = np.delete(data1, rowsToDel, 0)		
 	
@@ -274,15 +299,21 @@ for currFileName in fileList:
 		print(data1[:,colIndices[COL_NAME_STATUS]])
 		print(data1)
 	
-	printBarSingle()
-	print(currFileName)
 	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
-
+	priority_bugs_from_hotlist += len(data1[:, 0])
+	
 	# 	Iterate through each column and append to hostList.
 	
 	for i in range(0, len(listColumns)):
 		list2DHotList[listColumns[i]] += list(data1[:,colIndices[listColumns[i]]])
-	
+
+if priority_bugs_from_hotlist != len(priority_bugs):
+	print("WARNING!!!: Total bugs gathered from hotlist does not match the bugs in ", fileName)
+	time.sleep(10)
+
+print("Total bugs gathered from hotlist file: ", priority_bugs_from_hotlist)
+print("Total bugs gathered from ", fileName, ": ",len(priority_bugs))
+		
 printBarSingle()
 
 #	Construct mismatch list. The list contains any ticket that is not assigned to any of the hotlist.
@@ -296,7 +327,7 @@ for i in range(0, len(listColumns)):
 	list2DMisMatchList[listColumns[i]] = []
 
 for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
-	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID] and list2DAllTickets[COL_NAME_TYPE][i] != "BUG":
+	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID] and list2DAllTickets[COL_NAME_TYPE][i] == "BUG":
 		for j in range(0, len(listColumns)):
 			try:
 				if listColumns[j] in list2DAllTickets.keys():
@@ -312,7 +343,7 @@ for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
 print("Mismatch issue ID not assigned to hot list: ")
 
 for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
-	print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
+	print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_TYPE][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
 	list2DMisMatchList[COL_NAME_TITLE][i][0:50])
 
 # 	List of tickets opened last 7 days.
