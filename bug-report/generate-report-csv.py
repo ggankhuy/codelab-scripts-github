@@ -64,6 +64,7 @@ headers=None
 debug=0
 colIndices=None
 validStats=["NEW","ACCEPTED","ASSIGNED"]
+PRIORITY_LOWEST = 7
 
 COL_NAME_PRIORITY="PRIORITY"
 COL_NAME_TYPE="TYPE"
@@ -204,7 +205,7 @@ if debug:
 
 print("Total tickets: ", len(list2DAllTickets[COL_NAME_PRIORITY]))
 
-for i in range(0, 7):
+for i in range(0, PRIORITY_LOWEST):
 	priority_index='P' + str(i)
 	print(priority_index, ": ", list2DAllTickets[COL_NAME_PRIORITY].count(priority_index))
 	
@@ -302,6 +303,10 @@ for currFileName in fileList:
 	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
 	priority_bugs_from_hotlist += len(data1[:, 0])
 	
+	for i in range(0, PRIORITY_LOWEST):
+		priority_index='P' + str(i)
+		print(priority_index, ": ", list(data1[:, colIndices[COL_NAME_PRIORITY]]).count(priority_index))
+
 	# 	Iterate through each column and append to hostList.
 	
 	for i in range(0, len(listColumns)):
