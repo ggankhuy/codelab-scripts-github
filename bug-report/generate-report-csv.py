@@ -296,7 +296,7 @@ for i in range(0, len(listColumns)):
 	list2DMisMatchList[listColumns[i]] = []
 
 for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
-	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID]:
+	if not list2DAllTickets[COL_NAME_ISSUE_ID][i] in list2DHotList[COL_NAME_ISSUE_ID] and list2DAllTickets[COL_NAME_TYPE][i] != "BUG":
 		for j in range(0, len(listColumns)):
 			try:
 				if listColumns[j] in list2DAllTickets.keys():
@@ -348,7 +348,9 @@ for i in range(0, len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]])):
 
 for i in range(0, len(list2DAllTickets[COL_NAME_ISSUE_ID])):
 		
-		print(list2DAllTickets[COL_NAME_ISSUE_ID][i])
+		if debug:
+			print(list2DAllTickets[COL_NAME_ISSUE_ID][i])
+			
 		if 	list2DAllTickets[COL_NAME_ISSUE_ID][i] in issueIdsRecent:
 			print("Found in issueIdsRecent: ", list2DAllTickets[COL_NAME_ISSUE_ID][i])
 			
@@ -359,24 +361,7 @@ for i in range(0, len(list2DAllTickets[COL_NAME_ISSUE_ID])):
 				except Exception as msg:
 					print("Error: Can not append: ", list2DAllTickets[j][i])
 					continue
-		
-		#	for j in list(colIndicesMain.keys()):
-		#		
-		#		list2DTicketsRecent7days[j].\
-		#			append(data[i,j])
-
-		'''
-for i in range(0, len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]])):
-		print(i, data[i,colIndicesMain[COL_NAME_ISSUE_ID]])
-		
-		if 	data[i,colIndicesMain[COL_NAME_ISSUE_ID]] in issueIdsRecent:
-			print("Found in issueIdsRecent: ", data[i,colIndicesMain[COL_NAME_ISSUE_ID]])
-			
-			for j in list(colIndicesMain.keys()):
 				
-				list2DTicketsRecent7days[j].\
-					append(data[i,j])
-'''		
 print(list2DTicketsRecent7days)
 
 
