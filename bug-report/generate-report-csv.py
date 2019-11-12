@@ -182,6 +182,8 @@ for i in range(0, len(data[:,colIndicesMain[COL_NAME_STATUS]])):
 	if not data[i, colIndicesMain[COL_NAME_STATUS]] in validStats:
 		print("--- INFO: Removing the row with status: ", ", ID: ", data[i,colIndicesMain[COL_NAME_ISSUE_ID]], ", STATUS: ", data[i,colIndicesMain[COL_NAME_STATUS]])
 		rowsToDel.append(i)
+	else:
+		print("--- INFO: Keeping the row with status: ", ", ID: ", data[i,colIndicesMain[COL_NAME_ISSUE_ID]], ", STATUS: ", data[i,colIndicesMain[COL_NAME_STATUS]])
 
 data = np.delete(data, rowsToDel, 0)		
 
@@ -277,6 +279,7 @@ for currFileName in fileList:
 		print(data1)
 	
 	rowsToDel=[]
+	rowsToDelIssueId=[]
 	
 	for i in range(0, len(data1[:,colIndices[COL_NAME_STATUS]])):
 		if debug:
@@ -285,9 +288,18 @@ for currFileName in fileList:
 		if not data1[i, colIndices[COL_NAME_STATUS]] in validStats:
 			print("--- INFO: Removing the row with status: ", ", ID: ", data1[i,colIndices[COL_NAME_ISSUE_ID]], ", STATUS: ", data1[i,colIndices[COL_NAME_STATUS]])
 			rowsToDel.append(i)
+			rowsToDelIssueId.append
 		
 		if not data1[i, colIndices[COL_NAME_ISSUE_ID]] in list2DAllTickets[COL_NAME_ISSUE_ID]:
 			print("--- INFO: Removing the row with as it is not in ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]])
+			
+			if not i in rowsToDel:
+				rowsToDel.append(i)
+			else:
+				print("--- WARNING: already marked for delete: ", i)
+
+		if data1[i, colIndices[COL_NAME_TYPE]] != "BUG":
+			print("--- INFO: Removing the row with as it is not a BUG ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]], ", ", data1[i, colIndices[COL_NAME_TYPE]])
 			
 			if not i in rowsToDel:
 				rowsToDel.append(i)
@@ -314,10 +326,14 @@ for currFileName in fileList:
 
 if priority_bugs_from_hotlist != len(priority_bugs):
 	print("WARNING!!!: Total bugs gathered from hotlist does not match the bugs in ", fileName)
-	time.sleep(10)
 
 print("Total bugs gathered from hotlist file: ", priority_bugs_from_hotlist)
 print("Total bugs gathered from ", fileName, ": ",len(priority_bugs))
+
+if priority_bugs_from_hotlist != len(priority_bugs):
+	time.sleep(10)
+else:
+	time.sleep(3)
 		
 printBarSingle()
 
