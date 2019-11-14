@@ -328,7 +328,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 			if [[ $stat -ne 0 ]] ; then
 				echo "$counter1..."
-				sleep 2
+				sleep 5
 			else
 				echo "All relvf processes are finished..."
 				break
