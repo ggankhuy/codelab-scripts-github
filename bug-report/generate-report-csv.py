@@ -62,6 +62,7 @@ from datetime import datetime, timedelta
 
 headers=None
 debug=0
+debug_info=0
 colIndices=None
 validStats=["NEW","ACCEPTED","ASSIGNED"]
 PRIORITY_LOWEST = 7
@@ -118,7 +119,8 @@ def setColumnIndices(pHeaders, pListExclude=[]):
 			print(values)
 
 		if keys[i] in pListExclude:
-			print("--- INFO: (setColumnIndices) set to exclude: ", keys[i])
+			if debug_info:
+				print("--- INFO: (setColumnIndices) set to exclude: ", keys[i])
 			continue
 		
 		if not keys[i] in pHeaders:
@@ -300,25 +302,30 @@ for currFileName in fileList:
 			print(i, ":")
 			
 		if not data1[i, colIndices[COL_NAME_STATUS]] in validStats:
-			print("--- INFO: Removing the row with status: ", ", ID: ", data1[i,colIndices[COL_NAME_ISSUE_ID]], ", STATUS: ", data1[i,colIndices[COL_NAME_STATUS]])
+			if debug_info:
+				print("--- INFO: Removing the row with status: ", ", ID: ", data1[i,colIndices[COL_NAME_ISSUE_ID]], ", STATUS: ", data1[i,colIndices[COL_NAME_STATUS]])
 			rowsToDel.append(i)
 			rowsToDelIssueId.append
 		
 		if not data1[i, colIndices[COL_NAME_ISSUE_ID]] in list2DAllTickets[COL_NAME_ISSUE_ID]:
-			print("--- INFO: Removing the row with as it is not in ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]])
+			if debug_info:
+				print("--- INFO: Removing the row with as it is not in ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]])
 			
 			if not i in rowsToDel:
 				rowsToDel.append(i)
 			else:
-				print("--- WARNING: already marked for delete: ", i)
+				if debug_info:
+					print("--- WARNING: already marked for delete: ", i)
 
 		if data1[i, colIndices[COL_NAME_TYPE]] != "BUG":
-			print("--- INFO: Removing the row with as it is not a BUG ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]], ", ", data1[i, colIndices[COL_NAME_TYPE]])
+			if debug_info:
+				print("--- INFO: Removing the row with as it is not a BUG ", fileName, ": ", data1[i, colIndices[COL_NAME_ISSUE_ID]], ", ", data1[i, colIndices[COL_NAME_TYPE]])
 			
 			if not i in rowsToDel:
 				rowsToDel.append(i)
 			else:
-				print("--- WARNING: already marked for delete: ", i)
+				if debug_info:
+					print("--- WARNING: already marked for delete: ", i)
 	
 	#	Remove filtered out rows.
 	
@@ -344,12 +351,14 @@ for currFileName in fileList:
 		
 	dict2DHotListIssueIds[currFileName]= list(data1[:,colIndices[COL_NAME_ISSUE_ID]])
 	
-print("dict2DHotListIssueIds: ", dict2DHotListIssueIds)
+if debug:
+	print("dict2DHotListIssueIds: ", dict2DHotListIssueIds)
 
 for i in (list(dict2DHotListIssueIds.keys())):
 	list2DHotListAll+=(list(dict2DHotListIssueIds[i]))
-	
-print(list2DHotListAll)	
+
+if debug:
+	print("list2DHotListAll: ", list2DHotListAll)	
 
 for i in list2DHotListAll:
 	if list2DHotListAll.count(i) > 1:
@@ -370,7 +379,7 @@ print("Total bugs gathered from ", fileName, ": ",len(priority_bugs))
 if priority_bugs_from_hotlist != len(priority_bugs):
 	time.sleep(10)
 else:
-	time.sleep(3)
+	time.sleep(1)
 		
 printBarSingle()
 
@@ -400,18 +409,26 @@ for i in range(0, len(list2DAllTickets[COL_NAME_PRIORITY])):
 				
 print("Mismatch issue ID not assigned to hot list: ")
 
-for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
-	print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_TYPE][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
-	list2DMisMatchList[COL_NAME_TITLE][i][0:50])
+if len(list2DMisMatchList[COL_NAME_ISSUE_ID]):
+	for i in range(0, len(list2DMisMatchList[COL_NAME_ISSUE_ID])):
+		print(list2DMisMatchList[COL_NAME_ISSUE_ID][i], ", ", list2DMisMatchList[COL_NAME_TYPE][i], ", ", list2DMisMatchList[COL_NAME_STATUS][i], ", ", list2DMisMatchList[COL_NAME_CREATED_TIME][i], ", ", list2DMisMatchList[COL_NAME_MODIFIED_TIME][i], ", ", \
+		list2DMisMatchList[COL_NAME_TITLE][i][0:50])
+else:
+	print("None.")
+
+	printBarSingle()
 
 # 	List of tickets opened last 7 days.
 
 datetimeToday=datetime.today()	
-print("Today's date: ", datetimeToday)
+
+if debug:
+	print("Today's date: ", datetimeToday)
+
 print("Displaying tickets opened last 7 days")
 
-printBarSingle()
-print(len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]]))
+if debug:
+	print(len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]]))
 
 list2DTicketsRecent7days={}
 
@@ -450,8 +467,11 @@ for i in range(0, len(list2DAllTickets[COL_NAME_ISSUE_ID])):
 				except Exception as msg:
 					print("Error: Can not append: ", list2DAllTickets[j][i])
 					continue
-				
-print(list2DTicketsRecent7days)
+
+if sum(list2DTicketsRecent7days[COL_NAME_ISSUE_ID]):
+	print(list2DTicketsRecent7days)
+else:
+	print("None.")
 
 
 
