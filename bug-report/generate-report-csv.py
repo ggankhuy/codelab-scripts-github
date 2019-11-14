@@ -242,8 +242,16 @@ if debug:
 #	{"<COL_NAME>": [<COL_DATA>]} 
 #	Initialize all list empty at first. 
 
-list2DHotList={}
+#	list2DHostList content will be:
+#	"<columnName": [columnValues]
 
+list2DHotList={} 
+
+#	list2DHostListIssuesIds content will be:
+#	"fileName": [issueIds]
+dict2DHotListIssueIds={}
+list2DHotListDups=[]
+list2DHotListAll=[]
 for i in range(0, len(listColumns)):
 	list2DHotList[listColumns[i]] = []
 
@@ -251,9 +259,12 @@ for i in range(0, len(listColumns)):
 	
 priority_bugs_from_hotlist=0
 for currFileName in fileList:
+	dict2DHotListIssueIds[currFileName] = []
 	printBarSingle()
 	print(currFileName)
 
+	#	Read the content into np array.
+	
 	with open(currFileName) as f1:
 		reader = csv.reader(f1, delimiter=',')
 		headers = next(reader)
@@ -281,6 +292,9 @@ for currFileName in fileList:
 	rowsToDel=[]
 	rowsToDelIssueId=[]
 	
+	#	Iterate over status column. Filter out rows with 1. invalud status 2. issues that is not in all tickets file 3. not a bug.
+	#	Those filtered out issues row index are accumulated to rowsToDel list.
+		
 	for i in range(0, len(data1[:,colIndices[COL_NAME_STATUS]])):
 		if debug:
 			print(i, ":")
@@ -306,11 +320,15 @@ for currFileName in fileList:
 			else:
 				print("--- WARNING: already marked for delete: ", i)
 	
+	#	Remove filtered out rows.
+	
 	data1 = np.delete(data1, rowsToDel, 0)		
 	
 	if debug:
 		print(data1[:,colIndices[COL_NAME_STATUS]])
 		print(data1)
+	
+	#	Construct bugs in priority order for output.
 	
 	print("Bugs in ", currFileName, ": ", len(data1[:, 0]))
 	priority_bugs_from_hotlist += len(data1[:, 0])
@@ -319,10 +337,29 @@ for currFileName in fileList:
 		priority_index='P' + str(i)
 		print(priority_index, ": ", list(data1[:, colIndices[COL_NAME_PRIORITY]]).count(priority_index))
 
-	# 	Iterate through each column and append to hostList.
-	
+	# 	Once all invalid issues aforementioned above are filtered out, export to 2-d array from np array.
+		
 	for i in range(0, len(listColumns)):
 		list2DHotList[listColumns[i]] += list(data1[:,colIndices[listColumns[i]]])
+		
+	dict2DHotListIssueIds[currFileName]= list(data1[:,colIndices[COL_NAME_ISSUE_ID]])
+	
+print("dict2DHotListIssueIds: ", dict2DHotListIssueIds)
+
+for i in (list(dict2DHotListIssueIds.keys())):
+	list2DHotListAll+=(list(dict2DHotListIssueIds[i]))
+	
+print(list2DHotListAll)	
+
+for i in list2DHotListAll:
+	if list2DHotListAll.count(i) > 1:
+		if not i in list2DHotListDups:
+			list2DHotListDups.append(i)
+	
+if list2DHotListDups:
+	print("Found following duplicate IDs: ", list2DHotListDups)
+else:
+	print("No duplicates found in host list: ")
 
 if priority_bugs_from_hotlist != len(priority_bugs):
 	print("WARNING!!!: Total bugs gathered from hotlist does not match the bugs in ", fileName)
