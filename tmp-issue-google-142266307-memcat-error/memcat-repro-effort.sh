@@ -335,6 +335,18 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done
 
+		# Issue a hot-reset.
+
+		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
+			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
+		
+			if [[ $CONFIG_GET_REL_VF_BACKGROUND -eq 0 ]] ; then
+				echo 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/hot_reset
+			else
+				echo 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/hot_reset  &
+			fi
+		done 
+
 		if [[ $counter -eq  10 ]] ; then 
 			echo "Not all relvf process finished, timeout?..."
 			echo $stat1
