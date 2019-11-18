@@ -321,6 +321,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done 
 
+		counter1=0
+
 		for  counter1 in {0..10} ; do 
 			echo "Waiting for all relvf process to finihs..."
 			stat=`ps -ax | grep relvf | grep -v grep | grep -v Done | wc -l`
@@ -335,6 +337,12 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done
 
+		if [[ $counter1 -eq  10 ]] ; then 
+			echo "Not all relvf process finished, timeout?..."
+			echo $stat1
+			exit 1
+		fi
+
 		# Issue a hot-reset.
 
 		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
@@ -346,12 +354,6 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 				echo 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/hot_reset  &
 			fi
 		done 
-
-		if [[ $counter -eq  10 ]] ; then 
-			echo "Not all relvf process finished, timeout?..."
-			echo $stat1
-			exit 1
-		fi
 
 		# getvf calls on all VM.
 
@@ -381,7 +383,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done
 
-		if [[ $counter -eq  10 ]] ; then 
+		if [[ $counter1 -eq  10 ]] ; then 
 			echo "Not all getvf process finished, timeout?..."
 			echo $stat1
 			exit 1
