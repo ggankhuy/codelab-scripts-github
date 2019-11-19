@@ -1,3 +1,13 @@
+#	Use this from the root folder of gim source.
+#	If it is run from other location, result is undefined and will fail.
+#	- unloads current gim-api, gim
+#	- build  gim-api.ko and gim.ko from gim-api and sriov_drv folder, respectively.
+#	- cp built modules from current location to kernel library location (usually: /lib/modules)
+#	using modinfo output.
+#	- reload the newly built modules.
+#	- provide checksum for copy verification.
+#	- check dmesg signature for line containing release.
+
 #for i in {0..7} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
 
 GIM_LOC=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
