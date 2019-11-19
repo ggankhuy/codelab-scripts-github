@@ -1,16 +1,32 @@
-GIM_LOC=modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2
-GIM_API_LOC=modinfo gim_api | grep filename | tr -s ' ' | cut -d ' ' -f2
-cd  gim-api
-make 
-cp ./gim-api.ko  $GIM_API_LOC
-cd ..
-cd gim
-make
-cp ./gim.ko $GIM_LOC
-for i in {0..7} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
+#for i in {0..7} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
+
+GIM_LOC=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
+GIM_API_LOC=`modinfo gim_api | grep filename | tr -s ' ' | cut -d ' ' -f2`
+PWD=`pwd`
+
 modprobe -r gim 
 modprobe -r  gim-api
+
+cd  $PWD/gim-api
+make 
+cd ..
+cd $PWD/sriov_drv
+make
+
+cd ..
+cp $PWD/gim-api/gim-api.ko $GIM_API_LOC
+cp $PWD/sriov_drv/gim.ko $GIM_LOC
+
+echo ---------------------------------------------------------------------
+echo checksum $PWD/gim-api/gim-api.ko: `md5sum $PWD/gim-api/gim-api.ko`
+echo checksum $GIM_API_LOC: `md5sum $GIM_API_LOC`
+echo ---------------------------------------------------------------------
+echo checksum $PWD/sriov_drv/gim.ko: `md5sum $PWD/sriov_drv/gim.ko`
+echo checksum $GIM_LOC: `md5sum $GIM_LOC`
+echo ---------------------------------------------------------------------
+
 dmesg --clear
 modprobe gim-api
 modprobe gim
 
+dmesg | egrep -i "production|release"
