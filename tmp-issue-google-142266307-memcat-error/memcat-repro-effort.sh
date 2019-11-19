@@ -1,29 +1,6 @@
-#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
-#  runtest 6 from autotest.
-#  This script assumes the ens3 interface is used for streaming client and server. If the interface name is different
-#  or absent, the result is unpredictable.
-#  This script assumes the VM name is structured as debian-drop-<month>-<date>-debian-gpu<No>-vf<No> format 
-#  using auto-test script. If the VM name is structured differently in any way, the result is unpredictable.
-#  If there are VMs that are created for multiple drops, either running or shutdown, the result is extremely unpredictable. 
-#  
-#  Steps this tool takes:
-#  Count all vms.
-#  Load gim.
-#  Start default network.
-#  Turn on all vms.
-#  Log on to each vm through ssh (determine ip using virsh domifaddr <vmno>
-#  update /etc/network/interfaces with static ip from pool.
-#  IP address range: 10.216.66.67-78.
-#  Assignment:
-#  
-#  ixt39  4vm-s / 4 gpu-s, 10.216.66.67-70.
-#  ixt70  8vm-s / 8 gpu-s, 10.216.66.71-78.
-
-# Turn off all vm-s
-# Set vm vcpu-s to 8 as standard.
-# Turn on all VM-s 
-
-#source ./common.sh
+#   Gibraltar 142266307 issue repro helper script.   
+#   Make sure the VMs to be tested and operated on are all running, otherwise result
+#   is untested and unpredictable.
 
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
