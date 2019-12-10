@@ -1,29 +1,6 @@
-#  This script assumes all the VMs on either ixt39 or ixt70 is created afresh using autotest scripts i.e.
-#  runtest 6 from autotest.
-#  This script assumes the ens3 interface is used for streaming client and server. If the interface name is different
-#  or absent, the result is unpredictable.
-#  This script assumes the VM name is structured as debian-drop-<month>-<date>-debian-gpu<No>-vf<No> format 
-#  using auto-test script. If the VM name is structured differently in any way, the result is unpredictable.
-#  If there are VMs that are created for multiple drops, either running or shutdown, the result is extremely unpredictable. 
-#  
-#  Steps this tool takes:
-#  Count all vms.
-#  Load gim.
-#  Start default network.
-#  Turn on all vms.
-#  Log on to each vm through ssh (determine ip using virsh domifaddr <vmno>
-#  update /etc/network/interfaces with static ip from pool.
-#  IP address range: 10.216.66.67-78.
-#  Assignment:
-#  
-#  ixt39  4vm-s / 4 gpu-s, 10.216.66.67-70.
-#  ixt70  8vm-s / 8 gpu-s, 10.216.66.71-78.
-
-# Turn off all vm-s
-# Set vm vcpu-s to 8 as standard.
-# Turn on all VM-s 
-
-#source ./common.sh
+#   Gibraltar 142266307 issue repro helper script.   
+#   Make sure the VMs to be tested and operated on are all running, otherwise result
+#   is untested and unpredictable.
 
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
@@ -321,6 +298,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done 
 
+		counter1=0
+
 		for  counter1 in {0..10} ; do 
 			echo "Waiting for all relvf process to finihs..."
 			stat=`ps -ax | grep relvf | grep -v grep | grep -v Done | wc -l`
@@ -335,11 +314,23 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done
 
-		if [[ $counter -eq  10 ]] ; then 
+		if [[ $counter1 -eq  10 ]] ; then 
 			echo "Not all relvf process finished, timeout?..."
 			echo $stat1
 			exit 1
 		fi
+
+		# Issue a hot-reset.
+
+		for (( counter1=0; counter1 < $TOTAL_VMS; counter1++ ))  ; do
+			if [[ $DEBUG -eq 1 ]] || [[ $DEBUG_SYSFS -eq 1 ]] ; then echo "0000:${ARR_VM_VF[$counter1]} to /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/relvf" ; fi ;
+		
+			if [[ $CONFIG_GET_REL_VF_BACKGROUND -eq 0 ]] ; then
+				echo 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/hot_reset
+			else
+				echo 1 > /sys/bus/pci/devices/0000:${ARR_VM_PF[$counter1]}/hot_reset  &
+			fi
+		done 
 
 		# getvf calls on all VM.
 
@@ -369,7 +360,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 			fi
 		done
 
-		if [[ $counter -eq  10 ]] ; then 
+		if [[ $counter1 -eq  10 ]] ; then 
 			echo "Not all getvf process finished, timeout?..."
 			echo $stat1
 			exit 1
