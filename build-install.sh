@@ -23,7 +23,7 @@ GIM_LOC_SRC=$PWD/sriov_drv
 #	Set 1 to build install libgv.
 #	Set 0 to build install gim.
 
-OPTION_LIBGV=1
+OPTION_LIBGV=0
 
 modprobe -r gim 
 
@@ -67,3 +67,4 @@ fi
 
 modprobe gim
 dmesg | egrep -i "production|release"
+depmod
