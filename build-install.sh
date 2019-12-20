@@ -8,7 +8,7 @@
 #	- provide checksum for copy verification.
 #	- check dmesg signature for line containing release.
 
-#for i in {0..7} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
+#for i in {1..4} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
 
 GIM_LOC_DST=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
 
@@ -23,13 +23,13 @@ GIM_LOC_SRC=$PWD/sriov_drv
 #	Set 1 to build install libgv.
 #	Set 0 to build install gim.
 
-OPTION_LIBGV=0
+OPTION_LIBGV=1
 
 modprobe -r gim 
 
 if [[ $? -ne 0 ]] ; then 
-	echo "Failed to unload!!! Are VM-s running?"
-	exit 1
+	echo "Failed to unload!!! Are VM-s unning?"
+	#exit 1
 fi
 
 if [[ OPTION_LIBGV -eq 0 ]] ; then
