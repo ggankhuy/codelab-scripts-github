@@ -10,7 +10,18 @@
 
 #for i in {1..4} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
 
-GIM_LOC_DST=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
+#   This does not work when no gim is loaded or present before. Keep it just in case.
+#GIM_LOC_DST=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
+
+GIM_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/sriov_drv
+GIM_API_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/gim-api
+
+mkdir -p $GIM_LOC_DST
+mkdir -p $GIM_API_LOC_DST
+
+echo "GIM_LOC_DST: $GIM_LOC_DST"
+echo "GIM_API_LOC_DST: $GIM_API_LOC_DST"
+sleep 10
 
 if [[ OPTION_LIBGV != 0 ]] ; then
 	GIM_API_LOC=`modinfo gim_api | grep filename | tr -s ' ' | cut -d ' ' -f2`
@@ -18,6 +29,7 @@ fi
 
 PWD=`pwd`
 GIM_LOC_SRC=$PWD/sriov_drv
+GIM_API_LOC_SRC=$PWD/gim_api
 
 #	For libgv build and install. (Excludes gim-api).
 #	Set 1 to build install libgv.
@@ -65,6 +77,7 @@ if [[ OPTION_LIBGV != 0 ]] ; then
 	modprobe gim-api
 fi
 
-modprobe gim
 dmesg | egrep -i "production|release"
 depmod
+modprobe gim
+lsmod | grep gim
