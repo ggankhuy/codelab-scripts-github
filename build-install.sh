@@ -10,20 +10,19 @@
 
 #for i in {1..4} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
 
-OPTION_LIBGV=1
+OPTION_LIBGV=0
 
 #   This does not work when no gim is loaded or present before. Keep it just in case.
 #GIM_LOC_DST=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`
 
-GIM_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/sriov_drv
-GIM_API_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/gim-api
+GIM_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/sriov_drv/
+GIM_API_LOC_DST=/lib/modules/`uname -r`/kernel/drivers/gim-api/
 
 mkdir -p $GIM_LOC_DST
 mkdir -p $GIM_API_LOC_DST
 
 echo "GIM_LOC_DST: $GIM_LOC_DST"
 echo "GIM_API_LOC_DST: $GIM_API_LOC_DST"
-sleep 10
 
 if [[ OPTION_LIBGV != 0 ]] ; then
 	GIM_API_LOC=`modinfo gim_api | grep filename | tr -s ' ' | cut -d ' ' -f2`
@@ -49,10 +48,11 @@ if [[ OPTION_LIBGV -eq 0 ]] ; then
 	cd  $PWD/gim-api
 	make 
 	cd ..
-	cp $PWD/gim-api/gim-api.ko $GIM_API_LOC
+	echo cp $PWD/gim-api/gim-api.ko $GIM_API_LOC_DST
+	cp $PWD/gim-api/gim-api.ko $GIM_API_LOC_DST
 	echo ---------------------------------------------------------------------
 	echo checksum $PWD/gim-api/gim-api.ko: `md5sum $PWD/gim-api/gim-api.ko`
-	echo checksum $GIM_API_LOC: `md5sum $GIM_API_LOC`
+	echo checksum $GIM_API_LOC_DST: `md5sum $GIM_API_LOC_DST/gim-api.ko`
 elif [[ OPTION_LIBGV -eq 1 ]] ; then
 	GIM_LOC_SRC=$PWD/
 else
@@ -64,11 +64,12 @@ cd $GIM_LOC_SRC
 make
 
 cd ..
+echo cp $GIM_LOC_SRC/gim.ko $GIM_LOC_DST
 cp $GIM_LOC_SRC/gim.ko $GIM_LOC_DST
 
 echo ---------------------------------------------------------------------
 echo checksum $GIM_LOC_SRC/gim.ko: `md5sum $GIM_LOC_SRC/gim.ko`
-echo checksum $GIM_LOC_DST: `md5sum $GIM_LOC_DST`
+echo checksum $GIM_LOC_DST: `md5sum $GIM_LOC_DST/gim.ko`
 echo ---------------------------------------------------------------------
 
 dmesg --clear

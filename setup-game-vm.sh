@@ -115,7 +115,7 @@ TOTAL_IPS=${#CONFIG_GUEST_IP_RANGE[@]}
 
 echo "HOST IP is set to: $CONFIG_HOST_IP"
 echo "GUEST IP RANGE is set to: $CONFIG_GUEST_IP_RANGE"
-apt install sshpass -y
+#apt install sshpass -y
 
 if [[ $? -ne 0 ]] ; then
 	echo "ERROR. Failed to install sshpass package."
