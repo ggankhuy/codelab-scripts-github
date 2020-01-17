@@ -24,7 +24,7 @@ mkdir -p $GIM_API_LOC_DST
 echo "GIM_LOC_DST: $GIM_LOC_DST"
 echo "GIM_API_LOC_DST: $GIM_API_LOC_DST"
 
-if [[ OPTION_LIBGV != 0 ]] ; then
+if [[ OPTION_LIBGV == 0 ]] ; then
 	GIM_API_LOC=`modinfo gim_api | grep filename | tr -s ' ' | cut -d ' ' -f2`
 fi
 
@@ -74,7 +74,7 @@ echo ---------------------------------------------------------------------
 
 dmesg --clear
 
-if [[ OPTION_LIBGV != 0 ]] ; then
+if [[ OPTION_LIBGV == 0 ]] ; then
 	modprobe gim-api
 fi
 
