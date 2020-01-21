@@ -7,9 +7,9 @@ dpkg -i  $CONFIG_MEMCAT_LOC/grtev4-x86-runtimes_1.0-145370904_amd64.deb
 cd $CONFIG_MEMCAT_LOC
 modprobe amdkfd
 modprobe amdgpu
-common_runtime_setup novce
-sudo chmod -R g=u /usr/local/cloudcast/
-sudo chmod -R o=u /usr/local/cloudcast/
+#common_runtime_setup novce
+#sudo chmod -R g=u /usr/local/cloudcast/
+#sudo chmod -R o=u /usr/local/cloudcast/
 
 for (( i=0 ; i < 100; i ++ )) 
 do
