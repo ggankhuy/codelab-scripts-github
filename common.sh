@@ -17,7 +17,8 @@ REPO_SERVER_IP="10.217.74.231"
 REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
-OPTION_DHCLIENT_ENS3=1
+OPTION_DHCLIENT_EXT_INT=1
+CONFIG_EXT_INT=ens7
 
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
@@ -282,17 +283,17 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
-	if [[ $OPTION_DHCLIENT_ENS3 -eq 1 ]] ; then
-		sudo dhclient ens3
+	if [[ $OPTION_DHCLIENT_EXT_INT -eq 1 ]] ; then
+		sudo dhclient $CONFIG_EXT_INT
 	else
-		sudo ifup ens3
+		sudo ifup $CONFIG_EXT_INT
 	fi
 
 	if [[ $? -ne 0 ]] ; then
-        	echo "Warning: dhclient or ifup ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+        	echo "Warning: dhclient or ifup $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
 	fi
 	
-	external_ip=`ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+	external_ip=`ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
 	echo "external IP: " $external_ip
 	
 	if [[ -z $external_ip ]] ; then
@@ -336,12 +337,12 @@ function process_t1t2 ()
         sudo mkdir -p $LOG_DIR
 	sudo chmod 777 $LOG_DIR
 
-	if [[ $OPTION_DHCLIENT_ENS3 -eq 1 ]] ;  then
-		echo "Configuring ens3..."
-		sudo dhclient ens3
+	if [[ $OPTION_DHCLIENT_EXT_INT -eq 1 ]] ;  then
+		echo "Configuring $CONFIG_EXT_INT..."
+		sudo dhclient $CONFIG_EXT_INT
 	else
-		echo "Not configuring ens3..."
-		sudo ifup ens3
+		echo "Not configuring $CONFIG_EXT_INT..."
+		sudo ifup $CONFIG_EXT_INT
 	fi
 
 	echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
@@ -357,10 +358,10 @@ function process_t1t2 ()
 	fi
 
         if [[ $? -ne 0 ]] ; then
-                echo "Warning: dhclient ens3 failed. ens3 interface might not have been able to get DHCP IP..."
+                echo "Warning: dhclient $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
         fi
 
-        external_ip=`sudo ifconfig ens3 | grep "inet " | tr -s " " | cut -d ' ' -f3`
+        external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
         echo "external IP: " $external_ip
 
         if [[ -z $external_ip ]] ; then
