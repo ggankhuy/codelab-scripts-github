@@ -10,7 +10,7 @@
 
 #for i in {1..4} ; do virsh shutdown debian-drop-2019-q3-rc7-gpu$i-vf00 ; done;
 
-OPTION_LIBGV=0
+OPTION_LIBGV=1
 
 #   This does not work when no gim is loaded or present before. Keep it just in case.
 #GIM_LOC_DST=`modinfo gim | grep filename | tr -s ' ' | cut -d ' ' -f2`

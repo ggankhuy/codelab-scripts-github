@@ -39,6 +39,11 @@ CONFIG_DAYTONAX1_GUEST_IP_RANGE=(\
 "0.0.0.0" \
 "0.0.0.0" \
 "0.0.0.0")
+CONFIG_DAYTONAX2_GUEST_IP_RANGE=(\
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0")
 CONFIG_IXT39_GUEST_IP_RANGE=(\
 "10.216.66.67" \
 "10.216.66.68" \
@@ -53,6 +58,7 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
+CONFIG_VATS2_SUPPORT=1
 
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
@@ -127,7 +133,14 @@ fi
 #  
 #  ixt39  4vm-s / 4 gpu-s, 10.216.66.67-70.
 
-TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | grep running | wc -l"`
+if [[ $CONFIG_VATS2_SUPPORT -eq 1 ]] ; then
+	VM_GREP_PATTERN=vats
+else
+	VM_GREP_PATTERN=gpu
+fi
+
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l"`
+
 echo "TOTAL_VMS: $TOTAL_VMS"
 
 if [[ $DEBUG -eq 1 ]] ; then
@@ -158,8 +171,8 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	VM_INDEX=$(($n+1))
 	echo "VM_INDEX: $VM_INDEX"
 	
-	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
-	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep gpu | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
 	VM_IPS=`echo ${VM_IPS[@]} $VM_IP`
 	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
