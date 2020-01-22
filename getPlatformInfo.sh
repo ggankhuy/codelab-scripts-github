@@ -23,7 +23,7 @@ source common.sh
 p1=$1
 SINGLE_BAR='---------------------------------------'
 DOUBLE_BAR='======================================='
-apt install virt-what sshpass -y 
+# apt install virt-what sshpass -y 
 
 if [[ $?  -ne 0 ]] ; then
 	echo "ERROR: Failed to install packages..."

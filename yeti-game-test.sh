@@ -47,7 +47,7 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=3
+CONFIG_ITERATION_3DMARK=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -147,13 +147,13 @@ else
 	echo "OK, DIR_YETI_CONTENT_BUNDLE: $DIR_YETI_CONTENT_BUNDLE"
 fi
 
-#	In bashrc, cd into /git.co/gg-git-repo/
+#	In bashrc, cd into /git.co/ad-hoc-scripts/
 
-ret=`cat ~/.bashrc  | grep "cd /git.co/gg-git-repo"`
+ret=`cat ~/.bashrc  | grep "cd /git.co/ad-hoc-scripts"`
 
 if [[ -z $ret  ]] ; then
-        echo "Inserting cd /git.co/gg-git-repo to bash..."
-        echo "cd /git.co/gg-git-repo" >> ~/.bashrc
+        echo "Inserting cd /git.co/ad-hoc-scripts to bash..."
+        echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
 fi
 
 #	Load amdgpu, kfd driver:
