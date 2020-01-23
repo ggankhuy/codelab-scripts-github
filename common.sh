@@ -198,24 +198,33 @@ function common_runtime_setup ()
 }
 
 function set_repo_server() {
-	# Setup ggp-eng-bundle in /usr/local/cloudcast.
-
 	echo "Determining reachable repo server..."
 
-	for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ )) 
-	do
-		ping -c 4 ${REPO_SERVER_IPS[$i]}
- 		stat=$?
+        # Check if it is already setup in ~/.bashrc
 
-		if [[ $stat -eq 0 ]] ; then
-			echo "Found reachable repo server: ${REPO_SERVER_IPS[$i]}"
-			REPO_SERVER_IP=${REPO_SERVER_IPS[$i]}
-			break
-		fi
-	done
+        REPO_SERVER_IP_BASHRC=`cat ~/.bashrc | grep REPO_SERVER_IP`
 
-	echo "repo server is set to: $REPO_SERVER_IP"
-	sleep 5
+        if [[ -z $REPO_SERVER_IP_BASHRC ]] ; then
+                echo "REPO_SERVER_IP is not setup in bashrc."
+
+                for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ ))
+                do
+                        ping -c 4 ${REPO_SERVER_IPS[$i]}
+                        stat=$?
+
+                        if [[ $stat -eq 0 ]] ; then
+                                echo "Found reachable repo server: ${REPO_SERVER_IPS[$i]}"
+                                REPO_SERVER_IP=${REPO_SERVER_IPS[$i]}
+                                break
+                        fi
+                done
+
+                echo "repo server is set to: $REPO_SERVER_IP"
+                echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+        else
+                echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
+                REPO_SERVER_IP=$REPO_SERVER_IP_BASHRC
+        fi
 }
 function common_setup () {
 	clear
