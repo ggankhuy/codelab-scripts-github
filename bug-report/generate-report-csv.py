@@ -439,7 +439,8 @@ issueIdsRecent=[]
 
 for i in range(0, len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]])):
 	currTicketDate=data[i,colIndicesMain[COL_NAME_CREATED_TIME]]
-	datetimeCurrTicket=datetime.strptime(currTicketDate, '%Y-%m-%d %H:%M:%S')
+	print("CurrTicketDate: ", currTicketDate)
+	datetimeCurrTicket=datetime.strptime(currTicketDate, '%m/%d/%Y %H:%M')
 	delta=(datetimeToday-datetimeCurrTicket).days
 	
 	if debug:
