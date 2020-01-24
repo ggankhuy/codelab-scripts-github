@@ -223,7 +223,10 @@ function set_repo_server() {
                 echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
         else
                 echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
-                REPO_SERVER_IP=$REPO_SERVER_IP_BASHRC
+                REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
+                echo "REPO_SERVER_IP from bashrc is set to: $REPO_SERVER_IP"
+                sleep 10
+
         fi
 }
 function common_setup () {
