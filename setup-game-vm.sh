@@ -33,7 +33,13 @@ CONFIG_IXT21_HOST_IP="10.216.66.52"
 CONFIG_IXT25_HOST_IP="10.216.66.53"
 CONFIG_DAYTONAX1_HOST_IP="10.216.52.34"
 CONFIG_DAYTONAX2_HOST_IP="10.216.52.30"
+CONFIG_GB02_HOST_IP="10.216.52.62"
 CONFIG_HOST_IP=0
+CONFIG_GB02_IP_GUEST_IP_RANGE=(\
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0")
 CONFIG_DAYTONAX1_GUEST_IP_RANGE=(\
 "0.0.0.0" \
 "0.0.0.0" \
@@ -102,16 +108,14 @@ elif [[ $1 == "ixt70" ]] ; then
 	CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "ixt21" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT21_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "ixt25" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT25_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "daytonax1" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX1_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "daytonax2" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX2_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
+elif [[ $1 == "gb02" ]] ; then
+	CONFIG_HOST_IP=$CONFIG_GB02_HOST_IP
 else
 	echo "ERROR: Invalid parameter."
 	exit 1
@@ -121,7 +125,7 @@ TOTAL_IPS=${#CONFIG_GUEST_IP_RANGE[@]}
 
 echo "HOST IP is set to: $CONFIG_HOST_IP"
 echo "GUEST IP RANGE is set to: $CONFIG_GUEST_IP_RANGE"
-#apt install sshpass -y
+apt install sshpass -y
 
 if [[ $? -ne 0 ]] ; then
 	echo "ERROR. Failed to install sshpass package."
