@@ -18,7 +18,12 @@ REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "1
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
-CONFIG_EXT_INT=ens7
+
+#	qts servers: ens3
+# daytona x2: ens7
+# gb 02: ens8
+
+CONFIG_EXT_INT=ens8
 
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
@@ -225,8 +230,6 @@ function set_repo_server() {
                 echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
                 REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
                 echo "REPO_SERVER_IP from bashrc is set to: $REPO_SERVER_IP"
-                sleep 10
-
         fi
 }
 function common_setup () {
