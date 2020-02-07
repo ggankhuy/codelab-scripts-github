@@ -17,4 +17,21 @@ do
     sleep 1
 done
 
+cd  ..
 
+amd_gerrit_repos=(\
+ssh://gerritgit/gpu-virtual/ec/driver/libgv \
+ssh://gerritgit/gpu-virtual/ec/tool/smi-lib \
+)
+
+mkdir gerritt
+cd gerritt
+
+for i in ${amd_gerrit_repos[@]}
+do
+    echo $i
+    git clone $i
+    sleep 1
+done
+
+cd ..
