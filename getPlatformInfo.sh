@@ -75,6 +75,22 @@ fi
 clear
 echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
+# Set distribution specific commands here.
+DISTRO=`cat /etc/os-release | grep ^ID=  |  cut -d '=' -f2`
+if [[ -z $DISTRO ]] ; then
+	echo "Can not determine which distribution is."
+	exit 0
+fi
+
+if [[ $DISTRO == "ubuntu" ]] ; then
+	echo "Ubuntu distribution detected."
+elif [[ $DISTRO == "cent" ]] ; then
+	echo "CENTOS/REDHAT distribution detected."
+else
+	echo "Unknown distribution"
+	exit 0
+fi
+
 # -----------------------------------------
 # Get host information
 # -----------------------------------------
@@ -114,6 +130,10 @@ if [[ -z `virt-what` ]] ; then
 		exit 1
 	fi
 	vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	if [[ ! -z $? ]] ; then
+		echo "Use virsh to determine running VM-s indices."
+		exit 1
+	fi
 	dmesg >> $CONFIG_FILE_DMESG_HOST
 else
 	echo "ERROR: Please run from host..." 
@@ -152,7 +172,7 @@ echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
 echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
-echo $CONFIG_PATH_PLAT_INFO:
+echo LOG FILES ARE STORED AT: $CONFIG_PATH_PLAT_INFO:
 ls -l $CONFIG_PATH_PLAT_INFO
 
 
