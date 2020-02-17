@@ -37,11 +37,19 @@
 #		OS kernel version
 #		drop version (/drop/<dropname>)
 
-source common.sh
+#source common.sh
 p1=$1
 SINGLE_BAR='---------------------------------------'
 DOUBLE_BAR='======================================='
-# apt install virt-what sshpass -y 
+DATE=`date +%Y%m%d-%H-%M-%S`
+CONFIG_PATH_PLAT_INFO=/plat-info/$DATE/
+CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$DATE-platform-info.log
+CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-host.log
+CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
+
+mkdir -p $CONFIG_PATH_PLAT_INFO
+
+apt install virt-what sshpass -y 
 
 if [[ $?  -ne 0 ]] ; then
 	echo "ERROR: Failed to install packages..."
@@ -58,73 +66,87 @@ if [[ -z `which virt-what` ]] ; then
 fi
 
 clear
-echo $DOUBLE_BAR
+echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+
+# -----------------------------------------
+# Get host information
+# -----------------------------------------
 
 if [[ -z `virt-what` ]] ; then
         echo `hostname`
-	echo "HOST: "
-	echo $SINGLE_BAR
-	echo "HOST IP:"		
-	echo `ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1`
-	echo $SINGLE_BAR
-	echo "HOST OS: 		"`lsb_release --all | grep -i description`
-	echo $SINGLE_BAR
-	echo "HOST KERNEL: 	"`uname -r`
+	echo "HOST: " | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST IP:" | tee $CONFIG_FILE_PLAT_INFO
+	echo `ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST OS:          "`lsb_release --all | grep -i description` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST KERNEL: 	"`uname -r` | tee $CONFIG_FILE_PLAT_INFO
 
-	echo $SINGLE_BAR
-	echo "HOST GPU: "	
-	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus"
-	cat /sys/bus/pci/drivers/gim/gpubios
-        echo "HOST GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"`
-        echo $SINGLE_BAR
-        echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"`
-        echo $SINGLE_BAR
-        echo "HOST GIM?:        "`modinfo gim | egrep "^filename|^version"`
-        echo $SINGLE_BAR
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST GPU: " | tee $CONFIG_FILE_PLAT_INFO
+	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus" | tee $CONFIG_FILE_PLAT_INFO
+	cat /sys/bus/pci/drivers/gim/gpubios | tee $CONFIG_FILE_PLAT_INFO
+        echo "HOST GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"` | tee $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+        echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+        echo "HOST GIM?:        "`modinfo gim | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
-	echo $SINGLE_BAR
-	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version`
-	echo $SINGLE_BAR
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
 	#  ssh to vm, vm number is specified in $1.
 	
 	if [[ -z $1 ]] ; then
-		echo $DOUBLE_BAR
-		echo "ERROR: VM No. is not specified. Use virsh list to get index" 
-		echo $DOUBLE_BAR
+		echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+		echo "ERROR: VM No. is not specified. Use virsh list to get index"  | tee $CONFIG_FILE_PLAT_INFO
+		echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 		exit 1
 	fi
 	vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	dmesg >> $CONFIG_FILE_DMESG_HOST
 else
-	echo "ERROR: Please run from host..."
+	echo "ERROR: Please run from host..." 
 	exit 1
 fi
 
-echo $DOUBLE_BAR
-echo "VM IP: 		$vmIp"
+# -----------------------------------------
+# Get guest information
+# -----------------------------------------
+
+echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM IP:" 		$vmIp| tee $CONFIG_FILE_PLAT_INFO
 
 if [[ -z $vmIp ]] ; then
 	echo "Error: vmIp is empty. Failed to get address, did you specify VM index correctly?"
 	exit 1
 fi
 
-echo $SINGLE_BAR
-echo "VM OS: 		"`sshpass -p amd1234 ssh root@$vmIp 'lsb_release --all | grep -i description'`
-echo $SINGLE_BAR
-echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'`
-echo $SINGLE_BAR
-echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'`
-echo $SINGLE_BAR
-echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdgpu"'`
-echo $SINGLE_BAR
-echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd"'`
-echo $SINGLE_BAR
-echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'`
-echo $SINGLE_BAR
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM OS: 		"`sshpass -p amd1234 ssh root@$vmIp 'lsb_release --all | grep -i description'`| tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'` | tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'` | tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdgpu"'` | tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd"'` | tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee $CONFIG_FILE_PLAT_INFO
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
 
-echo $DOUBLE_BAR
 
+echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+
+echo $CONFIG_PATH_PLAT_INFO:
+ls -l $CONFIG_PATH_PLAT_INFO
 
 
 
