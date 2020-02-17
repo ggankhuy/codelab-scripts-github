@@ -46,6 +46,7 @@ CONFIG_PATH_PLAT_INFO=/plat-info/$DATE/
 CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$DATE-platform-info.log
 CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-host.log
 CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
+CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-clinfo-$p1.log
 
 if [[ $p1 == "--help" ]] ; then
 	clear
@@ -130,7 +131,7 @@ if [[ -z `virt-what` ]] ; then
 		vmpIp=""
 	else
 		vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-		if [[ ! -z $? ]] ; then
+		if [[ -z $vmIp ]] ; then
 			echo "Use virsh to determine running VM-s indices."
 		exit 1
 		fi
@@ -166,6 +167,8 @@ else
 	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	sshpass -p amd1234 ssh root@$vmIp 'clinfo' >  $CONFIG_FILE_CLINFO_GUEST
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 fi
 
