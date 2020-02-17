@@ -1,4 +1,22 @@
-#	Python 3 based script to collect information.
+#	Python 3 based script to cosystem llect information.
+# Compatibility:
+# Ubuntu 16.x, 19.x 
+# Centos, Redhat (future enhancement).
+# Requirement:
+# For VM information, virsh utility is used.
+# For VEGA10 cards, the sysfs files queried.
+# For NAVIx cards, the libsmi calls are queried. (future enhancement).
+
+#	Uti/clitiesommands used:
+# virsh (vm info)
+# virt-what (check virtual env)
+# dmidecode (smbios)
+# ifconfig (network)
+# modinfo
+# hostname
+# uname
+# lsb_release 
+# lsmod
 
 #	HOST SYSTEMS: 
 #	Host OS (if launched from HOS OS, ignored if launched from VM) 
