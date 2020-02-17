@@ -47,6 +47,13 @@ CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$DATE-platform-info.log
 CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-host.log
 CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
 
+if [[ $p1 == "--help" ]] ; then
+	clear
+	echo "usage: "
+	echo "$0 - get host information without specifying VM"
+	echo "$0 <vm_index> get host and guest information. Use virsh to get vm index."
+	exit 0
+fi
 mkdir -p $CONFIG_PATH_PLAT_INFO
 
 apt install virt-what sshpass -y 
