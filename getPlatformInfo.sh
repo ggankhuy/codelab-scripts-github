@@ -47,6 +47,7 @@ CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$DATE-platform-info.log
 CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-host.log
 CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
 CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-clinfo-$p1.log
+CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-modinfo-amdgpu-$p1.log
 
 if [[ $p1 == "--help" ]] ; then
 	clear
@@ -160,15 +161,13 @@ else
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdgpu"'` | tee $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	echo "VM GPUDRIVER: 	"`sshpass -p amd1234 ssh root@$vmIp 'lsmod | egrep "^amdkfd"'` | tee $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+	sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' >  $CONFIG_FILE_MODINFO_AMDGPU_GUEST
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	sshpass -p amd1234 ssh root@$vmIp 'clinfo' >  $CONFIG_FILE_CLINFO_GUEST
+	echo "CLINFO VERSION:" `sshpass -p amd1234 ssh root@$vmIp 'clinfo -v'` | tee  $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 fi
 
