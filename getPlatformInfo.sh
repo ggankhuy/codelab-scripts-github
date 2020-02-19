@@ -43,11 +43,19 @@ SINGLE_BAR='---------------------------------------'
 DOUBLE_BAR='======================================='
 DATE=`date +%Y%m%d-%H-%M-%S`
 CONFIG_PATH_PLAT_INFO=/plat-info/$DATE/
-CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$DATE-platform-info.log
-CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-host.log
-CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
-CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-clinfo-$p1.log
-CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-modinfo-amdgpu-$p1.log
+CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-platform-info.log
+CONFIG_SUBDIR_HOST=host
+CONFIG_SUBDIR_GUEST=guest
+
+CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmesg-host.log
+CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-syslog-host.log
+CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-host.log
+
+CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-guest-$p1.log
+CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-clinfo-$p1.log
+CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-modinfo-amdgpu-$p1.log
+CONFIG_FILE_SYSLOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-syslog-guest.log
+CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-guest.log
 
 function host_guest_1()  {
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
@@ -57,11 +65,23 @@ function host_guest_1()  {
 	echo "HOST G++ VER: " `g++ --version | grep g++` | tee $CONFIG_FILE_PLAT_INFO
 	echo "HOST C++ VER: " `c++ --version | grep c++` | tee $CONFIG_FILE_PLAT_INFO
 	echo "HOST CC VER: " `cc --version | grep cc` | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST HCC VER: " `hcc --version | grep hcc` | tee $CONFIG_FILE_PLAT_INFO
 	echo "CLANG VER: " `clang --version | grep clang` | tee $CONFIG_FILE_PLAT_INFO
 	echo "VIRT. SW VER: " `virsh --version` | tee $CONFIG_FILE_PLAT_INFO
 	
 }
 
+function host_guest_2() {
+	if [[ -z `virt-what` ]] ; then
+		dmesg >> $CONFIG_FILE_DMESG_HOST
+		cat /var/log/syslog >> $CONFIG_FILE_SYSLOG_HOST
+		cat  /var/log/kern.log >> $CONFIG_FILE_KERN_LOG_HOST
+	else
+		sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/syslog' >  $CONFIG_FILE_SYSLOG_GUEST
+		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/kern.log' >  $CONFIG_FILE_KERNLOG_GUEST
+	fi
+}
 
 if [[ $p1 == "--help" ]] ; then
 	clear
@@ -70,7 +90,6 @@ if [[ $p1 == "--help" ]] ; then
 	echo "$0 <vm_index> get host and guest information. Use virsh to get vm index."
 	exit 0
 fi
-mkdir -p $CONFIG_PATH_PLAT_INFO
 
 apt install virt-what sshpass -y 
 
@@ -106,6 +125,9 @@ else
 	echo "Unknown distribution"
 	exit 0
 fi
+
+mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST
+mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST
 
 # -----------------------------------------
 # Get host information
@@ -148,7 +170,7 @@ if [[ -z `virt-what` ]] ; then
 		exit 1
 		fi
 	fi
-	dmesg >> $CONFIG_FILE_DMESG_HOST
+	host_guest_2
 else
 	echo "ERROR: Please run from host..." 
 	exit 1
@@ -174,7 +196,7 @@ else
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+	host_guest_2
 	sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' >  $CONFIG_FILE_MODINFO_AMDGPU_GUEST
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	sshpass -p amd1234 ssh root@$vmIp 'clinfo' >  $CONFIG_FILE_CLINFO_GUEST
@@ -185,8 +207,8 @@ fi
 
 echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
-echo LOG FILES ARE STORED AT: $CONFIG_PATH_PLAT_INFO:
-ls -l $CONFIG_PATH_PLAT_INFO
+echo LOG FILES: $CONFIG_PATH_PLAT_INFO:
+tree $CONFIG_PATH_PLAT_INFO
 
 
 
