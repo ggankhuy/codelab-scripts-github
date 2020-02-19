@@ -49,6 +49,20 @@ CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-guest-$p1.log
 CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-dmesg-clinfo-$p1.log
 CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$DATE-modinfo-amdgpu-$p1.log
 
+function host_guest_1()  {
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST GCC VER: " `gcc --version | grep gcc` | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST G++ VER: " `g++ --version | grep g++` | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST C++ VER: " `c++ --version | grep c++` | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST CC VER: " `cc --version | grep cc` | tee $CONFIG_FILE_PLAT_INFO
+	echo "CLANG VER: " `clang --version | grep clang` | tee $CONFIG_FILE_PLAT_INFO
+	echo "VIRT. SW VER: " `virsh --version` | tee $CONFIG_FILE_PLAT_INFO
+	
+}
+
+
 if [[ $p1 == "--help" ]] ; then
 	clear
 	echo "usage: "
@@ -117,11 +131,8 @@ if [[ -z `virt-what` ]] ; then
         echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
         echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
         echo "HOST GIM?:        "`modinfo gim | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
-        echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
-	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	host_guest_1
 
 	#  ssh to vm, vm number is specified in $1.
 	
@@ -169,6 +180,7 @@ else
 	sshpass -p amd1234 ssh root@$vmIp 'clinfo' >  $CONFIG_FILE_CLINFO_GUEST
 	echo "CLINFO VERSION:" `sshpass -p amd1234 ssh root@$vmIp 'clinfo -v'` | tee  $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	host_guest_1
 fi
 
 echo $DOUBLE_BAR | tee $CONFIG_FILE_PLAT_INFO
