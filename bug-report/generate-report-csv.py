@@ -440,7 +440,12 @@ issueIdsRecent=[]
 for i in range(0, len(data[:,colIndicesMain[COL_NAME_ISSUE_ID]])):
 	currTicketDate=data[i,colIndicesMain[COL_NAME_CREATED_TIME]]
 	print("CurrTicketDate: ", currTicketDate)
-	datetimeCurrTicket=datetime.strptime(currTicketDate, '%m/%d/%Y %H:%M')
+	
+	try:
+		datetimeCurrTicket=datetime.strptime(currTicketDate, '%m/%d/%Y %H:%M')
+	except Exception as msg:
+		datetimeCurrTicket=datetime.strptime(currTicketDate, '%Y-%m-%d %H:%M:%S')
+
 	delta=(datetimeToday-datetimeCurrTicket).days
 	
 	if debug:
@@ -468,11 +473,12 @@ for i in range(0, len(list2DAllTickets[COL_NAME_ISSUE_ID])):
 				except Exception as msg:
 					print("Error: Can not append: ", list2DAllTickets[j][i])
 					continue
-
-if sum(list2DTicketsRecent7days[COL_NAME_ISSUE_ID]):
-	print(list2DTicketsRecent7days)
-else:
-	print("None.")
+print(list2DTicketsRecent7days)
+					
+#if sum(list2DTicketsRecent7days[COL_NAME_ISSUE_ID]):
+#	print(list2DTicketsRecent7days)
+#else:
+#	print("None.")
 
 
 
