@@ -167,10 +167,15 @@ if [[ -z `virt-what` ]] ; then
 		vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
 		if [[ -z $vmIp ]] ; then
 			echo "Use virsh to determine running VM-s indices."
-		exit 1
 		fi
 	fi
 	host_guest_2
+
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "GIM|LIBGV FIRMWARE LOADED:"
+	dmesg | egrep -i " AMD GIM start to probe device|loaded.*version"
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	
 else
 	echo "ERROR: Please run from host..." 
 	exit 1
