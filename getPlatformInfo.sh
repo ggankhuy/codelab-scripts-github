@@ -143,7 +143,17 @@ if [[ -z `virt-what` ]] ; then
 	echo "HOST OS:          "`lsb_release --all | grep -i description` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "HOST KERNEL: 	"`uname -r` | tee $CONFIG_FILE_PLAT_INFO
-
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST CPU: " `cat /proc/cpuinfo | grep "model name" | head -1`| tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST CPU LCPU COUNT: " `cat /proc/cpuinfo | grep "model name" | wc -l`| tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST CPU SOCKETS: " `dmidecode -t 4 | grep "Socket Designation" | wc -l` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo -e "HOST MEMORY (IN GB): " 
+	free -g
+	# used instead free
+	#cat /proc/meminfo | grep MemTotal
+	#cat /proc/meminfo | grep MemFree
+	#cat /proc/meminfo | grep MemAvail
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "HOST GPU: " | tee $CONFIG_FILE_PLAT_INFO
 	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus" | tee $CONFIG_FILE_PLAT_INFO
