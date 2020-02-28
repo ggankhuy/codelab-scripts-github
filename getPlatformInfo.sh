@@ -175,7 +175,6 @@ if [[ -z `virt-what` ]] ; then
 	echo "GIM|LIBGV FIRMWARE LOADED:"
 	dmesg | egrep -i " AMD GIM start to probe device|loaded.*version"
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	
 else
 	echo "ERROR: Please run from host..." 
 	exit 1
