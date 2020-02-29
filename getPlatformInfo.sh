@@ -155,9 +155,6 @@ if [[ -z `virt-what` ]] ; then
 	echo -e "HOST MEMORY (IN GB): " 
 	free -g
 	# used instead free
-	#cat /proc/meminfo | grep MemTotal
-	#cat /proc/meminfo | grep MemFree
-	#cat /proc/meminfo | grep MemAvail
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "HOST GPU: " | tee $CONFIG_FILE_PLAT_INFO
 	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus" | tee $CONFIG_FILE_PLAT_INFO
@@ -167,6 +164,10 @@ if [[ -z `virt-what` ]] ; then
         echo "HOST AMDGPU?:     "`modinfo amdgpu | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
         echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
         echo "HOST GIM?:        "`modinfo gim | egrep "^filename|^version"` | tee $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
+	echo "HOST GIM config in /etc/gim_config"  | tee $CONFIG_FILE_PLAT_INFO
+	cat /etc/gim_config | tee  $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 
 	host_guest_1
 
