@@ -47,15 +47,17 @@ CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-platform-
 CONFIG_SUBDIR_HOST=host
 CONFIG_SUBDIR_GUEST=guest
 
-CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmesg-host.log
-CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-syslog-host.log
-CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-host.log
+CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-host-dmesg.log
+CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-host-syslog.log
+CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-host-kernlog.log
 
-CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-guest-$p1.log
-CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-clinfo-$p1.log
-CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-modinfo-amdgpu-$p1.log
-CONFIG_FILE_SYSLOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-syslog-guest.log
-CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-guest.log
+CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-guest-dmesg-$p1.log
+CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-guest-clinfo-$p1.log
+CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-guest-modinfo-amdgpu-$p1.log
+CONFIG_FILE_SYSLOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-guest-syslog-guest.log
+CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-guest-kernlog-guest.log
+
+# 	function that runs commands on both host and guest the same way. 
 
 function host_guest_1()  {
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
@@ -71,13 +73,15 @@ function host_guest_1()  {
 	
 }
 
+# 	function that runs commands on both host and guest differently.
+
 function host_guest_2() {
-	if [[ -z `virt-what` ]] ; then
+	if [[ -z `sshpass -p amd1234 ssh root@$vmIp 'virt-what'` ]] ; then
 		dmesg >> $CONFIG_FILE_DMESG_HOST
 		cat /var/log/syslog >> $CONFIG_FILE_SYSLOG_HOST
 		cat  /var/log/kern.log >> $CONFIG_FILE_KERN_LOG_HOST
 	else
-		sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
+		sshpass -p amd1234 ssh root@$vmIp 'dmesg' > $CONFIG_FILE_DMESG_GUEST
 		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/syslog' >  $CONFIG_FILE_SYSLOG_GUEST
 		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/kern.log' >  $CONFIG_FILE_KERNLOG_GUEST
 	fi
@@ -208,7 +212,8 @@ else
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
-	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee $CONFIG_FILE_PLAT_INFO
+	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename"'` | tee $CONFIG_FILE_PLAT_INFO
+	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^version"'` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee $CONFIG_FILE_PLAT_INFO
 	host_guest_2
 	sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' >  $CONFIG_FILE_MODINFO_AMDGPU_GUEST
