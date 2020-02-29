@@ -34,6 +34,8 @@ cd  ..
 amd_gerrit_repos=(\
 ssh://gerritgit/gpu-virtual/ec/driver/libgv \
 ssh://gerritgit/gpu-virtual/ec/tool/smi-lib \
+ssh://gerritgit/gpu-virtual/ec/driver/vats2 \
+ssh://gerritgit/gpu-virtual/ec/driver/vats \	
 ssh://gerritgit/brahma/ec/drm \
 )
 
