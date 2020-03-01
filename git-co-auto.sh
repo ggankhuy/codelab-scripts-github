@@ -1,4 +1,4 @@
-CONFIG_USE_SSH_AMD_CLOUD_GPU=1
+CONFIG_USE_SSH_AMD_CLOUD_GPU=0
 
 if [[ $CONFIG_USE_SSH_AMD_CLOUD_GPU -eq 1 ]] ; then
     amd_cloud_gpu_repos=(\
@@ -37,6 +37,7 @@ ssh://gerritgit/gpu-virtual/ec/tool/smi-lib \
 ssh://gerritgit/gpu-virtual/ec/driver/vats2 \
 ssh://gerritgit/gpu-virtual/ec/driver/vats \	
 ssh://gerritgit/brahma/ec/drm \
+ssh://gerritgit/gpu-virtual/ec/driver/gim \
 )
 
 mkdir gerritt
