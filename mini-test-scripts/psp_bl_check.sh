@@ -5,7 +5,7 @@
 DOUBLE_BAR="========================================================"
 SINGLE_BAR="--------------------------------------------------------"
 CONFIG_SUPPORT_MEMCAT=1
-CONFIG_REBOOT=0
+CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
 CONFIG_USE_DURATION=1
@@ -21,6 +21,32 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 DEBUG=0
 DEBUG_SYSFS=1
 
+source common.sh
+
+function dmesg_check_psp_bl_stat()
+{
+  vm_name=$1
+
+  test_report_folder=./test-report/$0/dmesg
+  mkdir -p $test_report_folder
+  touch $test_report_folder/dmesg-`date +%Y%m%d-%H-%M-%S`.log
+  touch $test_report_folder/dmesg-all.log
+  dmesg > $test_report_folder/dmesg-`date +%Y%m%d-%H-%M-%S`.log
+  dmesg >> $test_report_folder/dmesg-all.log
+  ls -l $test_report_folder
+  sleep 3
+
+  if [[ `dmesg | grep "mmMP0_SMN_C2PMSG_33 reads non-zero value"` ]] ; then
+        echo "mmMP0_SMN_C2PMSG_33 read none zero value" 
+        exit 1
+  elif [[ `dmesg | grep "mmMP0_SMN_C2PMSG_33 read OK."` ]] ; then
+        echo "mmMP0_SMN_C2PMSG_33 reads zero value, OK."
+  else
+        echo "dmesg contains no mmMP0_SMN_C2PMSG_33 status, logic error, leaving."
+        exit 1
+  fi
+}
+
 #	Following setting requires great diligence from user of this script. When running flag is set 
 #	The  TOTAL_VMS will only count the running VM-s. This could be useful to not count non-running VM
 #	which is irrelevant to current drop being worked on. That is because non-running VM could be left over
@@ -34,7 +60,7 @@ VM_IPS=""
 p2=$2
 p1=$1
 
-apt install sshpass -y
+#apt install sshpass -y
 
 if [[ $? -ne 0 ]] ; then
 	echo "ERROR. Failed to install sshpass package."
@@ -53,121 +79,6 @@ if [[ $TOTAL_VMS -eq 0 ]] ; then
 	echo "TOTAL_VMs are zero...Need running VMs to operate this script on..."
 	exit 1
 fi
-
-ARR_VM_IP=()
-ARR_VM_NO=()
-ARR_VM_NAME=()
-ARR_VM_VF=()
-ARR_VM_PF=()
-
-#	Get pcie address (bdf) of a VM.
-#	This function needs to be called with ARR_VM_NAME is filled with running VM-s otherwise result is invalid.
-#	input: None.
-
-function get_bdf()
-{
-	
-
-	for w in ${ARR_VM_NAME[@]} ; do
-		bus=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f4 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
-		dev=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f5 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
-		fcn=`virsh dumpxml $w | grep "<\hostdev\>" -A 20 | grep hostdev -B 20 | grep -i "address domain" | tr -s ' '  | cut -d ' ' -f6 | tr -s ' ' | cut -d "'" -f2 | cut -d 'x' -f2`
-		vf=$bus:$dev.$fcn
-		ARR_VM_VF+=( $vf ) 
-		pf=`lspci | grep -i $vf -B 1 | head -1 | cut -d ' ' -f1`
-		ARR_VM_PF+=( $pf )
-	
-		if [[ $DEBUG -eq 1 ]] ; then echo "PF/VF obtained for VM: ${VM_NAME[$i]}: $pf/$vf" ; fi ; 
-	done 
-}
-
-#	Wait untill specified VM becomes pingable.
-#	input - 
-#	$1 - VM_NAME to wait for until it becomes pingable.
-
-function wait_till_ip_read()
-{
-	p=$1
-	echo waiting for $p to become pingable...
-	for s in {0..50} ; do
-		echo issuing virsh domifaddr $r
-		tmpIp=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-
-		ping -q -c 4  $tmpIp
-		stat=$?
-
-		if [[ $stat -eq 0 ]] ; then
-			echo "Can ping $tmpIp now..."
-			break
-		fi
-		sleep 30
-	done
-
-	if [[ $stat -ne 0 ]] ; then
-		echo "Error: Can not ping $tmpIp for long time with 10 retries..."
-		exit 1	
-	fi
-}
-
-#	Wait untill all VMs running VM becomes pingable. 
-#	For this function, ARR_VM_NAME must be populated properly.
-#	input: None.
-
-function wait_till_ips_read()
-{
-	for r in ${ARR_VM_NAME[@]} 
-	do 
-		wait_till_ip_read $r
-	done
-}
-
-#	Prints all arrays. All arrays must populated properly prior to calling this function.
-#	input: None.
-
-function print_arrs()
-{
-	echo $SINGLE_BAR
-	echo ${ARR_VM_IP[@]} 
-	echo ${ARR_VM_NO[@]} 
-	echo ${ARR_VM_PF[@]} 
-	echo ${ARR_VM_VF[@]} 
-	for o in ${ARR_VM_NAME[@]} ; do echo $o; done;
-	echo $SINGLE_BAR
-}
-
-#	Clear all arrays. Mostly needed since ARR_VM_NO which holds the VM index changes after reboot or power recycle.
-#	input:
-
-function clear_arrs()
-{
-	ARR_VM_IP=()
-	ARR_VM_NO=()
-	ARR_VM_NAME=()
-	ARR_VM_VF=()
-	ARR_VM_PF=()
-}
-
-#	Populates the arrays ARR_VM_IP, ARR_VM_NO, ARR_VM_NAME respectively.
-#	input: 0-based nth VM number. Note that this is not the VM index shows in virsh list.
-#	All VM-s must be running prior to calling this function.
-#	input: None.
-
-function get_vm_info()
-{
-	indexNo=$1
-	GPU_INDEX=$indexNo
-	VM_INDEX=$(($indexNo+1))
-	echo "get_vm_info: p1: $1. VM_INDEX: $VM_INDEX..."
-	sleep 3
-	VM_NAME=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
-	VM_NO=`virsh list  | grep gpu | head -$(($VM_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
-	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	ARR_VM_IP+=( $VM_IP ) 
-	ARR_VM_NO+=( $VM_NO )
-	ARR_VM_NAME+=( $VM_NAME ) 
-	DMESG_FILE_NAME=/tmp/dmesg-loop-$loopNo-vm-$vmNo.log
-	wait_till_ip_read $VM_NAME
-}
 
 if [[ ! -z $1  ]] ; then
 	CONIG_LOOP_TEST_NO=$1
@@ -198,6 +109,86 @@ dmesg --clear
 echo "Setup memcat on VM-s..."
 
 clear_arrs
+
+#   start with VM-s running
+
+#   loop
+#   - clear dmesg
+#   - shutdown VM-s
+#   - unload GIM
+#   - load GIM 
+#   - start VM-s
+#   - (optional) load amdgpus on guest vm-s.
+#   - check psp_bl from dmesg
+#       - exit if Rx is 80000000.
+
+echo "Starting loop..."
+sleep 2
+get_bdf
+print_arrs 
+
+counter=0
+
+for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
+	echo $DOUBLE_BAR
+	echo "Loop No. $counter"
+	echo $DOUBLE_BAR
+
+	sleep 1
+	clear_arrs
+
+#   - clear dmesg
+
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+		get_vm_info $n
+		echo "clear dmesg"
+		ssh root@$VM_IP 'dmesg --clear'
+		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
+		echo "Done."
+		if [[ $DEBUG -eq 1 ]] ; then echo "1. checking memcat on $VM_IP..." ;ssh root@$VM_IP 'ls -l /memcat/' ; fi;
+	done
+
+	get_bdf
+	sleep 1
+
+#   - shutdown VM-s
+
+	for m in ${ARR_VM_NAME[@]}  ; do
+		echo "Turning off VM_NAME: $m..."
+		virsh shutdown $m
+	done
+
+#   - unload GIM
+
+    modprobe -r gim
+
+    echo "GIM status using lsmod after unload..."
+    if [[ -z `lsmod | grep gim` ]] ; then
+        echo "GIM unload is ok."
+    else
+        echo "GIM unload appears unsuccessful."
+        lsmod | grep gim
+    fi
+    sleep 5
+
+#   - load GIM 
+
+    modprobe gim
+
+#   - start VM-s
+
+	for m in ${ARR_VM_NAME[@]}  ; do
+		echo "Turning on VM_NAME: $m..."
+		virsh start $m 
+	done
+
+#   - check psp_bl from dmesg
+#       - exit if Rx is 80000000.
+
+    dmesg_check_psp_bl_stat
+done
+
+exit 0
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo $SINGLE_BAR
