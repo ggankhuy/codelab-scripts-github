@@ -187,6 +187,8 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
     dmesg_check_psp_bl_stat
 
+#   loop manipulation based on number of ticks or duration.
+
     if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
         i=$((i-1))
         echo "loop variable i: $i"
@@ -201,6 +203,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
             break
         fi
     fi
+    counter=$((counter+1))
 done
 
 exit 0
