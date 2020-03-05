@@ -76,6 +76,9 @@ if debug:
 	print("np_buganizerIssues type: ", type(np_buganizerIssues))
 	printBarSingle()	
 	
+for i in np_buganizerIssues:
+	print(i[COL_ISSUE_ID])
+	
 # 	Iterate through all bus buganizer issues and search corresponding internal jira.
 #		Check to see internal jira opened
 #		1. Search ID in title, if found OK.
