@@ -274,7 +274,7 @@ function common_setup () {
 
 	if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
 		echo "ggp bundle is installed through debian package..."
-		dpkg -i /tmp/$GGP_BUNDLE_VERSION
+		sudo dpkg -i /tmp/$GGP_BUNDLE_VERSION
 		sleep 3
 	else
 		tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
