@@ -9,12 +9,14 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP="10.217.74.231"
+OPTION_GGP_INSTALL_USE_DEB=1
 
 #REPO_SERVER_IP="10.217.73.160"
 
 # 	IXT70 GAME REPO
 
-REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+#REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
@@ -55,6 +57,7 @@ export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
+export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
 
 #       Set either yeti or ggp  engineering bundle.
 
@@ -269,8 +272,14 @@ function common_setup () {
         sudo mkdir -p /srv/game
         sudo chown -R $(id -u):$(id -g) /srv/game
 
-	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
-	
+	if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
+		echo "ggp bundle is installed through debian package..."
+		dpkg -i /tmp/$GGP_BUNDLE_VERSION
+		sleep 3
+	else
+		tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
+	fi
+		
 	sudo mkdir /log
 	sudo chmod a+rw /log
 	
