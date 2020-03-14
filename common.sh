@@ -14,7 +14,7 @@ REPO_SERVER_IP="10.217.74.231"
 # 1 - for deb
 # 2 - no copy or invalid choice.
 
-OPTION_GGP_INSTALL_USE_DEB=2
+OPTION_GGP_INSTALL_USE_DEB=1
 
 #REPO_SERVER_IP="10.217.73.160"
 
