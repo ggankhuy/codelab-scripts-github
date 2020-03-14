@@ -199,6 +199,9 @@ function common_runtime_setup ()
 		source /usr/local/cloudcast/env/vce.sh
 	elif [[ $1 == "novce" ]] ; then
 		echo "setting non vce..."
+		if [[ -z `echo /usr/local/cloudcast/env/vce_nostreamer.sh | grep YETI_FORCE_SWAPCHAIN | grep null` ]] ; then
+	                echo "export YETI_FORCE_SWAPCHAIN=\"null\"" >> /usr/local/cloudcast/env/vce_nostreamer.sh
+		fi
 		source /usr/local/cloudcast/env/vce_nostreamer.sh
 	else
 		echo "common_runtime_setup: invalid p1: $1, supported values are vce and novce."
