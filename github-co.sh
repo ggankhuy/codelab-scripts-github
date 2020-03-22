@@ -23,6 +23,7 @@ amd_gerrit_repos=(\
 ssh://gerritgit/gpu-virtual/ec/driver/libgv \
 ssh://gerritgit/gpu-virtual/ec/tool/smi-lib \
 ssh://gerritgit/brahma/ec/drm \
+ssh://gerritgit/brahma/ec/linux \
 )
 
 mkdir gerritt
