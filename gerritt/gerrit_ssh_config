@@ -1,0 +1,31 @@
+# Replace <server_name> with a git server that is closest to your Geographical location.
+# Using git mirror will significantly reduce time required for source syncing:
+
+# git.amd.com           - Atlanta Datacenter Main Git Server
+# cybswgit01.amd.com    - Cyberjaya datacenter mirror
+# mkdcvgits01.amd.com   - Markham datacenter mirror
+# idcvgits01.amd.com    - Bangalore datacenter mirror
+# srdcvswgit01.amd.com  - Shanghai datacenter mirror (since August, 2018)
+
+Host androidgit
+    Hostname sclgit.amd.com
+#   HostName mkdcvgits03.amd.com
+    User androidgit
+    Port 22
+
+Host gerritgit
+    Hostname sclgit.amd.com
+#   HostName mkdcvgits03.amd.com
+    User ggankhuy
+    Port 29418
+
+Host gerritgitmaster
+    HostName git.amd.com
+    User ggankhuy
+
+Host *
+    ServerAliveInterval 60
+
+
+
+
