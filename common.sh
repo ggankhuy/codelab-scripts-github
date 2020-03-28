@@ -450,14 +450,14 @@ function copy_game_files() {
 
                 if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
                         echo 'sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest'
-			echo 'REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/'
-			echo 'game_dir_dest: $game_dir_dest'
-			echo 'game_dir_src: $game_dir_src'
+			echo "REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/"
+			echo "game_dir_dest: $game_dir_dest"
+			echo "game_dir_src: $game_dir_src"
                         sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest
                 elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
-			echo 'REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/'
-			echo 'game_dir_dest: $game_dir_dest'
-			echo 'game_dir_src: $game_dir_src'
+			echo "REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/"
+			echo "game_dir_dest: $game_dir_dest"
+			echo "game_dir_src: $game_dir_src"
                         echo 'sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/'
                         sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/
                 else
