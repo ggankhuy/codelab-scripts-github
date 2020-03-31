@@ -14,7 +14,7 @@ REPO_SERVER_IP="10.217.74.231"
 # 1 - for deb
 # 2 - no copy or invalid choice.
 
-OPTION_GGP_INSTALL_USE_DEB=1
+OPTION_GGP_INSTALL_USE_DEB=0
 
 #REPO_SERVER_IP="10.217.73.160"
 
@@ -61,8 +61,15 @@ OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
-export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
-export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
+
+if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
+	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
+elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
+	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
+else
+	echo "Invalid value for OPTION_GGP_INSTALL_USE_DEB, only 0 or 1 allowed: $OPTION_GGP_INSTALL_USE_DEB"
+	echo "Leaving the value of GGP_BUNDLE_VERSION unchanged as: $GGP_BUNDLE_VERSION"
+fi
 
 #       Set either yeti or ggp  engineering bundle.
 
