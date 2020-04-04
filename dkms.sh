@@ -1,8 +1,10 @@
 clear
+apt install -y dh-autoreconf
 echo ================================================
 echo "Verify prebuild.sh is 755-d on /usr/src/$1/ or /usr/src/<driver_name>"
 echo ================================================
 sleep 5
+
 if [[ -z $1 ]] || [[ -z $2 ]] ; then
         echo p1 module name or p2 version is not specified.
         echo p1, module: $1
