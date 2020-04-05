@@ -77,6 +77,9 @@ elif [[ $p1 == "tr2" ]] ; then
 elif [[ $p1 == "quail" ]] ; then
 	echo "tr2 is selected..."
 	game=$GAME_QUAIL
+elif [[ $p1 == "conga" ]] ; then
+	echo "conga is selected..."
+	game=$GAME_CONGA
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
 	echo "p2: $p2..."
@@ -158,18 +161,18 @@ fi
 
 #	Load amdgpu, kfd driver:
 
-sudo modprobe amdkfd
+# 		sudo modprobe amdkfd
 sudo modprobe amdgpu
-ret1=`lsmod | grep -u ^amdgpu`
+#ret1=`lsmod | grep -u ^amdgpu`
 ret2=`lsmod | grep -u ^amdgpu`
 
 if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
         echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
         exit 1
-        echo lsmod amdgpu: $ret1
+#        echo lsmod amdgpu: $ret1
         echo lsmod amdkfd: $ret2
 else
-        echo lsmod amdgpu: $ret1
+##	   echo lsmod amdgpu: $ret1
         echo lsmod amdkfd: $ret2
 fi
 
@@ -205,6 +208,13 @@ elif [[ $game -eq $GAME_DOOM ]] ; then
 	GAME_EXECUTABLE=DOOM
 	GAME_FOLDER="./"
 	GAME_NAME=$GAME_DOOM
+elif [[ $game -eq $GAME_CONGA ]] ; then
+	echo "GAME: CONGA" ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=conga
+	DESTINATION_FOLDER=conga
+	GAME_EXECUTABLE=CONGA
+	GAME_FOLDER="./"
+	GAME_NAME=$GAME_CONGA
 
 else
 	echo "Unsupported game: $game" ; exit 1
