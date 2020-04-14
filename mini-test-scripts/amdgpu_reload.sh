@@ -8,7 +8,7 @@ CONFIG_SUPPORT_MEMCAT=1
 CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
-CONFIG_USE_DURATION=1
+CONFIG_USE_DURATION=0
 CONFIG_DURATION_HR=72
 CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU=0
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
@@ -82,24 +82,19 @@ if [[ $TOTAL_VMS -eq 0 ]] ; then
 	exit 1
 fi
 
-if [[ ! -z $1  ]] ; then
-	CONIG_LOOP_TEST_NO=$1
-	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
-fi
-
 sleep 1
 TIME_LOOP_START=`date +%s`
 
 if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
 	echo "Test loop will continue $CONFIG_DURATION_HR hours..."
 	sleep 3
-fi
-
-if [[ ! -z $p1  ]] ; then
-	CONFIG_LOOP_TEST_NO=$p1
-	echo "CONFIG_LOOP_TEST_NO is set to $CONFIG_LOOP_TEST_NO..."
 else
-	echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
+    if [[ ! -z $p1  ]] ; then
+	    CONFIG_LOOP_TEST_NO=$p1
+	    echo "CONFIG_LOOP_TEST_NO is set to $CONFIG_LOOP_TEST_NO..."
+    else
+	    echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
+    fi
 fi
 
 sleep 3
