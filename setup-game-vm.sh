@@ -69,7 +69,7 @@ CONFIG_VATS2_SUPPORT=1
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
-CONFIG_SET_VCPUCOUNT=0
+CONFIG_SET_VCPUCOUNT=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 
@@ -251,6 +251,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" ./$SETUP_GAME_VM_CLIENT nonroot@$VM_IP:/home/nonroot/
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
 	fi
+
+    if [[ -z ~/.ssh/id_rsa.pub ]] ; then
+        echo "sshkey is not created."
+    else
+        echo "copying sshkey to VM"
+        ssh-copy-id -i ~/.ssh/id_rsa.pub root@$VM_IP
+    fi
 
 	# collect dmesg only.
 
