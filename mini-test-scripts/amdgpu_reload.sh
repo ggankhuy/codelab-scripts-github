@@ -174,7 +174,9 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
     
     #   - load GIM 
     
+        echo "GIM loading..."
         modprobe gim
+        echo "OK."
     
     #   - start VM-s
     
@@ -209,6 +211,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
             break
         fi
     fi
+    counter=$((counter+1))
 done
 
 exit 0
