@@ -210,9 +210,9 @@ elif [[ $game -eq $GAME_DOOM ]] ; then
 	GAME_NAME=$GAME_DOOM
 elif [[ $game -eq $GAME_CONGA ]] ; then
 	echo "GAME: CONGA" ; sleep $SLEEP_TIME
-	SOURCE_FOLDER=conga
+	SOURCE_FOLDER=Conga
 	DESTINATION_FOLDER=conga
-	GAME_EXECUTABLE=CONGA
+	GAME_EXECUTABLE=benchmark
 	GAME_FOLDER="./"
 	GAME_NAME=$GAME_CONGA
 
@@ -234,6 +234,13 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
         sudo chmod -R o=u /log/3dmark
 
 	GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
+
+elif [[ $game -eq $GAME_CONGA ]] ; then
+	echo "GAME: CONGA." ; sleep $SLEEP_TIME
+	sudo mkdir -p /log/conga/
+        sudo chmod -R g=u /log/conga
+        sudo chmod -R o=u /log/conga
+	GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
 elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
 	echo Following games: Doom/TR2 does not support non-stream test option.
