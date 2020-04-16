@@ -64,7 +64,7 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
-CONFIG_VATS2_SUPPORT=1
+CONFIG_VATS2_SUPPORT=0
 
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
@@ -202,7 +202,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 		echo "Turning on VM_NAME: $VM_NAME..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-		sleep 1
+		sleep 30
 		echo "Done."	
 	fi 
 
