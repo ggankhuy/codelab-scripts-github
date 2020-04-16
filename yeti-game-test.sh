@@ -48,6 +48,7 @@ SLEEP_TIME=1
 CONFIG_ABORT_GAME=1
 
 CONFIG_ITERATION_3DMARK=1
+CONFIG_ITERATION_CONGA=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -326,6 +327,17 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
 			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
 		done
+	elif [[ $game -eq $GAME_CONGA ]] ; then
+		echo "conga specific steps..."
+		common_runtime_setup novce
+		for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
+			#GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+			GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+			#./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
+			./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
+		done
+	else
+		echo "Unsupport nonstreaming game: $game"
 	fi
 	
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
