@@ -162,20 +162,16 @@ fi
 #	Load amdgpu, kfd driver:
 
 # 		sudo modprobe amdkfd
+
 sudo modprobe amdgpu
-#ret1=`lsmod | grep -u ^amdgpu`
 ret2=`lsmod | grep -u ^amdgpu`
 
-if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
-        echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+if [[ -z $ret2 ]] ; then
+        echo "Failed to install amdgpu (modprobe amdgpu), check the driver is installable or GPU is present."
         exit 1
-#        echo lsmod amdgpu: $ret1
-        echo lsmod amdkfd: $ret2
 else
-##	   echo lsmod amdgpu: $ret1
-        echo lsmod amdkfd: $ret2
+        echo lsmod amdgpu: $ret2
 fi
-
 
 GAME_PARAM="-"
 
