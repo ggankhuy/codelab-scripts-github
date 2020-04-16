@@ -8,7 +8,7 @@ CONFIG_SUPPORT_MEMCAT=1
 CONFIG_REBOOT=1
 CONFIG_MEMCAT_SRC_DIR=/root/memcat/
 CONFIG_MEMCAT_DST_DIR=/memcat/
-CONFIG_USE_DURATION=1
+CONFIG_USE_DURATION=0
 CONFIG_DURATION_HR=72
 CONFIG_RUN_MEMCAT_WITHOUT_AMDGPU=0
 CONFIG_DURATION_SEC=$((CONFIG_DURATION_HR * 3600))
@@ -23,21 +23,23 @@ DEBUG_SYSFS=1
 
 source common.sh
 
-function dmesg_unload_load_amdgpu()
+test_report_folder=./test-report/$0/dmesg/
+rm -rf  $test_report_folder/*
+echo "test_report_folder: $test_report_folder"
+sleep 2
+
+function dmesg_load_amdgpu()
 {
-    echo "Unloading  amdgpu for $VM_IP"
-    ssh root@$VM_IP 'modprobe -r amdgpu'
     echo "Loading  amdgpu for $VM_IP"
     ssh root@$VM_IP 'modprobe amdgpu'
     
-    test_report_folder=./test-report/$0/dmesg
     mkdir -p $test_report_folder
     touch $test_report_folder/dmesg-`date +%Y%m%d-%H-%M-%S`.log
     touch $test_report_folder/dmesg-all.log
     dmesg > $test_report_folder/dmesg-`date +%Y%m%d-%H-%M-%S`.log
     dmesg >> $test_report_folder/dmesg-all.log
     ls -l $test_report_folder
-    sleep 3
+    sleep 1
 
     if [[ `dmesg | grep "5000 msec"` ]] ; then
         echo "dmesg contains timeout error." 
@@ -80,24 +82,19 @@ if [[ $TOTAL_VMS -eq 0 ]] ; then
 	exit 1
 fi
 
-if [[ ! -z $1  ]] ; then
-	CONIG_LOOP_TEST_NO=$1
-	echo "CONIG_LOOP_TEST_NO is set to $CONIG_LOOP_TEST_NO..."
-fi
-
 sleep 1
 TIME_LOOP_START=`date +%s`
 
 if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
 	echo "Test loop will continue $CONFIG_DURATION_HR hours..."
 	sleep 3
-fi
-
-if [[ ! -z $p1  ]] ; then
-	CONFIG_LOOP_TEST_NO=$p1
-	echo "CONFIG_LOOP_TEST_NO is set to $CONFIG_LOOP_TEST_NO..."
 else
-	echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
+    if [[ ! -z $p1  ]] ; then
+	    CONFIG_LOOP_TEST_NO=$p1
+	    echo "CONFIG_LOOP_TEST_NO is set to $CONFIG_LOOP_TEST_NO..."
+    else
+	    echo "p1 is not supplied from cmdline, using default value for CONFIG_LOOP_TEST_NO: $CONFIG_LOOP_TEST_NO"
+    fi
 fi
 
 sleep 3
@@ -139,14 +136,16 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 #   - clear dmesg
 
+	get_bdf
+	sleep 1
+
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		get_vm_info $n
 		echo "clear dmesg"
 		ssh root@$VM_IP 'dmesg --clear'
+		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
+		echo "Done."
 	done
-
-	get_bdf
-	sleep 1
 
     if [[ $i -eq 0 ]] ; then    
 
@@ -158,23 +157,6 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 		    echo "Turning off VM_NAME: $m..."
 		    virsh destroy $m
 	    done
-    
-    #   - unload GIM
-    
-        modprobe -r gim
-    
-        echo "GIM status using lsmod after unload..."
-        if [[ -z `lsmod | grep gim` ]] ; then
-            echo "GIM unload is ok."
-        else
-            echo "GIM unload appears unsuccessful."
-            lsmod | grep gim
-        fi
-        sleep 5
-    
-    #   - load GIM 
-    
-        modprobe gim
     
     #   - start VM-s
     
@@ -188,11 +170,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
 
 	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		get_vm_info $n
-		echo "clear dmesg"
-		ssh root@$VM_IP 'dmesg --clear'
-		echo No. of dmesg line after clear: `ssh root@$VM_IP 'dmesg | wc -l'`
-		echo "Done."
-        dmesg_unload_load_amdgpu $VM_IP
+        dmesg_load_amdgpu $VM_IP
 	done
 
     if [[ $CONFIG_USE_DURATION -eq 1 ]] ; then
@@ -209,6 +187,7 @@ for (( i=0; i < $CONFIG_LOOP_TEST_NO; i++)) ; do
             break
         fi
     fi
+    counter=$((counter+1))
 done
 
 exit 0
