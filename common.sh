@@ -22,7 +22,7 @@ OPTION_GGP_INSTALL_USE_DEB=1
 # 	IXT70 GAME REPO
 
 #REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
-REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("192.168.122.1" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
@@ -31,7 +31,7 @@ OPTION_DHCLIENT_EXT_INT=1
 # daytona x2: ens7
 # gb 02: ens8
 
-CONFIG_EXT_INT=ens8
+CONFIG_EXT_INT=ens7
 
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
@@ -65,7 +65,7 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
 	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
-	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+	#export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
 	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else
