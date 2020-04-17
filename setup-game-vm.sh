@@ -231,8 +231,8 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     if [[ -z ~/.ssh/id_rsa.pub ]] ; then
         echo "sshkey is not created."
     else
-        echo "copying sshkey to VM"
-        ssh-copy-id -i ~/.ssh/id_rsa.pub root@$VM_IP
+        echo "copying sshkey to VM, skipping due to bug..."
+        #ssh-copy-id -i ~/.ssh/id_rsa.pub root@$VM_IP
     fi
 
 	# collect dmesg only.
