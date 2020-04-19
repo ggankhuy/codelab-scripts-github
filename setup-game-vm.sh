@@ -96,7 +96,8 @@ CONFIG_USE_STATIC_IP=0
 #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 
 DEBUG=1
-VM_IPS=""
+VM_IPS=()
+VM_NAMES=()
 p2=$2
 p1=$1
 
@@ -176,9 +177,11 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo "VM_INDEX: $VM_INDEX"
 	
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NAMES[$n]=$VM_NAME
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	VM_IPS=`echo ${VM_IPS[@]} $VM_IP`
+	VM_IPS[$n]=$VM_IP
+
 	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
 	sleep 1
 
@@ -253,24 +256,20 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 done
 
-for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-	echo $DOUBLE_BAR
-	GPU_INDEX=$n
-	VM_INDEX=$(($n+1))
-	echo "VM_INDEX: $VM_INDEX"
-	
-	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
-	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
-	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
+if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+		echo $DOUBLE_BAR
+		echo n: $n
+		GPU_INDEX=$n
 
-	if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
-		echo "Turning off VM_NAME: $VM_NAME..."
+		VM_NAME=${VM_NAMES[$n]}
+		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+		echo VM_NAME: $VM_NAME, VM_IP: $VM_IP
+
+		echo "Turning  off $VM_NAME"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
-		echo "Done."	
+		sleep 8 
 
-		sleep 3
-	
 		echo "Setting vCPUs to 8..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
@@ -281,15 +280,14 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 		if [[ $DEBUG -eq 1 ]] ; then
 			echo "VM_NAME: $VM_NAME"
-			echo "VM_NO: $VM_NO"		
 		fi
-	
-		echo "Turning on VM_NAME: $VM_NAME..."
+
+		echo "Rebooting VM_NAME: $VM_NAME..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
 		sleep 30
 		echo "Done."	
-	fi 
-done
+	done
+fi
 
 #	Exit if p2 is dmesg,
 
