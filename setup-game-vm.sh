@@ -69,7 +69,7 @@ CONFIG_VATS2_SUPPORT=1
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
-CONFIG_SET_VCPUCOUNT=0
+CONFIG_SET_VCPUCOUNT=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 
@@ -207,7 +207,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 	if [[ $2 == "ssh" ]] || [[ $2 == "" ]] ; then
 		echo "adding user nonroot"
-		sleep 3
+		sleep 5
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
@@ -251,10 +251,25 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		echo "No. of lines in VM$n dmesg after clear: $lines"
 	fi
 
+done
+
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+	echo $DOUBLE_BAR
+	GPU_INDEX=$n
+	VM_INDEX=$(($n+1))
+	echo "VM_INDEX: $VM_INDEX"
+	
+	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
+
 	if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
 		echo "Turning off VM_NAME: $VM_NAME..."
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
 		echo "Done."	
+
+		sleep 3
 	
 		echo "Setting vCPUs to 8..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
@@ -274,7 +289,6 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		sleep 30
 		echo "Done."	
 	fi 
-
 done
 
 #	Exit if p2 is dmesg,
