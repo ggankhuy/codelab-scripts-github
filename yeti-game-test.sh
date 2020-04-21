@@ -55,7 +55,7 @@ sleep $SLEEP_TIME
 
 #	apt packages 
 
-sudo apt install sshpass dstat -y
+sudo apt install sshpass dstat net-tools -y
 
 #	Process help request. 
 
