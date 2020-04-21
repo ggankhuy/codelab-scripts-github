@@ -237,7 +237,8 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
 	sudo mkdir -p /log/conga/
         sudo chmod -R g=u /log/conga
         sudo chmod -R o=u /log/conga
-	GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+	#GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+	GAME_PARAM="--asset_root=/srv/game/assets/ -i /srv/game/assets/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
 elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
 	echo Following games: Doom/TR2 does not support non-stream test option.

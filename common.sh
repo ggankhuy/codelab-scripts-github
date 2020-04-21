@@ -31,7 +31,7 @@ OPTION_DHCLIENT_EXT_INT=1
 # daytona x2: ens7
 # gb 02: ens8
 
-CONFIG_EXT_INT=ens8
+CONFIG_EXT_INT=ens3
 
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
