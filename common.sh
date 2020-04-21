@@ -365,7 +365,7 @@ function t1()
 
 function process_t1t2 ()
 {
-	ENABLE_LOG=1
+	ENABLE_LOG=0
 	GAME=$1
 	GAME_FOLDER=$2
 	GAME_PARAM=$3
@@ -416,6 +416,15 @@ function process_t1t2 ()
         IP_TO_DISPLAY="$external_ip"
         cd /usr/local/cloudcast
         read -p "Press a key to start $GAME streaming server..."
+
+	# 1080p by default.
+
+        sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+        sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+
+	#4K setting
+	#        sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+	#        sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
 
 	if [[ $ENABLE_LOG -eq 0 ]] ;  then
         	./dev/bin/yeti_streamer \
