@@ -269,10 +269,12 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo VM_NAME: $VM_NAME, VM_IP: $VM_IP
 
     if [[ $CONFIG_ADD_EXT_INTERFACE -eq 1 ]] ; then
-        if [[ -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] ; then
+        if [[ -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] && [[ ! -z $CONFIG_EXT_INT_SRC ]] ; then
             virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
         else        
-            echo "ext interface $CONFIG_EXT_INT_SRC is already attached to $VM_NAME"
+            echo "ext interface $CONFIG_EXT_INT_SRC is already attached to $VM_NAME or CONFIG_EXT_INT_SRC is not defined"
+            virsh domiflist $VM_NAME
+            echo "CONFIG_EXT_INT_SRC: $CONFIG_EXT_INT_SRC"
             sleep 3
         fi
     fi
