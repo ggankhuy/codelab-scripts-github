@@ -33,7 +33,13 @@ CONFIG_IXT21_HOST_IP="10.216.66.52"
 CONFIG_IXT25_HOST_IP="10.216.66.53"
 CONFIG_DAYTONAX1_HOST_IP="10.216.52.34"
 CONFIG_DAYTONAX2_HOST_IP="10.216.52.30"
+CONFIG_GB02_HOST_IP="10.216.52.62"
 CONFIG_HOST_IP=0
+CONFIG_GB02_IP_GUEST_IP_RANGE=(\
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0" \
+"0.0.0.0")
 CONFIG_DAYTONAX1_GUEST_IP_RANGE=(\
 "0.0.0.0" \
 "0.0.0.0" \
@@ -63,7 +69,7 @@ CONFIG_VATS2_SUPPORT=1
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
-CONFIG_SET_VCPUCOUNT=0
+CONFIG_SET_VCPUCOUNT=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 
@@ -90,7 +96,8 @@ CONFIG_USE_STATIC_IP=0
 #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 
 DEBUG=1
-VM_IPS=""
+VM_IPS=()
+VM_NAMES=()
 p2=$2
 p1=$1
 
@@ -102,16 +109,14 @@ elif [[ $1 == "ixt70" ]] ; then
 	CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "ixt21" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT21_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "ixt25" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_IXT25_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "daytonax1" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX1_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
 elif [[ $1 == "daytonax2" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX2_HOST_IP
-	#CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
+elif [[ $1 == "gb02" ]] ; then
+	CONFIG_HOST_IP=$CONFIG_GB02_HOST_IP
 else
 	echo "ERROR: Invalid parameter."
 	exit 1
@@ -121,7 +126,7 @@ TOTAL_IPS=${#CONFIG_GUEST_IP_RANGE[@]}
 
 echo "HOST IP is set to: $CONFIG_HOST_IP"
 echo "GUEST IP RANGE is set to: $CONFIG_GUEST_IP_RANGE"
-#apt install sshpass -y
+apt install sshpass -y
 
 if [[ $? -ne 0 ]] ; then
 	echo "ERROR. Failed to install sshpass package."
@@ -172,35 +177,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo "VM_INDEX: $VM_INDEX"
 	
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+	VM_NAMES[$n]=$VM_NAME
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	VM_IPS=`echo ${VM_IPS[@]} $VM_IP`
+	VM_IPS[$n]=$VM_IP
+
 	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
 	sleep 1
-
-	if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
-		echo "Turning off VM_NAME: $VM_NAME..."
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh shutdown $VM_NAME"
-		echo "Done."	
-	
-		echo "Setting vCPUs to 8..."
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
-		
-		VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
-		echo $VCPU_COUNT
-		echo "Done."	
-	
-		if [[ $DEBUG -eq 1 ]] ; then
-			echo "VM_NAME: $VM_NAME"
-			echo "VM_NO: $VM_NO"		
-		fi
-	
-		echo "Turning on VM_NAME: $VM_NAME..."
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
-		sleep 1
-		echo "Done."	
-	fi 
 
 	# Assign static ips now (halted development for now...)
 
@@ -227,7 +210,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 	if [[ $2 == "ssh" ]] || [[ $2 == "" ]] ; then
 		echo "adding user nonroot"
-		sleep 3
+		sleep 5
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"	
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"	
@@ -248,6 +231,13 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no nonroot@$VM_IP "nohup /home/nonroot/$SETUP_GAME_VM_CLIENT &"	
 	fi
 
+    if [[ -z ~/.ssh/id_rsa.pub ]] ; then
+        echo "sshkey is not created."
+    else
+        echo "copying sshkey to VM, skipping due to bug..."
+        #ssh-copy-id -i ~/.ssh/id_rsa.pub root@$VM_IP
+    fi
+
 	# collect dmesg only.
 
 	if [[ $2 == "dmesg" ]]; then
@@ -263,7 +253,41 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg | wc -l"
 		echo "No. of lines in VM$n dmesg after clear: $lines"
 	fi
+
 done
+
+if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+		echo $DOUBLE_BAR
+		echo n: $n
+		GPU_INDEX=$n
+
+		VM_NAME=${VM_NAMES[$n]}
+		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+		echo VM_NAME: $VM_NAME, VM_IP: $VM_IP
+
+		echo "Turning  off $VM_NAME"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
+		sleep 8 
+
+		echo "Setting vCPUs to 8..."
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
+		
+		VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
+		echo $VCPU_COUNT
+		echo "Done."	
+	
+		if [[ $DEBUG -eq 1 ]] ; then
+			echo "VM_NAME: $VM_NAME"
+		fi
+
+		echo "Rebooting VM_NAME: $VM_NAME..."
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
+		sleep 30
+		echo "Done."	
+	done
+fi
 
 #	Exit if p2 is dmesg,
 

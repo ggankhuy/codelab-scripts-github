@@ -4,20 +4,33 @@ GAME_3DMARK=0
 GAME_DOOM=1
 GAME_TR2=2
 GAME_QUAIL=3
+GAME_CONGA=4
 DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP="10.217.74.231"
 
+# 0 - for tar
+# 1 - for deb
+# 2 - no copy or invalid choice.
+
+OPTION_GGP_INSTALL_USE_DEB=1
+
 #REPO_SERVER_IP="10.217.73.160"
 
 # 	IXT70 GAME REPO
 
-REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+#REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
+
+#	qts servers: ens3
+# daytona x2: ens7
+# gb 02: ens8
+
 CONFIG_EXT_INT=ens7
 
 game=0          # game
@@ -49,7 +62,16 @@ OPTION_FILE_COPY_PROTOCOL=$FILE_COPY_RSYNC
 export DIR_YETI_CONTENT_BUNDLE=yeti-content-bundle
 export DIR_GGP_ENG_BUNDLE=ggp-eng-bundle
 export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
-export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
+
+if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
+	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
+	#export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
+	export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
+else
+	echo "Invalid value for OPTION_GGP_INSTALL_USE_DEB, only 0 or 1 allowed: $OPTION_GGP_INSTALL_USE_DEB"
+	echo "Leaving the value of GGP_BUNDLE_VERSION unchanged as: $GGP_BUNDLE_VERSION"
+fi
 
 #       Set either yeti or ggp  engineering bundle.
 
@@ -186,6 +208,9 @@ function common_runtime_setup ()
 		source /usr/local/cloudcast/env/vce.sh
 	elif [[ $1 == "novce" ]] ; then
 		echo "setting non vce..."
+		if [[ -z `echo /usr/local/cloudcast/env/vce_nostreamer.sh | grep YETI_FORCE_SWAPCHAIN | grep null` ]] ; then
+	                echo "export YETI_FORCE_SWAPCHAIN=\"null\"" >> /usr/local/cloudcast/env/vce_nostreamer.sh
+		fi
 		source /usr/local/cloudcast/env/vce_nostreamer.sh
 	else
 		echo "common_runtime_setup: invalid p1: $1, supported values are vce and novce."
@@ -193,7 +218,7 @@ function common_runtime_setup ()
 	fi
 
 	export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
-	#export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+	export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
 	sleep 1
 }
 
@@ -223,7 +248,8 @@ function set_repo_server() {
                 echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
         else
                 echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
-                REPO_SERVER_IP=$REPO_SERVER_IP_BASHRC
+                REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
+                echo "REPO_SERVER_IP from bashrc is set to: $REPO_SERVER_IP"
         fi
 }
 function common_setup () {
@@ -263,8 +289,16 @@ function common_setup () {
         sudo mkdir -p /srv/game
         sudo chown -R $(id -u):$(id -g) /srv/game
 
-	tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
-	
+        if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
+                echo "ggp bundle is installed through debian package..."
+                sudo dpkg -i /tmp/$GGP_BUNDLE_VERSION
+                sleep 3
+        elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
+                tar -xf /tmp/$GGP_BUNDLE_VERSION -C /usr/local/cloudcast --strip-components=1
+        else
+                echo "Specified option 2 for OPTION_GGP_INSTALL_USE_DEB or invalid. Proceeding without copying."
+        fi
+
 	sudo mkdir /log
 	sudo chmod a+rw /log
 	
@@ -424,8 +458,16 @@ function copy_game_files() {
                 echo "Copying $game_dir_src from $REPO_SERVER_IP, will take some time..."
 
                 if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
+                        echo 'sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest'
+			echo "REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/"
+			echo "game_dir_dest: $game_dir_dest"
+			echo "game_dir_src: $game_dir_src"
                         sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/$game_dir_src/* $game_dir_dest
                 elif [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_SCP ]] ; then
+			echo "REPO_SERVER_LOCATION: $REPO_SERVER_LOCATION/"
+			echo "game_dir_dest: $game_dir_dest"
+			echo "game_dir_src: $game_dir_src"
+                        echo 'sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/'
                         sudo sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no root@$REPO_SERVER_IP:$REPO_SERVER_LOCATION/$game_dir_src/* ~/$game_dir_dest/
                 else
                         echo "ERROR: Unknown or unsupported copy protocol."

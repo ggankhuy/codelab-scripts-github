@@ -48,6 +48,7 @@ SLEEP_TIME=1
 CONFIG_ABORT_GAME=1
 
 CONFIG_ITERATION_3DMARK=1
+CONFIG_ITERATION_CONGA=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -77,6 +78,9 @@ elif [[ $p1 == "tr2" ]] ; then
 elif [[ $p1 == "quail" ]] ; then
 	echo "tr2 is selected..."
 	game=$GAME_QUAIL
+elif [[ $p1 == "conga" ]] ; then
+	echo "conga is selected..."
+	game=$GAME_CONGA
 elif [[ $p1 == "setup" ]] ; then
 	echo "setting up the system for test."
 	echo "p2: $p2..."
@@ -158,28 +162,24 @@ fi
 
 #	Load amdgpu, kfd driver:
 
-sudo modprobe amdkfd
+# 		sudo modprobe amdkfd
+
 sudo modprobe amdgpu
-ret1=`lsmod | grep -u ^amdgpu`
 ret2=`lsmod | grep -u ^amdgpu`
 
-if [[ -z $ret1 ]]  || [[ -z $ret2 ]] ; then
-        echo "Failed to install amdgpu or amdkfd (modprobe amdgpu/amdkfd), check the driver is installable or GPU is present."
+if [[ -z $ret2 ]] ; then
+        echo "Failed to install amdgpu (modprobe amdgpu), check the driver is installable or GPU is present."
         exit 1
-        echo lsmod amdgpu: $ret1
-        echo lsmod amdkfd: $ret2
 else
-        echo lsmod amdgpu: $ret1
-        echo lsmod amdkfd: $ret2
+        echo lsmod amdgpu: $ret2
 fi
-
 
 GAME_PARAM="-"
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
 	echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
 	SOURCE_FOLDER=3dmark
-	DESTINATION_FOLDER=./3dmark
+	DESTINATION_FOLDER=./cumbia
 	GAME_EXECUTABLE=3dmark
 	GAME_FOLDER=./
 	GAME_NAME=$GAME_3DMARK
@@ -205,6 +205,13 @@ elif [[ $game -eq $GAME_DOOM ]] ; then
 	GAME_EXECUTABLE=DOOM
 	GAME_FOLDER="./"
 	GAME_NAME=$GAME_DOOM
+elif [[ $game -eq $GAME_CONGA ]] ; then
+	echo "GAME: CONGA" ; sleep $SLEEP_TIME
+	SOURCE_FOLDER=Conga
+	DESTINATION_FOLDER=conga
+	GAME_EXECUTABLE=benchmark
+	GAME_FOLDER="./"
+	GAME_NAME=$GAME_CONGA
 
 else
 	echo "Unsupported game: $game" ; exit 1
@@ -214,7 +221,7 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
 
 	echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
 	SOURCE_FOLDER=3dmark
-	DESTINATION_FOLDER=./3dmark
+	DESTINATION_FOLDER=./cumbia
 	GAME_EXECUTABLE=3dmark
 	GAME_FOLDER=./
 	GAME_NAME=$GAME_3DMARK
@@ -224,6 +231,13 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
         sudo chmod -R o=u /log/3dmark
 
 	GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
+
+elif [[ $game -eq $GAME_CONGA ]] ; then
+	echo "GAME: CONGA." ; sleep $SLEEP_TIME
+	sudo mkdir -p /log/conga/
+        sudo chmod -R g=u /log/conga
+        sudo chmod -R o=u /log/conga
+	GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
 elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
 	echo Following games: Doom/TR2 does not support non-stream test option.
@@ -313,6 +327,17 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
 			./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
 			./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
 		done
+	elif [[ $game -eq $GAME_CONGA ]] ; then
+		echo "conga specific steps..."
+		common_runtime_setup novce
+		for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
+			#GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+			GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+			#./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
+			./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
+		done
+	else
+		echo "Unsupport nonstreaming game: $game"
 	fi
 	
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
