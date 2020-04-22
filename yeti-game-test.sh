@@ -266,12 +266,11 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
     sudo chmod -R o=u /log/conga
     GAME_PARAM="--asset_root=/srv/game/assets/ -i /srv/game/assets/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
-elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
-    echo Following games: Doom/TR2 does not support non-stream test option.
+#elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
+#    echo Following games: Doom/TR2 does not support non-stream test option.
     
 else
-    echo "Invalid game: $game" 
-    exit 1
+    echo "No game specific configurations made so far for: $game" 
 fi
 
 if [[ $game -eq $GAME_QUAIL ]] ; then
