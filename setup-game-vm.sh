@@ -71,6 +71,7 @@ CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
 CONFIG_SET_VCPUCOUNT=1
+CONFIG_ADD_EXT_INTERFACE=1
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 
@@ -268,7 +269,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo VM_NAME: $VM_NAME, VM_IP: $VM_IP
 
     if [[ $CONFIG_ADD_EXT_INTERFACE -eq 1 ]] ; then
-        if [[ ! -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] ; then
+        if [[ -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] ; then
             virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
         else        
             echo "ext interface $CONFIG_EXT_INT_SRC is already attached to $VM_NAME"
