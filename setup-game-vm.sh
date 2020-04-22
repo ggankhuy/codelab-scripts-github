@@ -64,7 +64,7 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
-CONFIG_VATS2_SUPPORT=0
+CONFIG_VATS2_SUPPORT=1
 
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
@@ -253,6 +253,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg | wc -l"
 		echo "No. of lines in VM$n dmesg after clear: $lines"
 	fi
+
 done
 
 if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
