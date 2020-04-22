@@ -111,6 +111,9 @@ elif [[ $p1 == "quail" ]] ; then
 elif [[ $p1 == "conga" ]] ; then
     echo "conga is selected..."
     game=$GAME_CONGA
+elif [[ $p1 == "odin" ]] ; then
+    echo "conga is selected..."
+    game=$GAME_ODIN
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
@@ -242,6 +245,13 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
     GAME_EXECUTABLE=benchmark
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CONGA
+elif [[ $game -eq $GAME_ODIN ]] ; then
+    echo "GAME: ODIN" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Odin
+    DESTINATION_FOLDER=odin
+    GAME_EXECUTABLE=ffxv
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_ODIN
 
 else
     echo "Unsupported game: $game" ; exit 1
@@ -269,20 +279,19 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
     sudo chmod -R o=u /log/conga
     GAME_PARAM="--asset_root=/srv/game/assets/ -i /srv/game/assets/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
-elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
-    echo Following games: Doom/TR2 does not support non-stream test option.
+#elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
+#    echo Following games: Doom/TR2 does not support non-stream test option.
     
 else
-    echo "Invalid game: $game" 
-    exit 1
+    echo "No game specific configurations made so far for: $game" 
 fi
 
 if [[ $game -eq $GAME_QUAIL ]] ; then
-    sudo rm /srv/game/assets/
+    sudo rm -rf /srv/game/assets/
     sudo mkdir -p /srv/game/assets/
     sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
 else
-    sudo rm /srv/game/assets
+    sudo rm -rf /srv/game/assets
     sudo mkdir -p /srv/game
     sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
 fi
