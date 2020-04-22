@@ -4,6 +4,7 @@
 #  or absent, the result is unpredictable.
 #  This script assumes the VM name is structured as debian-drop-<month>-<date>-debian-gpu<No>-vf<No> format 
 #  using auto-test script. If the VM name is structured differently in any way, the result is unpredictable.
+
 #  If there are VMs that are created for multiple drops, either running or shutdown, the result is extremely unpredictable. 
 #  
 #  Steps this tool takes:
@@ -34,7 +35,6 @@ CONFIG_IXT25_HOST_IP="10.216.66.53"
 CONFIG_DAYTONAX1_HOST_IP="10.216.52.34"
 CONFIG_DAYTONAX2_HOST_IP="10.216.52.30"
 CONFIG_GB02_HOST_IP="10.216.52.62"
-
 CONFIG_HOST_IP=0
 CONFIG_GB02_IP_GUEST_IP_RANGE=(\
 "0.0.0.0" \
@@ -97,8 +97,8 @@ CONFIG_USE_STATIC_IP=0
 #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
 
 DEBUG=1
-VM_IPS=()
-VM_NAMES=()
+VM_IPS=""
+VM
 p2=$2
 p1=$1
 
@@ -116,7 +116,6 @@ elif [[ $1 == "daytonax1" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX1_HOST_IP
 elif [[ $1 == "daytonax2" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_DAYTONAX2_HOST_IP
-    CONFIG_EXT_INT_SRC=enp33s0f1
 elif [[ $1 == "gb02" ]] ; then
 	CONFIG_HOST_IP=$CONFIG_GB02_HOST_IP
 else
@@ -179,10 +178,10 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	echo "VM_INDEX: $VM_INDEX"
 	
 	VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
-	VM_NAMES[$n]=$VM_NAME
+	VM_NAMES=`echo ${VM_NAMES[@]}` $VM_NAME
 	VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
 	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	VM_IPS[$n]=$VM_IP
+	VM_IPS=`echo ${VM_IPS[@]} $VM_IP`
 
 	echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
 	sleep 1
@@ -258,29 +257,18 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
 done
 
-for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-	echo $DOUBLE_BAR
-	echo n: $n
-	GPU_INDEX=$n
+if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
+	for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+		echo $DOUBLE_BAR
+		echo n: $n
+		GPU_INDEX=$n
+		VM_INDEX=$(($n+1))
+		echo "VM_INDEX: $VM_INDEX"
 
-	VM_NAME=${VM_NAMES[$n]}
-	VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-	echo VM_NAME: $VM_NAME, VM_IP: $VM_IP
-
-    if [[ $CONFIG_ADD_EXT_INTERFACE -eq 1 ]] ; then
-        if [[ ! -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] ; then
-            virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
-        else        
-            echo "ext interface $CONFIG_EXT_INT_SRC is already attached to $VM_NAME"
-            sleep 3
-        fi
-    fi
-
-    if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
-
-		echo "Turning  off $VM_NAME"
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
-		sleep 8 
+		VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+		VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+		echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
 
 		echo "Setting vCPUs to 8..."
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
@@ -292,14 +280,15 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 	
 		if [[ $DEBUG -eq 1 ]] ; then
 			echo "VM_NAME: $VM_NAME"
+			echo "VM_NO: $VM_NO"		
 		fi
 
 		echo "Rebooting VM_NAME: $VM_NAME..."
-		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
+		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh reboot $VM_NAME"
 		sleep 30
 		echo "Done."	
-    fi
-done
+	done
+fi
 
 #	Exit if p2 is dmesg,
 
