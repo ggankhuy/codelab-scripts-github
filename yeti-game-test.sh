@@ -26,6 +26,7 @@ p3=$3       # 0 - non-stream, 1 for 1 pc stream , 2 for 2 pc stream.
 p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 for both terminal in one terminal.
             # $4 is not applicable if $3 is non streaming.
 
+<<<<<<< HEAD
 #   qts servers: ens3
 #   daytona x2: ens7
 #   gb 02: ens8
@@ -46,6 +47,18 @@ sleep 3
 game=0            # game
 mode=0            # 0 for yeti, 1 for linux
 option=0    # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+=======
+for var in "$@"
+do
+    echo "$var"
+done
+
+exit 1
+
+game=0		# game
+mode=0		# 0 for yeti, 1 for linux
+option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
+>>>>>>> setup-game-vm.sh: ext_int support, in test
 n=0
 
 MODE_YETI=0
