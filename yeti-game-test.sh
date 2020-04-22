@@ -173,8 +173,8 @@ fi
 ret=`cat ~/.bashrc  | grep "cd /git.co/ad-hoc-scripts"`
 
 if [[ -z $ret  ]] ; then
-        echo "Inserting cd /git.co/ad-hoc-scripts to bash..."
-        echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
+    echo "Inserting cd /git.co/ad-hoc-scripts to bash..."
+    echo "cd /git.co/ad-hoc-scripts" >> ~/.bashrc
 fi
 
 #    Load amdgpu, kfd driver:
@@ -252,9 +252,8 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
 elif [[ $game -eq $GAME_CONGA ]] ; then
     echo "GAME: CONGA." ; sleep $SLEEP_TIME
     sudo mkdir -p /log/conga/
-        sudo chmod -R g=u /log/conga
-        sudo chmod -R o=u /log/conga
-    #GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
+    sudo chmod -R g=u /log/conga
+    sudo chmod -R o=u /log/conga
     GAME_PARAM="--asset_root=/srv/game/assets/ -i /srv/game/assets/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
 elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
@@ -326,22 +325,22 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
             sleep 3
     
-                sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt1.json
-                sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt2.json 
+            sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt1.json
+            sudo sed -i '/resolution/c \ \"resolution" : "1920x1080",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.1080p.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.1080p.gt2.$DATE_3DMARK_LOOP.log
-                sudo sed -i '/encode_width/c \ \encode_width: 1280' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/encode_height/c \ \encode_height: 720' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/resolution/c \ \"resolution" : "1280x720",' ../../configs/gt1.json
-                sudo sed -i '/resolution/c \ \"resolution" : "1208x720",' ../../configs/gt2.json 
+            sudo sed -i '/encode_width/c \ \encode_width: 1280' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/encode_height/c \ \encode_height: 720' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/resolution/c \ \"resolution" : "1280x720",' ../../configs/gt1.json
+            sudo sed -i '/resolution/c \ \"resolution" : "1208x720",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.720p.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.720p.gt2.$DATE_3DMARK_LOOP.log
-                sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt1.json
-                sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
+            sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+            sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt1.json
+            sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
         done
@@ -349,9 +348,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         echo "conga specific steps..."
         common_runtime_setup novce
         for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
-            #GAME_PARAM="--asset_root=/srv/game/assets/conga -i /srv/game/assets/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
             GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
-            #./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
     else
