@@ -27,12 +27,6 @@ REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
 
-#	qts servers: ens3
-# daytona x2: ens7
-# gb 02: ens8
-
-CONFIG_EXT_INT=ens7
-
 game=0          # game
 mode=0          # 0 for yeti, 1 for linux
 option=0        # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
@@ -326,6 +320,7 @@ function common_setup () {
 function prompt_t2_with_ip () {
 	echo "Type, but do not execute the following command:"
 
+    CONFIG_EXT_INT=$3
 	if [[ $OPTION_DHCLIENT_EXT_INT -eq 1 ]] ; then
 		sudo dhclient $CONFIG_EXT_INT
 	else
@@ -336,6 +331,8 @@ function prompt_t2_with_ip () {
         	echo "Warning: dhclient or ifup $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
 	fi
 	
+    echo "ext interface: $CONFIG_EXT_INT"
+    sleep 3
 	external_ip=`ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
 	echo "external IP: " $external_ip
 	
@@ -369,10 +366,12 @@ function process_t1t2 ()
 	GAME=$1
 	GAME_FOLDER=$2
 	GAME_PARAM=$3
+    #CONFIG_EXT_INT=$4
 
 	echo "GAME: $GAME" 
 	echo "GAME Params: $GAME_PARAM"
 	echo "GAME folder: $GAME_FOLDER" 
+    echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
 	sleep 3
 
 	DATE=`date +%Y%m%d-%H-%M-%S`
@@ -404,6 +403,8 @@ function process_t1t2 ()
                 echo "Warning: dhclient $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
         fi
 
+        echo "external interface: $CONFIG_EXT_INT"
+        sleep 5
         external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
         echo "external IP: " $external_ip
 
