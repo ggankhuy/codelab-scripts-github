@@ -6,8 +6,8 @@ uname -r
 sudo nmcli c mod "Wired connection 1" ipv4.never-default true
 echo "make sure to reboot after nmcli configuration..."
 
-sudo echo "DebugOverlayEnabled,1  > $AMD_PAL_SETTING_CFG_FILE
-sudo echo "DebugOverlayConfig.UseDebugOverlayOnColorSpaceConversionCopy,1 >> $AMD_PAL_SETTING_CFG_FILE
+sudo echo "DebugOverlayEnabled,1" | sudo tee $AMD_PAL_SETTING_CFG_FILE
+sudo echo "DebugOverlayConfig.UseDebugOverlayOnColorSpaceConversionCopy,1" | sudo tee $AMD_PAL_SETTING_CFG_FILE
 
 sudo git config --global user.email "you@example.com"
 sudo git config --global user.name "Your Name"
