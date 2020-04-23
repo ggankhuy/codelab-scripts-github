@@ -6,6 +6,7 @@ GAME_TR2=2
 GAME_QUAIL=3
 GAME_CONGA=4
 GAME_ODIN=5
+GAME_CHASE=6
 DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
@@ -60,7 +61,7 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
-    #export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+    export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else

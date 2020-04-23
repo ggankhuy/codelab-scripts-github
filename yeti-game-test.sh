@@ -80,8 +80,9 @@ vm_check
 sleep $SLEEP_TIME
 
 #    apt packages 
+#    libcurl3 - needed by chase center.
 
-sudo apt install sshpass dstat net-tools -y
+sudo apt install sshpass dstat net-tools libcurl3 -y
 
 #    Process help request. 
 
@@ -110,6 +111,9 @@ elif [[ $p1 == "conga" ]] ; then
 elif [[ $p1 == "odin" ]] ; then
     echo "conga is selected..."
     game=$GAME_ODIN
+elif [[ $p1 == "chase" ]] ; then
+    echo "chase is selected..."
+    game=$GAME_CHASE
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
@@ -248,13 +252,18 @@ elif [[ $game -eq $GAME_ODIN ]] ; then
     GAME_EXECUTABLE=ffxv
     GAME_FOLDER="./"
     GAME_NAME=$GAME_ODIN
-
+elif [[ $game -eq $GAME_CHASE ]] ; then
+    echo "GAME: CHASE" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=ChaseCenter
+    DESTINATION_FOLDER=chase
+    GAME_EXECUTABLE=nba_debug_unopt.elf
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_CHASE
 else
     echo "Unsupported game: $game" ; exit 1
 fi
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
-
     echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
     SOURCE_FOLDER=3dmark
     DESTINATION_FOLDER=./cumbia
@@ -263,11 +272,9 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
     GAME_NAME=$GAME_3DMARK
     #GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
     sudo mkdir -p /log/3dmark/
-        sudo chmod -R g=u /log/3dmark
-        sudo chmod -R o=u /log/3dmark
-
+    sudo chmod -R g=u /log/3dmark
+    sudo chmod -R o=u /log/3dmark
     GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
-
 elif [[ $game -eq $GAME_CONGA ]] ; then
     echo "GAME: CONGA." ; sleep $SLEEP_TIME
     sudo mkdir -p /log/conga/
