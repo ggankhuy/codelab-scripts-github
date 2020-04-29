@@ -114,6 +114,7 @@ if [[ $p1 == "ixt39" ]] ; then
 elif [[ $1 == "ixt70" ]] ; then
     CONFIG_HOST_IP=$CONFIG_IXT70_HOST_IP
     CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT70_GUEST_IP_RANGE[@]})
+    CONFIG_EXT_INT_SRC=enp96s0f1
 elif [[ $1 == "ixt21" ]] ; then
     CONFIG_HOST_IP=$CONFIG_IXT21_HOST_IP
 elif [[ $1 == "ixt25" ]] ; then
