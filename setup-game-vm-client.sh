@@ -3,9 +3,6 @@ echo "mkdir git.co directory..."
 echo -e "amd1234\n" | sudo mkdir /git.co
 uname -r
 
-sudo nmcli c mod "Wired connection 1" ipv4.never-default true
-echo "make sure to reboot after nmcli configuration..."
-
 sudo echo "DebugOverlayEnabled,1" | sudo tee $AMD_PAL_SETTING_CFG_FILE
 sudo echo "DebugOverlayConfig.UseDebugOverlayOnColorSpaceConversionCopy,1" | sudo tee -a $AMD_PAL_SETTING_CFG_FILE
 
@@ -26,4 +23,7 @@ sudo git checkout master
 #./yeti-game-test.sh quail yeti 2 nolaunch 
 ./yeti-game-test.sh 3dmark yeti 2 nolaunch 
 #./yeti-game-test.sh tr2 yeti 2 nolaunch 
+
+sudo nmcli c mod "Wired connection 1" ipv4.never-default true
+echo "make sure to reboot after nmcli configuration..."
 
