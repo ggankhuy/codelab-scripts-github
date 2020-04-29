@@ -31,6 +31,7 @@ p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 
 #   gb 02: ens8
 
 CONFIG_EXT_INT=ens7
+CONFIG_ITERATION_COUNT=1
 
 for var in "$@"
 do
@@ -38,6 +39,11 @@ do
         echo "external interface: $var"
         CONFIG_EXT_INT=`echo $var | cut -d '=' -f2`
         echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
+    fi
+    if [[ ! -z `echo "$var" | grep "iter="` ]]  ; then
+        echo "iteration count: $var"
+        CONFIG_ITERATION_COUNT=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_ITERATION_COUNT: $CONFIG_ITERATION_COUNT"
     fi
 done
 
@@ -73,8 +79,6 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=1
-CONFIG_ITERATION_CONGA=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -345,7 +349,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         echo "3dmark specific steps..."
         common_runtime_setup novce
 
-        for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             echo Running 3dmark for $n th time.
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
             sleep 3
@@ -372,7 +376,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."
         common_runtime_setup novce
-        for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
