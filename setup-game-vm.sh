@@ -65,7 +65,7 @@ CONFIG_IXT70_GUEST_IP_RANGE=(\
 "10.216.66.76" \
 "10.216.66.77" \
 "10.216.66.78")
-CONFIG_VATS2_SUPPORT=0
+CONFIG_VATS2_SUPPORT=1
 
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
@@ -154,7 +154,7 @@ else
     VM_GREP_PATTERN=gpu
 fi
 
-TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l"`
 
 echo "TOTAL_VMS: $TOTAL_VMS"
 
@@ -172,8 +172,8 @@ fi
 #  Load gim.
 #  Start default network.
 
-modprobe gim
-virsh net-start default
+sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
+sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
 
 #   Set vCPUs to 8.
 
@@ -186,9 +186,9 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     VM_INDEX=$(($n+1))
     echo "VM_INDEX: $VM_INDEX"
     
-    VM_NAME=`virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
+    VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
     VM_NAMES[$n]=$VM_NAME
-    VM_NO=`virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
+    VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
     VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
     VM_IPS[$n]=$VM_IP
 
@@ -214,19 +214,18 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     #gateway 10.216.64.1
     #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
     
-    #cat /etc/network/interfaces > /etc/network/interfaces.bak
+    #sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
 
     # setup sshd and ssh client settings on guest VM-s.
 
     if [[ $2 == "ssh" ]] || [[ $2 == "" ]] ; then
         echo "adding user nonroot"
         sleep 5
-
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "adduser --disabled-password --gecos GECOS nonroot"    
         sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "echo -e \"amd1234\namd1234\n\" | passwd  nonroot"
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"
-
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "usermod -aG sudo nonroot"    
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "apt install -y ssh-askpass ssh"    
+    
         echo "setting ssh..."
         sleep 3
         sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "if [[ -z \`cat /etc/ssh/sshd_config | grep TCPKeepAlive\` ]] ; then echo TCPKeepAlive yes >> /etc/ssh/sshd_config ; fi;"
@@ -278,26 +277,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
     if [[ $CONFIG_ADD_EXT_INTERFACE -eq 1 ]] ; then
         if [[ -z `virsh domiflist $VM_NAME | grep $CONFIG_EXT_INT_SRC` ]] && [[ ! -z $CONFIG_EXT_INT_SRC ]] ; then
-            echo "IF list before:"
-            virsh domiflist $VM_NAME
-            direct_iface_count=`virsh domiflist $VM_NAME | grep direct | wc -l`
-
-            if [[ $direct_iface_count -eq  1 ]] ; then
-                echo "One direct interface, removing.."
-                virsh detach-interface --domain $VM_NAME --type direct
-                virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
-            elif [[ $direct_iface_count -gt 1 ]] ; then
-                echo "Too many direct interface count: $direct_iface_count, can not continue. Unable to attach additioanl direct interface."
-            else
-                # less than 1 interface count:
-
-                virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
-                sleep 5
-            fi
-
-            echo "IF list after:"
-            virsh domiflist $VM_NAME
-        
+            virsh attach-interface --domain $VM_NAME --type direct  --model e1000  --config --live --source $CONFIG_EXT_INT_SRC
         else        
             echo "ext interface $CONFIG_EXT_INT_SRC is already attached to $VM_NAME or CONFIG_EXT_INT_SRC is not defined"
             virsh domiflist $VM_NAME
@@ -306,20 +286,17 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
         fi
     fi
 
-    virsh shutdown $VM_NAME 
-    sleep 5
-
     if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
 
         echo "Turning  off $VM_NAME"
-        virsh destroy $VM_NAME
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
         sleep 8 
 
         echo "Setting vCPUs to 8..."
-        virsh setvcpus $VM_NAME 8 --config --maximum
-        virsh setvcpus $VM_NAME 8 --config
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
         
-        VCPU_COUNT=`virsh vcpucount $VM_NAME`
+        VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
         echo $VCPU_COUNT
         echo "Done."    
     
@@ -328,7 +305,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
         fi
 
         echo "Rebooting VM_NAME: $VM_NAME..."
-        virsh start $VM_NAME
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
         sleep 30
         echo "Done."    
     fi
@@ -353,7 +330,7 @@ if [[ $2 == "dmesg-clear" ]]; then
     exit 0
 fi
 
-TOTAL_VMS=`virsh list --all | grep -i gpu | wc -l`
+TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
 
 #  Log on to each vm through ssh (determine ip using virsh domifaddr <vmno>
 #  update /etc/network/interfaces with static ip from pool.
@@ -387,15 +364,3 @@ if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveInterval` ]] ; then echo "Se
 
 sed -i '/ServerAliveCountMax/c \\ServerAliveCountMax 10800' /etc/ssh/ssh_config
 if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveCountMax` ]] ; then echo "ServerAliveCountMax 10800" >> /etc/ssh/ssh_config ; fi;
-
-for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
-    echo $DOUBLE_BAR
-    echo n: $n
-    GPU_INDEX=$n
-    VM_INDEX=$(($n+1))
-    echo "VM_INDEX: $VM_INDEX"
-    
-    VM_NAME=`virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`    
-    virsh domiflist $VM_NAME
-    virsh vcpucount $VM_NAME
-done
