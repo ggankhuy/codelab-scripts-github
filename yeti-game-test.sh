@@ -380,6 +380,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
+
+            display_result $game
         done
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."

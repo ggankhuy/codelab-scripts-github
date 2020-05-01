@@ -446,7 +446,20 @@ function process_t1t2 ()
 }
 
 function display_result() {
-
+    GAME=$1
+    
+    if [[ $GAME -eq $GAME_3DMARK ]] ; then 
+        for i in gt1 gt2
+        do
+            #for j in 720 1080 4k
+            #do
+            egrep -irn "value\"" /log/ | grep -i $i | grep -i $j
+            #done
+        done
+    else
+        echo "Does not support displaying result for $GAME"
+    fi
+    
 }
 
 #       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION
