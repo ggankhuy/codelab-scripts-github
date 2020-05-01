@@ -47,8 +47,6 @@ do
     fi
 done
 
-sleep 3
-
 game=0            # game
 mode=0            # 0 for yeti, 1 for linux
 option=0    # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
