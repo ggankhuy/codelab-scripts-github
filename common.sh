@@ -442,6 +442,10 @@ function process_t1t2 ()
     fi
 }
 
+function display_result() {
+
+}
+
 #       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION
 #       input:
 #       $1 - name of directory in $REPO_SERVER_LOCATION to copy
