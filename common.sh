@@ -447,23 +447,52 @@ function process_t1t2 ()
 
 function display_result() {
     GAME=$1
+    DEBUG_DISPLAY_RESULT=0
 
     echo "display_result: $GAME"    
     
     if [[ $GAME -eq $GAME_3DMARK ]] ; then 
         for i in gt1 gt2
         do
-            echo "$i:"
             for j in 720 1080 4k
             do
+                echo "------------------"
                 echo "$i:$j"
                 egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
+                scores=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | tr -s ' ' | cut -d ":" -f4`
+                scores_count=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | wc -l`
+                echo scores_count: $scores_count
+                scores_cumulative=0
+                score_min=1000
+                score_max=0
+                score_average=0
+                
+                for k in $scores 
+                do
+                    if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                        echo -----
+                        echo "current score: $k"
+                        echo "score_cumulative: $scores_cumulative"
+                        echo "score min/max: $score_min/$score_max"
+                        if [[ $k<$score_min ]] ; then echo "min score found: $k" ; score_min=$k ; fi
+                        if [[ $k>$score_max ]] ; then echo "max score found: $k" ; score_max=$k ; fi
+                    fi
+                    scores_cumulative=`bc -l <<< $scores_cumulative+$k`
+                    
+                done
+                score_average=`bc -l <<< $scores_cumulative/$scores_count`
+                echo "average: $score_average"
+
+                if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                    echo "max: $score_max"
+                    echo "min: $score_min"
+                fi
+                sleep 230
             done
         done
     else
         echo "Does not support displaying result for $GAME"
     fi
-    
 }
 
 #       Copy game files from $REPO_SERVER_IP:/$REPO_SERVER_LOCATION

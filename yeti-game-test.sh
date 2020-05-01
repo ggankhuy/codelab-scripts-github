@@ -360,6 +360,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             echo Running 3dmark for $n th time.
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
+            display_result $game
             sleep 3
     
             sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
@@ -380,6 +381,8 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
+
+            display_result $game
         done
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."
