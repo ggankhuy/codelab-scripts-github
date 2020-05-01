@@ -487,7 +487,6 @@ function display_result() {
                     echo "max: $score_max"
                     echo "min: $score_min"
                 fi
-                sleep 230
             done
         done
     else
