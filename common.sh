@@ -459,8 +459,8 @@ function display_result() {
                 echo "------------------"
                 echo "$i:$j"
                 egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
-                scores=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | tr -s ' ' | cut -d ":" -f4`
-                scores_count=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | wc -l`
+                scores=`egrep -irn "value\"" /log/3dmark | grep $i | grep $j | tr -s ' ' | cut -d ":" -f4`
+                scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep $j | wc -l`
                 echo scores_count: $scores_count
 
                 if [[ $scores_count -eq 0 ]] ; then 
