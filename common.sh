@@ -461,8 +461,6 @@ function display_result() {
                 egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
                 scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | tr -s ' ' | cut -d ":" -f4`
                 scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep $j | wc -l`
-                echo score: $scores
-                echo scores_count: $scores_count
 
                 if [[ $scores_count -eq 0 ]] ; then 
                     echo "unable to find scores for $i:$j"
