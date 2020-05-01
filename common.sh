@@ -240,10 +240,10 @@ function set_repo_server() {
 	
 	if [[ -z $REPO_SERVER_IP ]] ; then
 		echo "Error: can not find pingable repo server IP:"
+	else
+	        echo "repo server is set to: $REPO_SERVER_IP"
+	        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
 	fi
-
-        echo "repo server is set to: $REPO_SERVER_IP"
-        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
     else
         echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
         REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
