@@ -120,6 +120,11 @@ elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
     common_setup $p2
+
+    if [[ -z $REPO_SERVER_IP ]] ; then
+        echo "Can not find available REPO_SERVER_IP."
+        exit 1
+    fi
     exit 0
 else
     echo "Invalid game selected: $p1"
@@ -303,6 +308,11 @@ fi
 
 copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
+if [[ -z $REPO_SERVER_IP ]] ; then
+    echo "Can not find available REPO_SERVER_IP."
+    exit 1
+fi
+
 # infiltrator specific code.
 
 if [[ $game -eq $GAME_QUAIL ]] ; then
@@ -390,7 +400,11 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
     if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then            
         echo "Terminal1." ; sleep $SLEEP_TIME
     
-            copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+        copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+        if [[ -z $REPO_SERVER_IP ]] ; then
+            echo "Can not find available REPO_SERVER_IP."
+        exit 1
 
         if [[ $game -eq $GAME_3DMARK ]] ; then
             echo "3dmark specific steps..."

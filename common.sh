@@ -11,7 +11,7 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP=""
 
 # 0 - for tar
 # 1 - for deb
@@ -19,12 +19,9 @@ REPO_SERVER_IP="10.217.74.231"
 
 OPTION_GGP_INSTALL_USE_DEB=1
 
-#REPO_SERVER_IP="10.217.73.160"
-
 #     IXT70 GAME REPO
 
-#REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
-REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("10.216.66.54" "10.216.66.51" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
@@ -227,6 +224,8 @@ function set_repo_server() {
     if [[ -z $REPO_SERVER_IP_BASHRC ]] ; then
         echo "REPO_SERVER_IP is not setup in bashrc."
 
+	REPO_SERVER_IP=""
+
         for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ ))
         do
             ping -c 4 ${REPO_SERVER_IPS[$i]}
@@ -238,9 +237,13 @@ function set_repo_server() {
                     break
             fi
         done
-
-        echo "repo server is set to: $REPO_SERVER_IP"
-        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+	
+	if [[ -z $REPO_SERVER_IP ]] ; then
+		echo "Error: can not find pingable repo server IP:"
+	else
+	        echo "repo server is set to: $REPO_SERVER_IP"
+	        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+	fi
     else
         echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
         REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
