@@ -360,8 +360,6 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             echo Running 3dmark for $n th time.
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
-            display_result $game
-            sleep 3
     
             sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
             sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
