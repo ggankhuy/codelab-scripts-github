@@ -447,14 +447,18 @@ function process_t1t2 ()
 
 function display_result() {
     GAME=$1
+
+    echo "display_result: $GAME"    
     
     if [[ $GAME -eq $GAME_3DMARK ]] ; then 
         for i in gt1 gt2
         do
-            #for j in 720 1080 4k
-            #do
-            egrep -irn "value\"" /log/ | grep -i $i | grep -i $j
-            #done
+            echo "$i:"
+            for j in 720 1080 4k
+            do
+                echo "$i:$j"
+                egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
+            done
         done
     else
         echo "Does not support displaying result for $GAME"
