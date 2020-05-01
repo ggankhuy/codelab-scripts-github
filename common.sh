@@ -462,6 +462,11 @@ function display_result() {
                 scores=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | tr -s ' ' | cut -d ":" -f4`
                 scores_count=`egrep -irn "value\"" /log/3dmark | grep gt1 | grep 1080 | wc -l`
                 echo scores_count: $scores_count
+
+                if [[ $scores_count -eq 0 ]] ; then 
+                    echo "unable to find scores for $i:$j
+                    continue
+                fi
                 scores_cumulative=0
                 score_min=1000
                 score_max=0

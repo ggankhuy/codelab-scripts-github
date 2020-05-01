@@ -381,6 +381,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
 
             display_result $game
+            sleep 300
         done
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."
