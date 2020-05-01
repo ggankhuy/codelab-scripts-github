@@ -406,7 +406,8 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
 
         if [[ -z $REPO_SERVER_IP ]] ; then
             echo "Can not find available REPO_SERVER_IP."
-        exit 1
+            exit 1
+        fi
 
         if [[ $game -eq $GAME_3DMARK ]] ; then
             echo "3dmark specific steps..."
