@@ -368,12 +368,17 @@ function process_t1t2 ()
     GAME=$1
     GAME_FOLDER=$2
     GAME_PARAM=$3
-    #CONFIG_EXT_INT=$4
 
     echo "GAME: $GAME" 
     echo "GAME Params: $GAME_PARAM"
     echo "GAME folder: $GAME_FOLDER" 
     echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
+
+    echo "external interface: $CONFIG_EXT_INT"
+    sleep 5
+    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
+    echo "external IP: " $external_ip
+
     sleep 3
 
     DATE=`date +%Y%m%d-%H-%M-%S`
@@ -391,7 +396,7 @@ function process_t1t2 ()
 
     echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
 
-        read -p "Press a key to start $GAME..."
+    read -p "Press a key to start $GAME..."
 
     sudo chmod 755 ./$GAME_FOLDER/$GAME
 
@@ -404,11 +409,6 @@ function process_t1t2 ()
     if [[ $? -ne 0 ]] ; then
             echo "Warning: dhclient $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
     fi
-
-    echo "external interface: $CONFIG_EXT_INT"
-    sleep 5
-    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
-    echo "external IP: " $external_ip
 
     if [[ -z $external_ip ]] ; then
             echo "Failed to get external IP: "  $external_ip
