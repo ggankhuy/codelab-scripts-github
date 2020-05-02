@@ -554,8 +554,8 @@ function copy_game_files() {
 function set_resolution() {
     pResolution=$1
     pGame=$2
-    resoH=( 1280 1920 3840 )
-    resoW=( 720 1080 2160 )
+    resoW=( 1280 1920 3840 )    
+    resoH=( 720 1080 2160 )
     resoHset=""
     resoWset=""
 
