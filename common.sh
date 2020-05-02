@@ -386,7 +386,7 @@ function process_t1t2 ()
     echo "GAME_RESO: $GAME_RESO"
 
     echo "external interface: $CONFIG_EXT_INT"
-    sleep 5
+    sleep 1
     external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
     echo "external IP: " $external_ip
 
@@ -566,23 +566,20 @@ function set_resolution() {
         counter=0
         for i in ${RESOLUTIONS_SUPPORTED[@]}
         do 
-	    echo "i: $i, pResolution: $pResolution"
             if [[ $i == $pResolution ]] ; then
-		echo "setting resolution var-s"
                 CONFIG_RESOLUTION=$pResolution
                 resoHset=${resoH[$counter]}
                 resoWset=${resoW[$counter]}
-                echo "Setting the resolution to $pResolution / $resoHset / $resoWset"
                 sudo sed -i "/encode_width/c \ \encode_width: $resoWset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
                 sudo sed -i "/encode_height/c \ \encode_height: $resoHset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
 
                 if [[ $pGame == GAME_3DMARK ]] ; then
                     echo "Setting json for 3dmark too..."
-                    sudo sed -i '/resolution/c \ \"resolution" : "$resoWsetx$resoHset",' ../../configs/gt1.json
-                    sudo sed -i '/resolution/c \ \"resolution" : "$resoWsetx$resoHset",' ../../configs/gt2.json
+                    sudo sed -i "/resolution/c \ \"resolution" : $resoWsetx$resoHset," ../../configs/gt1.json
+                    sudo sed -i "/resolution/c \ \"resolution" : $resoWsetx$resoHset," ../../configs/gt2.json
                 fi
 
-                sleep 300
+                sleep  3
                 break
             fi
             counter=$((counter+1))
