@@ -18,7 +18,7 @@ CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 RESOLUTION_1080="1080"
 RESOLUTION_720="720"
 RESOLUTION_4K="4K"
-
+RESOLUTIONS_SUPPORTED ( RESOLUTION_720 RESOLUTION_1080 RESOLUTION_4K )
 # 0 - for tar
 # 1 - for deb
 # 2 - no copy or invalid choice.
@@ -377,6 +377,7 @@ function process_t1t2 ()
     GAME=$1
     GAME_FOLDER=$2
     GAME_PARAM=$3
+    GAME_RESO=$4
 
     echo "GAME: $GAME" 
     echo "GAME Params: $GAME_PARAM"
@@ -387,6 +388,8 @@ function process_t1t2 ()
     sleep 5
     external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
     echo "external IP: " $external_ip
+
+    set_resolution $GAME_RESO
 
     sleep 3
 
@@ -428,10 +431,6 @@ function process_t1t2 ()
     IP_TO_DISPLAY="$external_ip"
     cd /usr/local/cloudcast
     read -p "Press a key to start $GAME streaming server..."
-
-    # 1080p by default.
-
-    set_resolution
 
     if [[ $ENABLE_LOG -eq 0 ]] ;  then
         ./dev/bin/yeti_streamer \
@@ -554,8 +553,8 @@ function copy_game_files() {
 function set_resolution() {
     pResolution=$1
     pGame=$2
-    resoH=( 1920 1280 3840 )
-    resoW=( 1080 720 2160 )
+    resoH=( 1280 1920 3840 )
+    resoW=( 720 1080 2160 )
     resoHset=""
     resoWset=""
 
@@ -563,11 +562,10 @@ function set_resolution() {
         echo "Resolution is empty. Setting to default 1080."
         CONFIG_RESOLUTION=RESOLUTION_1080
     else
-
         counter=0
-        for i in  RESOLUTION_1080 RESOLUTION_720 RESOLUTION_4K
+        for i in ${RESOLUTIONS_SUPPORTED[@]}
         do 
-            if [[ $i  -eq $pResolution ]] ; then
+            if [[ $i -eq $pResolution ]] ; then
                 CONFIG_RESOLUTION=$pResolution
                 resoHset=$resoH[$counter]
                 resoWset=$resoW[$counter]
