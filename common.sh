@@ -573,8 +573,8 @@ function set_resolution() {
                 resoHset=${resoH[$counter]}
                 resoWset=${resoW[$counter]}
                 echo "Setting the resolution to $pResolution / $resoHset / $resoWset"
-                sudo sed -i '/encode_width/c \ \encode_width: "$resoWset"' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/encode_height/c \ \encode_height: "$resoHset"' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i "/encode_width/c \ \encode_width: $resoWset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i "/encode_height/c \ \encode_height: $resoHset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
 
                 if [[ $pGame == GAME_3DMARK ]] ; then
                     echo "Setting json for 3dmark too..."
