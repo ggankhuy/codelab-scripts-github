@@ -15,10 +15,10 @@ REPO_SERVER_IP=""
 
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 
-RESOLUTION_1080="1080"
-RESOLUTION_720="720"
-RESOLUTION_4K="4K"
-RESOLUTIONS_SUPPORTED ( RESOLUTION_720 RESOLUTION_1080 RESOLUTION_4K )
+RESOLUTION_1080=1080
+RESOLUTION_720=720
+RESOLUTION_4K=4k
+RESOLUTIONS_SUPPORTED=( $RESOLUTION_720 $RESOLUTION_1080 $RESOLUTION_4K )
 # 0 - for tar
 # 1 - for deb
 # 2 - no copy or invalid choice.
@@ -377,12 +377,13 @@ function process_t1t2 ()
     GAME=$1
     GAME_FOLDER=$2
     GAME_PARAM=$3
-    GAME_RESO=$4
+    GAME_RESO=$5
 
     echo "GAME: $GAME" 
     echo "GAME Params: $GAME_PARAM"
     echo "GAME folder: $GAME_FOLDER" 
     echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
+    echo "GAME_RESO: $GAME_RESO"
 
     echo "external interface: $CONFIG_EXT_INT"
     sleep 5
@@ -565,13 +566,15 @@ function set_resolution() {
         counter=0
         for i in ${RESOLUTIONS_SUPPORTED[@]}
         do 
-            if [[ $i -eq $pResolution ]] ; then
+	    echo "i: $i, pResolution: $pResolution"
+            if [[ $i == $pResolution ]] ; then
+		echo "setting resolution var-s"
                 CONFIG_RESOLUTION=$pResolution
-                resoHset=$resoH[$counter]
-                resoWset=$resoW[$counter]
+                resoHset=${resoH[$counter]}
+                resoWset=${resoW[$counter]}
                 echo "Setting the resolution to $pResolution / $resoHset / $resoWset"
-                sudo sed -i '/encode_width/c \ \encode_width: $resoWset' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i '/encode_height/c \ \encode_height: $resoHset' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i '/encode_width/c \ \encode_width: "$resoWset"' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i '/encode_height/c \ \encode_height: "$resoHset"' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
 
                 if [[ $pGame == GAME_3DMARK ]] ; then
                     echo "Setting json for 3dmark too..."
@@ -589,7 +592,7 @@ function set_resolution() {
 
     if [[ -z $CONFIG_RESOLUTION ]] ; then
         echo "Unable to set the resolution! Defaulting to 1080p"
-        CONFIG_RESOLUTION=RESOLUTION_1080
+        CONFIG_RESOLUTION=$RESOLUTION_1080
         sleep 30
     fi
 }
