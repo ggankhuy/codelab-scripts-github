@@ -13,6 +13,12 @@ OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP=""
 
+CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
+
+RESOLUTION_1080="1080"
+RESOLUTION_720="720"
+RESOLUTION_4K="4K"
+
 # 0 - for tar
 # 1 - for deb
 # 2 - no copy or invalid choice.
@@ -224,7 +230,7 @@ function set_repo_server() {
     if [[ -z $REPO_SERVER_IP_BASHRC ]] ; then
         echo "REPO_SERVER_IP is not setup in bashrc."
 
-	REPO_SERVER_IP=""
+    REPO_SERVER_IP=""
 
         for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ ))
         do
@@ -237,13 +243,13 @@ function set_repo_server() {
                     break
             fi
         done
-	
-	if [[ -z $REPO_SERVER_IP ]] ; then
-		echo "Error: can not find pingable repo server IP:"
-	else
-	        echo "repo server is set to: $REPO_SERVER_IP"
-	        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
-	fi
+    
+    if [[ -z $REPO_SERVER_IP ]] ; then
+        echo "Error: can not find pingable repo server IP:"
+    else
+            echo "repo server is set to: $REPO_SERVER_IP"
+            echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+    fi
     else
         echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
         REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
@@ -425,12 +431,7 @@ function process_t1t2 ()
 
     # 1080p by default.
 
-    sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-    sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-
-    # 4K setting
-    #        sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-    #        sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+    set_resolution
 
     if [[ $ENABLE_LOG -eq 0 ]] ;  then
         ./dev/bin/yeti_streamer \
@@ -547,5 +548,50 @@ function copy_game_files() {
         fi
     else
         echo "$game_dir_dest exists, skipping."
+    fi
+}
+
+function set_resolution() {
+    pResolution=$1
+    pGame=$2
+    resoH=( 1920 1280 3840 )
+    resoW=( 1080 720 2160 )
+    resoHset=""
+    resoWset=""
+
+    if [[ -z $pResolution ]] ; then
+        echo "Resolution is empty. Setting to default 1080."
+        CONFIG_RESOLUTION=RESOLUTION_1080
+    else
+
+        counter=0
+        for i in  RESOLUTION_1080 RESOLUTION_720 RESOLUTION_4K
+        do 
+            if [[ $i  -eq $pResolution ]] ; then
+                CONFIG_RESOLUTION=$pResolution
+                resoHset=$resoH[$counter]
+                resoWset=$resoW[$counter]
+                echo "Setting the resolution to $pResolution / $resoHset / $resoWset"
+                sudo sed -i '/encode_width/c \ \encode_width: $resoWset' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i '/encode_height/c \ \encode_height: $resoHset' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+
+                if [[ $pGame == GAME_3DMARK ]] ; then
+                    echo "Setting json for 3dmark too..."
+                    sudo sed -i '/resolution/c \ \"resolution" : "$resoWsetx$resoHset",' ../../configs/gt1.json
+                    sudo sed -i '/resolution/c \ \"resolution" : "$resoWsetx$resoHset",' ../../configs/gt2.json
+                fi
+
+                sleep 300
+                break
+            fi
+            counter=$((counter+1))
+        done    
+
+    fi    
+
+    if [[ -z $CONFIG_RESOLUTION ]] ; then
+        echo "Unable to set the resolution! Defaulting to 1080p"
+        CONFIG_RESOLUTION=RESOLUTION_1080
+        sleep 30
     fi
 }
