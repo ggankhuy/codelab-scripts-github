@@ -2,7 +2,7 @@ if [[ -z '$1'  ]] ; then echo "Usage: $0 <ip_address of the server to which rocm
 
 VM_IP=$1
 
-for i in "apt remove amdgpu-dkms" "apt update" "apt dist-upgrade -y" "apt install libnuma-dev-y " "echo rebooting ; sleep 15 ; reboot" ; do
+for i in "apt remove amdgpu-dkms" "apt update" "apt dist-upgrade -y" "apt install libnuma-dev -y " "echo rebooting ; sleep 15 ; reboot" ; do
         sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
 done
 
