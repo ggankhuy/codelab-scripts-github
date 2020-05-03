@@ -31,6 +31,7 @@ p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 
 #   gb 02: ens8
 
 CONFIG_EXT_INT=ens7
+CONFIG_ITERATION_COUNT=1
 
 for var in "$@"
 do
@@ -39,9 +40,12 @@ do
         CONFIG_EXT_INT=`echo $var | cut -d '=' -f2`
         echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
     fi
+    if [[ ! -z `echo "$var" | grep "iter="` ]]  ; then
+        echo "iteration count: $var"
+        CONFIG_ITERATION_COUNT=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_ITERATION_COUNT: $CONFIG_ITERATION_COUNT"
+    fi
 done
-
-sleep 3
 
 game=0            # game
 mode=0            # 0 for yeti, 1 for linux
@@ -73,8 +77,6 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=1
-CONFIG_ITERATION_CONGA=1
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
@@ -118,6 +120,11 @@ elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
     common_setup $p2
+
+    if [[ -z $REPO_SERVER_IP ]] ; then
+        echo "Can not find available REPO_SERVER_IP."
+        exit 1
+    fi
     exit 0
 else
     echo "Invalid game selected: $p1"
@@ -301,6 +308,11 @@ fi
 
 copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
+if [[ -z $REPO_SERVER_IP ]] ; then
+    echo "Can not find available REPO_SERVER_IP."
+    exit 1
+fi
+
 # infiltrator specific code.
 
 if [[ $game -eq $GAME_QUAIL ]] ; then
@@ -345,10 +357,9 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         echo "3dmark specific steps..."
         common_runtime_setup novce
 
-        for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             echo Running 3dmark for $n th time.
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
-            sleep 3
     
             sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
             sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
@@ -368,11 +379,13 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
+
+            display_result $game
         done
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."
         common_runtime_setup novce
-        for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
@@ -388,7 +401,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
     if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then            
         echo "Terminal1." ; sleep $SLEEP_TIME
     
-            copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+        copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+        if [[ -z $REPO_SERVER_IP ]] ; then
+            echo "Can not find available REPO_SERVER_IP."
+            exit 1
+        fi
 
         if [[ $game -eq $GAME_3DMARK ]] ; then
             echo "3dmark specific steps..."

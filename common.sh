@@ -11,7 +11,7 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP=""
 
 # 0 - for tar
 # 1 - for deb
@@ -19,12 +19,9 @@ REPO_SERVER_IP="10.217.74.231"
 
 OPTION_GGP_INSTALL_USE_DEB=1
 
-#REPO_SERVER_IP="10.217.73.160"
-
 #     IXT70 GAME REPO
 
-#REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
-REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("10.216.66.54" "10.216.66.51" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
@@ -227,6 +224,8 @@ function set_repo_server() {
     if [[ -z $REPO_SERVER_IP_BASHRC ]] ; then
         echo "REPO_SERVER_IP is not setup in bashrc."
 
+	REPO_SERVER_IP=""
+
         for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ ))
         do
             ping -c 4 ${REPO_SERVER_IPS[$i]}
@@ -238,9 +237,13 @@ function set_repo_server() {
                     break
             fi
         done
-
-        echo "repo server is set to: $REPO_SERVER_IP"
-        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+	
+	if [[ -z $REPO_SERVER_IP ]] ; then
+		echo "Error: can not find pingable repo server IP:"
+	else
+	        echo "repo server is set to: $REPO_SERVER_IP"
+	        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+	fi
     else
         echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
         REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
@@ -368,12 +371,17 @@ function process_t1t2 ()
     GAME=$1
     GAME_FOLDER=$2
     GAME_PARAM=$3
-    #CONFIG_EXT_INT=$4
 
     echo "GAME: $GAME" 
     echo "GAME Params: $GAME_PARAM"
     echo "GAME folder: $GAME_FOLDER" 
     echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
+
+    echo "external interface: $CONFIG_EXT_INT"
+    sleep 5
+    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
+    echo "external IP: " $external_ip
+
     sleep 3
 
     DATE=`date +%Y%m%d-%H-%M-%S`
@@ -391,7 +399,7 @@ function process_t1t2 ()
 
     echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
 
-        read -p "Press a key to start $GAME..."
+    read -p "Press a key to start $GAME..."
 
     sudo chmod 755 ./$GAME_FOLDER/$GAME
 
@@ -404,11 +412,6 @@ function process_t1t2 ()
     if [[ $? -ne 0 ]] ; then
             echo "Warning: dhclient $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
     fi
-
-    echo "external interface: $CONFIG_EXT_INT"
-    sleep 5
-    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
-    echo "external IP: " $external_ip
 
     if [[ -z $external_ip ]] ; then
             echo "Failed to get external IP: "  $external_ip
@@ -439,6 +442,59 @@ function process_t1t2 ()
             -policy_config_file dev/bin/lan_policy.proto_ascii \
             -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
             -port 44700 -null_audio=true > $LOG_DIR/$GAME-stream-$DATE.log
+    fi
+}
+
+function display_result() {
+    GAME=$1
+    DEBUG_DISPLAY_RESULT=0
+
+    echo "display_result: $GAME"    
+    
+    if [[ $GAME -eq $GAME_3DMARK ]] ; then 
+        for i in gt1 gt2
+        do
+            for j in 720 1080 4k
+            do
+                echo ----------------
+                echo "$i:$j"
+                egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
+                scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | tr -s ' ' | cut -d ":" -f4`
+                scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep $j | wc -l`
+
+                if [[ $scores_count -eq 0 ]] ; then 
+                    echo "unable to find scores for $i:$j"
+                    continue
+                fi
+                scores_cumulative=0
+                score_min=1000
+                score_max=0
+                score_average=0
+                
+                for k in $scores 
+                do
+                    if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                        echo -----
+                        echo "current score: $k"
+                        echo "score_cumulative: $scores_cumulative"
+                        echo "score min/max: $score_min/$score_max"
+                        if [[ $k<$score_min ]] ; then echo "min score found: $k" ; score_min=$k ; fi
+                        if [[ $k>$score_max ]] ; then echo "max score found: $k" ; score_max=$k ; fi
+                    fi
+                    scores_cumulative=`bc -l <<< $scores_cumulative+$k`
+                    
+                done
+                score_average=`bc -l <<< $scores_cumulative/$scores_count`
+                echo "average: $score_average"
+
+                if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                    echo "max: $score_max"
+                    echo "min: $score_min"
+                fi
+            done
+        done
+    else
+        echo "Does not support displaying result for $GAME"
     fi
 }
 

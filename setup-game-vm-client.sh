@@ -27,3 +27,7 @@ sudo git checkout master
 sudo nmcli c mod "Wired connection 1" ipv4.never-default true
 echo "make sure to reboot after nmcli configuration..."
 
+echo "set tabsize 4" >> ~/.nanorc
+echo "set tabstospaces" >> ~/.nanorc
+
+
