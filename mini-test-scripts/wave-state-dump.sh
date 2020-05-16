@@ -1,4 +1,4 @@
-CONFIG_UMR_USE_VATS2_PATH=0
+CONFIG_UMR_USE_VATS2_PATH=1
 
 dmesg --clear
 modprobe amdgpu
@@ -16,7 +16,7 @@ echo "calling umr..."
 
 
 
-if [[ $CONFIG_UMR_USE_VATS2_PATH -eq 0 ]] ; then
+if [[ $CONFIG_UMR_USE_VATS2_PATH -eq 1 ]] ; then
 	./umr -O halt_waves -wa
 else
 	/usr/local/bin/umr -O halt_waves -wa
