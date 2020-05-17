@@ -17,8 +17,10 @@ echo "calling umr..."
 
 
 if [[ $CONFIG_UMR_USE_VATS2_PATH -eq 1 ]] ; then
+	echo "Using umr in vats2 guest package..."
 	./umr -O halt_waves -wa
 else
+	echo "using umr in /usr/local/bin/umr..."
 	/usr/local/bin/umr -O halt_waves -wa
 fi
 
