@@ -451,20 +451,20 @@ function display_result() {
     DEBUG_DISPLAY_RESULT=0
 
     echo "display_result: $GAME"    
-    
+
     if [[ $GAME -eq $GAME_3DMARK ]] ; then 
         for i in gt1 gt2
         do
             for j in 720 1080 4k
             do
-                echo ----------------
-                echo "$i:$j"
-                egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j
-                scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | tr -s ' ' | cut -d ":" -f4`
-                scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep $j | wc -l`
+                echo ---------------- | tee -a /log/3dmark/$DATE.brief.log
+                echo "$i:$j" | tee -a /log/3dmark/$DATE.brief.log
+                egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j | grep -v brief | tee -a /log/3dmark/$DATE.brief.log
+                scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | grep -v brief | tr -s ' ' | cut -d ":" -f4`
+                scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep -i $j | grep -v brief | wc -l`
 
                 if [[ $scores_count -eq 0 ]] ; then 
-                    echo "unable to find scores for $i:$j"
+                    echo "unable to find scores for $i:$j" | tee -a /log/3dmark/$DATE.brief.log
                     continue
                 fi
                 scores_cumulative=0
@@ -475,22 +475,22 @@ function display_result() {
                 for k in $scores 
                 do
                     if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
-                        echo -----
-                        echo "current score: $k"
-                        echo "score_cumulative: $scores_cumulative"
-                        echo "score min/max: $score_min/$score_max"
-                        if [[ $k<$score_min ]] ; then echo "min score found: $k" ; score_min=$k ; fi
-                        if [[ $k>$score_max ]] ; then echo "max score found: $k" ; score_max=$k ; fi
+                        echo ----- | tee -a /log/3dmark/$DATE.brief.log
+                        echo "current score: $k" | tee -a /log/3dmark/$DATE.brief.log
+                        echo "score_cumulative: $scores_cumulative" | tee -a /log/3dmark/$DATE.brief.log
+                        echo "score min/max: $score_min/$score_max" | tee -a /log/3dmark/$DATE.brief.log
+                        if [[ $k<$score_min ]] ; then echo "min score found: $k" | tee -a /log/3dmark/$DATE.brief.log ; score_min=$k ; fi
+                        if [[ $k>$score_max ]] ; then echo "max score found: $k" | tee -a /log/3dmark/$DATE.brief.log; score_max=$k ; fi
                     fi
                     scores_cumulative=`bc -l <<< $scores_cumulative+$k`
                     
                 done
                 score_average=`bc -l <<< $scores_cumulative/$scores_count`
-                echo "average:score: $score_average"
+                echo "average:score:: $score_average" | tee -a /log/3dmark/$DATE.brief.log
 
                 if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
-                    echo "max: $score_max"
-                    echo "min: $score_min"
+                    echo "max: $score_max" | tee -a /log/3dmark/$DATE.brief.log
+                    echo "min: $score_min" | tee -a /log/3dmark/$DATE.brief.log
                 fi
             done
         done
