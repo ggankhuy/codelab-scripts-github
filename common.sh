@@ -459,6 +459,7 @@ function display_result() {
             do
                 echo ---------------- | tee -a /log/3dmark/$DATE.brief.log
                 echo "$i:$j" | tee -a /log/3dmark/$DATE.brief.log
+
                 egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j | grep -v brief | tee -a /log/3dmark/$DATE.brief.log
                 scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | grep -v brief | tr -s ' ' | cut -d ":" -f4`
                 scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep -i $j | grep -v brief | wc -l`
