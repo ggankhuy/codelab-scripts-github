@@ -486,7 +486,7 @@ function display_result() {
                     
                 done
                 score_average=`bc -l <<< $scores_cumulative/$scores_count`
-                echo "average: $score_average"
+                echo "average:score: $score_average"
 
                 if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
                     echo "max: $score_max"
