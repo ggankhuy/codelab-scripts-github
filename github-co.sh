@@ -25,6 +25,7 @@ ssh://gerritgit/gpu-virtual/ec/tool/smi-lib \
 ssh://gerritgit/brahma/ec/drm \
 ssh://gerritgit/brahma/ec/linux \
 ssh://gerritgit/brahma/ec/umr \
+ssh://gerritgit/gpu-virtual/ec/driver/vats2 \
 )
 
 mkdir gerritt
