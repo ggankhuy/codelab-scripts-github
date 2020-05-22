@@ -19,6 +19,8 @@ RESOLUTION_1080=1080
 RESOLUTION_720=720
 RESOLUTION_4K=4k
 RESOLUTIONS_SUPPORTED=( $RESOLUTION_720 $RESOLUTION_1080 $RESOLUTION_4K )
+STREAMER_POLICY_FILE=lan_policy.proto_ascii
+
 # 0 - for tar
 # 1 - for deb
 # 2 - no copy or invalid choice.
@@ -359,7 +361,7 @@ function prompt_t2_with_ip () {
         IP_TO_DISPLAY="$external_ip"
     fi
 
-        echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
+        echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/$STREAMER_POLICY_FILE -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
 
 function t1()
@@ -435,12 +437,12 @@ function process_t1t2 ()
 
     if [[ $ENABLE_LOG -eq 0 ]] ;  then
         ./dev/bin/yeti_streamer \
-            -policy_config_file dev/bin/lan_policy.proto_ascii \
+            -policy_config_file dev/bin/$STREAMER_POLICY_FILE \
             -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
             -port 44700 -null_audio=true 
     else
         ./dev/bin/yeti_streamer \
-            -policy_config_file dev/bin/lan_policy.proto_ascii \
+            -policy_config_file dev/bin/$STREAMER_POLICY_FILE \
             -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
             -port 44700 -null_audio=true > $LOG_DIR/$GAME-stream-$DATE.log
     fi
@@ -571,8 +573,8 @@ function set_resolution() {
                 CONFIG_RESOLUTION=$pResolution
                 resoHset=${resoH[$counter]}
                 resoWset=${resoW[$counter]}
-                sudo sed -i "/encode_width/c \ \encode_width: $resoWset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-                sudo sed -i "/encode_height/c \ \encode_height: $resoHset" $CONFIG_POLICY_DIR/lan_policy.proto_ascii
+                sudo sed -i "/encode_width/c \ \encode_width: $resoWset" $CONFIG_POLICY_DIR/$STREAMER_POLICY_FILE
+                sudo sed -i "/encode_height/c \ \encode_height: $resoHset" $CONFIG_POLICY_DIR/$STREAMER_POLICY_FILE
 
                 if [[ $pGame == GAME_3DMARK ]] ; then
                     echo "Setting json for 3dmark too..."

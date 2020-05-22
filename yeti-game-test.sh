@@ -33,6 +33,7 @@ p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 
 CONFIG_EXT_INT=ens7
 CONFIG_ITERATION_COUNT=1
 CONFIG_RESOLUTION=RESOLUTION_1080
+CONFIG_CODEC=""
 
 for var in "$@"
 do
@@ -50,6 +51,12 @@ do
         echo "resolution: $var"
         CONFIG_RESOLUTION=`echo $var | cut -d '=' -f2`
         echo "CONFIG_RESOLUTION: $CONFIG_RESOLUTION"
+    fi
+    if [[ ! -z `echo "$var" | grep "codec="` ]]  ; then
+        echo "codec: $var"
+        CONFIG_CODEC=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_CODEC: $CONFIG_CODEC"
+        STREAMER_POLICY_FILE=lan_policy_vp9.proto_ascii
     fi
 done
 
