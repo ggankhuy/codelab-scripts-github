@@ -56,7 +56,14 @@ do
         echo "codec: $var"
         CONFIG_CODEC=`echo $var | cut -d '=' -f2`
         echo "CONFIG_CODEC: $CONFIG_CODEC"
-        STREAMER_POLICY_FILE=lan_policy_vp9.proto_ascii
+
+	if [[ $CONFIG_CODEC -eq "vp9" ]] ; then
+	        STREAMER_POLICY_FILE=lan_policy_vp9.proto_ascii
+		echo "lan policy is set to: $STREAMER_POLICY_FILE"
+	else
+		echo "Unknown codec. Leaving default"
+	fi
+	sleep 3
     fi
 done
 
