@@ -26,6 +26,7 @@ ssh://gerritgit/brahma/ec/drm \
 ssh://gerritgit/brahma/ec/linux \
 ssh://gerritgit/brahma/ec/umr \
 ssh://gerritgit/gpu-virtual/ec/driver/vats2 \
+ssh://gerritgit/android/ec/amd/vendor/amd/proprietary/bin/tools/quark \
 )
 
 mkdir gerritt
