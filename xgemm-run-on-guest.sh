@@ -53,6 +53,8 @@ fi
 
 #   Start capturing PM log:
 
+mkdir $CONFIG_OUTPUT_DIR
+
 echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
 #echo $CONFIG_FILENAME_ATITOOL -pmoutput $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX
 #$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX -pmcount=20 &
