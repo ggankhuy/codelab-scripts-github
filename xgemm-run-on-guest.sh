@@ -14,13 +14,15 @@ fi
 CONFIG_FILENAME_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
 CONFIG_FILENAME_XGEMM_FIND_MAX=./xgemm-find-max.py
 CONFIG_FILENAME_ATITOOL=/root/tools/atitool/atitool
-CONFIG_OUTPUT_DIR=./xgemm_out
 p1=$1
 p0=$0
 CONFIG_GPU_INDEX=$2
 CONFIG_IP_GUEST=$p1
 
 DATE=`date +%Y%m%d-%H-%M-%S`
+CONFIG_OUTPUT_DIR=./xgemm_out_$DATE
+OUTPUT_SUMMARY=output_summary_$DATE.log
+
 mkdir $CONFIG_OUTPUT_DIR
 
 if [[ $p1 == "--help" ]] ; then
@@ -70,6 +72,11 @@ for cmd in "cp $CONFIG_PATH_XGEMM_BINARY/xgemmStandaloneTest_NoCPU $CONFIG_PATH_
 "cd $CONFIG_PATH_XGEMM ; chmod 755 xgemmStandaloneTest_NoCPU ; pwd ; sleep 3; ./xgemmStandaloneTest_NoCPU" 
 do 
     sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
+    if [[ $? -ne 0 ]] ; then
+	echo "Error executing $cmd, giving up..."
+	kill $PID_ATITOOL
+	exit 1
+    fi
 done
 
 sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
@@ -78,7 +85,7 @@ echo "Idle run for few seconds before killing ..."
 sleep 10
 kill $PID_ATITOOL
 
-./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/output_final.log
+./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/$OUTPUT_SUMMARY
 echo "output of pmlog: $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv"
 
 
