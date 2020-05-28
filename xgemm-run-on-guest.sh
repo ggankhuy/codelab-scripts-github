@@ -1,8 +1,16 @@
 #   Following path definitions are VATS2 configured VM-s. It will differ for VATS1 and result likely be unpredictable.
 
 #   
-CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
-CONFIG_PATH_XGEMM_BINARY=/work/ubuntu_guest_package/utilities/test-apps/xgemm/
+VATS2_SUPPORT=0
+
+if [[  $VATS2_SUPPORT -eq 1 ]] ; then
+	CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
+	CONFIG_PATH_XGEMM_BINARY=/work/ubuntu_guest_package/utilities/test-apps/xgemm/
+else
+	CONFIG_PATH_XGEMM=/work/drop*/test-apps/xgemm/SgemmStressTest
+	CONFIG_PATH_XGEMM_BINARY=/work/drop*/test-apps/xgemm/
+fi
+
 CONFIG_FILENAME_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
 CONFIG_FILENAME_XGEMM_FIND_MAX=./xgemm-find-max.py
 CONFIG_FILENAME_ATITOOL=/root/tools/atitool/atitool
@@ -13,6 +21,7 @@ CONFIG_GPU_INDEX=$2
 CONFIG_IP_GUEST=$p1
 
 DATE=`date +%Y%m%d-%H-%M-%S`
+mkdir $CONFIG_OUTPUT_DIR
 
 if [[ $p1 == "--help" ]] ; then
 	clear
@@ -61,7 +70,6 @@ do
     sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
 done
 
-mkdir $CONFIG_OUTPUT_DIR
 sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
 
 echo "Idle run for few seconds before killing ..."
