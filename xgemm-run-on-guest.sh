@@ -3,7 +3,7 @@
 #   
 CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
 CONFIG_PATH_XGEMM_BINARY=/work/ubuntu_guest_package/utilities/test-apps/xgemm/
-CONFIG_FILENANE_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
+CONFIG_FILENAME_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
 CONFIG_FILENAME_XGEMM_FIND_MAX=./xgemm-find-max.py
 CONFIG_FILENAME_ATITOOL=/root/tools/atitool/atitool
 CONFIG_OUTPUT_DIR=./xgemm_out
@@ -44,27 +44,32 @@ fi
 
 #   Start capturing PM log:
 
+echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
 #echo $CONFIG_FILENAME_ATITOOL -pmoutput $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX
-#$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX -pmcount=10 &
-
+#$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX -pmcount=20 &
+$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX  &
+PID_ATITOOL=$!
+echo "Atitool PID: $PID_ATITOOL"
+echo "Idle run for few seconds..."
+sleep 10
+echo "Launching xgemm on guest $CONFIG_IP_GUEST..."
 echo "Guest VM IP:"  $CONFIG_IP_GUEST
 
 for cmd in "cp $CONFIG_PATH_XGEMM_BINARY/xgemmStandaloneTest_NoCPU $CONFIG_PATH_XGEMM" "modprobe amdgpu" \
-"cd $CONFIG_PATH_XGEMM_BINARY ; chmod 755 xgemmStandaloneTest_NoCPU ; ./xgemmStandaloneTest_NoCPU" 
+"cd $CONFIG_PATH_XGEMM ; chmod 755 xgemmStandaloneTest_NoCPU ; pwd ; sleep 3; ./xgemmStandaloneTest_NoCPU" 
 do 
     sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
 done
 
-#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST "cd  $CONFIG_PATH_XGEMM_BINARY/"
-#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST "ls -l /work/ubuntu_guest_package/utilities/test-apps/xgemm/"
-#sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST "lsb_release --all"
-#ssh root@$CONFIG_IP_GUEST "'cp $CONFIG_PATH_XGEMM_BINARY/xgemmStandaloneTest_NoCPU $CONFIG_PATH_XGEMM'"
-#ssh root@$CONFIG_IP_GUEST "'chmod 755 $CONFIG_PATH_XGEMM/xgemmStandaloneTest_NoCPU'"
+mkdir $CONFIG_OUTPUT_DIR
+sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
 
-#mkdir $CONFIG_OUTPUT_DIR
-#scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
+echo "Idle run for few seconds before killing ..."
+sleep 10
+kill $PID_ATITOOL
 
-#./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENANE_XGEMM_OUTPUT
+./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/output_final.log
+echo "output of pmlog: $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv"
 
 
 
