@@ -44,6 +44,8 @@ fi
 
 #   Start capturing PM log:
 
+mkdir $CONFIG_OUTPUT_DIR
+
 echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
 #echo $CONFIG_FILENAME_ATITOOL -pmoutput $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX
 #$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX -pmcount=20 &
@@ -61,7 +63,6 @@ do
     sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
 done
 
-mkdir $CONFIG_OUTPUT_DIR
 sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
 
 echo "Idle run for few seconds before killing ..."
