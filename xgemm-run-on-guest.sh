@@ -1,7 +1,7 @@
 #   Following path definitions are VATS2 configured VM-s. It will differ for VATS1 and result likely be unpredictable.
 
 #   
-VATS2_SUPPORT=0
+VATS2_SUPPORT=1
 
 if [[  $VATS2_SUPPORT -eq 1 ]] ; then
 	CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
