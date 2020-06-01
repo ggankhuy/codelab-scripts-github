@@ -5,11 +5,21 @@ GAME_DOOM=1
 GAME_TR2=2
 GAME_QUAIL=3
 GAME_CONGA=4
+GAME_ODIN=5
+GAME_CHASE=6
 DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
-REPO_SERVER_IP="10.217.74.231"
+REPO_SERVER_IP=""
+
+CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
+
+RESOLUTION_1080=1080
+RESOLUTION_720=720
+RESOLUTION_4K=4k
+RESOLUTIONS_SUPPORTED=( $RESOLUTION_720 $RESOLUTION_1080 $RESOLUTION_4K )
+STREAMER_POLICY_FILE=lan_policy.proto_ascii
 
 # 0 - for tar
 # 1 - for deb
@@ -17,12 +27,9 @@ REPO_SERVER_IP="10.217.74.231"
 
 OPTION_GGP_INSTALL_USE_DEB=1
 
-#REPO_SERVER_IP="10.217.73.160"
-
 #     IXT70 GAME REPO
 
-#REPO_SERVER_IPS=("192.168.0.27" "192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
-REPO_SERVER_IPS=("192.168.0.20" "10.217.75.124" "10.216.54.38" "10.217.73.160")
+REPO_SERVER_IPS=("10.216.66.54" "10.216.66.51" "10.217.75.124" "10.216.54.38" "10.217.73.160")
 
 REPO_SERVER_LOCATION=/repo/stadia
 OPTION_DHCLIENT_EXT_INT=1
@@ -59,7 +66,7 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
-    #export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+    export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else
@@ -212,6 +219,10 @@ function common_runtime_setup ()
 
     export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
     export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+    export GGP_INTERNAL_ENABLE_FABRICATED_PLAYER_MESSAGES=1 
+    export AMD_VK_USE_PIPELINE_CACHE=true 
+    export XDG_CACHE_HOME="/mnt/developer" 
+
     sleep 1
 }
 
@@ -225,6 +236,8 @@ function set_repo_server() {
     if [[ -z $REPO_SERVER_IP_BASHRC ]] ; then
         echo "REPO_SERVER_IP is not setup in bashrc."
 
+    REPO_SERVER_IP=""
+
         for (( i=0 ; i < ${#REPO_SERVER_IPS[@]} ; i++ ))
         do
             ping -c 4 ${REPO_SERVER_IPS[$i]}
@@ -236,9 +249,13 @@ function set_repo_server() {
                     break
             fi
         done
-
-        echo "repo server is set to: $REPO_SERVER_IP"
-        echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+    
+    if [[ -z $REPO_SERVER_IP ]] ; then
+        echo "Error: can not find pingable repo server IP:"
+    else
+            echo "repo server is set to: $REPO_SERVER_IP"
+            echo "REPO_SERVER_IP=$REPO_SERVER_IP" >> ~/.bashrc
+    fi
     else
         echo "REPO_SERVER_IP is already setup in bashrc: $REPO_SERVER_IP_BASHRC"
         REPO_SERVER_IP=`echo $REPO_SERVER_IP_BASHRC | cut -d '=' -f2`
@@ -348,7 +365,7 @@ function prompt_t2_with_ip () {
         IP_TO_DISPLAY="$external_ip"
     fi
 
-        echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/lan_policy.proto_ascii -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
+        echo "./dev/bin/yeti_streamer -policy_config_file dev/bin/$STREAMER_POLICY_FILE -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY -port 44700 -null_audio=true"
 }
 
 function t1()
@@ -366,12 +383,21 @@ function process_t1t2 ()
     GAME=$1
     GAME_FOLDER=$2
     GAME_PARAM=$3
-    #CONFIG_EXT_INT=$4
+    GAME_RESO=$5
 
     echo "GAME: $GAME" 
     echo "GAME Params: $GAME_PARAM"
     echo "GAME folder: $GAME_FOLDER" 
     echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
+    echo "GAME_RESO: $GAME_RESO"
+
+    echo "external interface: $CONFIG_EXT_INT"
+    sleep 1
+    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
+    echo "external IP: " $external_ip
+
+    set_resolution $GAME_RESO
+
     sleep 3
 
     DATE=`date +%Y%m%d-%H-%M-%S`
@@ -389,7 +415,7 @@ function process_t1t2 ()
 
     echo "./$GAME_FOLDER/$GAME $GAME_PARAM"
 
-        read -p "Press a key to start $GAME..."
+    read -p "Press a key to start $GAME..."
 
     sudo chmod 755 ./$GAME_FOLDER/$GAME
 
@@ -403,11 +429,6 @@ function process_t1t2 ()
             echo "Warning: dhclient $CONFIG_EXT_INT failed. $CONFIG_EXT_INT interface might not have been able to get DHCP IP..."
     fi
 
-    echo "external interface: $CONFIG_EXT_INT"
-    sleep 5
-    external_ip=`sudo ifconfig $CONFIG_EXT_INT | grep "inet " | tr -s " " | cut -d ' ' -f3`
-    echo "external IP: " $external_ip
-
     if [[ -z $external_ip ]] ; then
             echo "Failed to get external IP: "  $external_ip
             exit 1
@@ -418,25 +439,70 @@ function process_t1t2 ()
     cd /usr/local/cloudcast
     read -p "Press a key to start $GAME streaming server..."
 
-    # 1080p by default.
-
-    sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-    sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-
-    # 4K setting
-    #        sudo sed -i '/encode_width/c \ \encode_width: 3840' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-    #        sudo sed -i '/encode_height/c \ \encode_height: 2160' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
-
     if [[ $ENABLE_LOG -eq 0 ]] ;  then
         ./dev/bin/yeti_streamer \
-            -policy_config_file dev/bin/lan_policy.proto_ascii \
+            -policy_config_file dev/bin/$STREAMER_POLICY_FILE \
             -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
             -port 44700 -null_audio=true 
     else
         ./dev/bin/yeti_streamer \
-            -policy_config_file dev/bin/lan_policy.proto_ascii \
+            -policy_config_file dev/bin/$STREAMER_POLICY_FILE \
             -connect_to_game_on_start -direct_webrtc_ws -external_ip=$IP_TO_DISPLAY \
             -port 44700 -null_audio=true > $LOG_DIR/$GAME-stream-$DATE.log
+    fi
+}
+
+function display_result() {
+    GAME=$1
+    DEBUG_DISPLAY_RESULT=0
+
+    echo "display_result: $GAME"    
+
+    if [[ $GAME -eq $GAME_3DMARK ]] ; then 
+        for i in gt1 gt2
+        do
+            for j in 720 1080 4k
+            do
+                echo ---------------- | tee -a /log/3dmark/$DATE.brief.log
+                echo "$i:$j" | tee -a /log/3dmark/$DATE.brief.log
+
+                egrep -irn "value\"" /log/3dmark/* | grep -i $i | grep -i $j | grep -v brief | tee -a /log/3dmark/$DATE.brief.log
+                scores=`egrep -irn "value\"" /log/3dmark | grep -i $i | grep -i $j | grep -v brief | tr -s ' ' | cut -d ":" -f4`
+                scores_count=`egrep -irn "value\"" /log/3dmark | grep $i | grep -i $j | grep -v brief | wc -l`
+
+                if [[ $scores_count -eq 0 ]] ; then 
+                    echo "unable to find scores for $i:$j" | tee -a /log/3dmark/$DATE.brief.log
+                    continue
+                fi
+                scores_cumulative=0
+                score_min=1000
+                score_max=0
+                score_average=0
+                
+                for k in $scores 
+                do
+                    if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                        echo ----- | tee -a /log/3dmark/$DATE.brief.log
+                        echo "current score: $k" | tee -a /log/3dmark/$DATE.brief.log
+                        echo "score_cumulative: $scores_cumulative" | tee -a /log/3dmark/$DATE.brief.log
+                        echo "score min/max: $score_min/$score_max" | tee -a /log/3dmark/$DATE.brief.log
+                        if [[ $k<$score_min ]] ; then echo "min score found: $k" | tee -a /log/3dmark/$DATE.brief.log ; score_min=$k ; fi
+                        if [[ $k>$score_max ]] ; then echo "max score found: $k" | tee -a /log/3dmark/$DATE.brief.log; score_max=$k ; fi
+                    fi
+                    scores_cumulative=`bc -l <<< $scores_cumulative+$k`
+                    
+                done
+                score_average=`bc -l <<< $scores_cumulative/$scores_count`
+                echo "average:score:: $score_average" | tee -a /log/3dmark/$DATE.brief.log
+
+                if [[ $DEBUG_DISPLAY_RESULT -eq 1 ]] ; then
+                    echo "max: $score_max" | tee -a /log/3dmark/$DATE.brief.log
+                    echo "min: $score_min" | tee -a /log/3dmark/$DATE.brief.log
+                fi
+            done
+        done
+    else
+        echo "Does not support displaying result for $GAME"
     fi
 }
 
@@ -489,5 +555,48 @@ function copy_game_files() {
         fi
     else
         echo "$game_dir_dest exists, skipping."
+    fi
+}
+
+function set_resolution() {
+    pResolution=$1
+    pGame=$2
+    resoW=( 1280 1920 3840 )    
+    resoH=( 720 1080 2160 )
+    resoHset=""
+    resoWset=""
+
+    if [[ -z $pResolution ]] ; then
+        echo "Resolution is empty. Setting to default 1080."
+        CONFIG_RESOLUTION=RESOLUTION_1080
+    else
+        counter=0
+        for i in ${RESOLUTIONS_SUPPORTED[@]}
+        do 
+            if [[ $i == $pResolution ]] ; then
+                CONFIG_RESOLUTION=$pResolution
+                resoHset=${resoH[$counter]}
+                resoWset=${resoW[$counter]}
+                sudo sed -i "/encode_width/c \ \encode_width: $resoWset" $CONFIG_POLICY_DIR/$STREAMER_POLICY_FILE
+                sudo sed -i "/encode_height/c \ \encode_height: $resoHset" $CONFIG_POLICY_DIR/$STREAMER_POLICY_FILE
+
+                if [[ $pGame == GAME_3DMARK ]] ; then
+                    echo "Setting json for 3dmark too..."
+                    sudo sed -i "/resolution/c \ \"resolution" : $resoWsetx$resoHset," ../../configs/gt1.json
+                    sudo sed -i "/resolution/c \ \"resolution" : $resoWsetx$resoHset," ../../configs/gt2.json
+                fi
+
+                sleep  3
+                break
+            fi
+            counter=$((counter+1))
+        done    
+
+    fi    
+
+    if [[ -z $CONFIG_RESOLUTION ]] ; then
+        echo "Unable to set the resolution! Defaulting to 1080p"
+        CONFIG_RESOLUTION=$RESOLUTION_1080
+        sleep 30
     fi
 }

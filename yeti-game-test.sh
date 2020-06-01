@@ -26,12 +26,14 @@ p3=$3       # 0 - non-stream, 1 for 1 pc stream , 2 for 2 pc stream.
 p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 for both terminal in one terminal.
             # $4 is not applicable if $3 is non streaming.
 
-<<<<<<< HEAD
 #   qts servers: ens3
 #   daytona x2: ens7
 #   gb 02: ens8
 
 CONFIG_EXT_INT=ens7
+CONFIG_ITERATION_COUNT=1
+CONFIG_RESOLUTION=RESOLUTION_1080
+CONFIG_CODEC=""
 
 for var in "$@"
 do
@@ -40,25 +42,43 @@ do
         CONFIG_EXT_INT=`echo $var | cut -d '=' -f2`
         echo "CONFIG_EXT_INT: $CONFIG_EXT_INT"
     fi
-done
+    if [[ ! -z `echo "$var" | grep "iter="` ]]  ; then
+        echo "iteration count: $var"
+        CONFIG_ITERATION_COUNT=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_ITERATION_COUNT: $CONFIG_ITERATION_COUNT"
+    fi
+    if [[ ! -z `echo "$var" | grep "reso="` ]]  ; then
+        echo "resolution: $var"
+        CONFIG_RESOLUTION=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_RESOLUTION: $CONFIG_RESOLUTION"
+    fi
+    if [[ ! -z `echo "$var" | grep "codec="` ]]  ; then
+        echo "codec: $var"
+        CONFIG_CODEC=`echo $var | cut -d '=' -f2`
+        echo "CONFIG_CODEC: $CONFIG_CODEC"
 
-sleep 3
+	if [[ $CONFIG_CODEC -eq "vp9" ]] ; then
+	        STREAMER_POLICY_FILE=lan_policy_vp9.proto_ascii
+		echo "lan policy is set to: $STREAMER_POLICY_FILE"
+	else
+		echo "Unknown codec. Leaving default"
+	fi
+	sleep 3
+    fi
+done
 
 game=0            # game
 mode=0            # 0 for yeti, 1 for linux
 option=0    # 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
-=======
+
 for var in "$@"
 do
     echo "$var"
 done
 
-exit 1
-
 game=0		# game
 mode=0		# 0 for yeti, 1 for linux
 option=0	# 0 for streaming, 1 and 2 for streaming with 1 or 2 pc respectively.
->>>>>>> setup-game-vm.sh: ext_int support, in test
 n=0
 
 MODE_YETI=0
@@ -77,15 +97,13 @@ SLEEP_TIME=1
 
 CONFIG_ABORT_GAME=1
 
-CONFIG_ITERATION_3DMARK=10
-CONFIG_ITERATION_CONGA=1
-CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 vm_check
 sleep $SLEEP_TIME
 
 #    apt packages 
+#    libcurl3 - needed by chase center.
 
-sudo apt install sshpass dstat net-tools -y
+sudo apt install sshpass dstat net-tools libcurl3 -y
 
 #    Process help request. 
 
@@ -111,10 +129,21 @@ elif [[ $p1 == "quail" ]] ; then
 elif [[ $p1 == "conga" ]] ; then
     echo "conga is selected..."
     game=$GAME_CONGA
+elif [[ $p1 == "odin" ]] ; then
+    echo "conga is selected..."
+    game=$GAME_ODIN
+elif [[ $p1 == "chase" ]] ; then
+    echo "chase is selected..."
+    game=$GAME_CHASE
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
     common_setup $p2
+
+    if [[ -z $REPO_SERVER_IP ]] ; then
+        echo "Can not find available REPO_SERVER_IP."
+        exit 1
+    fi
     exit 0
 else
     echo "Invalid game selected: $p1"
@@ -242,13 +271,25 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
     GAME_EXECUTABLE=benchmark
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CONGA
-
+elif [[ $game -eq $GAME_ODIN ]] ; then
+    echo "GAME: ODIN" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Odin
+    DESTINATION_FOLDER=odin
+    GAME_EXECUTABLE=ffxv
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_ODIN
+elif [[ $game -eq $GAME_CHASE ]] ; then
+    echo "GAME: CHASE" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=ChaseCenter
+    DESTINATION_FOLDER=chase
+    GAME_EXECUTABLE=nba_debug_unopt.elf
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_CHASE
 else
     echo "Unsupported game: $game" ; exit 1
 fi
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
-
     echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
     SOURCE_FOLDER=3dmark
     DESTINATION_FOLDER=./cumbia
@@ -257,11 +298,9 @@ if [[ $game -eq $GAME_3DMARK ]] ; then
     GAME_NAME=$GAME_3DMARK
     #GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json --output <output_full_path>"
     sudo mkdir -p /log/3dmark/
-        sudo chmod -R g=u /log/3dmark
-        sudo chmod -R o=u /log/3dmark
-
+    sudo chmod -R g=u /log/3dmark
+    sudo chmod -R o=u /log/3dmark
     GAME_PARAM="--asset_root=../../assets -i ../../configs/gt2.json --output /log/3dmark/3dmark.$DATE.log"
-
 elif [[ $game -eq $GAME_CONGA ]] ; then
     echo "GAME: CONGA." ; sleep $SLEEP_TIME
     sudo mkdir -p /log/conga/
@@ -269,25 +308,29 @@ elif [[ $game -eq $GAME_CONGA ]] ; then
     sudo chmod -R o=u /log/conga
     GAME_PARAM="--asset_root=/srv/game/assets/ -i /srv/game/assets/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
 
-elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
-    echo Following games: Doom/TR2 does not support non-stream test option.
+#elif [[ $game -eq $GAME_DOOM ]] || [[ $game -eq $GAME_TR2 ]] ; then
+#    echo Following games: Doom/TR2 does not support non-stream test option.
     
 else
-    echo "Invalid game: $game" 
-    exit 1
+    echo "No game specific configurations made so far for: $game" 
 fi
 
 if [[ $game -eq $GAME_QUAIL ]] ; then
-    sudo rm /srv/game/assets/
+    sudo rm -rf /srv/game/assets/
     sudo mkdir -p /srv/game/assets/
     sudo ln -fs /srv/game/$DESTINATION_FOLDER/ /srv/game/assets/Quail
 else
-    sudo rm /srv/game/assets
+    sudo rm -rf /srv/game/assets
     sudo mkdir -p /srv/game
     sudo ln -fs /srv/game/$DESTINATION_FOLDER /srv/game/assets
 fi
 
 copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+if [[ -z $REPO_SERVER_IP ]] ; then
+    echo "Can not find available REPO_SERVER_IP."
+    exit 1
+fi
 
 # infiltrator specific code.
 
@@ -333,10 +376,9 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
         echo "3dmark specific steps..."
         common_runtime_setup novce
 
-        for (( n=0; n < $CONFIG_ITERATION_3DMARK; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             echo Running 3dmark for $n th time.
             DATE_3DMARK_LOOP=`date +%Y%m%d-%H-%M-%S`
-            sleep 3
     
             sudo sed -i '/encode_width/c \ \encode_width: 1920' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
             sudo sed -i '/encode_height/c \ \encode_height: 1080' $CONFIG_POLICY_DIR/lan_policy.proto_ascii
@@ -356,11 +398,13 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             sudo sed -i '/resolution/c \ \"resolution" : "3840x2160",' ../../configs/gt2.json 
             ./3dmark --asset_root=../../assets -i ../../configs/gt1.json  --output /log/3dmark/3dmark.4k.gt1.$DATE_3DMARK_LOOP.log
             ./3dmark --asset_root=../../assets -i ../../configs/gt2.json  --output /log/3dmark/3dmark.4k.gt2.$DATE_3DMARK_LOOP.log
+
+            display_result $game
         done
     elif [[ $game -eq $GAME_CONGA ]] ; then
         echo "conga specific steps..."
         common_runtime_setup novce
-        for (( n=0; n < $CONFIG_ITERATION_CONGA; n++ )) ; do
+        for (( n=0; n < $CONFIG_ITERATION_COUNT; n++ )) ; do
             GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
@@ -376,7 +420,12 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
     if [[ $p4 == "t1" ]] || [[ $p4 == "t1t2" ]] || [[ $p4 == "nolaunch" ]] ; then            
         echo "Terminal1." ; sleep $SLEEP_TIME
     
-            copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+        copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
+
+        if [[ -z $REPO_SERVER_IP ]] ; then
+            echo "Can not find available REPO_SERVER_IP."
+            exit 1
+        fi
 
         if [[ $game -eq $GAME_3DMARK ]] ; then
             echo "3dmark specific steps..."
@@ -389,7 +438,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
         fi 
 
         if [[ $p4 == "t1t2" ]] ; then
-            process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM" "$CONFIG_EXT_INT"
+            process_t1t2 $GAME_EXECUTABLE $GAME_FOLDER "$GAME_PARAM" "$CONFIG_EXT_INT" "$CONFIG_RESOLUTION"
         else
             echo ./$GAME_EXECUTABLE
         fi
