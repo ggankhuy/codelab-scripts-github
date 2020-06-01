@@ -66,7 +66,7 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
-#   export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+    export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else
@@ -219,6 +219,10 @@ function common_runtime_setup ()
 
     export GGP_INTERNAL_VK_DELEGATE_ICD=/opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
     export GGP_INTERNAL_VK_ALLOW_GOOGLE_YETI_SURFACE=1
+    export GGP_INTERNAL_ENABLE_FABRICATED_PLAYER_MESSAGES=1 
+    export AMD_VK_USE_PIPELINE_CACHE=true 
+    export XDG_CACHE_HOME="/mnt/developer" 
+
     sleep 1
 }
 
