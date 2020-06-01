@@ -10,12 +10,13 @@ else
 	CONFIG_PATH_XGEMM=/work/drop*/test-apps/xgemm/SgemmStressTest
 	CONFIG_PATH_XGEMM_BINARY=/work/drop*/test-apps/xgemm/
 fi
-
 CONFIG_FILENAME_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
 CONFIG_FILENAME_XGEMM_FIND_MAX=./xgemm-find-max.py
 CONFIG_FILENAME_ATITOOL=/root/tools/atitool/atitool
 p1=$1
 p0=$0
+
+CONFIG_OUTPUT_DIR=./xgemm_out
 CONFIG_GPU_INDEX=$2
 CONFIG_IP_GUEST=$p1
 
@@ -88,5 +89,5 @@ kill $PID_ATITOOL
 ./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/$OUTPUT_SUMMARY
 echo "output of pmlog: $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv"
 
-
+    
 
