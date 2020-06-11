@@ -264,6 +264,7 @@ elif [[ $game -eq $GAME_DOOM ]] ; then
     GAME_EXECUTABLE=DOOM
     GAME_FOLDER="./"
     GAME_NAME=$GAME_DOOM
+    GAME_PARAM="+com_showfps 2 +com_speeds 3"
 elif [[ $game -eq $GAME_CONGA ]] ; then
     echo "GAME: CONGA" ; sleep $SLEEP_TIME
     SOURCE_FOLDER=Conga
