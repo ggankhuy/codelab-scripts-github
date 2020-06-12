@@ -30,4 +30,7 @@ echo "make sure to reboot after nmcli configuration..."
 echo "set tabsize 4" >> ~/.nanorc
 echo "set tabstospaces" >> ~/.nanorc
 
+sudo echo "set tabsize 4" >> /root/.nanorc
+sudo echo "set tabstospaces" >> /root/.nanorc
+
 
