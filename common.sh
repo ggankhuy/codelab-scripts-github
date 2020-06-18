@@ -222,7 +222,8 @@ function common_runtime_setup ()
     export GGP_INTERNAL_ENABLE_FABRICATED_PLAYER_MESSAGES=1 
     export AMD_VK_USE_PIPELINE_CACHE=true 
     export XDG_CACHE_HOME="/mnt/developer" 
-
+    export GGP_INTERNAL_VK_DISABLE_VSYNC=1
+    export GGP_INTERNAL_VK_FORCE_PRESENT_MODE =1
     sleep 1
 }
 
