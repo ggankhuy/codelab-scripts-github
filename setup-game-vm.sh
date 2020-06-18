@@ -368,3 +368,14 @@ if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveInterval` ]] ; then echo "Se
 
 sed -i '/ServerAliveCountMax/c \\ServerAliveCountMax 10800' /etc/ssh/ssh_config
 if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveCountMax` ]] ; then echo "ServerAliveCountMax 10800" >> /etc/ssh/ssh_config ; fi;
+
+# print final status.
+
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+    echo $DOUBLE_BAR
+    echo n: $n
+    GPU_INDEX=$n
+    VM_NAME=${VM_NAMES[$n]}
+    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh domiflist $VM_NAME"
+done
+
