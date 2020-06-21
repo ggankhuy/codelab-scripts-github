@@ -318,7 +318,8 @@ function common_setup () {
     
     echo "Soft links: "
     ls -l /usr/local/cloudcast/
-    ls -l /opt/cloudcast/lib/amdvlk64.so    
+    #ls -l /opt/cloudcast/lib/amdvlk64.so    
+    ls -l /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
 
     # If logic is not working...After add, it adds again. 
 
