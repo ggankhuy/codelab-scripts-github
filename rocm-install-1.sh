@@ -20,3 +20,4 @@ do
         sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
 done
 
+apt install ocl-icd-opencl-dev libopenblas-dev  -y
