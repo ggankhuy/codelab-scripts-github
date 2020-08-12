@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+# https://jira.readthedocs.io/en/master/examples.html#quickstart
 from jira import JIRA
 import re
 
