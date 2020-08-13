@@ -20,6 +20,8 @@ else
     https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-LibGV.git \
     https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-misc.git \
     https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-VkExamples \
+    https://ggghamd@github.com/AMD-CloudGPU/SMI-Lib/releases \
+	
     )
 fi
 
@@ -29,15 +31,16 @@ cd amd-gib
 for i in ${amd_cloud_gpu_repos[@]}
 do
     echo $i
-    echo cloning $i...
+    echo cloning $i... /skip/
     #git clone $i 
-    ln ../expect.sh .
-    export EXPECT_URL=$i
-    echo "EXPECT_URL1: $EXPECT_URL"
-    expect ./expect.sh
+    #ln ../expect.sh .
+    #export EXPECT_URL=$i
+    #echo "EXPECT_URL1: $EXPECT_URL"
+    #expect ./expect.sh
     #expect "Password for '$i':"
     #send -- "amd1234A#\r"
     #expect eof
+    git clone $i
 done
 
 cd  ..
