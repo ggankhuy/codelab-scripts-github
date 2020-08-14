@@ -13,14 +13,14 @@ if [[ $CONFIG_USE_SSH_AMD_CLOUD_GPU -eq 1 ]] ; then
     )
 else
     amd_cloud_gpu_repos=(\
-#    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-LinuxGuestKernel.git \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-Vulkan \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-GIM \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-Libdrm \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-LibGV.git \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-misc.git \
-    https://ggghamd@github.com/AMD-CloudGPU/Gibraltar-VkExamples \
-    https://ggghamd@github.com/AMD-CloudGPU/SMI-Lib/releases \
+#    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-LinuxGuestKernel.git \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-Vulkan \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-Libdrm \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-LibGV.git \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-misc.git \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-VkExamples \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/SMI-Lib/releases \
 	
     )
 fi
@@ -38,7 +38,7 @@ do
     #echo "EXPECT_URL1: $EXPECT_URL"
     #expect ./expect.sh
     #expect "Password for '$i':"
-    #send -- "amd1234A#\r"
+    #send -- "amd1234A%23\r"
     #expect eof
     git clone $i
 done
