@@ -1,5 +1,6 @@
 CONFIG_USE_SSH_AMD_CLOUD_GPU=0
 #git config credential.helper store
+
 if [[ -z `cat ~/.git-credentials | grep ggghamd`  ]] ; then
     echo "storing credentials for ggghamd@github.com"
     echo "https://ggghamd:amd1234A%23@github.com" >> ~/.git-credentials
