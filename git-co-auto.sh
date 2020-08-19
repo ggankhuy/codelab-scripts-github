@@ -21,7 +21,7 @@ else
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-LibGV.git \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-misc.git \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-VkExamples \
-    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/SMI-Lib/releases \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/SMI-Lib.git \
 	
     )
 fi
