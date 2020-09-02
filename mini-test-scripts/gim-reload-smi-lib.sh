@@ -6,12 +6,12 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 LOG_FOLDER=`pwd`/log/$DATE
 mkdir -p $LOG_FOLDER
 GPUS=`lspci -nd 1002: | wc -l`
+echo "GPUS: $GPUS"
 GPU_BDFS=()
 
-for i in {1..4} ; do 
+for ((i=1; i<=$GPUS; i++)); do
 	GPU_BDFS+=(`lspci -nd 1002: | head -$i  | tail -1 | tr -s ' ' | cut -d ' ' -f1`)
 done
-
 echo "GPU_BDFS: "
 
 for value in ${GPU_BDFS[@]}
@@ -19,17 +19,16 @@ do
      echo $value
 done
 
-	pushd /usr/src/gim*/smi-lib
-	make clean ; make
-	cd examples
-	cd basic-query
-	make clean ;make
-	popd
+pushd /usr/src/gim*/smi-lib
+make clean ; make
+cd examples
+cd basic-query
+make clean ;make
+popd
 	
 
 echo p1: $p1
-for i in {1..3} 
-do
+for (( i=1 ; i <=$p1 ; i++ )) ; do
 	mkdir -p $LOG_FOLDER/$i
 	echo "Loading gim $i th time..."
 	modprobe gim
