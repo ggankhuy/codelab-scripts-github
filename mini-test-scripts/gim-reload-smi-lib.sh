@@ -24,6 +24,11 @@ make clean ; make
 cd examples
 cd basic-query
 make clean ;make
+if [[ $? -ne 0 ]] ; then
+	echo "Failed to build  smi-lib utility..."
+	ls -l 
+	#exit 1
+fi
 popd
 	
 
@@ -52,6 +57,12 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 	sleep 2
 
 	pushd /usr/src/gim*/smi-lib/examples/basic-query
+
+	if [[ ! -f ./alloc_vf_with_parameters ]] ; then
+		echo "Error: ./alloc_vf_with_parameters utility does not exist in current directory or failed to build."
+		exit 1
+	fi
+
 	./alloc_vf_with_parameters  | tee -a $LOG_FOLDER/$i/alloc_vf_with_parameters.$DATE.$i.log
 	dmesg > $LOG_FOLDER/$i/dmesg.alloc.vf.with.parameters.$DATE.$i.log
 	dmesg --clear
