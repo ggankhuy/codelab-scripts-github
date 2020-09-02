@@ -41,7 +41,7 @@ do
 	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
 
 	for j in ${GPU_BDFS[@]} ; do
-		lspci -s $i -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
 	done
 	dmesg --clear
 
@@ -65,9 +65,9 @@ do
 	echo "Gim unload result: $ret"
 	dmesg > $LOG_FOLDER/$i/dmesg.gim.unload.$DATE.$i.log
 	dmesg --clear
-	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
 	for j in ${GPU_BDFS[@]} ; do
-		lspci -s $i -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
 	done
 
 	#if [[ $ret -ne 0 ]] ; then
