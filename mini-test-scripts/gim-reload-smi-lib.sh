@@ -41,7 +41,7 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 	ret=$?
 	echo "Gim load result: $ret"
 
-	dmesg > $LOG_FOLDER/$i/dmesg.           gim.load.$DATE.$i.log
+	dmesg > $LOG_FOLDER/$i/dmesg.gim.load.$DATE.$i.log
 	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
 	cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.load$DATE.$i.log
 
