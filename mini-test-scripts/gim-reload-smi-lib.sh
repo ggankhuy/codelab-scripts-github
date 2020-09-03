@@ -41,8 +41,9 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 	ret=$?
 	echo "Gim load result: $ret"
 
-	dmesg > $LOG_FOLDER/$i/dmesg.gim.load.$DATE.$i.log
+	dmesg > $LOG_FOLDER/$i/dmesg.           gim.load.$DATE.$i.log
 	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+	cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.load$DATE.$i.log
 
 	for j in ${GPU_BDFS[@]} ; do
 		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
@@ -64,6 +65,8 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 	fi
 
 	./alloc_vf_with_parameters  | tee -a $LOG_FOLDER/$i/alloc_vf_with_parameters.$DATE.$i.log
+	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.alloc.vf.$DATE.$i.log
+	cat /proc/iomem > $LOG_FOLDER/$i/iomem.alloc.vf.$DATE.$i.log
 	dmesg > $LOG_FOLDER/$i/dmesg.alloc.vf.with.parameters.$DATE.$i.log
 	dmesg --clear
 	popd
@@ -76,6 +79,8 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 	dmesg > $LOG_FOLDER/$i/dmesg.gim.unload.$DATE.$i.log
 	dmesg --clear
 	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
+	cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.unload.$DATE.$i.log
+
 	for j in ${GPU_BDFS[@]} ; do
 		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
 	done
