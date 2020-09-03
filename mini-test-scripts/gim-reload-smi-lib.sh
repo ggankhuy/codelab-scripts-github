@@ -1,5 +1,7 @@
 p1=$1
+p2=$2
 if [[ -z $p1 ]] ;then p1=3 ; fi
+if [[ -z $p2 ]] ;then p2=1 ; fi
 lspci -nd 1002:
 clear
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -64,8 +66,11 @@ for (( i=1 ; i <=$p1 ; i++ )) ; do
 		exit 1
 	fi
 
-	./alloc_vf_with_parameters  | tee -a $LOG_FOLDER/$i/alloc_vf_with_parameters.$DATE.$i.log
+	./alloc_vf_with_parameters $p1 $p2 | tee -a $LOG_FOLDER/$i/alloc_vf_with_parameters.$DATE.$i.log
 	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.alloc.vf.$DATE.$i.log
+	for j in ${GPU_BDFS[@]} ; do
+		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.alloc.vf.$DATE.$i.log
+	done
 	cat /proc/iomem > $LOG_FOLDER/$i/iomem.alloc.vf.$DATE.$i.log
 	dmesg > $LOG_FOLDER/$i/dmesg.alloc.vf.with.parameters.$DATE.$i.log
 	dmesg --clear
