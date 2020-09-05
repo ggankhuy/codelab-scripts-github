@@ -1,7 +1,19 @@
+p0=$0-
 p1=$1
 p2=$2
+p3=$3
 if [[ -z $p1 ]] ;then p1=3 ; fi
 if [[ -z $p2 ]] ;then p2=1 ; fi
+if [[ -z $p3 ]] ;then p3=10 ; fi
+
+if [[ $p1 == "--help" ]] ; then
+	clear
+	echo "Usage: ./$p0 <vf alloc loop=3> <No. of vf=1> <this script loop=10>"
+	echo "<vf alloc loop> is for smi-lib utility loop which is passed to the tool."
+	echo "<No. of vf=1> os for smi-lib utility, to tell how many vf-s per pf to allocate, also passed to the tool."
+	echo "<this script loop> is for loop withing this script. Each loop consists of load gim, call smi-lib utility and unload gim."
+	exit 0 
+fi
 lspci -nd 1002:
 clear
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -35,7 +47,7 @@ popd
 	
 
 echo p1: $p1
-for (( i=1 ; i <=$p1 ; i++ )) ; do
+for (( i=1 ; i <=$p3 ; i++ )) ; do
 	mkdir -p $LOG_FOLDER/$i
 	echo "Loading gim $i th time..."
 	modprobe gim
