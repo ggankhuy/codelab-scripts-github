@@ -1,0 +1,46 @@
+Issue key,Issue id,Summary,Labels,Labels,Labels,Labels,Labels,Custom field (Closed Date),Created,Custom field (Rejected Date)
+SWDEV-247403,1668292,[Gibraltar] 163148304  [libgv][v340] NULL ptr deference causing kernel crash,CST,Gibraltar,MUST_FIX,,,8/18/2020 13:18,8/7/2020 14:34,
+SWDEV-244708,1650824,[Gibraltar] 161384191 - release VFs issue with v540,"CST,",Gibraltar,,,,8/14/2020 0:29,7/15/2020 17:17,8/14/2020 0:29
+SWDEV-244665,1650384,[Gibraltar] 161304209 - libgv 2.0.1 compile errors,CST,Gibraltar,,,,7/28/2020 12:51,7/15/2020 11:34,
+SWDEV-244562,1649662,[Gibraltar] 161180209 - missing GPU after upgrading Rm firmware,"CST,",Gibraltar,,,,8/18/2020 11:03,7/14/2020 16:35,
+SWDEV-244545,1649581,[Gibraltar] 160800707 amdgpu loading issues on rome + semitruck + v340,CST,Gibraltar,,,,7/21/2020 16:24,7/14/2020 15:13,
+SWDEV-240177,1623313,158019587 libgv is updating static bus info in sysfs,"CST,",Gibraltar,,,,6/16/2020 13:50,6/10/2020 12:31,6/16/2020 13:00
+SWDEV-239846,1621401,[Gibraltar] 158513053 - heap error in smi_init_test ,"CST,",Gibraltar,MUST_FIX,,,8/18/2020 13:20,6/8/2020 18:10,
+SWDEV-236481,1601558,[Gibraltar]  156684071 add link speed to smi pci bus info,"CST,",Gibraltar,,,,5/19/2020 17:43,5/14/2020 20:18,
+SWDEV-236476,1601538,[Gibraltar] 156669691 HIP/issues/2082: cuda_wrapper inclusion needs to be fixed,"CST,",Gibraltar,GibraltarML-external,ROCm3.7,,8/18/2020 13:07,5/14/2020 19:04,
+SWDEV-233060,1582574, 154740437 xgemm issues on v540 with new vbios,"CST,",Gibraltar,,,,4/29/2020 14:42,4/23/2020 14:10,4/29/2020 10:04
+SWDEV-232034,1576071,154246508 ROCclr misses licensing info,"CST,",Gibraltar,,,,4/28/2020 14:27,4/16/2020 20:58,
+SWDEV-232033,1576067,154264279 GPUs not running at full power with Xgemm,"CST,",Gibraltar,,,,5/12/2020 13:37,4/16/2020 20:55,
+SWDEV-230811,1568538,"[Gibraltar] 153090571 two variants of migraphx package different .deb file sizes, but have virtually identical content, possible issue","CST,",Gibraltar,,,,5/1/2020 12:55,4/9/2020 3:37,5/1/2020 12:55
+SWDEV-230751,1568273,[Gibraltar] 153592665 Add allcoated flag to smi_vf_config,"CST,",Gibraltar,,,,7/16/2020 13:50,4/8/2020 20:14,7/16/2020 4:04
+SWDEV-229714,1562144,[Gibraltar]152811343 compilation issue while enabling CONFIG_GIM_STATIC_ID,CST,gibraltar,,,,7/28/2020 17:28,4/1/2020 13:46,7/28/2020 17:27
+SWDEV-228849,1556906,20Q1 [ubuntu1804] guest amdgpu dkms driver load fails with 2019Q3 host gim on Skylake V340,"CST,",Gibraltar,,,,4/20/2020 14:59,3/26/2020 0:40,4/9/2020 20:50
+SWDEV-227127,1548003,[Gibraltar] 151339480 Invalid error returned during init,CST,Gibraltar,,,,7/16/2020 13:50,3/13/2020 15:51,7/16/2020 4:03
+SWDEV-227126,1547996,[Gibraltar] 151456294 Serial number returned has a negative value on v540 ,CST,Gibraltar,,,,7/21/2020 20:43,3/13/2020 15:44,
+SWDEV-225828,1535100,[Gibraltar] 150806116 serial number is 0 on all v540 cards ,"CST,",Gibraltar,,,,3/10/2020 14:13,3/5/2020 11:26,3/9/2020 10:53
+SWDEV-225682,1534350,[Gibraltar] 150401223 kernel tracebacks when clearing FB,CST,Gibraltar,,,,7/21/2020 13:13,3/4/2020 16:37,
+SWDEV-225678,1534341,"[Gibraltar] 150401603 Failed to send message"" in dmesg when allocate fails ",Gibraltar,navi12,,,,3/11/2020 15:27,3/4/2020 16:26,
+SWDEV-225676,1534338,"[Gibraltar] 150738439 libsmi compile errors, need to enforce make rule","CST,",Gibraltar,SMILIB,,,3/6/2020 6:16,3/4/2020 16:22,
+SWDEV-225666,1534314,[Gibraltar] 150790088 gpu init failure with dmesg errors when libgv module is loaded,"CST,",Gibraltar,,,,3/13/2020 8:35,3/4/2020 15:59,3/13/2020 8:35
+SWDEV-225465,1533255,[Gibraltar] 150639101 API to get VF's allocated in a PF,CST,Gibraltar,,,,4/24/2020 11:18,3/3/2020 17:16,3/6/2020 11:31
+SWDEV-225464,1533251,[Gibraltar] 150642156 API to get parent device for VF,CST,gibraltar,,,,7/16/2020 13:52,3/3/2020 17:13,7/16/2020 4:03
+SWDEV-224815,1529614,[Gibraltar] 150404969 Are VF's allocated when modules are loaded?,,,,,,4/24/2020 3:42,2/27/2020 17:15,2/28/2020 11:11
+SWDEV-224801,1529513,[Gibraltar] 150371658 Improve libgv logging to help parsing,CST,Gibraltar,,,,5/7/2020 18:50,2/27/2020 15:49,
+SWDEV-224789,1529457,[Gibraltar] 149846689 Provide test for clearing and verifying framebuffer,CST,Gibraltar,SMILIB,,,3/10/2020 12:13,2/27/2020 15:04,2/28/2020 11:17
+SWDEV-224600,1528286,[Gibraltar] 150201887 gpuvsmi_allocate_vf failed with error SMI_ERR_API_FAILED,SMIDRV,SMILIB,,,,4/28/2020 14:20,2/26/2020 13:58,3/6/2020 11:18
+SWDEV-224586,1528237,[Gibraltar] 150132120 rock-dkms package fails to build the driver for linux kernel 5.1,GibraltarML,GibraltarML-external,ROCm3.3,,,4/28/2020 14:42,2/26/2020 13:01,
+SWDEV-223564,1522122,[GIbraltar] 149769907 Troubles with build_rocm.sh,GibraltarML,GibraltarML-external,,,,5/6/2020 15:33,2/18/2020 16:59,
+SWDEV-222901,1517530,[Gibraltar] 148797806 OpenCL update needed for v540,CST,Gibraltar,,,,5/6/2020 15:39,2/12/2020 12:54,
+SWDEV-221331,1507523,[Gibraltar] Stadia games are showing approx. 50pct lower score on navi12 720p 1080p,,,,,,2/5/2020 13:21,1/30/2020 11:37,
+SWDEV-221066,1506084,Gibraltar [148464885] Hang on Navi12 with libgv 1.9 and 20Q1-Beta-KMD-Pre-Release-Internal-Use-Only-Software,gibraltar,,,,,2/12/2020 9:13,1/28/2020 17:26,1/31/2020 15:57
+SWDEV-221036,1505895,Gibraltar [148395175]?ÿlibgv1.9-beta has compile errors,CST,Gibraltar,,,,4/28/2020 14:38,1/28/2020 14:18,
+LWPVATS-59,1504335,[Gibraltar][Vats2] Vats2 installation stuck on depmod on MI-25,CST,Gibraltar,sprint_200210,,,5/6/2020 12:46,1/25/2020 19:56,
+SWDEV-220454,1502233,Gibraltar [147698416] Fix warnings by treating them as errors,CST,Gibraltar,,,,1/30/2020 14:21,1/22/2020 12:25,1/30/2020 14:17
+SWDEV-211627,1454982,143968606 [Gibraltar] Atom vbios fails to load - AMDGIM_ERROR_PF_POST_VBIOS_FAIL,,,,,,2/27/2020 14:54,11/12/2019 2:24,2/27/2020 14:54
+LWPJAMASPPT-884,1439451,Request Jama access,,,,,,10/23/2019 6:58,10/22/2019 17:20,
+SWDEV-199425,1384118,[Gibraltar] 2019 Q3 RC5 installation fails due to sources.list URL,CST,Gilbraltar,,,,10/8/2019 21:32,8/8/2019 19:12,
+SWDEV-198374,1378819,drop-2019-q3-V320-rc3 installation does not complete.,,,,,,5/6/2020 12:45,7/31/2019 23:45,5/6/2020 12:45
+SWDEV-197654,1373942,Parametrize ethernet device assignment to base VM,,,,,,12/9/2019 1:23,7/25/2019 14:15,12/9/2019 1:23
+SWDEV-195648,1361992,[Gibraltar] memcat write is not reliable ,CST,gibraltar,,,,3/18/2020 20:01,7/9/2019 13:19,3/18/2020 18:28
+SWDEV-192720,1345607,V320 and MI-25 shows same DID 1002:6860 in PCIe configuration space,CST,Gibraltar,,,,8/13/2020 13:44,6/13/2019 20:43,4/9/2020 3:46
+SWDEV-192601,1344548,The order of amdkfd and amdgpu can cause xgemm fail with multi GPU ,CST,gibraltar,,,,2/27/2020 14:50,6/12/2019 17:40,2/27/2020 14:50
