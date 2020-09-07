@@ -107,7 +107,7 @@ if [[ $p1 == "ixt39" ]] ; then
     CONFIG_HOST_IP=$CONFIG_IXT39_HOST_IP
     CONFIG_GUEST_IP_RANGE=(${CONFIG_IXT39_GUEST_IP_RANGE[@]})
     if [[ $CONFIG_VATS2_SUPPORT -eq 1 ]] ; then
-        CONFIG_EXT_INT_SRC=ens4f1
+        CONFIG_EXT_INT_SRC=enp96s0f1
     else
         CONFIG_EXT_INT_SRC=enp96s0f1
     fi
@@ -368,3 +368,14 @@ if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveInterval` ]] ; then echo "Se
 
 sed -i '/ServerAliveCountMax/c \\ServerAliveCountMax 10800' /etc/ssh/ssh_config
 if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveCountMax` ]] ; then echo "ServerAliveCountMax 10800" >> /etc/ssh/ssh_config ; fi;
+
+# print final status.
+
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+    echo $DOUBLE_BAR
+    echo n: $n
+    GPU_INDEX=$n
+    VM_NAME=${VM_NAMES[$n]}
+    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh domiflist $VM_NAME"
+done
+
