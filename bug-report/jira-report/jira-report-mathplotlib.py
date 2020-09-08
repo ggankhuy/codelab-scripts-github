@@ -23,14 +23,9 @@ for i in range(1, len(jiradata)):
 	openDate=datetime.strptime(jiradata[i][1], '%m/%d/%Y %H:%M')
 	delta.append((closedDate-openDate).days)
 
-#	for j in range(0, len(jiradata[i])):
-#		print(jiradata[i][j])
-#		jiradata[i][j]=datetime.strptime(jiradata[i][j].strip(), '%m/%d/%Y %H:%M')
-
 for i in jiradata:
 	print(i)
 print(len(jiradata), len(jiradata[0]))
-
 
 print("delta:")
 for i in delta:
@@ -38,6 +33,27 @@ for i in delta:
 
 npdelta=np.asarray(delta)
 print(npdelta.shape)
+
+'''
+#n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
+n, num_bins, patches = plt.hist(npdelta)
+
+print("n, num_bins, patches: ", n, num_bins, patches)
+hist, bin_edges = np.histogram(npdelta, density=True)
+print("hist: ", hist)
+print("hist.sum(): ", hist.sum())
+#print(np.sum(hist * np.diff(bin_edges)))
+'''
+plt.hist(npdelta, bins=[10, 20, 30, 40, 50, 60, 100], histtype='step')
+plt.xlabel('Number of days to resolve')
+plt.ylabel('Number of tickets')
+plt.title(r'Defect resolution data')
+plt.show()
+'''
+plt.plot(bins, npdelta)
+plt.show()
+'''
+
 '''
 NP RANGE TOO UNFAMILIAR. Instead manipulate list and then convert to np before graphing
 #npjiradata = np.array(jiradata[1:], dtype=np.float)
@@ -69,13 +85,3 @@ plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
 #plt.plot([1, 2, 3, 4], [10, 20, -4, 100], 'ro')
 plt.ylabel('some numbers')
 '''
-
-num_bins = 5
-#n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
-n, bins, patches = plt.hist(npdelta, num_bins)
-
-plt.plot(bins, npdelta)
-plt.xlabel('Number of days to resolve')
-plt.ylabel('Number of tickets')
-plt.title(r'Defect resolution data')
-plt.show()
