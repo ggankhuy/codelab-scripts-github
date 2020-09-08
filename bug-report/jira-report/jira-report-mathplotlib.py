@@ -36,7 +36,8 @@ print("delta:")
 for i in delta:
 	print(i)
 
-np.asarray(delta)
+npdelta=np.asarray(delta)
+print(npdelta.shape)
 '''
 NP RANGE TOO UNFAMILIAR. Instead manipulate list and then convert to np before graphing
 #npjiradata = np.array(jiradata[1:], dtype=np.float)
@@ -68,5 +69,13 @@ plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
 #plt.plot([1, 2, 3, 4], [10, 20, -4, 100], 'ro')
 plt.ylabel('some numbers')
 '''
-plt.plot(delta)
+
+num_bins = 5
+#n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
+n, bins, patches = plt.hist(npdelta, num_bins)
+
+plt.plot(bins, npdelta)
+plt.xlabel('Number of days to resolve')
+plt.ylabel('Number of tickets')
+plt.title(r'Defect resolution data')
 plt.show()
