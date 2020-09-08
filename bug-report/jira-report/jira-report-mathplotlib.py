@@ -36,6 +36,7 @@ print("delta:")
 for i in delta:
 	print(i)
 
+np.asarray(delta)
 '''
 NP RANGE TOO UNFAMILIAR. Instead manipulate list and then convert to np before graphing
 #npjiradata = np.array(jiradata[1:], dtype=np.float)
@@ -65,6 +66,7 @@ t = np.arange(0., 5., 0.2)
 plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
 
 #plt.plot([1, 2, 3, 4], [10, 20, -4, 100], 'ro')
-#plt.ylabel('some numbers')
+plt.ylabel('some numbers')
 '''
-#plt.show()
+plt.plot(delta)
+plt.show()
