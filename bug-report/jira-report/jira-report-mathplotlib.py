@@ -27,6 +27,8 @@ for i in jiradata:
 	print(i)
 print(len(jiradata), len(jiradata[0]))
 
+delta.sort()
+
 print("delta:")
 for i in delta:
 	print(i)
@@ -36,7 +38,6 @@ print(npdelta.shape)
 
 '''
 #n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
-n, num_bins, patches = plt.hist(npdelta)
 
 print("n, num_bins, patches: ", n, num_bins, patches)
 hist, bin_edges = np.histogram(npdelta, density=True)
@@ -44,10 +45,19 @@ print("hist: ", hist)
 print("hist.sum(): ", hist.sum())
 #print(np.sum(hist * np.diff(bin_edges)))
 '''
-plt.hist(npdelta, bins=[10, 20, 30, 40, 50, 60, 100], histtype='step')
+
+#hist, bin_edges = np.histogram(npdelta, density=True)
+bins_list=[0, 7, 14, 21, 28]
+hist, bin_edges = np.histogram(npdelta, bins=bins_list)
+
+print("hist: ", hist)
+print("bin_edges: ", bin_edges)
+
+plt.hist(npdelta, bins=bins_list, histtype='step')
 plt.xlabel('Number of days to resolve')
 plt.ylabel('Number of tickets')
 plt.title(r'Defect resolution data')
+plt.xticks(bins_list, bins_list)
 plt.show()
 '''
 plt.plot(bins, npdelta)
