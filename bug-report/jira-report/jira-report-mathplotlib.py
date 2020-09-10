@@ -35,7 +35,6 @@ for i in delta:
 
 npdelta=np.asarray(delta)
 print(npdelta.shape)
-
 '''
 #n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
 
@@ -45,19 +44,29 @@ print("hist: ", hist)
 print("hist.sum(): ", hist.sum())
 #print(np.sum(hist * np.diff(bin_edges)))
 '''
+bins = [0, 7, 14,21,400] # your bins
+data=npdelta
+hist, bin_edges = np.histogram(data,bins) # make the histogram
 
-#hist, bin_edges = np.histogram(npdelta, density=True)
-bins_list=[0, 7, 14, 21, 28]
-hist, bin_edges = np.histogram(npdelta, bins=bins_list)
+fig,ax = plt.subplots()
 
-print("hist: ", hist)
-print("bin_edges: ", bin_edges)
+# Plot the histogram heights against integers on the x axis
+ax.bar(range(len(hist)),hist,width=1) 
 
-plt.hist(npdelta, bins=bins_list, histtype='step')
+# Set the ticks to the middle of the bars
+ax.set_xticks([0.5+i for i,j in enumerate(hist)])
+
+# Set the xticklabels to a string that tells us what the bin edges were
+ax.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist)])
+
+'''
+#this was cultprit!!!
+plt.hist(npdelta, bins=bins_list)
 plt.xlabel('Number of days to resolve')
 plt.ylabel('Number of tickets')
 plt.title(r'Defect resolution data')
-plt.xticks(bins_list, bins_list)
+plt.xticks(bins_list, bins_list_x_axis_ticks)
+'''
 plt.show()
 '''
 plt.plot(bins, npdelta)
