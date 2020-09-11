@@ -47,7 +47,9 @@ print("hist.sum(): ", hist.sum())
 '''
 
 #hist, bin_edges = np.histogram(npdelta, density=True)
-bins_list=[0, 7, 14, 21, 28]
+bins_list=[0, 7, 14, 21, 42]
+bins_list_x_axis_ticks=['0-7', '7-14', '14-21', '21+42', '']
+
 hist, bin_edges = np.histogram(npdelta, bins=bins_list)
 
 print("hist: ", hist)
@@ -57,7 +59,7 @@ plt.hist(npdelta, bins=bins_list, histtype='step')
 plt.xlabel('Number of days to resolve')
 plt.ylabel('Number of tickets')
 plt.title(r'Defect resolution data')
-plt.xticks(bins_list, bins_list)
+plt.xticks(bins_list, bins_list_x_axis_ticks)
 plt.show()
 '''
 plt.plot(bins, npdelta)

@@ -34,6 +34,7 @@ CONFIG_IXT25_HOST_IP="10.216.66.53"
 CONFIG_DAYTONAX1_HOST_IP="10.216.52.34"
 CONFIG_DAYTONAX2_HOST_IP="10.216.52.30"
 CONFIG_GB02_HOST_IP="10.216.52.62"
+CONFIG_V320_HOST_IP="11.0.0.30"
 
 CONFIG_HOST_IP=0
 CONFIG_GB02_IP_GUEST_IP_RANGE=(\
@@ -70,8 +71,8 @@ CONFIG_VATS2_SUPPORT=1
 CONFIG_GW="10.216.64.1"
 CONFIG_DNS="10.216.64.5 10.218.15.1 10.218.15.2"
 CONFIG_NETMASK="255.255.252.0"
-CONFIG_SET_VCPUCOUNT=1
-CONFIG_ADD_EXT_INTERFACE=1
+CONFIG_SET_VCPUCOUNT=0
+CONFIG_ADD_EXT_INTERFACE=0
 SETUP_GAME_VM_CLIENT=setup-game-vm-client.sh
 DATE=`date +%Y%m%d-%H-%M-%S`
 
@@ -131,6 +132,8 @@ elif [[ $1 == "daytonax2" ]] ; then
 elif [[ $1 == "gb02" ]] ; then
     CONFIG_HOST_IP=$CONFIG_GB02_HOST_IP
     CONFIG_EXT_INT_SRC=enp225s0f0	
+elif [[ $1 == "v320" ]] ; then
+    CONFIG_HOST_IP=$CONFIG_V320_HOST_IP
 else
     echo "ERROR: Invalid parameter."
     exit 1
@@ -176,7 +179,9 @@ fi
 #  Load gim.
 #  Start default network.
 
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
+if [[ $1 != "v320" ]] ; then
+    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
+fi
 sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
 
 #   Set vCPUs to 8.
