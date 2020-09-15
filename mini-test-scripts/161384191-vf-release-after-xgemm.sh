@@ -1,6 +1,6 @@
 DIRNAME=161384191-result
 mkdir $DIRNAME
-
+CONFIG_VATS2_SUPPORT=1
 p1=$1
 
 if [[ -z $1 ]] ; then
@@ -11,6 +11,37 @@ else
 	sleep 5
 	VM_NAME=$p1
 fi
+
+if [[ $1 -eq "all" ]] ; then
+	if [[ $CONFIG_VATS2_SUPPORT -eq 1 ]] ; then
+	    VM_GREP_PATTERN=vats
+	else
+	    VM_GREP_PATTERN=gpu
+	fi
+fi
+
+TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
+
+echo "TOTAL_VMS: $TOTAL_VMS"
+
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+    echo $DOUBLE_BAR
+    echo n: $n
+    GPU_INDEX=$n
+    VM_INDEX=$(($n+1))
+    echo "VM_INDEX: $VM_INDEX"
+
+    VM_NAME=`virsh list --all |         grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
+    VM_NAMES[$n]=$VM_NAME
+    VM_NO=`virsh list --all |         grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
+    VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+    VM_IPS[$n]=$VM_IP
+
+    echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
+    sleep 1
+done
+
+exit 0
 
 for i in {0..3}
 do
