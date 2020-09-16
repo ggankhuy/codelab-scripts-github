@@ -158,7 +158,7 @@ else
     VM_GREP_PATTERN=gpu
 fi
 
-TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l"`
+TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
 
 echo "TOTAL_VMS: $TOTAL_VMS"
 
@@ -176,8 +176,8 @@ fi
 #  Load gim.
 #  Start default network.
 
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "modprobe gim"
-sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh net-start default"
+modprobe gim
+virsh net-start default
 
 #   Set vCPUs to 8.
 
@@ -190,9 +190,9 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     VM_INDEX=$(($n+1))
     echo "VM_INDEX: $VM_INDEX"
     
-    VM_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3"`
+    VM_NAME=`virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX+1)) | tail -1  | tr -s ' ' | cut -d ' ' -f3`
     VM_NAMES[$n]=$VM_NAME
-    VM_NO=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2"`
+    VM_NO=`virsh list --all | grep $VM_GREP_PATTERN | head -$(($GPU_INDEX)) | tail -1  | tr -s ' ' | cut -d ' ' -f2`
     VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
     VM_IPS[$n]=$VM_IP
 
@@ -218,7 +218,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     #gateway 10.216.64.1
     #dns-nameservers 10.216.64.5 10.218.15.1 10.218.15.2
     
-    #sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "cat /etc/network/interfaces > /etc/network/interfaces.bak"
+    #cat /etc/network/interfaces > /etc/network/interfaces.bak"
 
     # setup sshd and ssh client settings on guest VM-s.
 
@@ -293,14 +293,14 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     if [[ $CONFIG_SET_VCPUCOUNT -eq 1 ]] ; then
 
         echo "Turning  off $VM_NAME"
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh destroy $VM_NAME"
+        virsh destroy $VM_NAME
         sleep 8 
 
         echo "Setting vCPUs to 8..."
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config --maximum"
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh setvcpus $VM_NAME 8 --config"
+        virsh setvcpus $VM_NAME 8 --config --maximum
+        virsh setvcpus $VM_NAME 8 --config
         
-        VCPU_COUNT=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh vcpucount $VM_NAME"`
+        VCPU_COUNT=`virsh vcpucount $VM_NAME`
         echo $VCPU_COUNT
         echo "Done."    
     
@@ -309,7 +309,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
         fi
 
         echo "Rebooting VM_NAME: $VM_NAME..."
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh start $VM_NAME"
+        virsh start $VM_NAME
         sleep 30
         echo "Done."    
     fi
@@ -334,7 +334,7 @@ if [[ $2 == "dmesg-clear" ]]; then
     exit 0
 fi
 
-TOTAL_VMS=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh list --all | grep -i gpu | wc -l"`
+TOTAL_VMS=`virsh list --all | grep -i gpu | wc -l`
 
 #  Log on to each vm through ssh (determine ip using virsh domifaddr <vmno>
 #  update /etc/network/interfaces with static ip from pool.
@@ -376,6 +376,6 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     echo n: $n
     GPU_INDEX=$n
     VM_NAME=${VM_NAMES[$n]}
-    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_HOST_IP "virsh domiflist $VM_NAME"
+    virsh domiflist $VM_NAME
 done
 
