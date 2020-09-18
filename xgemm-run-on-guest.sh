@@ -77,8 +77,6 @@ echo "Launching xgemm on guest $CONFIG_IP_GUEST..."
 echo "Guest VM IP:"  $CONFIG_IP_GUEST
 
 if [[ $CONFIG_XGEMM_GIB -eq 1 ]] ; then
-	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST 'mkdir /xgemm'
-	sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no  /xgemm/* root@$CONFIG_IP_GUEST:/xgemm/
 	for cmd in "modprobe amdgpu; cp /xgemm/multi_amd_xgemm.stripped /xgemm/multi_amd_xgemm; dpkg -i /xgemm/grtev4-x86-runtimes_1.0-145370904_amd64.deb ; apt install ocl-icd-opencl-dev libopenblas-dev -y ; cd /xgemm; chmod 755 ./multi_amd_xgemm ;./multi_amd_xgemm --logtostderr --xgemm_kernel_compile_arguments="-cl-std=CL2.0" --noenforce_kernel_ipv6_support --iterations 100" 
 	do 
 	    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd

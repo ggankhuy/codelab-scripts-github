@@ -52,6 +52,10 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
     echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
     sleep 1
+
+    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'mkdir /xgemm'
+    sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no  /xgemm/* root@$VM_IP:/xgemm/
+    if [[ $? -ne 0 ]] ; then echo "Unable to find xgemm on host."; exit 1; fi
 done
 
 echo $DOUBLE_BAR
