@@ -137,7 +137,7 @@ do
 			shutdown_time=$(($shutdown_time+$WAIT_INTERVAL))
 			echo "shutdown wait time so far: $shutdown_time..."
 		done
-		echo "shutdown_time for reboot No. $k: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
+		echo "shutdown_time for vm: $i, iteration No. $k: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
 	done
 
 	echo "Saving host dmesg..."
@@ -145,3 +145,10 @@ do
 	dmesg > /$DIRNAME/dmesg-iter-$k-host.log
 	dmesg --clear
 done
+
+echo "End of t est: Turning back on all vm-s..."
+for i in ${VM_NAMES[@]}
+	virsh start $i 
+done
+
+virsh list
