@@ -2,13 +2,18 @@
 
 #   
 VATS2_SUPPORT=1
+CONFIG_XGEMM_GIB=1
 
-if [[  $VATS2_SUPPORT -eq 1 ]] ; then
-	CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
-	CONFIG_PATH_XGEMM_BINARY=/work/ubuntu_guest_package/utilities/test-apps/xgemm/
+if [[ $CONFIG_XGEMM_GIB -eq 1 ]] ; then
+	CONFIG_PATH_XGEMM_HOST=/xgemm
 else
-	CONFIG_PATH_XGEMM=/work/drop*/test-apps/xgemm/SgemmStressTest
-	CONFIG_PATH_XGEMM_BINARY=/work/drop*/test-apps/xgemm/
+	if [[  $VATS2_SUPPORT -eq 1 ]] ; then
+		CONFIG_PATH_XGEMM=/work/ubuntu_guest_package/utilities/test-apps/xgemm/SgemmStressTest/
+		CONFIG_PATH_XGEMM_BINARY=/work/ubuntu_guest_package/utilities/test-apps/xgemm/
+	else
+		CONFIG_PATH_XGEMM=/work/drop*/test-apps/xgemm/SgemmStressTest
+		CONFIG_PATH_XGEMM_BINARY=/work/drop*/test-apps/xgemm/
+	fi
 fi
 CONFIG_FILENAME_XGEMM_OUTPUT=PerfoGemm_GPU_0.csv
 CONFIG_FILENAME_XGEMM_FIND_MAX=./xgemm-find-max.py
@@ -59,8 +64,6 @@ fi
 mkdir $CONFIG_OUTPUT_DIR
 
 echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
-#echo $CONFIG_FILENAME_ATITOOL -pmoutput $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX
-#$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX -pmcount=20 &
 $CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX  &
 PID_ATITOOL=$!
 echo "Atitool PID: $PID_ATITOOL"
@@ -69,17 +72,30 @@ sleep 10
 echo "Launching xgemm on guest $CONFIG_IP_GUEST..."
 echo "Guest VM IP:"  $CONFIG_IP_GUEST
 
-for cmd in "cp $CONFIG_PATH_XGEMM_BINARY/xgemmStandaloneTest_NoCPU $CONFIG_PATH_XGEMM" "modprobe amdgpu" \
-"cd $CONFIG_PATH_XGEMM ; chmod 755 xgemmStandaloneTest_NoCPU ; pwd ; sleep 3; ./xgemmStandaloneTest_NoCPU" 
-do 
-    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
-    if [[ $? -ne 0 ]] ; then
-	echo "Error executing $cmd, giving up..."
-	kill $PID_ATITOOL
-	exit 1
-    fi
-done
-
+if [[ $CONFIG_XGEMM_GIB -eq 1 ]] ; then
+	sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST 'mkdir /xgemm'
+	sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no  /xgemm/* root@$CONFIG_IP_GUEST:/xgemm/
+	for cmd in "cp /xgemm/multi_amd_xgemm.stripped /xgemm/multi_amd_xgemm; dpkg -i /xgemm/grtev4-x86-runtimes_1.0-145370904_amd64.deb ; apt install ocl-icd-opencl-dev libopenblas-dev -y ; cd /xgemm; chmod 755 ./multi_amd_xgemm ;./multi_amd_xgemm --logtostderr --xgemm_kernel_compile_arguments="-cl-std=CL2.0" --noenforce_kernel_ipv6_support --iterations 100" 
+	do 
+	    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
+	    if [[ $? -ne 0 ]] ; then
+		echo "Error executing $cmd, giving up..."
+		kill $PID_ATITOOL
+		exit 1
+	    fi
+	done
+else
+	for cmd in "cp $CONFIG_PATH_XGEMM_BINARY/xgemmStandaloneTest_NoCPU $CONFIG_PATH_XGEMM" "modprobe amdgpu" \
+	"cd $CONFIG_PATH_XGEMM ; chmod 755 xgemmStandaloneTest_NoCPU ; pwd ; sleep 3; ./xgemmStandaloneTest_NoCPU" 
+	do 
+	    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
+	    if [[ $? -ne 0 ]] ; then
+		echo "Error executing $cmd, giving up..."
+		kill $PID_ATITOOL
+		exit 1
+	    fi
+	done
+fi
 sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
 
 echo "Idle run for few seconds before killing ..."
