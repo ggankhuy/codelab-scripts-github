@@ -1,7 +1,8 @@
 DIRNAME=161384191-result
 mkdir $DIRNAME
 CONFIG_VATS2_SUPPORT=1
-CONFIG_ITERATIONS=2
+CONFIG_ITERATIONS=10
+CONFIG_BY_PASS_XGEMM=1
 p0=$0
 p1=$1
 p2=$2
@@ -86,8 +87,13 @@ do
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg --clear"
 
 		pushd ..
-		echo "running xgemm on guest $VM_IP..." ; sleep 1 
-		 ./xgemm-run-on-guest.sh $VM_IP 0	
+
+		if [[ $CONFIG_BY_PASS_XGEMM -eq 0 ]] ; then
+			echo "running xgemm on guest $VM_IP..." ; sleep 1 
+			 ./xgemm-run-on-guest.sh $VM_IP 0	
+		else
+			echo "Bypassing xgemm..."
+		fi
 		popd
 		echo "shutdown $VM_NAME" 
 		virsh shutdown $VM_NAME & 	
