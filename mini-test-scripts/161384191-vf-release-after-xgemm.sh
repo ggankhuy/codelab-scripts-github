@@ -57,7 +57,7 @@ done
 echo $DOUBLE_BAR
 echo "Started all VMs, running test now..."
 echo $DOUBLE_BAR
-for (( k=0; k < $CONFIG_ITERATION_COUNT; k++ ))
+for (( k=0; k < $CONFIG_ITERATIONS; k++ ))
 do
 	echo $DOUBLE_BAR
 	echo "ITERATION $k of $CONFIG_ITERATIONS"
