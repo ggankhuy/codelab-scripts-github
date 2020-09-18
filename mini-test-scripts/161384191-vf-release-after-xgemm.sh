@@ -1,4 +1,5 @@
 DIRNAME=161384191-result
+WAIT_INTERVAL=10
 mkdir $DIRNAME
 CONFIG_VATS2_SUPPORT=1
 CONFIG_ITERATIONS=10
@@ -81,10 +82,22 @@ do
 		echo $SINGLE_BAR
 		echo "start $i"
 		virsh start $i
-		sleep 30
-		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+
+		timeout=0
+                for j in {0..10} ; do
+                        sleep $WAIT_INTERVAL
+			VM_IP=`virsh domifaddr $i | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+                        if [[ ! -z $VM_IP ]] ; then
+                                break
+                        else
+                                echo "Can not get IP, waiting more..."
+                        fi
+                        timeout=$(($timeout+$WAIT_INTERVAL))
+                        echo "wait time so far for obtaining IP for $i...: $timeout seconds."
+                done
+
 		if [[ -z $VM_IP ]] ; then
-			echo "Failed to obtain IP,, skipping ..."
+			echo "Failed to obtain IP, skipping VM $i..."
 			continue
 		fi
 		echo "VM_IP obtained: $VM_IP" ; sleep 1
@@ -110,7 +123,6 @@ do
 		virsh shutdown $VM_NAME & 	
 
 		shutdown_time=0
-		WAIT_INTERVAL=10
 		for j in {0..30} ; do
 			sleep $WAIT_INTERVAL
 			echo "checking if $VM_NAME is shutdown ..."
