@@ -1,5 +1,5 @@
 DIRNAME=161384191-result
-WAIT_INTERVAL=10
+WAIT_INTERVAL=3
 mkdir $DIRNAME
 CONFIG_VATS2_SUPPORT=1
 CONFIG_ITERATIONS=10
@@ -119,20 +119,20 @@ do
 			echo "Bypassing xgemm..."
 		fi
 		popd
-		echo "shutdown $VM_NAME" 
-		virsh shutdown $VM_NAME & 	
+		echo "shutdown $i" 
+		virsh shutdown $i & 	
 
 		shutdown_time=0
 		for j in {0..30} ; do
 			sleep $WAIT_INTERVAL
-			echo "checking if $VM_NAME is shutdown ..."
-			stat=`virsh list | grep $VM_NAME`
+			echo "checking if $i is shutdown ..."
+			stat=`virsh list | grep $i`
 			if [[ -z $stat ]] ; then
-				echo "shutdown of $VM_NAME is completed..."
+				echo "shutdown of $i is completed..."
 				shutdown_time=$(($shutdown_time+$WAIT_INTERVAL))
 				break
 			else
-				echo "shutdown of $VM_NAME is not completed, waiting more..."
+				echo "shutdown of $i is not completed, waiting more..."
 			fi			
 			shutdown_time=$(($shutdown_time+$WAIT_INTERVAL))
 			echo "shutdown wait time so far: $shutdown_time..."
