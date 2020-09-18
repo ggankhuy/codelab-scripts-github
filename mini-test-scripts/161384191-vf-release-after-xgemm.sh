@@ -77,7 +77,7 @@ do
 		virsh start $i
 		sleep 30
 		VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-		if [[ $? -ne 0 ]] ; then
+		if [[ -z $VM_IP ]] ; then
 			echo "Failed to obtain IP,, skipping ..."
 			continue
 		fi
