@@ -1,7 +1,7 @@
 DIRNAME=161384191-result
 mkdir $DIRNAME
 CONFIG_VATS2_SUPPORT=1
-CONFIG_ITERATIONS=10
+CONFIG_ITERATIONS=2
 p0=$0
 p1=$1
 p2=$2
@@ -96,6 +96,7 @@ do
 			stat=`virsh list | grep $VM_NAME`
 			if [[ -z $stat ]] ; then
 				echo "shutdown of $VM_NAME is completed..."
+				shutdown_time=$(($shutdown_time+$WAIT_INTERVAL))
 				break
 			else
 				echo "shutdown of $VM_NAME is not completed, waiting more..."

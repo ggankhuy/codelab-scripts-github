@@ -3,6 +3,7 @@
 #   
 VATS2_SUPPORT=1
 CONFIG_XGEMM_GIB=1
+CONFIG_PMLOG_CAPTURE=0
 
 if [[ $CONFIG_XGEMM_GIB -eq 1 ]] ; then
 	CONFIG_PATH_XGEMM_HOST=/xgemm
@@ -44,7 +45,7 @@ if [[ -z $CONFIG_IP_GUEST ]] ; then
     exit 1
 fi   
 
-if [[ -z $CONFIG_GPU_INDEX ]] ; then
+if [[ -z $CONFIG_GPU_INDEX ]] && [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
     echo "Need GPU index for atitool. It must match the VM whose IP specified in p1. Otherwise pmlog will capture data from wrong VM..."
     exit 1
 fi
@@ -54,7 +55,7 @@ if [[ ! -f $CONFIG_FILENAME_XGEMM_FIND_MAX ]] ; then
     exit 1
 fi
 
-if [[ ! -f $CONFIG_FILENAME_ATITOOL ]] ; then
+if [[ ! -f $CONFIG_FILENAME_ATITOOL ]] && [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
     echo "atitool is not available as path: $CONFIG_FILENAME_ATITOOL"
     exit 1
 fi
@@ -63,12 +64,15 @@ fi
 
 mkdir $CONFIG_OUTPUT_DIR
 
-echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
-$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX  &
-PID_ATITOOL=$!
-echo "Atitool PID: $PID_ATITOOL"
-echo "Idle run for few seconds..."
-sleep 10
+if [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
+	echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
+	$CONFIG_FILENAME_ATITOOL -pmoutput=$CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv -pmlogall -i=$CONFIG_GPU_INDEX  &
+	PID_ATITOOL=$!
+	echo "Atitool PID: $PID_ATITOOL"
+	echo "Idle run for few seconds..."
+	sleep 10
+fi
+
 echo "Launching xgemm on guest $CONFIG_IP_GUEST..."
 echo "Guest VM IP:"  $CONFIG_IP_GUEST
 
@@ -80,7 +84,10 @@ if [[ $CONFIG_XGEMM_GIB -eq 1 ]] ; then
 	    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
 	    if [[ $? -ne 0 ]] ; then
 		echo "Error executing $cmd, giving up..."
-		kill $PID_ATITOOL
+
+		if [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
+			kill $PID_ATITOOL
+		fi
 		exit 1
 	    fi
 	done
@@ -91,7 +98,10 @@ else
 	    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$CONFIG_IP_GUEST $cmd
 	    if [[ $? -ne 0 ]] ; then
 		echo "Error executing $cmd, giving up..."
-		kill $PID_ATITOOL
+
+		if [[ $CONFIG_PMLOG_CAPTURE ]] ; then
+			kill $PID_ATITOOL
+		fi
 		exit 1
 	    fi
 	done
@@ -100,10 +110,15 @@ sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAM
 
 echo "Idle run for few seconds before killing ..."
 sleep 10
-kill $PID_ATITOOL
 
-./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/$OUTPUT_SUMMARY
-echo "output of pmlog: $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv"
+if [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
+	kill $PID_ATITOOL
+fi
+
+if [[ $CONFIG_XGEMM_GIB -ne 1 ]] ; then
+	./$CONFIG_FILENAME_XGEMM_FIND_MAX $CONFIG_OUTPUT_DIR/$CONFIG_FILENAME_XGEMM_OUTPUT | tee $CONFIG_OUTPUT_DIR/$OUTPUT_SUMMARY
+	echo "output of pmlog: $CONFIG_OUTPUT_DIR/PMLOG-$DATE.csv"
+fi
 
     
 
