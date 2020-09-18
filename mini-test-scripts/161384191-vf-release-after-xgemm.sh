@@ -141,8 +141,8 @@ do
 	done
 
 	echo "Saving host dmesg..."
-	touch /$DIRNAME/dmesg-iter-$k-host.log
-	dmesg > /$DIRNAME/dmesg-iter-$k-host.log
+	touch ./$DIRNAME/dmesg-iter-$k-host.log
+	dmesg > ./$DIRNAME/dmesg-iter-$k-host.log
 	dmesg --clear
 done
 
