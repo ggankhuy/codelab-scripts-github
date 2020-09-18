@@ -88,7 +88,12 @@ do
                         sleep $WAIT_INTERVAL
 			VM_IP=`virsh domifaddr $i | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
                         if [[ ! -z $VM_IP ]] ; then
-                                break
+				ping -c 10 $VM_IP
+				if [[ $? -eq 0 ]]  ; then
+	                                break
+				else 
+					echo "Can not ping, extending timeout..."
+				fi
                         else
                                 echo "Can not get IP, waiting more..."
                         fi
@@ -104,11 +109,6 @@ do
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'dmesg > /tmp/dmesg'
 		sshpass -p amd1234 scp -o StrictHostKeyChecking=no root@$VM_IP:/tmp/dmesg ./$DIRNAME/dmesg-iter-$k-vm-$i.log
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg --clear"
-		dmesg > /$DIRNAME/dmesg-iter-$k-host.log
-		dmesg --clear
-
-		echo "Saving host dmesg..."
-		
 
 		pushd ..
 
@@ -139,4 +139,9 @@ do
 		done
 		echo "shutdown_time for reboot No. $k: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
 	done
+
+	echo "Saving host dmesg..."
+	touch /$DIRNAME/dmesg-iter-$k-host.log
+	dmesg > /$DIRNAME/dmesg-iter-$k-host.log
+	dmesg --clear
 done
