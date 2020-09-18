@@ -106,7 +106,9 @@ else
 	    fi
 	done
 fi
-sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
+if [[ $CONFIG_XGEMM_GIB -ne 1 ]] ; then
+	sshpass -p amd1234 scp root@$CONFIG_IP_GUEST:/$CONFIG_PATH_XGEMM/$CONFIG_FILENAME_XGEMM_OUTPUT $CONFIG_OUTPUT_DIR/
+fi
 
 echo "Idle run for few seconds before killing ..."
 sleep 10

@@ -104,6 +104,6 @@ do
 			shutdown_time=$(($shutdown_time+$WAIT_INTERVAL))
 			echo "shutdown wait time so far: $shutdown_time..."
 		done
-		echo "shutdown_time for reboot No. $i: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
+		echo "shutdown_time for reboot No. $k: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
 	done
 done
