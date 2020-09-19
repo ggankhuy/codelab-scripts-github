@@ -1,10 +1,11 @@
-DIRNAME=161384191-result
 WAIT_INTERVAL=3
-mkdir $DIRNAME
 CONFIG_VATS2_SUPPORT=1
-CONFIG_ITERATIONS=10
-CONFIG_BY_PASS_XGEMM=1
+CONFIG_ITERATIONS=3
+CONFIG_BY_PASS_XGEMM=0
+
 DATE=`date +%Y%m%d-%H-%M-%S`
+DIRNAME=161384191-result/$DATE/
+mkdir -p $DIRNAME
 p0=$0
 p1=$1
 p2=$2
@@ -147,7 +148,7 @@ do
 done
 
 echo "End of t est: Turning back on all vm-s..."
-for i in ${VM_NAMES[@]}
+for i in ${VM_NAMES[@]} ; do 
 	virsh start $i 
 done
 
