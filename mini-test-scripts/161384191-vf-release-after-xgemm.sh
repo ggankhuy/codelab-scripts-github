@@ -147,7 +147,7 @@ do
 	dmesg --clear
 done
 
-echo "End of t est: Turning back on all vm-s..."
+echo "End of test: Turning back on all vm-s..."
 for i in ${VM_NAMES[@]} ; do 
 	virsh start $i 
 done
