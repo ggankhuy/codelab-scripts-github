@@ -115,7 +115,7 @@ do
 
 		if [[ $CONFIG_BY_PASS_XGEMM -eq 0 ]] ; then
 			echo "running xgemm on guest $VM_IP..." ; sleep 1 
-			 ./xgemm-run-on-guest.sh $VM_IP 0	
+			 ./xgemm-run-on-guest.sh $VM_IP 0 &
 		else
 			echo "Bypassing xgemm..."
 		fi
@@ -140,12 +140,30 @@ do
 		done
 		echo "shutdown_time for vm: $i, iteration No. $k: $shutdown_time" >> ./$DIRNAME/shutdown_times.log
 	done
-
 	echo "Saving host dmesg..."
 	touch ./$DIRNAME/dmesg-iter-$k-host.log
 	dmesg > ./$DIRNAME/dmesg-iter-$k-host.log
 	dmesg --clear
 done
+
+echo "Waiting until all xgemm scripts finished running..."
+for (( m=0; m < $10; m++ ))  ; do
+	count_guest_xgemm_processes=`ps -ef | grep xgemm-run-on-guest.sh | wc -l`
+
+	if  [[ $count_guest_xgemm_processes -ne 0 ]] ; then
+		echo "...$m sec"
+	else
+		if [[ $m -eq 10 ]] ; then
+			echo "Likely timeout waiting for xgem scripts to finish. Too unsafe to continue..."
+			exit 1
+		else
+			echo "Done..."
+			break
+		fi
+	fi
+	sleep 10
+done
+
 
 echo "End of test: Turning back on all vm-s..."
 for i in ${VM_NAMES[@]} ; do 
