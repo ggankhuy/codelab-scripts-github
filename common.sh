@@ -15,7 +15,7 @@ REPO_SERVER_IP=""
 
 #   Could be useful when repo server is not reachable and no need as setup is already done.'
 
-CONFIG_BYPASS_SETUP_REPO_SERVER=1
+CONFIG_BYPASS_SETUP_REPO_SERVER=0
 
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 
@@ -284,7 +284,7 @@ function common_setup () {
     echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
     
 
-    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 1 ]] ; then
+    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 0 ]] ; then
         set_repo_server 
     fi
 
@@ -532,7 +532,7 @@ function copy_game_files() {
             game_dir_dest="."
     fi
 
-    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 1 ]] ; then
+    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 0 ]] ; then
         set_repo_server
     fi
     
