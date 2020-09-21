@@ -13,6 +13,10 @@ OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP=""
 
+#   Could be useful when repo server is not reachable and no need as setup is already done.'
+
+CONFIG_BYPASS_SETUP_REPO_SERVER=1
+
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
 
 RESOLUTION_1080=1080
@@ -279,7 +283,10 @@ function common_setup () {
 
     echo "Copying ggp-eng-bundle to /usr/local/cloudcast..."
     
-    set_repo_server 
+
+    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 1 ]] ; then
+        set_repo_server 
+    fi
 
     if [[ $OPTION_FILE_COPY_PROTOCOL == $FILE_COPY_RSYNC ]] ; then
        sudo sshpass -p amd1234 rsync -v -z -r -e "ssh -o StrictHostKeyChecking=no" root@$REPO_SERVER_IP:/$REPO_SERVER_LOCATION/florida/$GGP_BUNDLE_VERSION /tmp/
@@ -525,7 +532,9 @@ function copy_game_files() {
             game_dir_dest="."
     fi
 
-    set_repo_server
+    if [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 1 ]] ; then
+        set_repo_server
+    fi
     
     echo "Destination path: $game_dir_dest"
     sudo mkdir -p $game_dir_dest
