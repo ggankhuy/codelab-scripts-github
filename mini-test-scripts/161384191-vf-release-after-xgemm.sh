@@ -1,4 +1,4 @@
-WAIT_INTERVAL=3
+WAIT_INTERVAL=5
 CONFIG_VATS2_SUPPORT=1
 CONFIG_ITERATIONS=3
 CONFIG_BY_PASS_XGEMM=0
@@ -79,17 +79,16 @@ do
 	for i in ${VM_NAMES[@]}
 	do
 		echo $SINGLE_BAR
-		echo "Launching xgemm on VM_NAME: $i, ITERATION $k"
 		echo $SINGLE_BAR
 		echo "start $i"
 		virsh start $i
 
 		timeout=0
-                for j in {0..10} ; do
+                for j in {0..20} ; do
                         sleep $WAIT_INTERVAL
 			VM_IP=`virsh domifaddr $i | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
                         if [[ ! -z $VM_IP ]] ; then
-				ping -c 10 $VM_IP
+				ping -c 2 $VM_IP
 				if [[ $? -eq 0 ]]  ; then
 	                                break
 				else 
@@ -103,23 +102,49 @@ do
                 done
 
 		if [[ -z $VM_IP ]] ; then
-			echo "Failed to obtain IP, skipping VM $i..."
-			continue
+			echo "Failed to obtain IP, , too unsafe to continue...."
+			exit 1
 		fi
 		echo "VM_IP obtained: $VM_IP" ; sleep 1
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'dmesg > /tmp/dmesg'
 		sshpass -p amd1234 scp -o StrictHostKeyChecking=no root@$VM_IP:/tmp/dmesg ./$DIRNAME/dmesg-iter-$k-vm-$i.log
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "dmesg --clear"
+	done
 
-		pushd ..
-
+	pushd ..
+	for i in ${VM_NAMES[@]}
+	do
 		if [[ $CONFIG_BY_PASS_XGEMM -eq 0 ]] ; then
-			echo "running xgemm on guest $VM_IP..." ; sleep 1 
+			echo "Running xgemm on guest $VM_IP..." ; sleep 1 
 			 ./xgemm-run-on-guest.sh $VM_IP 0 &
 		else
 			echo "Bypassing xgemm..."
 		fi
-		popd
+	done
+	popd
+
+	echo "Waiting until all xgemm scripts finished running..."
+
+	for (( m=0; m < $10; m++ ))  ; do
+		count_guest_xgemm_processes=`ps -ef | grep xgemm-run-on-guest.sh | wc -l`
+
+		if  [[ $count_guest_xgemm_processes -ne 0 ]] ; then
+			echo "...$m sec, No. of processes running: $count_guest_xgemm_processes"
+		else
+			if [[ $m -eq 10 ]] ; then
+				echo "Likely timeout waiting for xgem scripts to finish. Too unsafe to continue..."
+				exit 1
+			else
+				echo "Done..."
+				break
+			fi
+		fi
+		sleep 10
+	done
+
+	for i in ${VM_NAMES[@]}
+	do
+	
 		echo "shutdown $i" 
 		virsh shutdown $i & 	
 
@@ -145,25 +170,6 @@ do
 	dmesg > ./$DIRNAME/dmesg-iter-$k-host.log
 	dmesg --clear
 done
-
-echo "Waiting until all xgemm scripts finished running..."
-for (( m=0; m < $10; m++ ))  ; do
-	count_guest_xgemm_processes=`ps -ef | grep xgemm-run-on-guest.sh | wc -l`
-
-	if  [[ $count_guest_xgemm_processes -ne 0 ]] ; then
-		echo "...$m sec"
-	else
-		if [[ $m -eq 10 ]] ; then
-			echo "Likely timeout waiting for xgem scripts to finish. Too unsafe to continue..."
-			exit 1
-		else
-			echo "Done..."
-			break
-		fi
-	fi
-	sleep 10
-done
-
 
 echo "End of test: Turning back on all vm-s..."
 for i in ${VM_NAMES[@]} ; do 
