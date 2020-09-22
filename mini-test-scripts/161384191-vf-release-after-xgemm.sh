@@ -2,6 +2,7 @@ WAIT_INTERVAL=5
 CONFIG_VATS2_SUPPORT=1
 CONFIG_ITERATIONS=3
 CONFIG_BY_PASS_XGEMM=0
+CONFIG_BARRIER_USE_WAIT=1 
 
 DATE=`date +%Y%m%d-%H-%M-%S`
 DIRNAME=161384191-result/$DATE/
@@ -81,8 +82,10 @@ do
 		echo $SINGLE_BAR
 		echo $SINGLE_BAR
 		echo "start $i"
-		virsh start $i
-
+		virsh start $i &
+	done
+	for i in  ${VM_NAMES[@]}
+	do
 		timeout=0
                 for j in {0..20} ; do
                         sleep $WAIT_INTERVAL
@@ -98,13 +101,14 @@ do
                                 echo "Can not get IP, waiting more..."
                         fi
                         timeout=$(($timeout+$WAIT_INTERVAL))
-                        echo "wait time so far for obtaining IP for $i...: $timeout seconds."
+                        echo "Wait time so far for obtaining IP for $i...: $timeout seconds."
                 done
 
 		if [[ -z $VM_IP ]] ; then
 			echo "Failed to obtain IP, , too unsafe to continue...."
 			exit 1
 		fi
+
 		echo "VM_IP obtained: $VM_IP" ; sleep 1
 		sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'dmesg > /tmp/dmesg'
 		sshpass -p amd1234 scp -o StrictHostKeyChecking=no root@$VM_IP:/tmp/dmesg ./$DIRNAME/dmesg-iter-$k-vm-$i.log
@@ -112,6 +116,7 @@ do
 	done
 
 	pushd ..
+
 	for i in ${VM_NAMES[@]}
 	do
 		if [[ $CONFIG_BY_PASS_XGEMM -eq 0 ]] ; then
@@ -123,14 +128,19 @@ do
 	done
 	popd
 
+	sleep 5
+
 	echo "Waiting until all xgemm scripts finished running..."
 
+	if [[ $CONFIG_BARRIER_USE_WAIT -eq 1 ]] ; then
+		echo "waiting..."
+		wait
+	else
 	for (( m=0; m < $10; m++ ))  ; do
 		count_guest_xgemm_processes=`ps -ef | grep xgemm-run-on-guest.sh | wc -l`
 
-		if  [[ $count_guest_xgemm_processes -ne 0 ]] ; then
-			echo "...$m sec, No. of processes running: $count_guest_xgemm_processes"
-		else
+		echo "...$mnth waitloop, No. of processes running: $count_guest_xgemm_processes"
+		if  [[ $count_guest_xgemm_processes -eq 0 ]] ; then
 			if [[ $m -eq 10 ]] ; then
 				echo "Likely timeout waiting for xgem scripts to finish. Too unsafe to continue..."
 				exit 1
@@ -141,7 +151,8 @@ do
 		fi
 		sleep 10
 	done
-
+	fi
+	sleep 5
 	for i in ${VM_NAMES[@]}
 	do
 	
