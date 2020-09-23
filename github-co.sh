@@ -18,6 +18,7 @@ else
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-Vulkan \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-Libdrm \
+    https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-Libdrm-Public \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-LibGV.git \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-misc.git \
     https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-VkExamples \
