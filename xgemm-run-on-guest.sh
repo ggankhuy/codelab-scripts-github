@@ -30,7 +30,9 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 CONFIG_OUTPUT_DIR=./xgemm_out_$DATE
 OUTPUT_SUMMARY=output_summary_$DATE.log
 
-mkdir $CONFIG_OUTPUT_DIR
+if [[ ! -d $CONFIG_OUTPUT_DIR ]] ; then
+	mkdir $CONFIG_OUTPUT_DIR
+fi
 
 if [[ $p1 == "--help" ]] ; then
 	clear
@@ -62,7 +64,9 @@ fi
 
 #   Start capturing PM log:
 
-mkdir $CONFIG_OUTPUT_DIR
+if [[ ! -d $CONFIG_OUTPUT_DIR ]] ; then
+	mkdir $CONFIG_OUTPUT_DIR
+fi
 
 if [[ $CONFIG_PMLOG_CAPTURE -eq 1 ]] ; then
 	echo  "Start capturing PM log from i=$CONFIG_GPU_INDEX..."
