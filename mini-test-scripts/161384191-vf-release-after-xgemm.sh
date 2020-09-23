@@ -1,6 +1,6 @@
 WAIT_INTERVAL=5
 CONFIG_VATS2_SUPPORT=1
-CONFIG_ITERATIONS=3
+CONFIG_ITERATIONS=50
 CONFIG_BY_PASS_XGEMM=0
 CONFIG_BARRIER_USE_WAIT=1 
 
@@ -61,7 +61,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
     sleep 1
 
-    if [[ $CONFIG_BY_PASS_XGEMM -ne 0 ]] ; then
+    if [[ $CONFIG_BY_PASS_XGEMM -ne 1 ]] ; then
         sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'mkdir /xgemm'
         sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no  /xgemm/* root@$VM_IP:/xgemm/
     fi
