@@ -5,7 +5,7 @@ INSTALL_ROCM_SRC=$2
 INSTALL_ROCM_SRC_COPY=1
 INSTALL_ROCM_SRC_COPY_RUN=0
 WAIT_INTERVAL=10
-for i in "apt remove amdgpu-dkms -y" "apt update -y" "apt dist-upgrade -y" "apt install libnuma-dev -y " "echo rebooting ; sleep 15 ; reboot" ; do
+for i in "apt remove amdgpu-dkms -y" "apt remove amdgpu-dkms-firmware -y" "apt update -y" "apt dist-upgrade -y" "apt install libnuma-dev -y " "echo rebooting ; sleep 15 ; reboot" ; do
         echo ----------
         echo $i
         echo ----------
