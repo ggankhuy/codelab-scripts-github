@@ -565,12 +565,14 @@ function set_resolution() {
     pGame=$2
     resoW=( 1280 1920 3840 )    
     resoH=( 720 1080 2160 )
+    resoRender=( 720p 1080p 4k )
     resoHset=""
     resoWset=""
 
     if [[ -z $pResolution ]] ; then
-        echo "Resolution is empty. Setting to default 1080."
+        echo "resolution is empty. Setting to default 1080."
         CONFIG_RESOLUTION=RESOLUTION_1080
+	export 	GGP_VK_PRIMARY_SURFACE_EXTENT=1080p
     else
         counter=0
         for i in ${RESOLUTIONS_SUPPORTED[@]}
@@ -588,6 +590,7 @@ function set_resolution() {
                     sudo sed -i "/resolution/c \ \"resolution" : $resoWsetx$resoHset," ../../configs/gt2.json
                 fi
 
+		export GGP_VK_PRIMARY_SURFACE_EXTENT=${resoRender[$counter]}
                 sleep  3
                 break
             fi
@@ -601,4 +604,6 @@ function set_resolution() {
         CONFIG_RESOLUTION=$RESOLUTION_1080
         sleep 30
     fi
+    readbackRenderReso=`env  | grep GGP_VK_PRIMARY_SURFACE_EXTENT`
+    echo "render resolution set to: $readBackRenderReso."
 }
