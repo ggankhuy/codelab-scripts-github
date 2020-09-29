@@ -11,7 +11,7 @@ sudo git config --global user.name "Your Name"
 
 echo "git clone..."
 #cd /git.co ; echo -e "g00db0y\n" | sudo git clone ssh://ixt-rack-85@10.216.64.102:32029/home/ixt-rack-85/gg-git-repo/
-cd /git.co ; sudo git clone http://gitlab1.amd.com/ggamd000/ad-hoc-scripts.git
+#cd /git.co ; sudo git clone http://gitlab1.amd.com/ggamd000/ad-hoc-scripts.git
 
 echo "checkout dev branch and run yeti setup..."
 #cd /git.co/ad-hoc-scripts 

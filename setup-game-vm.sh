@@ -132,8 +132,11 @@ elif [[ $1 == "gb02" ]] ; then
     CONFIG_HOST_IP=$CONFIG_GB02_HOST_IP
     CONFIG_EXT_INT_SRC=enp225s0f0	
 else
-    echo "ERROR: Invalid parameter."
-    exit 1
+#   echo "ERROR: Invalid parameter."
+#    exit 1
+    echo "Assuming IP entered. Proceed at your own risk..."
+    sleep 5
+    
 fi
 
 TOTAL_IPS=${#CONFIG_GUEST_IP_RANGE[@]}

@@ -140,7 +140,7 @@ elif [[ $p1 == "setup" ]] ; then
     echo "p2: $p2..."
     common_setup $p2
 
-    if [[ -z $REPO_SERVER_IP ]] ; then
+    if [[ -z $REPO_SERVER_IP ]] && [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 0 ]] ; then
         echo "Can not find available REPO_SERVER_IP."
         exit 1
     fi
@@ -328,7 +328,7 @@ fi
 
 copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
-if [[ -z $REPO_SERVER_IP ]] ; then
+if [[ -z $REPO_SERVER_IP ]] && [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 0 ]] ; then
     echo "Can not find available REPO_SERVER_IP."
     exit 1
 fi
@@ -423,7 +423,7 @@ elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
     
         copy_game_files $SOURCE_FOLDER /srv/game/$DESTINATION_FOLDER/
 
-        if [[ -z $REPO_SERVER_IP ]] ; then
+        if [[ -z $REPO_SERVER_IP ]] && [[ $CONFIG_BYPASS_SETUP_REPO_SERVER -eq 0 ]] ; then
             echo "Can not find available REPO_SERVER_IP."
             exit 1
         fi
