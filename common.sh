@@ -71,6 +71,7 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+    export GGP_BUNDLE_VERSION=ggp-eng-bundle_20200910.1.0.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else
@@ -235,8 +236,6 @@ function common_runtime_setup ()
     export GGP_VK_DISABLE_UNIVERSAL_QUEUE_PRESENTS=1
     export YETI_VK_FORCE_PRIVATE_ASYNC_COMPUTE_SWAPCHAIN_PRESENTS=1
     export YETI_VK_DISABLE_UNIVERSAL_QUEUE_PRESENTS=1
-    
-    
     sleep 1
 }
 
