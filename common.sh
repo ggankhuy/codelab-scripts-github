@@ -227,7 +227,16 @@ function common_runtime_setup ()
     export AMD_VK_USE_PIPELINE_CACHE=true 
     export XDG_CACHE_HOME="/mnt/developer" 
     export GGP_INTERNAL_VK_DISABLE_VSYNC=1
-    export GGP_INTERNAL_VK_FORCE_PRESENT_MODE =1
+    export GGP_INTERNAL_VK_FORCE_PRESENT_MODE=1
+
+    # attempt at 20200910.ggp bundle to work with doom, but this is only for vp9
+
+    export GGP_VK_FORCE_PRIVATE_ASYNC_COMPUTE_SWAPCHAIN_PRESENTS=1
+    export GGP_VK_DISABLE_UNIVERSAL_QUEUE_PRESENTS=1
+    export YETI_VK_FORCE_PRIVATE_ASYNC_COMPUTE_SWAPCHAIN_PRESENTS=1
+    export YETI_VK_DISABLE_UNIVERSAL_QUEUE_PRESENTS=1
+    
+    
     sleep 1
 }
 
