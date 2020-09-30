@@ -621,6 +621,6 @@ function set_resolution() {
         CONFIG_RESOLUTION=$RESOLUTION_1080
         sleep 30
     fi
-    readbackRenderReso=`env  | grep GGP_VK_PRIMARY_SURFACE_EXTENT`
+    readBackRenderReso=`env  | grep GGP_VK_PRIMARY_SURFACE_EXTENT`
     echo "render resolution set to: $readBackRenderReso."
 }
