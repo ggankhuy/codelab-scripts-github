@@ -297,7 +297,7 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
         echo "Turning  off $VM_NAME"
         virsh destroy $VM_NAME
-        sleep 8 
+        sleep 5
 
         echo "Setting vCPUs to 8..."
         virsh setvcpus $VM_NAME 8 --config --maximum
@@ -313,7 +313,6 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
 
         echo "Rebooting VM_NAME: $VM_NAME..."
         virsh start $VM_NAME
-        sleep 30
         echo "Done."    
     fi
 done
@@ -373,6 +372,23 @@ sed -i '/ServerAliveCountMax/c \\ServerAliveCountMax 10800' /etc/ssh/ssh_config
 if [[ -z `cat /etc/ssh/ssh_config | grep ServerAliveCountMax` ]] ; then echo "ServerAliveCountMax 10800" >> /etc/ssh/ssh_config ; fi;
 
 # print final status.
+
+counter=0
+for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
+    VM_NAME=${VM_NAMES[$n]}
+    VM_IP=`virsh domifaddr $VM_NAME | grep ipv4 | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+    if [[ -z $VM_IP ]] ; then
+	sleep 5
+	coutner=$((counter+1))
+	if [[ counter -le 10 ]] ; then 
+            echo "Waiting till IP becomes available." ; 
+	else
+	    echo "Timeout trying to ping $VM_IP!!"
+        fi
+    else
+        echo "Ping is ok for $VM_NAME: $VM_IP"
+    fi
+done
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     echo $DOUBLE_BAR
