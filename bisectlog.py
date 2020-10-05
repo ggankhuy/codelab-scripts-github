@@ -1,6 +1,10 @@
 import sys
+import os
 gim_init_delimiter="Start AMD open source GIM initialization"
 gpu_init_delimiter="AMD GIM start to probe device"
+
+print("Delimiters: ", gim_init_delimiter, ", ", gpu_init_delimiter)
+print("If these delimiter string changes in future version of libgv, this script may break. Check often the gim init and gpu initialization log periodically.")
 
 # bisects log into different files:
 #	each libgv initialization will be separate files.
@@ -45,14 +49,19 @@ fp_content=fp.read()
 fp_content_gim_inits=fp_content.split(gim_init_delimiter)
 
 for i in range(0, len(fp_content_gim_inits)):
-	fpw=open(arg1 + ".libgv-init-" + str(i) + ".log", "w")
+	subdir="libgv-init-" + str(i)
+	print("Created subdirectory " + subdir)
+	os.mkdir(subdir)
+	filename=subdir + "\\" + arg1 + ".libgv-init-" + str(i) + ".log"
+	print("filename: ", filename)
+	fpw=open(filename, "w")
 	fpw.write(fp_content_gim_inits[i])
 	fpw.close()
 	
 	fp_content_gpu_inits=fp_content_gim_inits[i].split(gpu_init_delimiter)
 	
 	for j in range(0, len(fp_content_gpu_inits)):
-		fpw1=open(arg1 + ".libgv-init-" + str(i) + "gpu" + str(j) + ".log", "w")
+		fpw1=open(subdir + "\\" + arg1 + ".libgv-init-" + str(i) + ".gpu" + str(j) + ".log", "w")
 		fpw1.write(fp_content_gpu_inits[j])
 		fpw1.close()
 		
