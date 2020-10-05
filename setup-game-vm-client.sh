@@ -1,3 +1,5 @@
+#   new location will be in /mnt/developer/amdPalSettings.cfg
+
 AMD_PAL_SETTING_CFG_FILE=/etc/amd/amdPalSettings.cfg
 sudo mkdir /git.co
 uname -r

@@ -229,6 +229,7 @@ function common_runtime_setup ()
     export XDG_CACHE_HOME="/mnt/developer" 
     export GGP_INTERNAL_VK_DISABLE_VSYNC=1
     export GGP_INTERNAL_VK_FORCE_PRESENT_MODE=1
+    export AMDVLKXF=$AMDVLKXF,YUV-9c240ad2 # only for 24 or older vulkan driver when using 910.debg. 
 
     # attempt at 20200910.ggp bundle to work with doom, but this is only for vp9
 
