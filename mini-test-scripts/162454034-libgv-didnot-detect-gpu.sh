@@ -82,15 +82,15 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
 	mkdir -p $CONFIG_PATH_LOG
 	echo "Loop $i..."
-	echo "sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP 'lspci | grep -i amd | grep Disp'" > $CONFIG_PATH_LOG/lspci.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" > $CONFIG_PATH_LOG/lspci.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "--- iteration $i: ---" >> $DIRNAME/summary.log
 	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tr -d '\n'`
-	echo "retry 3. No. of gpu-s detected by lspci : $res " 
-	echo "retry 3a. No. of gpu-s detected by lspci : $res " | tee -a  >> $DIRNAME/summary.log
+	echo "No. of gpu-s detected by lspci : $res " 
+	echo "No. of gpu-s detected by lspci : $res " | tee -a $DIRNAME/summary.log
 	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -ai | grep Adapter | wc -l" | tr -d '\n'`
 	echo "No. of gpu-s detected by amdvbflash: $res" 
-	echo "No. of gpu-s detected by amdvbflash: $res" | tee -a  >> $DIRNAME/summary.log
+	echo "No. of gpu-s detected by amdvbflash: $res" | tee -a $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
 		if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
