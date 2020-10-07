@@ -9,7 +9,7 @@ CONFIG_GPU_FLASH_IDX_MIN=2
 CONFIG_GPU_FLASH_IDX_MAX=13
 
 # amdvbflash path
-CONFIG_PATH_AMDVBFLASH=/root/tools/amdvbflash/amdvbflash-4.74
+CONFIG_PATH_AMDVBFLASH=/root/tools/amdvbflash/amdvbflash-4.74/amdvbflash
 CONFIG_PATH_VBIOS=/drop/20200918/linux_host_package/vbios/NAVI12/Gemini/D3020100.101
 
 #  BMC access
@@ -43,6 +43,8 @@ CONFIG_PC_TYPE=$CONFIG_PC_REBOOT
 
 CONFIG_ITER=100 
 
+CONFIG_DEBUG_ENABLE_POWERCYCLE=0
+
 for var in "$@"
 do
     if [[ ! -z `echo "$var" | grep "help"` ]]  ; then
@@ -75,44 +77,46 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" >  $CONFIG_PATH_LOG/lspci.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "iteration $i: " >> $DIRNAME/summary.log
-	echo "No. of gpu-s detected by lspci: "
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" >> $DIRNAME/summary.log
-	echo "No. of gpu-s detected by amdvbflash: "
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >> $DIRNAME/summary.log
+	echo "No. of gpu-s detected by lspci: " | tee -a  >> $DIRNAME/summary.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log
+	echo "No. of gpu-s detected by amdvbflash: " tee -a  >> $DIRNAME/summary.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" | tee -a  >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
 		echo "Flashing gpu $j..."
-		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -p $j $CONFIG_PATH_VBIO"
+		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -p $j $CONFIG_PATH_VBIOS"
 	done
 
-	echo "Powercycling..."
-
-	if [[ $CONFIG_PC_TYPE==$CONFIG_PC_REBOOT ]] ; then
-		"echo Powercycle type: reboot..."
-		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
-	elif [[ $CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE ]] ; then
-		"echo Powercycle type: power off and on..."
-		sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
-		sleep $CONFIG_PC_POWERCYCLE_INTERVAL
-		sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/boot_up_system.py"	
-	fi
-
-	CONFIG_PING_TIMEOUT_ERROR=1
-	for (( k = 0 ; k < $CONFIG_PING_TIMEOUT ; k+=$CONFIG_PING_INTERVAL )) ; do
-		ping -c 2 $CONFIG_OS_IP
-		ping_stat=$?
-
-		if [[ $ping_stat -eq 0 ]] ; then
-			echo "Can ping OS now..."
-			CONFIG_PING_TIMEOUT_ERROR=0
-			break
+	if [[ $CONFIG_DEBUG_ENABLE_POWERCYCLE -ne 0 ]] ; then
+		echo "Powercycling..."
+	
+		if [[ $CONFIG_PC_TYPE==$CONFIG_PC_REBOOT ]] ; then
+			"echo Powercycle type: reboot..."
+			sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
+		elif [[ $CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE ]] ; then
+			"echo Powercycle type: power off and on..."
+			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
+			sleep $CONFIG_PC_POWERCYCLE_INTERVAL
+			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/boot_up_system.py"	
 		fi
-		sleep $CONFIG_PING_INTERVAL
-	done
-
-	if [[ $CONFIG_PING_TIMEOUT_ERROR -eq 1 ]] ; then
-		echo "Timeout trying to ping OS for $CONFIG_PING_TIMEOUT seconds, giving up..."
-		exit 1
+	
+		CONFIG_PING_TIMEOUT_ERROR=1
+		for (( k = 0 ; k < $CONFIG_PING_TIMEOUT ; k+=$CONFIG_PING_INTERVAL )) ; do
+			ping -c 2 $CONFIG_OS_IP
+			ping_stat=$?
+	
+			if [[ $ping_stat -eq 0 ]] ; then
+				echo "Can ping OS now..."
+				CONFIG_PING_TIMEOUT_ERROR=0
+				break
+			fi
+			sleep $CONFIG_PING_INTERVAL
+		done
+	
+		if [[ $CONFIG_PING_TIMEOUT_ERROR -eq 1 ]] ; then
+			echo "Timeout trying to ping OS for $CONFIG_PING_TIMEOUT seconds, giving up..."
+			exit 1
+		fi
 	fi
 done
 
