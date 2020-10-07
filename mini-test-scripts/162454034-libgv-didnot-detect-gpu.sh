@@ -6,7 +6,8 @@ mkdir -p $DIRNAME
 
 # GPU flash range
 CONFIG_GPU_FLASH_IDX_MIN=2
-CONFIG_GPU_FLASH_IDX_MAX=13
+CONFIG_GPU_FLASH_IDX_MAX=12
+CONFIG_GPU_FLASH_IDX_MAX=5
 
 # amdvbflash path
 CONFIG_PATH_AMDVBFLASH=/root/tools/amdvbflash/amdvbflash-4.74/amdvbflash
@@ -37,18 +38,21 @@ CONFIG_PC_POWERCYCLE_INTERVAL=30
 
 #	Powercycle or reboot.
 
-CONFIG_PC_TYPE=$CONFIG_PC_REBOOT
+CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE
 
 #	number of test to repeat
 
 CONFIG_ITER=100 
 
-CONFIG_DEBUG_ENABLE_POWERCYCLE=0
+CONFIG_DEBUG_ENABLE_POWERCYCLE=1
+
+#	Whether clear cmd enabled, friendly for terminal but not for ssh log and vice versa.
+CONFIG_ENABLE_CLEAR=1
 
 for var in "$@"
 do
     if [[ ! -z `echo "$var" | grep "help"` ]]  ; then
-	clear
+	if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
 	echo "-----------------------------"
         echo "$0 iter=<number of loops> bmcip=<bmc ip> osip=<OS IP>"
 	echo "-----------------------------"
@@ -83,21 +87,27 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" | tee -a  >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
+		if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
 		echo "Flashing gpu $j..."
-		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -p $j $CONFIG_PATH_VBIOS"
+		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -fa -p $j $CONFIG_PATH_VBIOS"
 	done
 
 	if [[ $CONFIG_DEBUG_ENABLE_POWERCYCLE -ne 0 ]] ; then
 		echo "Powercycling..."
 	
 		if [[ $CONFIG_PC_TYPE==$CONFIG_PC_REBOOT ]] ; then
-			"echo Powercycle type: reboot..."
+			echo "Powercycle type: reboot..."
 			sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
+			sleep 10
 		elif [[ $CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE ]] ; then
-			"echo Powercycle type: power off and on..."
+			echo "Powercycle type: power off and on..."
 			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
+			sleep 10
 			sleep $CONFIG_PC_POWERCYCLE_INTERVAL
 			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/boot_up_system.py"	
+		else
+			echo "Can not recognize powercycle type: $CONFIG_PC_TYPE"
+			exit 1
 		fi
 	
 		CONFIG_PING_TIMEOUT_ERROR=1
