@@ -47,7 +47,7 @@ CONFIG_ITER=100
 CONFIG_DEBUG_ENABLE_POWERCYCLE=1
 
 #	Whether clear cmd enabled, friendly for terminal but not for ssh log and vice versa.
-CONFIG_ENABLE_CLEAR=1
+CONFIG_ENABLE_CLEAR=0
 
 for var in "$@"
 do
@@ -95,11 +95,11 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	if [[ $CONFIG_DEBUG_ENABLE_POWERCYCLE -ne 0 ]] ; then
 		echo "Powercycling..."
 	
-		if [[ $CONFIG_PC_TYPE==$CONFIG_PC_REBOOT ]] ; then
+		if [[ $CONFIG_PC_TYPE -eq $CONFIG_PC_REBOOT ]] ; then
 			echo "Powercycle type: reboot..."
 			sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
 			sleep 10
-		elif [[ $CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE ]] ; then
+		elif [[ $CONFIG_PC_TYPE -eq $CONFIG_PC_POWERCYCLE ]] ; then
 			echo "Powercycle type: power off and on..."
 			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
 			sleep 10
@@ -129,7 +129,3 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 		fi
 	fi
 done
-
-
-
-
