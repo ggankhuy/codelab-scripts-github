@@ -82,7 +82,7 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
 	mkdir -p $CONFIG_PATH_LOG
 	echo "Loop $i..."
-	echo "sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP 'lspci | grep -i amd | grep Disp'"
+	echo "sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP 'lspci | grep -i amd | grep Disp'" > $CONFIG_PATH_LOG/lspci.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "--- iteration $i: ---" >> $DIRNAME/summary.log
 	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tr -d '\n'`
