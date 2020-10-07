@@ -23,6 +23,8 @@ CONFIG_BMC_PW=OpenBmc
 CONFIG_OS_IP="10.216.52.232"
 CONFIG_OS_USERNAME=root
 COFNIG_OS_PW=amd1234
+CONFIG_PING_TIMEOUT=300
+CONFIG_PING_INTERVAL=15
 
 # POWER CYCLE TYPE
 
@@ -31,7 +33,7 @@ CONFIG_PC_REBOOT=1
 #	power off and on. Interval between off and on is dictated by CONFIG_PC_POWERCYCLE_IN in seconds.
 
 CONFIG_PC_POWERCYCLE=2 
-CONFIG_PC_POWERCYCLE_INTERNAL=1
+CONFIG_PC_POWERCYCLE_INTERVAL=30
 
 #	Powercycle or reboot.
 
@@ -69,24 +71,47 @@ done
 
 for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
-	lspci | grep -i amd | grep Disp` >  $CONFIG_PATH_LOG/lspci.log
-	$CONFIG_PATH_AMDVBFLASH -i > $CONFIG_PATH_LOG/amdvbflash.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" >  $CONFIG_PATH_LOG/lspci.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "iteration $i: " >> $DIRNAME/summary.log
-	echo No. of gpu-s detected by lspci: `lspci | grep -i amd | grep Disp | wc -l` >> $DIRNAME/summary.log
-	echo No. of gpu-s detected by amdvbflash: `$CONFIG_PATH_AMDVBFLASH` >> $DIRNAME/summary.log
+	echo No. of gpu-s detected by lspci: "
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" >> $DIRNAME/summary.log
+	echo No. of gpu-s detected by amdvbflash: 
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >> $DIRNAME/summary.log
+
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
 		echo "Flashing gpu $j..."
-		$$CONFIG_PATH_AMDVBFLASH -p $j $CONFIG_PATH_VBIOS
+		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -p $j $CONFIG_PATH_VBIO"
 	done
 
 	echo "Powercycling..."
 
 	if [[ $CONFIG_PC_TYPE==$CONFIG_PC_REBOOT ]] ; then
 		"echo Powercycle type: reboot..."
-		reboot
+		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
 	elif [[ $CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE ]] ; then
 		"echo Powercycle type: power off and on..."
-		
+		sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
+		sleep $CONFIG_PC_POWERCYCLE_INTERVAL
+		sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/boot_up_system.py"	
+	fi
+
+	CONFIG_PING_TIMEOUT_ERROR=1
+	for (( k = 0 ; k < $CONFIG_PING_TIMEOUT ; k+=$CONFIG_PING_INTERVAL )) ; do
+		ping -c 2 $CONFIG_OS_IP
+		ping_stat=$?
+
+		if [[ $ping_stat -eq 0 ]] ; then
+			echo "Can ping OS now..."
+			CONFIG_PING_TIMEOUT_ERROR=0
+			break
+		fi
+		sleep $CONFIG_PING_INTERVAL
+	done
+
+	if [[ $CONFIG_PING_TIMEOUT_ERROR -eq 1 ]] ; then
+		echo "Timeout trying to ping OS for $CONFIG_PING_TIMEOUT seconds, giving up..."
+		exit 1
 	fi
 done
 
