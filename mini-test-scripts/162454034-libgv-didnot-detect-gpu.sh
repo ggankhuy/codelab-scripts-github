@@ -68,17 +68,21 @@ do
     if [[ ! -z `echo "$var" | grep "bmcip="` ]]  ; then
         CONFIG_BMC_IP=`echo $var | cut -d '=' -f2`
         echo "CONFIG_BMC_IP: $CONFIG_BMC_IP"
+	ping -c 2 $CONFIG_BMC_IP
+	if [[ $? -ne 0 ]] ; then "$CONFIG_BMC_IP is not pingable..."; exit 1 ; fi
     fi
     if [[ ! -z `echo "$var" | grep "osip="` ]]  ; then
         CONFIG_OS_IP=`echo $var | cut -d '=' -f2`
         echo "CONFIG_OS_IP: $CONFIG_OS_IP"
+	if [[ $? -ne 0 ]] ; then "$CONFIG_OS_IP is not pingable..."; exit 1 ; fi
     fi
 done
 
 for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
 	mkdir -p $CONFIG_PATH_LOG
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" >  $CONFIG_PATH_LOG/lspci.log
+	echo "Loop $i..."
+	echo "sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP 'lspci | grep -i amd | grep Disp'"
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "iteration $i: " >> $DIRNAME/summary.log
 	ret=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log`
