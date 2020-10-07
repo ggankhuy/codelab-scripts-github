@@ -17,7 +17,7 @@ CONFIG_PATH_VBIOS=/drop/20200918/linux_host_package/vbios/NAVI12/Gemini/D3020100
 
 CONFIG_BMC_IP="10.216.52.241"
 CONFIG_BMC_USERNAME=root
-CONFIG_BMC_PW=OpenBmc
+CONFIG_BMC_PW=0penBmc
 
 # host ip access
 
@@ -101,10 +101,10 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 			sleep 10
 		elif [[ $CONFIG_PC_TYPE -eq $CONFIG_PC_POWERCYCLE ]] ; then
 			echo "Powercycle type: power off and on..."
-			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/shut_down_system.py"
+			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /home/root/BMC_Scripts/shut_down_system.py"
 			sleep 10
 			sleep $CONFIG_PC_POWERCYCLE_INTERVAL
-			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /root/BMC_Scripts/boot_up_system.py"	
+			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /home/root/BMC_Scripts/boot_up_system.py"	
 		else
 			echo "Can not recognize powercycle type: $CONFIG_PC_TYPE"
 			exit 1
