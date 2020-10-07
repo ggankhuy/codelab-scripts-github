@@ -38,7 +38,7 @@ CONFIG_PC_POWERCYCLE_INTERVAL=30
 
 #	Powercycle or reboot.
 
-CONFIG_PC_TYPE=$CONFIG_PC_POWERCYCLE
+CONFIG_PC_TYPE=$CONFIG_PC_REBOOT
 
 #	number of test to repeat
 
@@ -85,10 +85,12 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	echo "sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP 'lspci | grep -i amd | grep Disp'"
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "--- iteration $i: ---" >> $DIRNAME/summary.log
-	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log` | tr -d '\n'
-	echo -n "retry 1. No. of gpu-s detected by lspci : $res " | tee -a  >> $DIRNAME/summary.log
-	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -ai | grep Adapter | wc -l" | tee -a  >> $DIRNAME/summary.log`  | tr -d '\n'
-	echo -n "No. of gpu-s detected by amdvbflash: $res" | tee -a  >> $DIRNAME/summary.log
+	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tr -d '\n'`
+	echo "retry 3. No. of gpu-s detected by lspci : $res " 
+	echo "retry 3a. No. of gpu-s detected by lspci : $res " | tee -a  >> $DIRNAME/summary.log
+	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -ai | grep Adapter | wc -l" | tr -d '\n'`
+	echo "No. of gpu-s detected by amdvbflash: $res" 
+	echo "No. of gpu-s detected by amdvbflash: $res" | tee -a  >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
 		if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
@@ -97,14 +99,14 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	done
 
 	if [[ $CONFIG_DEBUG_ENABLE_POWERCYCLE -ne 0 ]] ; then
-		echo "Powercycling..."
+		echo "Powercycling..." 
 	
 		if [[ $CONFIG_PC_TYPE -eq $CONFIG_PC_REBOOT ]] ; then
-			echo "Powercycle type: reboot..."
+			echo "Powercycle type: reboot..." | tee -a  >> $DIRNAME/summary.log
 			sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "reboot"
-			sleep 10
+			sleep 30
 		elif [[ $CONFIG_PC_TYPE -eq $CONFIG_PC_POWERCYCLE ]] ; then
-			echo "Powercycle type: power off and on..."
+			echo "Powercycle type: power off and on..." | tee -a  >> $DIRNAME/summary.log
 			sshpass -p $CONFIG_BMC_PW ssh -o StrictHostKeyChecking=no $CONFIG_BMC_USERNAME@$CONFIG_BMC_IP "python /home/root/BMC_Scripts/shut_down_system.py"
 			sleep 10
 			sleep $CONFIG_PC_POWERCYCLE_INTERVAL
@@ -121,6 +123,7 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	
 			if [[ $ping_stat -eq 0 ]] ; then
 				echo "Can ping OS now..."
+				sleep 5
 				CONFIG_PING_TIMEOUT_ERROR=0
 				break
 			fi
