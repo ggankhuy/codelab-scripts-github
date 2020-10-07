@@ -22,7 +22,7 @@ CONFIG_BMC_PW=OpenBmc
 
 CONFIG_OS_IP="10.216.52.232"
 CONFIG_OS_USERNAME=root
-COFNIG_OS_PW=amd1234
+CONFIG_OS_PW=amd1234
 CONFIG_PING_TIMEOUT=300
 CONFIG_PING_INTERVAL=15
 
@@ -71,12 +71,13 @@ done
 
 for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
+	mkdir -p $CONFIG_PATH_LOG
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" >  $CONFIG_PATH_LOG/lspci.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "iteration $i: " >> $DIRNAME/summary.log
-	echo No. of gpu-s detected by lspci: "
+	echo "No. of gpu-s detected by lspci: "
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" >> $DIRNAME/summary.log
-	echo No. of gpu-s detected by amdvbflash: 
+	echo "No. of gpu-s detected by amdvbflash: "
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
