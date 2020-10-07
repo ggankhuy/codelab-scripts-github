@@ -7,7 +7,7 @@ mkdir -p $DIRNAME
 # GPU flash range
 CONFIG_GPU_FLASH_IDX_MIN=2
 CONFIG_GPU_FLASH_IDX_MAX=12
-CONFIG_GPU_FLASH_IDX_MAX=5
+#CONFIG_GPU_FLASH_IDX_MAX=5
 
 # amdvbflash path
 CONFIG_PATH_AMDVBFLASH=/root/tools/amdvbflash/amdvbflash-4.74/amdvbflash
@@ -81,10 +81,10 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" >  $CONFIG_PATH_LOG/lspci.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
 	echo "iteration $i: " >> $DIRNAME/summary.log
-	echo "No. of gpu-s detected by lspci: " | tee -a  >> $DIRNAME/summary.log
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log
-	echo "No. of gpu-s detected by amdvbflash: " | tee -a  >> $DIRNAME/summary.log
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" | tee -a  >> $DIRNAME/summary.log
+	ret=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log`
+	echo "No. of gpu-s detected by lspci: " $res | tee -a  >> $DIRNAME/summary.log
+	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -ai | grep Adapter | wc -l" | tee -a  >> $DIRNAME/summary.log`
+	echo "No. of gpu-s detected by amdvbflash:" $res | tee -a  >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
 		if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
