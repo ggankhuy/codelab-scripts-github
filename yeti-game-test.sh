@@ -135,6 +135,9 @@ elif [[ $p1 == "odin" ]] ; then
 elif [[ $p1 == "chase" ]] ; then
     echo "chase is selected..."
     game=$GAME_CHASE
+elif [[ $p1 == "miyagi" ]] ; then
+    echo "miyagi is selected..."
+    game=$GAME_MIYAGI
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
@@ -286,7 +289,15 @@ elif [[ $game -eq $GAME_CHASE ]] ; then
     GAME_EXECUTABLE=nba_debug_unopt.elf
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CHASE
+elif [[ $game -eq $GAME_MIYAGI ]] ; then
+    echo "GAME: MIYAGI" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Miyagi
+    DESTINATION_FOLDER=miyagi
+    GAME_EXECUTABLE=./Binaries/Retail/MK11Game-Retail
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_MIYAGI
 else
+
     echo "Unsupported game: $game" ; exit 1
 fi
 
