@@ -83,7 +83,7 @@ for (( i=0 ; i < $CONFIG_ITER ; i++ )) ; do
 	echo "iteration $i: " >> $DIRNAME/summary.log
 	echo "No. of gpu-s detected by lspci: " | tee -a  >> $DIRNAME/summary.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tee -a  >> $DIRNAME/summary.log
-	echo "No. of gpu-s detected by amdvbflash: " tee -a  >> $DIRNAME/summary.log
+	echo "No. of gpu-s detected by amdvbflash: " | tee -a  >> $DIRNAME/summary.log
 	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" | tee -a  >> $DIRNAME/summary.log
 
 	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
