@@ -300,10 +300,11 @@ elif [[ $game -eq $GAME_MIYAGI ]] ; then
     GAME_FOLDER="./"
     GAME_NAME=$GAME_MIYAGI
 elif [[ $game -eq $GAME_GEORGETOWN ]] ; then
-    echo "GAME: MIYAGI" ; sleep $SLEEP_TIME
+    echo "GAME: GEORGETOWN/DOOMETERNAL" ; sleep $SLEEP_TIME
     SOURCE_FOLDER=Georgetown
     DESTINATION_FOLDER=georgetown
-    GAME_EXECUTABLE=./DOOMEternal +permissions_forceCampaignEntitlement 1 +com_showfps 2 +com_speeds 3
+    GAME_EXECUTABLE="./DOOMEternal"
+    GAME_PARAM="+permissions_forceCampaignEntitlement 1 +com_showfps 2 +com_speeds 3"
     GAME_FOLDER="./"
     GAME_NAME=$GAME_GEORGETOWN
 else
