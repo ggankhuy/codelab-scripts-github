@@ -1,3 +1,5 @@
+# 	game defines.
+
 SLEEP_TIME=1
 SLEEP_TIME_2=2
 GAME_3DMARK=0
@@ -15,11 +17,13 @@ OPTION_EXTERNAL_IP=1
 OPTION_LOCAL_IP=2
 REPO_SERVER_IP=""
 
-#   Could be useful when repo server is not reachable and no need as setup is already done.'
+#   When set, could be useful when repo server is not reachable and no need as setup is already done.'
 
 CONFIG_BYPASS_SETUP_REPO_SERVER=0
 
 CONFIG_POLICY_DIR=/usr/local/cloudcast/dev/bin/
+
+# 	sup resolution defines.
 
 RESOLUTION_1080=1080
 RESOLUTION_720=720
@@ -33,11 +37,11 @@ STREAMER_POLICY_FILE=lan_policy.proto_ascii
 
 OPTION_GGP_INSTALL_USE_DEB=1
 
-#     IXT70 GAME REPO
+#     game repo servers.
 
 REPO_SERVER_IPS=("11.0.0.30" "10.216.66.54" "10.216.66.51" "10.217.75.124" "10.216.54.38" "10.217.73.160")
-
 REPO_SERVER_LOCATION=/repo/stadia
+
 OPTION_DHCLIENT_EXT_INT=1
 
 game=0          # game
@@ -56,9 +60,7 @@ TERMINAL_CLIENT=2
 
 SLEEP_TIME=1
 
-#       Set either yeti or ggp  engineering bundle.
-
-TR2_START_LOCATION=/usr/local/cloudcast/runit/
+#	file cfines.
 
 FILE_COPY_SCP=1
 FILE_COPY_WGET=2
@@ -231,9 +233,7 @@ function common_runtime_setup ()
     export XDG_CACHE_HOME="/mnt/developer" 
     export GGP_INTERNAL_VK_DISABLE_VSYNC=1
     export GGP_INTERNAL_VK_FORCE_PRESENT_MODE=1
-    export AMDVLKXF=$AMDVLKXF,YUV-9c240ad2 # only for 24 or older vulkan driver when using 910.debg. 
-
-    # attempt at 20200910.ggp bundle to work with doom, but this is only for vp9
+    export AMDVLKXF=$AMDVLKXF,YUV-9c240ad2 # only for 24 or older vulkan driver when using 20200910.deb. 
 
     export GGP_VK_FORCE_PRIVATE_ASYNC_COMPUTE_SWAPCHAIN_PRESENTS=1
     export GGP_VK_DISABLE_UNIVERSAL_QUEUE_PRESENTS=1
@@ -336,7 +336,6 @@ function common_setup () {
     
     echo "Soft links: "
     ls -l /usr/local/cloudcast/
-    #ls -l /opt/cloudcast/lib/amdvlk64.so    
     ls -l /opt/amdgpu-pro/lib/x86_64-linux-gnu/amdvlk64.so
 
     # If logic is not working...After add, it adds again. 
@@ -472,6 +471,9 @@ function process_t1t2 ()
     fi
 }
 
+#	additional processing fork scores.
+#	applico 3dmark only.
+
 function display_result() {
     GAME=$1
     DEBUG_DISPLAY_RESULT=0
@@ -579,6 +581,8 @@ function copy_game_files() {
         echo "$game_dir_dest exists, skipping."
     fi
 }
+
+# set render and encoder resolution.
 
 function set_resolution() {
     pResolution=$1
