@@ -138,6 +138,9 @@ elif [[ $p1 == "chase" ]] ; then
 elif [[ $p1 == "miyagi" ]] ; then
     echo "miyagi is selected..."
     game=$GAME_MIYAGI
+elif [[ $p1 == "georgetown" ]] ; then
+    echo "georgetown is selected..."
+    game=$GAME_GEORGETOWN
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
@@ -296,6 +299,13 @@ elif [[ $game -eq $GAME_MIYAGI ]] ; then
     GAME_EXECUTABLE=./Binaries/Retail/MK11Game-Retail
     GAME_FOLDER="./"
     GAME_NAME=$GAME_MIYAGI
+elif [[ $game -eq $GAME_GEORGETOWN ]] ; then
+    echo "GAME: MIYAGI" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Georgetown
+    DESTINATION_FOLDER=georgetown
+    GAME_EXECUTABLE=./DOOMEternal +permissions_forceCampaignEntitlement 1 +com_showfps 2 +com_speeds 3
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_GEORGETOWN
 else
 
     echo "Unsupported game: $game" ; exit 1
