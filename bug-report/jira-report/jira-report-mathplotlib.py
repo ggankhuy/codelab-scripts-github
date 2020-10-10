@@ -1,37 +1,77 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
+import re
+
 from datetime import datetime, timedelta
 
 datetimeToday=datetime.today()
+fileName='INTERNAL 2020-10-10T01_44_07-0500-filtered.csv'
+with open(fileName, 'r') as f:
+    jiraData = list(csv.reader(f, delimiter=','))
+jiraDataDates=[]
 
-with open('INTERNAL 2020-09-07T14_15_52-0500-filtered.csv', 'r') as f:
-    jiradata = list(csv.reader(f, delimiter=','))
+jiraDataP0=[]
+jiraDataP0Dates=[]
+jiraDataP1=[]
+jiraDataP1Dates=[]
 
-#jiradata=jiradata[1][1]
+#jiraData=jiraData[1][1]
 
-print (jiradata)
+for i in range(0, len(jiraData)):
+    jiraDataDates.append(jiraData[i][8:10])
+	
+    if re.search("P1", jiraData[i][13]):
+	    jiraDataP0.append(jiraData[i])
+		
+    if re.search("P2", jiraData[i][13]):
+        jiraDataP1.append(jiraData[i])
 
-for i in range(0, len(jiradata)):
-    jiradata[i]= jiradata[i][8:10]
+for i in range(0, len(jiraDataP0)):
+    jiraDataP0Dates.append(jiraDataP0[i][8:10])
+    
+for i in range(0, len(jiraDataP1)):
+    jiraDataP1Dates.append(jiraDataP1[i][8:10])
+    
+print("Total No. of tickets imported: ", len(jiraData))    
+print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
+print("Total No. of P1 tickets imported: ", len(jiraDataP1))    
+    
+for i in jiraData:
+    print(i)
 
+for i in jiraDataDates:
+    print(i)
+	
 delta=[]
+deltaP0=[]
+deltaP1=[]
 
 print("converting to datetime format...")
-for i in range(1, len(jiradata)):
-	closedDate=datetime.strptime(jiradata[i][0], '%m/%d/%Y %H:%M')
-	openDate=datetime.strptime(jiradata[i][1], '%m/%d/%Y %H:%M')
-	delta.append((closedDate-openDate).days)
+for i in range(1, len(jiraDataDates)):
+    closedDate=datetime.strptime(jiraDataDates[i][0], '%m/%d/%Y %H:%M')
+    openDate=datetime.strptime(jiraDataDates[i][1], '%m/%d/%Y %H:%M')
+    delta.append((closedDate-openDate).days)
+	
+for i in range(1, len(jiraDataP0Dates)):
+    closedDate=datetime.strptime(jiraDataP0Dates[i][0], '%m/%d/%Y %H:%M')
+    openDate=datetime.strptime(jiraDataP0Dates[i][1], '%m/%d/%Y %H:%M')
+    deltaP0.append((closedDate-openDate).days)
 
-for i in jiradata:
-	print(i)
-print(len(jiradata), len(jiradata[0]))
+for i in range(1, len(jiraDataP1Dates)):
+    closedDate=datetime.strptime(jiraDataP1Dates[i][0], '%m/%d/%Y %H:%M')
+    openDate=datetime.strptime(jiraDataP1Dates[i][1], '%m/%d/%Y %H:%M')
+    deltaP1.append((closedDate-openDate).days)
+
+for i in jiraDataDates:
+    print(i)
+print(len(jiraDataDates), len(jiraDataDates[0]))
 
 delta.sort()
 
 print("delta:")
 for i in delta:
-	print(i)
+    print(i)
 
 npdelta=np.asarray(delta)
 print(npdelta.shape)
@@ -75,26 +115,26 @@ plt.show()
 
 '''
 NP RANGE TOO UNFAMILIAR. Instead manipulate list and then convert to np before graphing
-#npjiradata = np.array(jiradata[1:], dtype=np.float)
-npjiradata = np.array(jiradata)
+#npjiraData = np.array(jiraData[1:], dtype=np.float)
+npjiraData = np.array(jiraData)
 
-npjiradata_date_closed=npjiradata[:,8:9]
-npjiradata_date_open=npjiradata[:,9:10]
+npjiraData_date_closed=npjiraData[:,8:9]
+npjiraData_date_open=npjiraData[:,9:10]
 
-print(npjiradata_date_closed)
-print(type(npjiradata_date_closed))
-print(npjiradata_date_closed.shape[0])
+print(npjiraData_date_closed)
+print(type(npjiraData_date_closed))
+print(npjiraData_date_closed.shape[0])
 
 delta=[]
 
-for i in range(1, npjiradata_date_closed.shape[0]):
-	#npjiradata_date_closed[i][0]=npjiradata_date_closed[i][0].split(' ')[0]
-	#npjiradata_date_open[i][0]=npjiradata_date_open[i][0].split(' ')[0]
-	npjiradata_date_closed[i][0]=datetime.strptime(npjiradata_date_closed[i][0], '%m/%d/%Y %H:%M')
-	npjiradata_date_open[i][0]=datetime.strptime(npjiradata_date_open[i][0], '%m/%d/%Y %H:%M')
-	delta.append((npjiradata_date_closed[i][0]-npjiradata_date_open[i][0]).days)
-print(npjiradata_date_closed)
-print(npjiradata_date_open)
+for i in range(1, npjiraData_date_closed.shape[0]):
+    #npjiraData_date_closed[i][0]=npjiraData_date_closed[i][0].split(' ')[0]
+    #npjiraData_date_open[i][0]=npjiraData_date_open[i][0].split(' ')[0]
+    npjiraData_date_closed[i][0]=datetime.strptime(npjiraData_date_closed[i][0], '%m/%d/%Y %H:%M')
+    npjiraData_date_open[i][0]=datetime.strptime(npjiraData_date_open[i][0], '%m/%d/%Y %H:%M')
+    delta.append((npjiraData_date_closed[i][0]-npjiraData_date_open[i][0]).days)
+print(npjiraData_date_closed)
+print(npjiraData_date_open)
 print(delta)
 ''
 t = np.arange(0., 5., 0.2)
