@@ -68,6 +68,8 @@ for i in jiraDataDates:
 print(len(jiraDataDates), len(jiraDataDates[0]))
 
 delta.sort()
+deltaP0.sort()
+deltaP1.sort()
 
 print("delta:")
 for i in delta:
@@ -75,6 +77,11 @@ for i in delta:
 
 npdelta=np.asarray(delta)
 print(npdelta.shape)
+npdeltaP0=np.asarray(deltaP0)
+print(npdelta.shape)
+npdeltaP1=np.asarray(deltaP1)
+print(npdelta.shape)
+
 '''
 #n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
 
@@ -84,20 +91,41 @@ print("hist: ", hist)
 print("hist.sum(): ", hist.sum())
 #print(np.sum(hist * np.diff(bin_edges)))
 '''
-bins = [0, 7, 14,21,400] # your bins
-data=npdelta
-hist, bin_edges = np.histogram(data,bins) # make the histogram
+bins = [0, 7, 14,21, 28, 400] # your bins
 
-fig,ax = plt.subplots()
+data=npdelta
+dataP0=npdeltaP0
+dataP1=npdeltaP1
+
+hist1, bin_edges = np.histogram(data,bins) # make the histogram
+hist2, bin_edges = np.histogram(dataP0,bins) # make the histogram
+hist3, bin_edges = np.histogram(dataP1,bins) # make the histogram
+
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
 
 # Plot the histogram heights against integers on the x axis
-ax.bar(range(len(hist)),hist,width=1) 
+ax1.bar(range(len(hist1)),hist1,width=1) 
+ax2.bar(range(len(hist2)),hist2,width=1) 
+ax3.bar(range(len(hist3)),hist3,width=1) 
+ax1.set_title("All tickets: P0-Pn")
+ax2.set_title("P0 tickets")
+ax3.set_title("P1 tickets")
+
+
+ax1.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+ax2.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+ax3.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+
 
 # Set the ticks to the middle of the bars
-ax.set_xticks([0.5+i for i,j in enumerate(hist)])
+ax1.set_xticks([0.5+i for i,j in enumerate(hist1)])
+ax2.set_xticks([0.5+i for i,j in enumerate(hist2)])
+ax3.set_xticks([0.5+i for i,j in enumerate(hist3)])
 
 # Set the xticklabels to a string that tells us what the bin edges were
-ax.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist)])
+ax1.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist1)])
+ax2.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist2)])
+ax3.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist3)])
 
 '''
 #this was cultprit!!!
