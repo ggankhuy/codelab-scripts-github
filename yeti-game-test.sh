@@ -32,7 +32,7 @@ p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 
 
 CONFIG_EXT_INT=ens7
 CONFIG_ITERATION_COUNT=1
-CONFIG_RESOLUTION=RESOLUTION_1080
+CONFIG_RESOLUTION=$RESOLUTION_1080
 CONFIG_CODEC=""
 
 for var in "$@"

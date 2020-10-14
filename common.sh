@@ -595,7 +595,7 @@ function set_resolution() {
 
     if [[ -z $pResolution ]] ; then
         echo "resolution is empty. Setting to default 1080."
-        CONFIG_RESOLUTION=RESOLUTION_1080
+        CONFIG_RESOLUTION=$RESOLUTION_1080
 	export 	GGP_VK_PRIMARY_SURFACE_EXTENT=1080p
     else
         counter=0
