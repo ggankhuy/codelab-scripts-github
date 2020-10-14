@@ -222,62 +222,26 @@ else
         echo lsmod amdgpu: $ret2
 fi
 
+GAME_SOURCE_FOLDERS=( 3dmark Quail tr2 Doom_Linux Conga Odin Chasecenter)
+GAME_DESTINATION_FOLDERS=( cumbia Infiltrator catchingfire lincoln conga odin chase)
+GAME_EXECUTABLES=( 3dmark InfiltratorDemo.elf TR2_yeti_final DOOM benchmark ffxv nba_debug_unopt.elf)
+GAME_FOLDERS=( ./ ./InfiltratorDemo/Binaries/Quail/ ./ ./ ./ ./ ./)
+GAME_PARAMS=( "--asset_root=../../assets -i ../../configs/gt1.json" "" "" "+com_showfps 2 +com_speeds 3" "" "" "")
 GAME_PARAM="-"
 
-if [[ $game -eq $GAME_3DMARK ]] ; then
-    echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=3dmark
-    DESTINATION_FOLDER=./cumbia
-    GAME_EXECUTABLE=3dmark
-    GAME_FOLDER=./
-    GAME_NAME=$GAME_3DMARK
-    GAME_PARAM="--asset_root=../../assets -i ../../configs/gt1.json"
-elif [[ $game -eq $GAME_QUAIL ]] ; then
-    echo "TR2 is selected" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Quail
-    DESTINATION_FOLDER=infiltrator
-    GAME_EXECUTABLE=InfiltratorDemo.elf
-    GAME_FOLDER=./InfiltratorDemo/Binaries/Quail/
-    GAME_NAME=$GAME_QUAIL
-elif [[ $game -eq $GAME_TR2 ]] ; then
-    echo "TR2 is selected" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=tr2
-    DESTINATION_FOLDER=catchingfire
-    GAME_EXECUTABLE=TR2_yeti_final
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_TR2
-elif [[ $game -eq $GAME_DOOM ]] ; then
-    echo "GAME: DOOM" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Doom_Linux
-    DESTINATION_FOLDER=lincoln
-    GAME_EXECUTABLE=DOOM
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_DOOM
-    GAME_PARAM="+com_showfps 2 +com_speeds 3"
-elif [[ $game -eq $GAME_CONGA ]] ; then
-    echo "GAME: CONGA" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Conga
-    DESTINATION_FOLDER=conga
-    GAME_EXECUTABLE=benchmark
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_CONGA
-elif [[ $game -eq $GAME_ODIN ]] ; then
-    echo "GAME: ODIN" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Odin
-    DESTINATION_FOLDER=odin
-    GAME_EXECUTABLE=ffxv
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_ODIN
-elif [[ $game -eq $GAME_CHASE ]] ; then
-    echo "GAME: CHASE" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=ChaseCenter
-    DESTINATION_FOLDER=chase
-    GAME_EXECUTABLE=nba_debug_unopt.elf
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_CHASE
-else
-    echo "Unsupported game: $game" ; exit 1
-fi
+for (( i=0 ; i < ${#GAME_SOURCE_FOLDERS[@]} ; i++ )) ; do
+    if [[ $p1 == ${GAME_NAMES_P1[$i]} ]] ; then
+        echo "GAME: ${GAME_NAMES_P1[$i]}." ; sleep $SLEEP_TIME
+        SOURCE_FOLDER=${GAME_SOURCE_FOLDERS[$i]}
+        DESTINATION_FOLDER=${GAME_DESTINATION_FOLDERS[$i]}
+        GAME_EXECUTABLE=3dmark=${GAME_EXECUTABLES[$i]}
+        GAME_FOLDER=${GAME_FOLDERS[$i]}
+        GAME_NAME=${GAME_NAMES_P1[$i]}
+        GAME_PARAM=${GAME_PARAMS[$i]}
+    fi
+done
+
+#   game specific codes.
 
 if [[ $game -eq $GAME_3DMARK ]] ; then
     echo "GAME: 3DMARK." ; sleep $SLEEP_TIME
