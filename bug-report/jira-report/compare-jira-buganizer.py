@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 datetimeToday=datetime.today()
 
 DEBUG=1
+DEBUGL2=0
 fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
 fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
 fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
@@ -59,37 +60,44 @@ print("Total imported buganizer issues: ", len(bugData))
 jiraDataIssueIdsBuganizer=[]
 jiraDataIssueIds=[]
 jiraListIllegaSummaryTitle=[]
+
 for i in range(0, len(jiraData)):
-		print(SINGLE_BAR)
-		if DEBUG:
-			#time.sleep(1)
-			print("Summary: ", jiraData[i][IDX_COL_JIRA_SUMMARY])
-		summary=jiraData[i][IDX_COL_JIRA_SUMMARY].split()
+	print(SINGLE_BAR)
+	issueId=None
+	if DEBUG:
+		#time.sleep(1)
+		print(i, "Summary: ", jiraData[i][IDX_COL_JIRA_SUMMARY])
+	summary=jiraData[i][IDX_COL_JIRA_SUMMARY].split()
 		
+	for j in summary:
+		if j.isdigit() and len(j)==9:
+			if DEBUG:
+				print("Found jira ID: ", str(j))
+			issueId=j
 			
-		for j in summary:
-			if j.isdigit() and len(j)==9:
-				if DEBUG:
-					print("Found jira ID: ", str(j))
-				issueId=j
-				try:
-					jiraDataIssueIdsBuganizer.append(int(j))
-					jiraDataIssueIds.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
-				except Exception as msg:
-					print("Fatal error: ", j, " is determined to be valid 9-digit Buganizer ID but can not be converted to integer.")
-					exit(1)
-				print("Added ", jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
-				continue
-				
+			try:
+				jiraDataIssueIdsBuganizer.append(int(j))
+				jiraDataIssueIds.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+			except Exception as msg:
+				print("Fatal error: ", j, " is determined to be valid 9-digit Buganizer ID but can not be converted to integer.")
+				exit(1)
+			print("Added ", jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+			continue
+			
+	if not issueId:
 		print("Unable to find from summary the buganizer ID for ", str(jiraData[i][IDX_COL_JIRA_ISSUE_KEY]))
 		jiraDataIssueIdsBuganizer.append('')
 		jiraDataIssueIds.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
 		jiraListIllegaSummaryTitle.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
 
+input("Press Enter to continue...") 
+	
 print(DOUBLE_BAR)
+print("len of jiradata: ", len(jiraData))
 print("Len of jiraDataIssueIdsBuganizer: ", len(jiraDataIssueIdsBuganizer))
 print("len of jiraDataIssueIds:", len(jiraDataIssueIds))
 print(DOUBLE_BAR)
+input("Press Enter to continue...") 
 	
 print("Following jira summary has illegal title, unable to find buganizer ID-s:")		
 for i in jiraListIllegaSummaryTitle:
@@ -101,10 +109,14 @@ for i in range(0,len(jiraDataIssueIdsBuganizer)):
 	if jiraDataIssueIdsBuganizer[i]:
 		for j in bugData:
 			#print("Checking if ", jiraDataIssueIdsBuganizer[i], " matches ", j)
-			if j[IDX_COL_BUG_ID] == jiraDataIssueIdsBuganizer[i]:
+			if j[IDX_COL_BUG_ID].strip() == str(jiraDataIssueIdsBuganizer[i]):
 				print("Found matching issue ID in buganizer: ", str(j[IDX_COL_BUG_ID]))
+				continue
+		if DEBUGL2:
+			print("Unable to find matching issue ID in buganizer for: ", str(jiraDataIssueIdsBuganizer[i]))
 	else:
-		print("Skipping ", jiraDataIssueIds[i], " as it is empty.")
+		if DEBUGL2:
+			print("Skipping ", jiraDataIssueIds[i], " as it is empty.")
 		
 	
 '''	
