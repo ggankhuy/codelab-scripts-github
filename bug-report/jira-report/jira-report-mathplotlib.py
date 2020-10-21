@@ -5,6 +5,10 @@ import re
 
 from datetime import datetime, timedelta
 
+color=['#aaaaff','#aaffaa','#ffaaaa']
+edgecolor=['#0000ff','#00ff00','#ff0000']
+titles=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
+
 datetimeToday=datetime.today()
 fileName='INTERNAL 2020-10-10T01_44_07-0500-filtered.csv'
 
@@ -95,61 +99,34 @@ print(npdelta.shape)
 print(npdeltaP0.shape)
 print(npdeltaP1.shape)
 
-# Obsolete code. 
-'''
-#n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
-
-print("n, num_bins, patches: ", n, num_bins, patches)
-hist, bin_edges = np.histogram(npdelta, density=True)
-print("hist: ", hist)
-print("hist.sum(): ", hist.sum())
-#print(np.sum(hist * np.diff(bin_edges)))
-'''
-
 # Create bins for histogram
 
-bins = [0, 7, 14,21, 28, 400] # your bins
+bins = [0, 7, 14, 21, 28, 400] # your bins
 
-data=npdelta
-dataP0=npdeltaP0
-dataP1=npdeltaP1
-
+#data=npdelta
+#dataP0=npdeltaP0
+#dataP1=npdeltaP1
+data=[npdelta, npdeltaP0, npdeltaP1]
 # Create histogram data. 
 
-hist1, bin_edges = np.histogram(data, bins) # make the histogram
-hist2, bin_edges = np.histogram(dataP0, bins) # make the histogram
-hist3, bin_edges = np.histogram(dataP1, bins) # make the histogram
-
+hist=[]
+for i in data:
+	hist.append(np.histogram(i, bins)[0])
+	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
-ax1.bar(range(len(hist1)), hist1, width=0.8, color='#aaaaff', edgecolor='#0000ff') 
-ax2.bar(range(len(hist2)), hist2, width=0.8, color='#aaffaa', edgecolor='#00ff00') 
-ax3.bar(range(len(hist3)), hist3, width=0.8, color='#ffaaaa', edgecolor='#ff0000') 
-ax1.set_title("All tickets: P0-Pn")
-ax2.set_title("P0 tickets")
-ax3.set_title("P1 tickets")
+ax=[ax1, ax2, ax3]
 
-# Set axis labels for x and y axis.	
-
-ax1.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-ax2.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-ax3.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-
-# Set the ticks to the middle of the bars.
-
-ax1.set_xticks([0.5+i for i,j in enumerate(hist1)])
-ax2.set_xticks([0.5+i for i,j in enumerate(hist2)])
-ax3.set_xticks([0.5+i for i,j in enumerate(hist3)])
-
-# Set the xticklabels to a string that tells us what the bin edges were.
-
-ax1.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist1)])
-ax2.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist2)])
-ax3.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist3)])
+for i in range(0, len(ax)):
+	ax[i].bar(range(len(hist[i])), hist[i], width=0.8, color=color[i], edgecolor=edgecolor[i]) 
+	ax[i].set_title(titles[i])
+	ax[i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+	ax[i].set_xticks([0.5+i for i,j in enumerate(hist[i])])
+	ax[i].set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist[i])])
 
 #	Make Y axis integer only.
 yint = []
