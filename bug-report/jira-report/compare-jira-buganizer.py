@@ -2,9 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import re
-
+import time
+DOUBLE_BAR="================================"
+SINGLE_BAR="--------------------------------"
 from datetime import datetime, timedelta
 datetimeToday=datetime.today()
+
+DEBUG=1
 fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
 fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
 fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
@@ -17,9 +21,11 @@ fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
 IDX_COL_JIRA_CLOSED_DATE=8
 IDX_COL_JIRA_OPENED_DATE=9
 IDX_COL_JIRA_PRIORITY=8
+IDX_COL_JIRA_SUMMARY=2
+IDX_COL_JIRA_ISSUE_KEY=0
 
-IDX_COL_BUG_STATUS=6
-IDX_COL_BUG_ID=7
+IDX_COL_BUG_STATUS=5
+IDX_COL_BUG_ID=6
 
 with open(fileNameJira, 'r') as f:
     jiraData = list(csv.reader(f, delimiter=','))
@@ -47,7 +53,60 @@ for i in bugData:
 	print(i[IDX_COL_BUG_STATUS:IDX_COL_BUG_ID+1])
 
 print("Total imported buganizer issues: ", len(bugData))
-    
+
+# Iterate through jira bug, get the title column and try extracting the gibraltar issue id. 
+
+jiraDataIssueIdsBuganizer=[]
+jiraDataIssueIds=[]
+jiraListIllegaSummaryTitle=[]
+for i in range(0, len(jiraData)):
+		print(SINGLE_BAR)
+		if DEBUG:
+			#time.sleep(1)
+			print("Summary: ", jiraData[i][IDX_COL_JIRA_SUMMARY])
+		summary=jiraData[i][IDX_COL_JIRA_SUMMARY].split()
+		
+			
+		for j in summary:
+			if j.isdigit() and len(j)==9:
+				if DEBUG:
+					print("Found jira ID: ", str(j))
+				issueId=j
+				try:
+					jiraDataIssueIdsBuganizer.append(int(j))
+					jiraDataIssueIds.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+				except Exception as msg:
+					print("Fatal error: ", j, " is determined to be valid 9-digit Buganizer ID but can not be converted to integer.")
+					exit(1)
+				print("Added ", jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+				continue
+				
+		print("Unable to find from summary the buganizer ID for ", str(jiraData[i][IDX_COL_JIRA_ISSUE_KEY]))
+		jiraDataIssueIdsBuganizer.append('')
+		jiraDataIssueIds.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+		jiraListIllegaSummaryTitle.append(jiraData[i][IDX_COL_JIRA_ISSUE_KEY])
+
+print(DOUBLE_BAR)
+print("Len of jiraDataIssueIdsBuganizer: ", len(jiraDataIssueIdsBuganizer))
+print("len of jiraDataIssueIds:", len(jiraDataIssueIds))
+print(DOUBLE_BAR)
+	
+print("Following jira summary has illegal title, unable to find buganizer ID-s:")		
+for i in jiraListIllegaSummaryTitle:
+	print(i)
+
+print(DOUBLE_BAR)
+
+for i in range(0,len(jiraDataIssueIdsBuganizer)):
+	if jiraDataIssueIdsBuganizer[i]:
+		for j in bugData:
+			#print("Checking if ", jiraDataIssueIdsBuganizer[i], " matches ", j)
+			if j[IDX_COL_BUG_ID] == jiraDataIssueIdsBuganizer[i]:
+				print("Found matching issue ID in buganizer: ", str(j[IDX_COL_BUG_ID]))
+	else:
+		print("Skipping ", jiraDataIssueIds[i], " as it is empty.")
+		
+	
 '''	
     
 print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
