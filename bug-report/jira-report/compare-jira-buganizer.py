@@ -10,6 +10,7 @@ datetimeToday=datetime.today()
 
 DEBUG=1
 DEBUGL2=0
+BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ASSIGNED']
 fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
 fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
 fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
@@ -19,11 +20,11 @@ fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
 # Column 13 must be a priority, otherwise code will either break or need adjustment. 
 # Column 
 
+IDX_COL_JIRA_ISSUE_KEY=0
+IDX_COL_JIRA_SUMMARY=2
 IDX_COL_JIRA_CLOSED_DATE=8
 IDX_COL_JIRA_OPENED_DATE=9
-IDX_COL_JIRA_PRIORITY=8
-IDX_COL_JIRA_SUMMARY=2
-IDX_COL_JIRA_ISSUE_KEY=0
+IDX_COL_JIRA_REJECTED_DATE=10
 
 IDX_COL_BUG_STATUS=5
 IDX_COL_BUG_ID=6
@@ -60,6 +61,8 @@ print("Total imported buganizer issues: ", len(bugData))
 jiraDataIssueIdsBuganizer=[]
 jiraDataIssueIds=[]
 jiraListIllegaSummaryTitle=[]
+
+jiraListUnclosedTickets=[]
 
 for i in range(0, len(jiraData)):
 	print(SINGLE_BAR)
@@ -111,6 +114,14 @@ for i in range(0,len(jiraDataIssueIdsBuganizer)):
 			#print("Checking if ", jiraDataIssueIdsBuganizer[i], " matches ", j)
 			if j[IDX_COL_BUG_ID].strip() == str(jiraDataIssueIdsBuganizer[i]):
 				print("Found matching issue ID in buganizer: ", str(j[IDX_COL_BUG_ID]))
+				
+				# Now real check if the jira id is not closed (closed data is empty) and buganizer status is NOT CLOSED.
+				
+				if not j[IDX_COL_BUG_STATUS] in BUGANIZER_OPEN_STATUSES and jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip()=='' and  jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip()=='':
+					print("Following jira is not closed: ", jiraData[i][IDX_COL_JIRA_ISSUE_KEY], ", Buganizer ID / status: ", j[IDX_COL_BUG_ID], "/", j[IDX_COL_BUG_STATUS])
+						
+					jiraListUnclosedTickets.append([jiraData[i][IDX_COL_JIRA_ISSUE_KEY], j[IDX_COL_BUG_ID], j[IDX_COL_BUG_STATUS]])
+					
 				continue
 		if DEBUGL2:
 			print("Unable to find matching issue ID in buganizer for: ", str(jiraDataIssueIdsBuganizer[i]))
