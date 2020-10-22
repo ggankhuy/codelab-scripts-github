@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import csv
 import re
 import time
-DOUBLE_BAR="================================"
-SINGLE_BAR="--------------------------------"
+DOUBLE_BAR="====================================================================================="
+SINGLE_BAR="-------------------------------------------------------------------------------------"
 from datetime import datetime, timedelta
 datetimeToday=datetime.today()
 
@@ -12,7 +12,8 @@ DEBUG=1
 DEBUGL2=0
 BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ASSIGNED']
 fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
-fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
+fileNameJira='INTERNAL 2020-10-10T01_44_07-0500-bad-col.csv'
+#fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
 fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
 
 # Column name definitions for exports from Jira(internal_jira)/Buganizer(external_jira)
@@ -24,18 +25,13 @@ IDX_COL_JIRA_SUMMARY=2
 IDX_COL_JIRA_CLOSED_DATE=8
 IDX_COL_JIRA_OPENED_DATE=9
 IDX_COL_JIRA_REJECTED_DATE=10
-JIRA_DATA_COLUMNS={'Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)'}
+JIRA_DATA_COLUMNS=['Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)']
 IDX_COL_BUG_STATUS=5
 IDX_COL_BUG_ID=6
 
 with open(fileNameJira, 'r') as f:
     jiraData = list(csv.reader(f, delimiter=','))
 jiraDataDates=[]
-# jiraDataP0/P1: Gather p0 and p1 designated tickets.
-# jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
-
-#for i in range(0, len(jiraData)):
-#   jiraDataDates.append(jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_OPENED_DATE+1])	
 	
 print("Total No. of tickets imported: ", len(jiraData))    
 
@@ -60,8 +56,20 @@ print(jiraDataColumns)
 bugDataColumns=bugData[0]
 print("bugDataColumns:")
 print(bugDataColumns)
-input("..."	)
 
+if DEBUGL2:
+	input("..."	)
+
+for i in range(0, len(JIRA_DATA_COLUMNS)):
+	if JIRA_DATA_COLUMNS[i] != jiraDataColumns[i]:
+		print(DOUBLE_BAR)
+		print("Error: imported file(", fileNameJira, ")'s column labels are not matching: ")
+		print("{0:<30}".format("Expected"), "{0:<30}".format("Read("+fileNameJira+"):"))
+		print(SINGLE_BAR)		
+		for j in range(0, len(JIRA_DATA_COLUMNS)):
+			print("{0:<30}".format(JIRA_DATA_COLUMNS[j]), "{0:<30}".format(jiraDataColumns[j])) 
+		print(DOUBLE_BAR)
+		exit(1)
 # Iterate through jira bug, get the title column and try extracting the gibraltar issue id. 
 
 jiraDataIssueIdsBuganizer=[]
