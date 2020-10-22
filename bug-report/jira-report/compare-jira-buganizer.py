@@ -15,24 +15,22 @@ fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
 fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
 fileNamesBuganizer=['issuesn12.csv', 'issuesv10.csv']
 
-# Open exported file: exported from Jira. Column 8-9 must contain closed and open dates, respectively otherwise
-# Code will either break or need adjustment. 
-# Column 13 must be a priority, otherwise code will either break or need adjustment. 
-# Column 
+# Column name definitions for exports from Jira(internal_jira)/Buganizer(external_jira)
+# Code will either break or need adjustment by changing IDX_COL_JIRA_<COLUMN_NAME> for jira export or
+# IDX_COL_BUG_<COLUMN_NAME> for buganizer export. 
 
 IDX_COL_JIRA_ISSUE_KEY=0
 IDX_COL_JIRA_SUMMARY=2
 IDX_COL_JIRA_CLOSED_DATE=8
 IDX_COL_JIRA_OPENED_DATE=9
 IDX_COL_JIRA_REJECTED_DATE=10
-
+JIRA_DATA_COLUMNS={'Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)'}
 IDX_COL_BUG_STATUS=5
 IDX_COL_BUG_ID=6
 
 with open(fileNameJira, 'r') as f:
     jiraData = list(csv.reader(f, delimiter=','))
 jiraDataDates=[]
-
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
 # jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
 
@@ -55,6 +53,14 @@ for i in bugData:
 	print(i[IDX_COL_BUG_STATUS:IDX_COL_BUG_ID+1])
 
 print("Total imported buganizer issues: ", len(bugData))
+
+jiraDataColumns=jiraData[0]
+print("jiraDataColumns:")
+print(jiraDataColumns)
+bugDataColumns=bugData[0]
+print("bugDataColumns:")
+print(bugDataColumns)
+input("..."	)
 
 # Iterate through jira bug, get the title column and try extracting the gibraltar issue id. 
 
