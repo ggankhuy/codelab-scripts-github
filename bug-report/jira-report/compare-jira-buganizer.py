@@ -10,12 +10,20 @@ datetimeToday=datetime.today()
 
 DEBUG=1
 DEBUGL2=0
+DEBUG_COL_MISMATCH_TEST=0
 BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ASSIGNED']
 fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
-fileNameJira='INTERNAL 2020-10-10T01_44_07-0500-bad-col.csv'
-#fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
-#fileNamesBuganizer=['issuesv10-bad-col.csv', 'issuesn12.csv']
-fileNamesBuganizer=['issuesv10.csv', 'issuesn12.csv']
+
+# There are still problem with when last of fileNamesBuganizer has mismatched column. Ideally
+# all files in the list to be tested individually. Current validation is conjoined list is being tested.
+
+if DEBUG_COL_MISMATCH_TEST:
+	fileNameJira='INTERNAL 2020-10-10T01_44_07-0500-bad-col.csv'
+	fileNamesBuganizer=['issuesv10-bad-col.csv', 'issuesn12.csv']
+	fileNamesBuganizer=['issuesv10.csv', 'issuesn12-bad-col.csv']
+else:
+	fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
+	fileNamesBuganizer=['issuesv10.csv', 'issuesn12.csv']
 
 # Column name definitions for exports from Jira(internal_jira)/Buganizer(external_jira)
 # Code will either break or need adjustment by changing IDX_COL_JIRA_<COLUMN_NAME> for jira export or
@@ -62,26 +70,7 @@ print(bugDataColumns)
 if DEBUGL2:
 	input("..."	)
 	
-print("Validaing column label...")		
-for i in range(0, len(BUG_DATA_COLUMNS)):
-	print(i, ": ", BUG_DATA_COLUMNS[i], bugDataColumns[i])		
-	if BUG_DATA_COLUMNS[i] != bugDataColumns[i]:
-		print(DOUBLE_BAR)
-		print("Error: imported file(", str(fileNamesBuganizer), ")'s column labels are not matching: ")
-		print("{0:<30}".format("Expected"), "{0:<30}".format("Read("+str(fileNamesBuganizer)+"):"))
-		print(SINGLE_BAR)		
-		for j in range(0, max(len(BUG_DATA_COLUMNS),len(bugDataColumns))):
-			try:
-				print("{0:<30}".format(BUG_DATA_COLUMNS[j]), "{0:<30}".format(bugDataColumns[j])) 
-			except Exception as msg:
-				try:
-					print("{0:<30}".format(BUG_DATA_COLUMNS[j])) 
-				except Exception as msg:
-					print("{0:<30}".format(bugDataColumns[j])) 
-								
-		print(DOUBLE_BAR)
-		exit(1)
-input("..")
+print("Validaing column labels...")		
 
 for i in range(0, len(JIRA_DATA_COLUMNS)):
 	if JIRA_DATA_COLUMNS[i] != jiraDataColumns[i]:
@@ -91,15 +80,47 @@ for i in range(0, len(JIRA_DATA_COLUMNS)):
 		print(SINGLE_BAR)		
 		for j in range(0, max(len(JIRA_DATA_COLUMNS), len(jiraDataColumns))):
 			try:
-				print("{0:<30}".format(JIRA_DATA_COLUMNS[j]), "{0:<30}".format(jiraDataColumns[j])) 
+				if JIRA_DATA_COLUMNS[j].strip() != jiraDataColumns[j].strip():
+					print("-->", "{0:<30}".format(JIRA_DATA_COLUMNS[j]), "{0:<30}".format(jiraDataColumns[j])) 
+				else:
+					print("{0:<30}".format(JIRA_DATA_COLUMNS[j]), "{0:<30}".format(jiraDataColumns[j])) 				
 			except Exception as msg:
 				try:
-					print("{0:<30}".format(JIRA_DATA_COLUMNS[j])) 
+					print("-->", "{0:<30}".format(JIRA_DATA_COLUMNS[j])) 
 				except Exception as msg:
-					print("{0:<30}".format(jiraDataColumns[j])) 
+					print("-->", "{0:<30}".format(jiraDataColumns[j])) 
 				
 		print(DOUBLE_BAR)
 		exit(1)
+
+
+for fileNameBuganizer in fileNamesBuganizer:
+	with open(fileNameBuganizer, 'r') as f:
+		bugDataTmp=list(csv.reader(f, delimiter=','))
+
+	bugDataColumns=bugDataTmp[0]
+	for i in range(0, len(BUG_DATA_COLUMNS)):
+		print(i, ": ", BUG_DATA_COLUMNS[i], bugDataColumns[i])		
+		if BUG_DATA_COLUMNS[i] != bugDataColumns[i]:
+			print(DOUBLE_BAR)
+			print("Error: imported file(", str(fileNameBuganizer), ")'s column labels are not matching: ")
+			print("{0:<30}".format("Expected"), "{0:<30}".format("Read("+str(fileNamesBuganizer)+"):"))
+			print(SINGLE_BAR)		
+			for j in range(0, max(len(BUG_DATA_COLUMNS),len(bugDataColumns))):
+				try:
+					if BUG_DATA_COLUMNS[j] != bugDataColumns[j]:
+						print("-->", "{0:<27}".format(BUG_DATA_COLUMNS[j]), "{0:<30}".format(bugDataColumns[j])) 
+					else:
+						print("{0:<30}".format(BUG_DATA_COLUMNS[j]), "{0:<30}".format(bugDataColumns[j])) 					
+				except Exception as msg:
+					try:
+						print("-->", "{0:<30}".format(BUG_DATA_COLUMNS[j])) 
+					except Exception as msg:
+						print("-->", "{0:<30}".format(bugDataColumns[j])) 
+									
+			print(DOUBLE_BAR)
+			exit(1)
+input("..")
 
 		
 # Iterate through jira bug, get the title column and try extracting the gibraltar issue id. 
