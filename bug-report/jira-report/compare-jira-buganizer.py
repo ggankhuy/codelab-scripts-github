@@ -36,26 +36,27 @@ import matplotlib.pyplot as plt
 import csv
 import re
 import time
+import os
 DOUBLE_BAR="====================================================================================="
 SINGLE_BAR="-------------------------------------------------------------------------------------"
 from datetime import datetime, timedelta
 datetimeToday=datetime.today()
-
+datetimeString=datetimeToday.strftime("%m-%d-%Y-%H-%M-%S")
 DEBUG=1
 DEBUGL2=0
 DEBUG_COL_MISMATCH_TEST=0
 BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ASSIGNED']
+OUTPUT_PATH="output"
+TEXT_EDITOR="notepad++"
 
 # 	Define filenames to be opened. 
-
-fileNameJira='INTERNAL 2020-10-10T01_44_07-0500.csv'
 
 if DEBUG_COL_MISMATCH_TEST:
 	fileNameJira='INTERNAL 2020-10-10T01_44_07-0500-bad-col.csv'
 	fileNamesBuganizer=['issuesv10-bad-col.csv', 'issuesn12.csv']
 	fileNamesBuganizer=['issuesv10.csv', 'issuesn12-bad-col.csv']
 else:
-	fileNameJira='INTERNAL 2020-09-07T14_15_52-0500.csv'
+	fileNameJira='jira-gibraltar.csv'
 	fileNamesBuganizer=['issuesv10.csv', 'issuesn12.csv']
 
 # Column label designation for exports from Jira(internal_jira)/Buganizer(external_jira)
@@ -73,6 +74,22 @@ BUG_DATA_COLUMNS=['POSITION', 'PRIORITY', 'TYPE', 'TITLE', 'ASSIGNEE', 'STATUS',
 IDX_COL_BUG_STATUS=5
 IDX_COL_BUG_ID=6
 
+# 	Prepare output directory.
+
+try:
+	os.mkdir(OUTPUT_PATH)
+except Exception as msg:
+	print("directory or file already exist.")
+	
+print(datetimeString)
+OUTPUT_PATH=OUTPUT_PATH+"\output-"+datetimeString+".log"
+print(OUTPUT_PATH)
+
+fout=open(OUTPUT_PATH, 'a+')
+if not fout:
+	print("Error: can not open file ", OUTPUT_PATH, " for writing.")
+	time.sleep(3)
+	
 # 	Open jira issues.
 
 with open(fileNameJira, 'r') as f:
@@ -182,7 +199,6 @@ for fileNameBuganizer in fileNamesBuganizer:
 									
 			print(DOUBLE_BAR)
 			exit(1)
-input("..")
 		
 jiraDataIssueIdsBuganizer=[]
 jiraDataIssueIds=[]
@@ -287,7 +303,15 @@ for i in range(0,len(jiraDataIssueIdsBuganizer)):
 
 print(DOUBLE_BAR)
 print("Jira tickets that are not closed (but closed on buganizer): ")
+fout.write(DOUBLE_BAR+'\n')
+fout.write("Jira tickets that are not closed (but closed on buganizer): "+'\n')
+
 for i in jiraListUnclosedTickets:
 		print(i)
+		fout.write(str(i)+'\n')
 print(DOUBLE_BAR)
-
+fout.write(DOUBLE_BAR+'\n')
+fout.close()
+print("output file: ")
+print(OUTPUT_PATH)
+os.system(TEXT_EDITOR + " " + OUTPUT_PATH)
