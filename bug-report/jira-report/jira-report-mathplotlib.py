@@ -38,25 +38,26 @@ for i in range(0, len(jiraData)):
 	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
 		jiraDataDates.append(jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
 	
-		if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-			jiraDataP0.append(jiraData[i])
-			
-		if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-			jiraDataP1.append(jiraData[i])
+	if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+		jiraDataP0.append(jiraData[i])
+		
+	if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+		jiraDataP1.append(jiraData[i])
 
 # jiraDataDatesP0/P1: Gather only column 8, 9 for P0/P1 which contains closed and open dates only. 
 
 for i in range(0, len(jiraDataP0)):
-	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
+	if jiraDataP0[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraDataP0[i][IDX_COL_JIRA_REJECTED_DATE].strip():
 		jiraDataP0Dates.append(jiraDataP0[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
     
 for i in range(0, len(jiraDataP1)):
-	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
+	if jiraDataP1[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraDataP1[i][IDX_COL_JIRA_REJECTED_DATE].strip():
 		jiraDataP1Dates.append(jiraDataP1[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
     
 print("Total No. of tickets imported: ", len(jiraData))    
 print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
-print("Total No. of P1 tickets imported: ", len(jiraDataP1))    
+print("Total No. of P1 tickets imported: ", len(jiraDataP1))  
+input("...")  
     
 for i in jiraData:
     print(i)
