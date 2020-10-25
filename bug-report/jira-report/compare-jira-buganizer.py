@@ -45,7 +45,7 @@ datetimeString=datetimeToday.strftime("%m-%d-%Y-%H-%M-%S")
 DEBUG=1
 DEBUGL2=0
 DEBUG_COL_MISMATCH_TEST=0
-BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ASSIGNED']
+BUGANIZER_OPEN_STATUSES=['ASSIGNED', 'ACCEPTED']
 OUTPUT_PATH="output"
 TEXT_EDITOR="notepad++"
 
@@ -65,9 +65,9 @@ else:
 
 IDX_COL_JIRA_ISSUE_KEY=0
 IDX_COL_JIRA_SUMMARY=2
-IDX_COL_JIRA_CLOSED_DATE=8
-IDX_COL_JIRA_OPENED_DATE=9
-IDX_COL_JIRA_REJECTED_DATE=10
+IDX_COL_JIRA_CLOSED_DATE=10
+IDX_COL_JIRA_OPENED_DATE=11
+IDX_COL_JIRA_REJECTED_DATE=12
 
 JIRA_DATA_COLUMNS=['Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels','Labels','Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)', 'Custom field (Triage Category)', 'Custom field (Triage Assignment)', 'Priority', 'Custom field (Assessed Date)',	'Custom field (Analyzed Date)']
 
@@ -204,7 +204,7 @@ for fileNameBuganizer in fileNamesBuganizer:
 jiraDataIssueIdsBuganizer=[]
 jiraDataIssueIds=[]
 jiraListIllegaSummaryTitle=[]
-jiraListUnclosedTickets=[]
+jiraOutput=[]
 
 # Iterate through jira bug, get the title column and try extracting the gibraltar issue id. 
 
@@ -246,7 +246,8 @@ for i in range(0, len(jiraData)):
 if DEBUGL2:
 	input("Press Enter to continue...") 
 
-#	Print out sanity comparison of each list. 	
+#	Print out sanity comparison of each list. 
+	
 print(DOUBLE_BAR)
 print("len of jiradata: ", len(jiraData))
 print("Len of jiraDataIssueIdsBuganizer: ", len(jiraDataIssueIdsBuganizer))
@@ -291,7 +292,7 @@ for i in range(0,len(jiraDataIssueIdsBuganizer)):
 						
 					#	If not closed, update the list, will print out this list in the end.
 						
-					jiraListUnclosedTickets.append([jiraData[i][IDX_COL_JIRA_ISSUE_KEY], j[IDX_COL_BUG_ID], j[IDX_COL_BUG_STATUS]])
+					jiraOutput.append([jiraData[i][IDX_COL_JIRA_ISSUE_KEY], j[IDX_COL_BUG_ID], j[IDX_COL_BUG_STATUS]])
 					
 				continue
 		if DEBUGL2:
@@ -307,7 +308,7 @@ print("Jira tickets that are not closed (but closed on buganizer): ")
 fout.write(DOUBLE_BAR+'\n')
 fout.write("Jira tickets that are not closed (but closed on buganizer): "+'\n')
 
-for i in jiraListUnclosedTickets:
+for i in jiraOutput:
 		print(i)
 		fout.write(str(i)+'\n')
 print(DOUBLE_BAR)
