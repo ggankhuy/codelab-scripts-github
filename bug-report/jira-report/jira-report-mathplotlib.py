@@ -4,7 +4,8 @@ import csv
 import re
 
 from datetime import datetime, timedelta
-
+DEBUG=1
+DEBUGL2=0
 IDX_COL_JIRA_ISSUE_KEY=0
 IDX_COL_JIRA_SUMMARY=2
 IDX_COL_JIRA_CLOSED_DATE=10
@@ -57,13 +58,13 @@ for i in range(0, len(jiraDataP1)):
 print("Total No. of tickets imported: ", len(jiraData))    
 print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
 print("Total No. of P1 tickets imported: ", len(jiraDataP1))  
-input("...")  
     
-for i in jiraData:
-    print(i)
+if DEBUGL2:
+	for i in jiraData:
+		print(i)
 
-for i in jiraDataDates:
-    print(i)
+	for i in jiraDataDates:
+		print(i)
 
 # holds delta (closed - open) in number of days	
 delta=[]
@@ -97,10 +98,14 @@ delta.sort()
 deltaP0.sort()
 deltaP1.sort()
 
-print("delta:")
-for i in delta:
-    print(i)
-
+if DEBUGL2:
+	print("delta/all/P0/P1:")
+	for k in [delta, deltaP0, deltaP1]:
+		print("...")
+		for i in k:
+			print(i)
+		input("...")	
+		
 # convert delta (closed-open) to numpy format.
 
 npdelta=np.asarray(delta)
@@ -113,11 +118,8 @@ print(npdeltaP1.shape)
 # Create bins for histogram
 
 bins = [0, 7, 14, 21, 28, 400] # your bins
-
-#data=npdelta
-#dataP0=npdeltaP0
-#dataP1=npdeltaP1
 data=[npdelta, npdeltaP0, npdeltaP1]
+
 # Create histogram data. 
 
 hist=[]
