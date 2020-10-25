@@ -69,7 +69,8 @@ IDX_COL_JIRA_CLOSED_DATE=8
 IDX_COL_JIRA_OPENED_DATE=9
 IDX_COL_JIRA_REJECTED_DATE=10
 
-JIRA_DATA_COLUMNS=['Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)']
+JIRA_DATA_COLUMNS=['Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels','Labels','Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)', 'Custom field (Triage Category)', 'Custom field (Triage Assignment)', 'Priority', 'Custom field (Assessed Date)',	'Custom field (Analyzed Date)']
+
 BUG_DATA_COLUMNS=['POSITION', 'PRIORITY', 'TYPE', 'TITLE', 'ASSIGNEE', 'STATUS', 'ISSUE_ID', 'CREATED_TIME (UTC)', 'MODIFIED_TIME (UTC)']
 IDX_COL_BUG_STATUS=5
 IDX_COL_BUG_ID=6
