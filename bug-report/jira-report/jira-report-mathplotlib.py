@@ -5,12 +5,19 @@ import re
 
 from datetime import datetime, timedelta
 
+IDX_COL_JIRA_ISSUE_KEY=0
+IDX_COL_JIRA_SUMMARY=2
+IDX_COL_JIRA_CLOSED_DATE=10
+IDX_COL_JIRA_OPENED_DATE=11
+IDX_COL_JIRA_REJECTED_DATE=12
+IDX_COL_JIRA_PRIORITY=15
+
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
 titles=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
 
 datetimeToday=datetime.today()
-fileName='INTERNAL 2020-10-10T01_44_07-0500-filtered.csv'
+fileName='jira-gibraltar.csv'
 
 # Open exported file: exported from Jira. Column 8-9 must contain closed and open dates, respectively otherwise
 # Code will either break or need adjustment. 
@@ -28,21 +35,24 @@ jiraDataP1Dates=[]
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
 # jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
 for i in range(0, len(jiraData)):
-    jiraDataDates.append(jiraData[i][8:10])
+	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
+		jiraDataDates.append(jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
 	
-    if re.search("P1", jiraData[i][13]):
-	    jiraDataP0.append(jiraData[i])
-		
-    if re.search("P2", jiraData[i][13]):
-        jiraDataP1.append(jiraData[i])
+		if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+			jiraDataP0.append(jiraData[i])
+			
+		if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+			jiraDataP1.append(jiraData[i])
 
 # jiraDataDatesP0/P1: Gather only column 8, 9 for P0/P1 which contains closed and open dates only. 
 
 for i in range(0, len(jiraDataP0)):
-    jiraDataP0Dates.append(jiraDataP0[i][8:10])
+	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
+		jiraDataP0Dates.append(jiraDataP0[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
     
 for i in range(0, len(jiraDataP1)):
-    jiraDataP1Dates.append(jiraDataP1[i][8:10])
+	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
+		jiraDataP1Dates.append(jiraDataP1[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
     
 print("Total No. of tickets imported: ", len(jiraData))    
 print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
