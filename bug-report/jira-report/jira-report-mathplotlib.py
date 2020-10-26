@@ -15,6 +15,9 @@ IDX_COL_JIRA_PRIORITY=15
 IDX_COL_JIRA_ASSESSED_DATE=16
 IDX_COL_JIRA_ANALYZED_DATE=17
 
+CONFIG_SIZE_WORKFLOWS=3
+CONFIG_SIZE_PRIORITIES=3
+
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
 titles=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
@@ -48,16 +51,17 @@ tmpList=[]
 listNameK=["ALL", "P0", "P1"]
 listNameJ=["CLOSED", "ASSESSED", "ANALYZED"]
 searchPattern=[".", "P1", "P2"]
+
 # 	Outer loop is for closed/assessed/analyzed loop.
 
-for j in range(0, 3):
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	print("Processing ", listNameJ[j])
 
 	tmpListJ=[]
 
 	# inner loop for ALL/P0/P1.
 
-	for k in range(0, 3):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		print("Processing ", listNameK[k])
 		tmpListK=[]
 		
@@ -78,41 +82,33 @@ for j in range(0, 3):
 
 print("Total No. of tickets imported (all/p0/p1): ")  
 
-for j in range(0, 3):
-	for k in range(0, 3):
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		printShapeList(jiraDataDates[j][k])    
-input("...")
-
-if DEBUGL2:
-	for i in jiraData:
-		print(i)
-
-	for j in range(0,3):
-		print("Printing ", listName[j])
-		for i in jiraDataDates[j]:	
-			print(i)
 
 # holds delta (closed - open) in number of days	
-'''
-delta=[]
-deltaP0=[]
-deltaP1=[]
-'''
+
 deltas=[]
 
 print("converting to datetime format...")
 
-for j in range(0, 3):
-	tmpList=[]
-	for i in range(1, len(jiraDataDates[j])):
-		closedDate=datetime.strptime(jiraDataDates[j][i][0], '%m/%d/%Y %H:%M')
-		openDate=datetime.strptime(jiraDataDates[j][i][1], '%m/%d/%Y %H:%M')
-		tmpList.append((closedDate-openDate).days)
-	deltas.append(tmpList)
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	tmpListJ=[]
+	
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		tmpListK=[]
+		for i in range(1, len(jiraDataDates[j])):
+			closedDate=datetime.strptime(jiraDataDates[j][i][0], '%m/%d/%Y %H:%M')
+			openDate=datetime.strptime(jiraDataDates[j][i][1], '%m/%d/%Y %H:%M')
+			tmpListK.append((closedDate-openDate).days)
+		tmpListJ.append(tmpListK)
+	deltas.append(tmpListJ)
 
-print("Date deltas constructed (all/p0/p1): ")    
-for i in range(0, 3):
-	printShapeList(deltas[i])
+print("Date deltas constructed (ALL/P0/P1): ")    
+
+for j in range(0, 3):
+	for k in range(0, 3):
+		printShapeList(deltas[j][k])
 	
 input("...")
 
