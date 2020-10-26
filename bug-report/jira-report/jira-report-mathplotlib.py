@@ -20,7 +20,8 @@ CONFIG_SIZE_PRIORITIES=3
 
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
-titles=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
+titlesI=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
+titlesJ=["Resolved time","Assessed time","Analyzed time"]
 
 datetimeToday=datetime.today()
 fileName='jira-gibraltar.csv'
@@ -157,7 +158,7 @@ for i in hist:
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15))
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(10, 20))
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
@@ -174,12 +175,12 @@ for j in range(0, len(ax)):
 			range(len(hist[j][i])), \
 			hist[j][i], width=0.8, \
 			color=color[i], edgecolor=edgecolor[i]) 
-		ax[j][i].set_title(titles[i])
+		ax[j][i].set_title(titlesJ[j] + ", " + titlesI[i])
 		ax[j][i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-		#ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
-		#ax[j][i].set_xticklabels(\
-		#	['{} - {}'.format(bins[i],bins[i+1]) \
-		#	for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticklabels(\
+			['{} - {}'.format(bins[i],bins[i+1]) \
+			for i,k in enumerate(hist[j][i])])
 
 #	Make Y axis integer only.
 yint = []
