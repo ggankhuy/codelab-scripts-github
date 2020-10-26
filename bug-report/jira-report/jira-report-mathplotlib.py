@@ -41,7 +41,7 @@ IDX_LIST_JIRA_DATE_OPEN_TO_CLOSE=0
 IDX_LIST_JIRA_DATE_OPEN_TO_ASSESS=1
 IDX_LIST_JIRA_DATE_OPEN_TO_ANALYZE=2
 
-IDX_LIST_JIRA_DATE_ITER=[IDX_COL_JIRA_REJECTED_DATE, IDX_COL_JIRA_ASSESSED_DATE, IDX_COL_JIRA_ANALYZED_DATE]
+IDX_LIST_JIRA_DATE_ITER=[IDX_COL_JIRA_CLOSED_DATE, IDX_COL_JIRA_ASSESSED_DATE, IDX_COL_JIRA_ANALYZED_DATE]
 jiraDataDates=[]
 
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
@@ -80,6 +80,12 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	print(" tmpListJ size:", len(tmpListJ))
 	jiraDataDates.append(tmpListJ)
 
+if DEBUGL2:
+	for i in jiraDataDates:
+		for j in i:
+			for k in j:
+				print(k)
+			
 if DEBUG:
 	print("Total No. of tickets imported (all/p0/p1): ")  
 
@@ -99,8 +105,8 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		tmpListK=[]
 		for i in range(1, len(jiraDataDates[j][k])):
-			closedDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
-			openDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
+			closedDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
+			openDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
 			tmpListK.append((closedDate-openDate).days)
 		tmpListJ.append(tmpListK)
 	deltas.append(tmpListJ)
@@ -139,34 +145,41 @@ hist=[]
 for j in data:
 	tmpList=[]
 	for k in j:
-		tmpList.append(np.histogram(i, bins)[0])
+		tmpList.append(np.histogram(k, bins)[0])
+		print("curr hist: ", tmpList)
 	hist.append(tmpList)
+	
 print("hist: ")
 for i in hist:
+	print("...")
 	for j in i:
 		print(j)
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 5))
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15))
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
 ax=[[ax1, ax2, ax3],[ax4, ax5, ax6],[ax7, ax8, ax9]]
 print(ax)
-input("..")
 
-for j in range(0, len(ax)-2):
+for j in range(0, len(ax)):
 	print("len(ax):", len(ax))
-	for i in range(0, len(ax[j])-2):
+	for i in range(0, len(ax[j])):
 		print("len(ax[j]):", len(ax[j]))
-		ax[j][i].bar(range(len(hist[j][i])), hist[j][i], width=0.8, color=color[i], edgecolor=edgecolor[i]) 
+		print("ax[j][j]: ", ax[j][i])
+		print("len(hist[j][i])/hist[j][i]: ", len(hist[j][i]), ", ", hist[j][i])
+		ax[j][i].bar(\
+			range(len(hist[j][i])), \
+			hist[j][i], width=0.8, \
+			color=color[i], edgecolor=edgecolor[i]) 
 		ax[j][i].set_title(titles[i])
 		ax[j][i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
-		ax[j][i].set_xticklabels(\
-			['{} - {}'.format(bins[i],bins[i+1]) \
-			for i,k in enumerate(hist[j][i])])
+		#ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
+		#ax[j][i].set_xticklabels(\
+		#	['{} - {}'.format(bins[i],bins[i+1]) \
+		#	for i,k in enumerate(hist[j][i])])
 
 #	Make Y axis integer only.
 yint = []
