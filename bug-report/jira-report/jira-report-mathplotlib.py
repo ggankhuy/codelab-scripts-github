@@ -80,11 +80,12 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	print(" tmpListJ size:", len(tmpListJ))
 	jiraDataDates.append(tmpListJ)
 
-print("Total No. of tickets imported (all/p0/p1): ")  
+if DEBUG:
+	print("Total No. of tickets imported (all/p0/p1): ")  
 
-for j in range(0, CONFIG_SIZE_WORKFLOWS):
-	for k in range(0, CONFIG_SIZE_PRIORITIES):
-		printShapeList(jiraDataDates[j][k])    
+	for j in range(0, CONFIG_SIZE_WORKFLOWS):
+		for k in range(0, CONFIG_SIZE_PRIORITIES):
+			printShapeList(jiraDataDates[j][k])    
 
 # holds delta (closed - open) in number of days	
 
@@ -97,38 +98,36 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	
 	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		tmpListK=[]
-		for i in range(1, len(jiraDataDates[j])):
-			closedDate=datetime.strptime(jiraDataDates[j][i][0], '%m/%d/%Y %H:%M')
-			openDate=datetime.strptime(jiraDataDates[j][i][1], '%m/%d/%Y %H:%M')
+		for i in range(1, len(jiraDataDates[j][k])):
+			closedDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
+			openDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
 			tmpListK.append((closedDate-openDate).days)
 		tmpListJ.append(tmpListK)
 	deltas.append(tmpListJ)
 
-print("Date deltas constructed (ALL/P0/P1): ")    
+if DEBUG:
+	print("Date deltas constructed (ALL/P0/P1): ")    
 
-for j in range(0, 3):
-	for k in range(0, 3):
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		printShapeList(deltas[j][k])
-	
-input("...")
-
-if DEBUGL2:
-	for j in range(0, 3):
-		for i in jiraDataDates[j]:
-			print(i)
-		print(len(jiraDataDates[j]), len(jiraDataDates[j][0]))
 
 # Sort deltas
 # convert delta (closed-open) to numpy format.
 
 npdelta=[]
-for j in range(0, 3):
-	deltas[j].sort()
-	npdelta.append(np.asarray(deltas[j]))
-	
-for j in range(0, 3):
-	print(npdelta[j].shape)
-	
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	tmpList=[]
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		deltas[j][k].sort()		
+		tmpList.append(np.asarray(deltas[j][k]))
+	npdelta.append(tmpList)
+
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		print("Shape of np delta: ", np.shape(npdelta[j][k]))
+input("...")
+
 # Create bins for histogram
 
 bins = [0, 7, 14, 21, 28, 400] # your bins
@@ -137,23 +136,30 @@ data=npdelta
 # Create histogram data. 
 
 hist=[]
-for i in data:
-	hist.append(np.histogram(i, bins)[0])
+
+for j in data:
+	tmpList=[]
+	for k in j:
+		tmpList.append(np.histogram(i, bins)[0])
+	hist.append(tmpList)
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 5))
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
-ax=[ax1, ax2, ax3]
+ax=[[ax1, ax2, ax3],[ax4, ax5, ax6],[ax7, ax8, ax9]]
 
-for i in range(0, len(ax)):
-	ax[i].bar(range(len(hist[i])), hist[i], width=0.8, color=color[i], edgecolor=edgecolor[i]) 
-	ax[i].set_title(titles[i])
-	ax[i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-	ax[i].set_xticks([0.5+i for i,j in enumerate(hist[i])])
-	ax[i].set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist[i])])
+for j in range(0, len(ax)):
+	print("len(ax):", len(ax))
+	for i in range(0, len(ax[j])):
+		print("len(ax[j]):", len(ax[j]))
+		ax[j][i].bar(range(len(hist[j][i])), hist[j][i], width=0.8, color=color[i], edgecolor=edgecolor[i]) 
+		ax[j][i].set_title(titles[i])
+		ax[j][i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticklabels(['{} - {}'.format(bins[j][i],bins[j][i+1]) for i,k in enumerate(hist[j][i])])
 
 #	Make Y axis integer only.
 yint = []
