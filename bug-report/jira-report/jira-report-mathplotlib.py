@@ -12,6 +12,8 @@ IDX_COL_JIRA_CLOSED_DATE=10
 IDX_COL_JIRA_OPENED_DATE=11
 IDX_COL_JIRA_REJECTED_DATE=12
 IDX_COL_JIRA_PRIORITY=15
+IDX_COL_JIRA_ASSESSED_DATE=16
+IDX_COL_JIRA_ANALYZED_DATE=17
 
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
@@ -20,12 +22,23 @@ titles=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
 datetimeToday=datetime.today()
 fileName='jira-gibraltar.csv'
 
+def printShapeList(pList):
+	tmpNp=np.array(pList)
+	print("dim: ", np.shape(tmpNp))
+	
+
 # Open exported file: exported from Jira. Column 8-9 must contain closed and open dates, respectively otherwise
 # Code will either break or need adjustment. 
 # Column 13 must be a priority, otherwise code will either break or need adjustment. 
 
 with open(fileName, 'r') as f:
     jiraData = list(csv.reader(f, delimiter=','))
+
+IDX_LIST_JIRA_DATE_OPEN_TO_CLOSE=0
+IDX_LIST_JIRA_DATE_OPEN_TO_ASSESS=1
+IDX_LIST_JIRA_DATE_OPEN_TO_ANALYZE=2
+
+IDX_LIST_JIRA_DATE_ITER=[IDX_COL_JIRA_REJECTED_DATE, IDX_COL_JIRA_ASSESSED_DATE, IDX_COL_JIRA_ANALYZED_DATE]
 jiraDataDates=[]
 
 jiraDataP0=[]
@@ -35,29 +48,54 @@ jiraDataP1Dates=[]
 
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
 # jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
-for i in range(0, len(jiraData)):
-	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip():
-		jiraDataDates.append(jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
-	
-	if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-		jiraDataP0.append(jiraData[i])
-		
-	if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-		jiraDataP1.append(jiraData[i])
 
+tmpList=[]
+tmpListP0=[]
+tmpListP1=[]
+
+for j in range(0, 3):
+	for i in range(0, len(jiraData)):
+		'''
+# why?	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip():
+		if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip():
+			tmpList.append( \
+				jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
+				jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_CLOSED_DATE+1])
+		if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+			tmpListP0.append(jiraData[i])
+		if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
+			tmpListP1.append(jiraData[i])
+	jiraDataDates.append(tmpList)
+	jiraDataP0.append(tmpListP0)
+	jiraDataP1.append(tmpListP1)
+print("Shape of jiraData/P0/1: ")	
+printShapeList(jiraData)
+printShapeList(jiraDataP0)
+printShapeList(jiraDataP1)
+input("...")
+		'''
+listName=["all", "p0", "p1"]
 # jiraDataDatesP0/P1: Gather only column 8, 9 for P0/P1 which contains closed and open dates only. 
 
-for i in range(0, len(jiraDataP0)):
-	if jiraDataP0[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraDataP0[i][IDX_COL_JIRA_REJECTED_DATE].strip():
-		jiraDataP0Dates.append(jiraDataP0[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
-    
-for i in range(0, len(jiraDataP1)):
-	if jiraDataP1[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraDataP1[i][IDX_COL_JIRA_REJECTED_DATE].strip():
-		jiraDataP1Dates.append(jiraDataP1[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_REJECTED_DATE])
-    
-print("Total No. of tickets imported: ", len(jiraData))    
-print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
-print("Total No. of P1 tickets imported: ", len(jiraDataP1))  
+for j in range(0, 3):
+	print("Processing ", listName[j])
+	tmpList=[]
+	for i in range(0, len(jiraData)):
+	
+		# if cell is not empty.
+		
+		if jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]].strip():
+			tmpList.append( \
+				jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
+				jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]:IDX_LIST_JIRA_DATE_ITER[j]+1])
+
+	jiraDataDates.append(tmpList)
+
+print("Total No. of tickets imported (all/p0/p1): ")    
+for i in range(0, 3):
+	printShapeList(jiraDataDates[i])
+	
+input("...")
     
 if DEBUGL2:
 	for i in jiraData:
