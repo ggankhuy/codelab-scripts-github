@@ -41,122 +41,102 @@ IDX_LIST_JIRA_DATE_OPEN_TO_ANALYZE=2
 IDX_LIST_JIRA_DATE_ITER=[IDX_COL_JIRA_REJECTED_DATE, IDX_COL_JIRA_ASSESSED_DATE, IDX_COL_JIRA_ANALYZED_DATE]
 jiraDataDates=[]
 
-jiraDataP0=[]
-jiraDataP0Dates=[]
-jiraDataP1=[]
-jiraDataP1Dates=[]
-
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
 # jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
 
 tmpList=[]
-tmpListP0=[]
-tmpListP1=[]
+listNameK=["ALL", "P0", "P1"]
+listNameJ=["CLOSED", "ASSESSED", "ANALYZED"]
+searchPattern=[".", "P1", "P2"]
+# 	Outer loop is for closed/assessed/analyzed loop.
 
 for j in range(0, 3):
-	for i in range(0, len(jiraData)):
-		'''
-# why?	if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip() and jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip():
-		if jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip():
-			tmpList.append( \
-				jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
-				jiraData[i][IDX_COL_JIRA_CLOSED_DATE:IDX_COL_JIRA_CLOSED_DATE+1])
-		if re.search("P1", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-			tmpListP0.append(jiraData[i])
-		if re.search("P2", jiraData[i][IDX_COL_JIRA_PRIORITY]):
-			tmpListP1.append(jiraData[i])
-	jiraDataDates.append(tmpList)
-	jiraDataP0.append(tmpListP0)
-	jiraDataP1.append(tmpListP1)
-print("Shape of jiraData/P0/1: ")	
-printShapeList(jiraData)
-printShapeList(jiraDataP0)
-printShapeList(jiraDataP1)
-input("...")
-		'''
-listName=["all", "p0", "p1"]
-# jiraDataDatesP0/P1: Gather only column 8, 9 for P0/P1 which contains closed and open dates only. 
+	print("Processing ", listNameJ[j])
 
-for j in range(0, 3):
-	print("Processing ", listName[j])
-	tmpList=[]
-	for i in range(0, len(jiraData)):
-	
-		# if cell is not empty.
+	tmpListJ=[]
+
+	# inner loop for ALL/P0/P1.
+
+	for k in range(0, 3):
+		print("Processing ", listNameK[k])
+		tmpListK=[]
 		
-		if jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]].strip():
-			tmpList.append( \
-				jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
-				jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]:IDX_LIST_JIRA_DATE_ITER[j]+1])
+		for i in range(0, len(jiraData)):
+		
+			# if cell is not empty and matches the priority.
+			
+			if jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]].strip() and re.search(searchPattern[k], jiraData[i][IDX_COL_JIRA_PRIORITY].strip()):
+				tmpListK.append( \
+					jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
+					jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]:IDX_LIST_JIRA_DATE_ITER[j]+1])
+					
+		print("  tmpListK size:", len(tmpListK))
+		tmpListJ.append(tmpListK)
+		
+	print(" tmpListJ size:", len(tmpListJ))
+	jiraDataDates.append(tmpListJ)
 
-	jiraDataDates.append(tmpList)
+print("Total No. of tickets imported (all/p0/p1): ")  
 
-print("Total No. of tickets imported (all/p0/p1): ")    
-for i in range(0, 3):
-	printShapeList(jiraDataDates[i])
-	
+for j in range(0, 3):
+	for k in range(0, 3):
+		printShapeList(jiraDataDates[j][k])    
 input("...")
-    
+
 if DEBUGL2:
 	for i in jiraData:
 		print(i)
 
-	for i in jiraDataDates:
-		print(i)
+	for j in range(0,3):
+		print("Printing ", listName[j])
+		for i in jiraDataDates[j]:	
+			print(i)
 
 # holds delta (closed - open) in number of days	
+'''
 delta=[]
 deltaP0=[]
 deltaP1=[]
+'''
+deltas=[]
 
 print("converting to datetime format...")
 
-for i in range(1, len(jiraDataDates)):
-    closedDate=datetime.strptime(jiraDataDates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataDates[i][1], '%m/%d/%Y %H:%M')
-    delta.append((closedDate-openDate).days)
+for j in range(0, 3):
+	tmpList=[]
+	for i in range(1, len(jiraDataDates[j])):
+		closedDate=datetime.strptime(jiraDataDates[j][i][0], '%m/%d/%Y %H:%M')
+		openDate=datetime.strptime(jiraDataDates[j][i][1], '%m/%d/%Y %H:%M')
+		tmpList.append((closedDate-openDate).days)
+	deltas.append(tmpList)
+
+print("Date deltas constructed (all/p0/p1): ")    
+for i in range(0, 3):
+	printShapeList(deltas[i])
 	
-for i in range(1, len(jiraDataP0Dates)):
-    closedDate=datetime.strptime(jiraDataP0Dates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataP0Dates[i][1], '%m/%d/%Y %H:%M')
-    deltaP0.append((closedDate-openDate).days)
-
-for i in range(1, len(jiraDataP1Dates)):
-    closedDate=datetime.strptime(jiraDataP1Dates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataP1Dates[i][1], '%m/%d/%Y %H:%M')
-    deltaP1.append((closedDate-openDate).days)
-
-for i in jiraDataDates:
-    print(i)
-print(len(jiraDataDates), len(jiraDataDates[0]))
-
-# Sort deltas
-
-delta.sort()
-deltaP0.sort()
-deltaP1.sort()
+input("...")
 
 if DEBUGL2:
-	print("delta/all/P0/P1:")
-	for k in [delta, deltaP0, deltaP1]:
-		print("...")
-		for i in k:
+	for j in range(0, 3):
+		for i in jiraDataDates[j]:
 			print(i)
-		input("...")	
-		
+		print(len(jiraDataDates[j]), len(jiraDataDates[j][0]))
+
+# Sort deltas
 # convert delta (closed-open) to numpy format.
 
-npdelta=np.asarray(delta)
-npdeltaP0=np.asarray(deltaP0)
-npdeltaP1=np.asarray(deltaP1)
-print(npdelta.shape)
-print(npdeltaP0.shape)
-print(npdeltaP1.shape)
-
+npdelta=[]
+for j in range(0, 3):
+	deltas[j].sort()
+	npdelta.append(np.asarray(deltas[j]))
+	
+for j in range(0, 3):
+	print(npdelta[j].shape)
+	
 # Create bins for histogram
 
 bins = [0, 7, 14, 21, 28, 400] # your bins
-data=[npdelta, npdeltaP0, npdeltaP1]
+data=npdelta
 
 # Create histogram data. 
 
