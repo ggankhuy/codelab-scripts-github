@@ -68,6 +68,8 @@ IDX_COL_JIRA_SUMMARY=2
 IDX_COL_JIRA_CLOSED_DATE=10
 IDX_COL_JIRA_OPENED_DATE=11
 IDX_COL_JIRA_REJECTED_DATE=12
+IDX_COL_JIRA_ASSESSED_DATE=16
+IDX_COL_JIRA_ANALYZED_DATE=17
 
 JIRA_DATA_COLUMNS=['Issue key', 'Issue id', 'Summary', 'Labels', 'Labels', 'Labels', 'Labels', 'Labels','Labels','Labels', 'Custom field (Closed Date)', 'Created', 'Custom field (Rejected Date)', 'Custom field (Triage Category)', 'Custom field (Triage Assignment)', 'Priority', 'Custom field (Assessed Date)',	'Custom field (Analyzed Date)']
 
