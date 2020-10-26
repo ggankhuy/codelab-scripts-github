@@ -126,7 +126,6 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		print("Shape of np delta: ", np.shape(npdelta[j][k]))
-input("...")
 
 # Create bins for histogram
 
@@ -142,6 +141,10 @@ for j in data:
 	for k in j:
 		tmpList.append(np.histogram(i, bins)[0])
 	hist.append(tmpList)
+print("hist: ")
+for i in hist:
+	for j in i:
+		print(j)
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
@@ -150,16 +153,20 @@ fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, f
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
 ax=[[ax1, ax2, ax3],[ax4, ax5, ax6],[ax7, ax8, ax9]]
+print(ax)
+input("..")
 
-for j in range(0, len(ax)):
+for j in range(0, len(ax)-2):
 	print("len(ax):", len(ax))
-	for i in range(0, len(ax[j])):
+	for i in range(0, len(ax[j])-2):
 		print("len(ax[j]):", len(ax[j]))
 		ax[j][i].bar(range(len(hist[j][i])), hist[j][i], width=0.8, color=color[i], edgecolor=edgecolor[i]) 
 		ax[j][i].set_title(titles[i])
 		ax[j][i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
 		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
-		ax[j][i].set_xticklabels(['{} - {}'.format(bins[j][i],bins[j][i+1]) for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticklabels(\
+			['{} - {}'.format(bins[i],bins[i+1]) \
+			for i,k in enumerate(hist[j][i])])
 
 #	Make Y axis integer only.
 yint = []
