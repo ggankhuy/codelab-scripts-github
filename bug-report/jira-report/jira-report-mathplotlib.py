@@ -158,7 +158,9 @@ for i in hist:
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(10, 20))
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15), sharex='all')
+#plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.3)
+plt.subplots_adjust(wspace=0.5, hspace=0.3)
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
@@ -176,14 +178,16 @@ for j in range(0, len(ax)):
 			hist[j][i], width=0.8, \
 			color=color[i], edgecolor=edgecolor[i]) 
 		ax[j][i].set_title(titlesJ[j] + ", " + titlesI[i])
-		ax[j][i].set(xlabel='Number of days to resolve', ylabel='Number of tickets')
+		ax[j][i].set(xlabel='Number of days', ylabel='Number of tickets')
 		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
 		ax[j][i].set_xticklabels(\
 			['{} - {}'.format(bins[i],bins[i+1]) \
 			for i,k in enumerate(hist[j][i])])
+		ax[j][i].legend()
 
 #	Make Y axis integer only.
 yint = []
+
 
 locs, labels = plt.yticks()
 for each in locs:
