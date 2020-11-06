@@ -1,1 +1,0 @@
-/root/rocm-install.sh
