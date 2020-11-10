@@ -52,6 +52,7 @@ echo p1: $p1
 
 if [[ $CONFIG_ENABLE_LOAD_UNLOAD_GIM -eq 0 ]] ; then
 	echo "Enabling GIM before loop..."
+	modprobe gim
 fi
 
 for (( i=1 ; i <=$p3 ; i++ )) ; do
