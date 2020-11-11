@@ -23,6 +23,8 @@ GPUS=`lspci -nd 1002: | wc -l`
 echo "GPUS: $GPUS"
 GPU_BDFS=()
 
+CONFIG_ENABLE_LOAD_UNLOAD_GIM=0
+
 for ((i=1; i<=$GPUS; i++)); do
 	GPU_BDFS+=(`lspci -nd 1002: | head -$i  | tail -1 | tr -s ' ' | cut -d ' ' -f1`)
 done
@@ -47,26 +49,38 @@ popd
 	
 
 echo p1: $p1
+
+if [[ $CONFIG_ENABLE_LOAD_UNLOAD_GIM -eq 0 ]] ; then
+	echo "Enabling GIM before loop..."
+	modprobe gim
+fi
+
 for (( i=1 ; i <=$p3 ; i++ )) ; do
 	mkdir -p $LOG_FOLDER/$i
-	echo "Loading gim $i th time..."
-	modprobe gim
-	lsmod | grep -i gim
-	ret=$?
-	echo "Gim load result: $ret"
 
-	dmesg > $LOG_FOLDER/$i/dmesg.gim.load.$DATE.$i.log
-	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
-	cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.load$DATE.$i.log
+	if [[  $CONFIG_ENABLE_LOAD_UNLOAD_GIM -eq 1 ]] ; then
+		echo "Loading gim $i th time..."
+		modprobe gim
+		lsmod | grep -i gim
+		ret=$?
+		echo "Gim load result: $ret"
 
-	for j in ${GPU_BDFS[@]} ; do
-		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
-	done
-	dmesg --clear
+		dmesg > $LOG_FOLDER/$i/dmesg.gim.load.$DATE.$i.log
+		lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+		cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.load$DATE.$i.log
 
-	if [[ $ret -ne 0 ]] ; then
-		echo "Error loading gim..."
-		exit 1
+		for j in ${GPU_BDFS[@]} ; do
+			lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.load.$DATE.$i.log
+		done
+		dmesg --clear
+
+		if [[ $ret -ne 0 ]] ; then
+			echo "Error loading gim..."
+			exit 1
+		fi
+	else
+		echo "Skipping the loading of GIM..."
+		dmesg --clear
 	fi
 
 	sleep 2
@@ -88,23 +102,27 @@ for (( i=1 ; i <=$p3 ; i++ )) ; do
 	dmesg --clear
 	popd
 
-	echo "Unload gim $i th time..."
-	modprobe -r gim 
-	lsmod | grep -i gim
-	ret=$?
-	echo "Gim unload result: $ret"
-	dmesg > $LOG_FOLDER/$i/dmesg.gim.unload.$DATE.$i.log
-	dmesg --clear
-	lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
-	cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.unload.$DATE.$i.log
+	if [[  $CONFIG_ENABLE_LOAD_UNLOAD_GIM -eq 1 ]] ; then
+		echo "Unload gim $i th time..."
+		modprobe -r gim 
+		lsmod | grep -i gim
+		ret=$?
+		echo "Gim unload result: $ret"
+		dmesg > $LOG_FOLDER/$i/dmesg.gim.unload.$DATE.$i.log
+		dmesg --clear
+		lspci | grep -i amd > $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
+		cat /proc/iomem > $LOG_FOLDER/$i/iomem.gim.unload.$DATE.$i.log
 
-	for j in ${GPU_BDFS[@]} ; do
-		lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
-	done
+		for j in ${GPU_BDFS[@]} ; do
+			lspci -s $j -vvv >> $LOG_FOLDER/$i/lspci.gim.unload.$DATE.$i.log
+		done
 
-	#if [[ $ret -ne 0 ]] ; then
-	#echo Error unloading gim...
-	#	exit 1
-	#fi
-	sleep 2
+			#if [[ $ret -ne 0 ]] ; then
+			#echo Error unloading gim...
+			#	exit 1
+			#fi
+		sleep 2
+	else
+		echo "Skipping the unloading of GIM..."
+	fi
 done

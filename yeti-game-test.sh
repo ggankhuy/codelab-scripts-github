@@ -32,7 +32,7 @@ p4=$4       # t1 - for terminal 1 (obsolete), t2 for terminal 2(obsolete), t1t2 
 
 CONFIG_EXT_INT=ens7
 CONFIG_ITERATION_COUNT=1
-CONFIG_RESOLUTION=RESOLUTION_1080
+CONFIG_RESOLUTION=$RESOLUTION_1080
 CONFIG_CODEC=""
 
 for var in "$@"
@@ -135,6 +135,12 @@ elif [[ $p1 == "odin" ]] ; then
 elif [[ $p1 == "chase" ]] ; then
     echo "chase is selected..."
     game=$GAME_CHASE
+elif [[ $p1 == "miyagi" ]] ; then
+    echo "miyagi is selected..."
+    game=$GAME_MIYAGI
+elif [[ $p1 == "georgetown" ]] ; then
+    echo "georgetown is selected..."
+    game=$GAME_GEORGETOWN
 elif [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
@@ -286,7 +292,23 @@ elif [[ $game -eq $GAME_CHASE ]] ; then
     GAME_EXECUTABLE=nba_debug_unopt.elf
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CHASE
+elif [[ $game -eq $GAME_MIYAGI ]] ; then
+    echo "GAME: MIYAGI" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Miyagi
+    DESTINATION_FOLDER=miyagi
+    GAME_EXECUTABLE=./Binaries/Retail/MK11Game-Retail
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_MIYAGI
+elif [[ $game -eq $GAME_GEORGETOWN ]] ; then
+    echo "GAME: GEORGETOWN/DOOMETERNAL" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=Georgetown
+    DESTINATION_FOLDER=georgetown
+    GAME_EXECUTABLE="./DOOMEternal"
+    GAME_PARAM="+permissions_forceCampaignEntitlement 1 +com_showfps 2 +com_speeds 3"
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_GEORGETOWN
 else
+
     echo "Unsupported game: $game" ; exit 1
 fi
 
