@@ -1,6 +1,7 @@
+#   new location will be in /mnt/developer/amdPalSettings.cfg
+
 AMD_PAL_SETTING_CFG_FILE=/etc/amd/amdPalSettings.cfg
-echo "mkdir git.co directory..."
-echo -e "amd1234\n" | sudo mkdir /git.co
+sudo mkdir /git.co
 uname -r
 
 sudo echo "DebugOverlayEnabled,1" | sudo tee $AMD_PAL_SETTING_CFG_FILE
@@ -11,7 +12,8 @@ sudo git config --global user.name "Your Name"
 
 echo "git clone..."
 #cd /git.co ; echo -e "g00db0y\n" | sudo git clone ssh://ixt-rack-85@10.216.64.102:32029/home/ixt-rack-85/gg-git-repo/
-cd /git.co ; sudo git clone http://gitlab1.amd.com/ggamd000/ad-hoc-scripts.git
+#cd /git.co ; sudo git clone http://gitlab1.amd.com/ggamd000/ad-hoc-scripts.git
+cd /git.co ; sudo git clone http://github.com/ggghamd/ad-hoc-scripts.git
 
 echo "checkout dev branch and run yeti setup..."
 #cd /git.co/ad-hoc-scripts 
