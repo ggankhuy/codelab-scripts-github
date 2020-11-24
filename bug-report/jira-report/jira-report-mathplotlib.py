@@ -106,6 +106,7 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		tmpListK=[]
 		for i in range(1, len(jiraDataDates[j][k])):
+			print(jiraDataDates[j][k][i])
 			closedDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
 			openDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
 			tmpListK.append((closedDate-openDate).days)
