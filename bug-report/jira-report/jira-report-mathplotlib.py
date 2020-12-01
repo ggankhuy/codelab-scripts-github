@@ -181,9 +181,9 @@ for i in hist:
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15), sharex='all')
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15))
 #plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.3)
-plt.subplots_adjust(wspace=0.5, hspace=0.3)
+plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
