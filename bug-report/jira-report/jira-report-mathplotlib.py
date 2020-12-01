@@ -143,7 +143,7 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 # inner: P0-pn], [P1], [P2]]
 
 bins = [\
-	[[0, 18, 200], [0, 3, 400], [0, 3, 400]], \
+	[[0, 18, 100, 200], [0, 3, 400], [0, 3, 400]], \
 	[[0, 3, 200], [0, 3, 400], [0, 3, 400]], \
 	[[0, 3, 200], [0, 3, 400], [0, 3, 400]]\
 	] # your bins
@@ -151,7 +151,7 @@ bins = [\
 enable_flags=[\
 	[[1], [0], [0]], \
 	[[1], [0], [0]], \
-	[[1], [0], [0]]\	
+	[[1], [0], [0]]\
 	]
 data=npdelta
 
@@ -204,9 +204,9 @@ for j in range(0, len(ax)):
 		ax[j][i].set(xlabel='Number of days', ylabel='Number of tickets')
 		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
 		
-		#ax[j][i].set_xticklabels(\
-		#	['{} - {}'.format(bins[j][i],bins[j][i+1]) \
-		#	for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticklabels(\
+			['{} - {}'.format(bins[j][i][m],bins[j][i][m+1]) \
+			for m,n in enumerate(hist[j][i])])
 		ax[j][i].legend()
 		
 
