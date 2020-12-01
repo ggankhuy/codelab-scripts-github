@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import re
+import time
 
 from datetime import datetime, timedelta
 DEBUG=1
@@ -137,19 +138,40 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 
 # Create bins for histogram
 
-bins = [0, 7, 14, 21, 28, 400] # your bins
+# bins:
+# outer: resolve, assessed, analyzed
+# inner: P0-pn], [P1], [P2]]
+
+bins = [\
+	[[0, 18, 200], [0, 3, 400], [0, 3, 400]], \
+	[[0, 3, 200], [0, 3, 400], [0, 3, 400]], \
+	[[0, 3, 200], [0, 3, 400], [0, 3, 400]]\
+	] # your bins
+
+enable_flags=[\
+	[[1], [0], [0]], \
+	[[1], [0], [0]], \
+	[[1], [0], [0]]\	
+	]
 data=npdelta
 
 # Create histogram data. 
 
 hist=[]
 
+counterj=0
 for j in data:
+	
 	tmpList=[]
+	counterk=0
 	for k in j:
-		tmpList.append(np.histogram(k, bins)[0])
+		print("bins[counterk]: ", bins[counterj][counterk])
+		#time.sleep(1)
+		tmpList.append(np.histogram(k, bins[counterj][counterk])[0])
 		print("curr hist: ", tmpList)
+		counterk+=1
 	hist.append(tmpList)
+	counterj+=1
 	
 print("hist: ")
 for i in hist:
@@ -181,10 +203,12 @@ for j in range(0, len(ax)):
 		ax[j][i].set_title(titlesJ[j] + ", " + titlesI[i])
 		ax[j][i].set(xlabel='Number of days', ylabel='Number of tickets')
 		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
-		ax[j][i].set_xticklabels(\
-			['{} - {}'.format(bins[i],bins[i+1]) \
-			for i,k in enumerate(hist[j][i])])
+		
+		#ax[j][i].set_xticklabels(\
+		#	['{} - {}'.format(bins[j][i],bins[j][i+1]) \
+		#	for i,k in enumerate(hist[j][i])])
 		ax[j][i].legend()
+		
 
 #	Make Y axis integer only.
 yint = []
