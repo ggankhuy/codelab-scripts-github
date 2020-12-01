@@ -114,34 +114,7 @@ fi
 
 #    p1 is for either 3dmark or doom (unless more support added.
 
-if [[ $p1 == "3dmark" ]] ; then
-    echo "3dmark is selected..."
-    game=$GAME_3DMARK
-elif  [[ $p1 == "doom" ]] ; then
-    echo "doom is selected..."
-    game=$GAME_DOOM
-elif [[ $p1 == "tr2" ]] ; then
-    echo "tr2 is selected..."
-    game=$GAME_TR2
-elif [[ $p1 == "quail" ]] ; then
-    echo "tr2 is selected..."
-    game=$GAME_QUAIL
-elif [[ $p1 == "conga" ]] ; then
-    echo "conga is selected..."
-    game=$GAME_CONGA
-elif [[ $p1 == "odin" ]] ; then
-    echo "conga is selected..."
-    game=$GAME_ODIN
-elif [[ $p1 == "chase" ]] ; then
-    echo "chase is selected..."
-    game=$GAME_CHASE
-elif [[ $p1 == "miyagi" ]] ; then
-    echo "miyagi is selected..."
-    game=$GAME_MIYAGI
-elif [[ $p1 == "georgetown" ]] ; then
-    echo "georgetown is selected..."
-    game=$GAME_GEORGETOWN
-elif [[ $p1 == "setup" ]] ; then
+if [[ $p1 == "setup" ]] ; then
     echo "setting up the system for test."
     echo "p2: $p2..."
     common_setup $p2
@@ -151,11 +124,21 @@ elif [[ $p1 == "setup" ]] ; then
         exit 1
     fi
     exit 0
-else
-    echo "Invalid game selected: $p1"
-    exit 1
 fi
 
+game=""
+GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" ) 
+GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE )
+
+for (( i=0 ; i < ${#GAME_NAMES_P1[@]} ; i++ )) ; do
+    if [[ $p1 == ${GAME_NAMES_P1[$i]} ]] ; then
+        game=${GAME_CODE[$i]}
+        echo "${GAME_NAMES_P1[$i]} is selected, game code: ${GAME_CODE[$i]}"
+    fi
+done
+
+if [[ -z $game ]] ; then echo "Invalid game is selected: $p1" ; exit 1; fi
+ 
 if [[ -z $2  ]] || [[ -z $3 ]] ; then
     echo "p0 selected is for game not setup. Therefore you need to supply p2-4 parameters."
     usage
@@ -292,23 +275,7 @@ elif [[ $game -eq $GAME_CHASE ]] ; then
     GAME_EXECUTABLE=nba_debug_unopt.elf
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CHASE
-elif [[ $game -eq $GAME_MIYAGI ]] ; then
-    echo "GAME: MIYAGI" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Miyagi
-    DESTINATION_FOLDER=miyagi
-    GAME_EXECUTABLE=./Binaries/Retail/MK11Game-Retail
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_MIYAGI
-elif [[ $game -eq $GAME_GEORGETOWN ]] ; then
-    echo "GAME: GEORGETOWN/DOOMETERNAL" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=Georgetown
-    DESTINATION_FOLDER=georgetown
-    GAME_EXECUTABLE="./DOOMEternal"
-    GAME_PARAM="+permissions_forceCampaignEntitlement 1 +com_showfps 2 +com_speeds 3"
-    GAME_FOLDER="./"
-    GAME_NAME=$GAME_GEORGETOWN
 else
-
     echo "Unsupported game: $game" ; exit 1
 fi
 

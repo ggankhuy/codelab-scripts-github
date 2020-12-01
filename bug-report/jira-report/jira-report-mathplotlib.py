@@ -4,9 +4,32 @@ import csv
 import re
 
 from datetime import datetime, timedelta
+DEBUG=1
+DEBUGL2=0
+IDX_COL_JIRA_ISSUE_KEY=0
+IDX_COL_JIRA_SUMMARY=2
+IDX_COL_JIRA_CLOSED_DATE=10
+IDX_COL_JIRA_OPENED_DATE=11
+IDX_COL_JIRA_REJECTED_DATE=12
+IDX_COL_JIRA_PRIORITY=15
+IDX_COL_JIRA_ASSESSED_DATE=16
+IDX_COL_JIRA_ANALYZED_DATE=17
+
+CONFIG_SIZE_WORKFLOWS=3
+CONFIG_SIZE_PRIORITIES=3
+
+color=['#aaaaff','#aaffaa','#ffaaaa']
+edgecolor=['#0000ff','#00ff00','#ff0000']
+titlesI=["All tickets: P0-Pn","P0 tickets","P1 tickets"]
+titlesJ=["Resolved time","Assessed time","Analyzed time"]
 
 datetimeToday=datetime.today()
-fileName='INTERNAL 2020-10-10T01_44_07-0500-filtered.csv'
+fileName='jira-gibraltar.csv'
+
+def printShapeList(pList):
+	tmpNp=np.array(pList)
+	print("dim: ", np.shape(tmpNp))
+	
 
 # Open exported file: exported from Jira. Column 8-9 must contain closed and open dates, respectively otherwise
 # Code will either break or need adjustment. 
@@ -14,195 +37,160 @@ fileName='INTERNAL 2020-10-10T01_44_07-0500-filtered.csv'
 
 with open(fileName, 'r') as f:
     jiraData = list(csv.reader(f, delimiter=','))
-jiraDataDates=[]
 
-jiraDataP0=[]
-jiraDataP0Dates=[]
-jiraDataP1=[]
-jiraDataP1Dates=[]
+IDX_LIST_JIRA_DATE_OPEN_TO_CLOSE=0
+IDX_LIST_JIRA_DATE_OPEN_TO_ASSESS=1
+IDX_LIST_JIRA_DATE_OPEN_TO_ANALYZE=2
+
+IDX_LIST_JIRA_DATE_ITER=[IDX_COL_JIRA_CLOSED_DATE, IDX_COL_JIRA_ASSESSED_DATE, IDX_COL_JIRA_ANALYZED_DATE]
+jiraDataDates=[]
 
 # jiraDataP0/P1: Gather p0 and p1 designated tickets.
 # jiraDataDates: Gather only column 8, 9 which contains closed and open dates only. 
-for i in range(0, len(jiraData)):
-    jiraDataDates.append(jiraData[i][8:10])
-	
-    if re.search("P1", jiraData[i][13]):
-	    jiraDataP0.append(jiraData[i])
+
+tmpList=[]
+listNameK=["ALL", "P0", "P1"]
+listNameJ=["CLOSED", "ASSESSED", "ANALYZED"]
+searchPattern=[".", "P1", "P2"]
+
+# 	Outer loop is for closed/assessed/analyzed loop.
+
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	print("Processing ", listNameJ[j])
+
+	tmpListJ=[]
+
+	# inner loop for ALL/P0/P1.
+
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		print("Processing ", listNameK[k])
+		tmpListK=[]
 		
-    if re.search("P2", jiraData[i][13]):
-        jiraDataP1.append(jiraData[i])
+		for i in range(0, len(jiraData)):
+		
+			# if cell is not empty and matches the priority.
+			
+			if jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]].strip() and re.search(searchPattern[k], jiraData[i][IDX_COL_JIRA_PRIORITY].strip()):
+				tmpListK.append( \
+					jiraData[i][IDX_COL_JIRA_OPENED_DATE:IDX_COL_JIRA_OPENED_DATE+1] + \
+					jiraData[i][IDX_LIST_JIRA_DATE_ITER[j]:IDX_LIST_JIRA_DATE_ITER[j]+1])
+					
+		print("  tmpListK size:", len(tmpListK))
+		tmpListJ.append(tmpListK)
+		
+	print(" tmpListJ size:", len(tmpListJ))
+	jiraDataDates.append(tmpListJ)
 
-# jiraDataDatesP0/P1: Gather only column 8, 9 for P0/P1 which contains closed and open dates only. 
+if DEBUGL2:
+	for i in jiraDataDates:
+		for j in i:
+			for k in j:
+				print(k)
+			
+if DEBUG:
+	print("Total No. of tickets imported (all/p0/p1): ")  
 
-for i in range(0, len(jiraDataP0)):
-    jiraDataP0Dates.append(jiraDataP0[i][8:10])
-    
-for i in range(0, len(jiraDataP1)):
-    jiraDataP1Dates.append(jiraDataP1[i][8:10])
-    
-print("Total No. of tickets imported: ", len(jiraData))    
-print("Total No. of P0 tickets imported: ", len(jiraDataP0))    
-print("Total No. of P1 tickets imported: ", len(jiraDataP1))    
-    
-for i in jiraData:
-    print(i)
-
-for i in jiraDataDates:
-    print(i)
+	for j in range(0, CONFIG_SIZE_WORKFLOWS):
+		for k in range(0, CONFIG_SIZE_PRIORITIES):
+			printShapeList(jiraDataDates[j][k])    
 
 # holds delta (closed - open) in number of days	
-delta=[]
-deltaP0=[]
-deltaP1=[]
+
+deltas=[]
 
 print("converting to datetime format...")
 
-for i in range(1, len(jiraDataDates)):
-    closedDate=datetime.strptime(jiraDataDates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataDates[i][1], '%m/%d/%Y %H:%M')
-    delta.append((closedDate-openDate).days)
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	tmpListJ=[]
 	
-for i in range(1, len(jiraDataP0Dates)):
-    closedDate=datetime.strptime(jiraDataP0Dates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataP0Dates[i][1], '%m/%d/%Y %H:%M')
-    deltaP0.append((closedDate-openDate).days)
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		tmpListK=[]
+		for i in range(1, len(jiraDataDates[j][k])):
+			closedDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
+			openDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
+			tmpListK.append((closedDate-openDate).days)
+		tmpListJ.append(tmpListK)
+	deltas.append(tmpListJ)
 
-for i in range(1, len(jiraDataP1Dates)):
-    closedDate=datetime.strptime(jiraDataP1Dates[i][0], '%m/%d/%Y %H:%M')
-    openDate=datetime.strptime(jiraDataP1Dates[i][1], '%m/%d/%Y %H:%M')
-    deltaP1.append((closedDate-openDate).days)
+if DEBUG:
+	print("Date deltas constructed (ALL/P0/P1): ")    
 
-for i in jiraDataDates:
-    print(i)
-print(len(jiraDataDates), len(jiraDataDates[0]))
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		printShapeList(deltas[j][k])
 
 # Sort deltas
-
-delta.sort()
-deltaP0.sort()
-deltaP1.sort()
-
-print("delta:")
-for i in delta:
-    print(i)
-
 # convert delta (closed-open) to numpy format.
 
-npdelta=np.asarray(delta)
-npdeltaP0=np.asarray(deltaP0)
-npdeltaP1=np.asarray(deltaP1)
-print(npdelta.shape)
-print(npdeltaP0.shape)
-print(npdeltaP1.shape)
+npdelta=[]
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	tmpList=[]
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		deltas[j][k].sort()		
+		tmpList.append(np.asarray(deltas[j][k]))
+	npdelta.append(tmpList)
 
-# Obsolete code. 
-'''
-#n, bins, patches = plt.hist(delta, num_bins, normed=1, facecolor='blue', alpha=0.5)
-
-print("n, num_bins, patches: ", n, num_bins, patches)
-hist, bin_edges = np.histogram(npdelta, density=True)
-print("hist: ", hist)
-print("hist.sum(): ", hist.sum())
-#print(np.sum(hist * np.diff(bin_edges)))
-'''
+for j in range(0, CONFIG_SIZE_WORKFLOWS):
+	for k in range(0, CONFIG_SIZE_PRIORITIES):
+		print("Shape of np delta: ", np.shape(npdelta[j][k]))
 
 # Create bins for histogram
 
-bins = [0, 7, 14,21, 28, 400] # your bins
-
+bins = [0, 7, 14, 21, 28, 400] # your bins
 data=npdelta
-dataP0=npdeltaP0
-dataP1=npdeltaP1
 
 # Create histogram data. 
 
-hist1, bin_edges = np.histogram(data, bins) # make the histogram
-hist2, bin_edges = np.histogram(dataP0, bins) # make the histogram
-hist3, bin_edges = np.histogram(dataP1, bins) # make the histogram
+hist=[]
 
+for j in data:
+	tmpList=[]
+	for k in j:
+		tmpList.append(np.histogram(k, bins)[0])
+		print("curr hist: ", tmpList)
+	hist.append(tmpList)
+	
+print("hist: ")
+for i in hist:
+	print("...")
+	for j in i:
+		print(j)
+	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15), sharex='all')
+#plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.3)
+plt.subplots_adjust(wspace=0.5, hspace=0.3)
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
-ax1.bar(range(len(hist1)), hist1, width=0.8, color='#aaaaff', edgecolor='#0000ff') 
-ax2.bar(range(len(hist2)), hist2, width=0.8, color='#aaffaa', edgecolor='#00ff00') 
-ax3.bar(range(len(hist3)), hist3, width=0.8, color='#ffaaaa', edgecolor='#ff0000') 
-ax1.set_title("All tickets: P0-Pn")
-ax2.set_title("P0 tickets")
-ax3.set_title("P1 tickets")
+ax=[[ax1, ax2, ax3],[ax4, ax5, ax6],[ax7, ax8, ax9]]
+print(ax)
 
-# Set axis labels for x and y axis.	
-
-ax1.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-ax2.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-ax3.set(xlabel='Number of days to resolve', ylabel='Number of tickets')
-
-# Set the ticks to the middle of the bars.
-
-ax1.set_xticks([0.5+i for i,j in enumerate(hist1)])
-ax2.set_xticks([0.5+i for i,j in enumerate(hist2)])
-ax3.set_xticks([0.5+i for i,j in enumerate(hist3)])
-
-# Set the xticklabels to a string that tells us what the bin edges were.
-
-ax1.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist1)])
-ax2.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist2)])
-ax3.set_xticklabels(['{} - {}'.format(bins[i],bins[i+1]) for i,j in enumerate(hist3)])
+for j in range(0, len(ax)):
+	print("len(ax):", len(ax))
+	for i in range(0, len(ax[j])):
+		print("len(ax[j]):", len(ax[j]))
+		print("ax[j][j]: ", ax[j][i])
+		print("len(hist[j][i])/hist[j][i]: ", len(hist[j][i]), ", ", hist[j][i])
+		ax[j][i].bar(\
+			range(len(hist[j][i])), \
+			hist[j][i], width=0.8, \
+			color=color[i], edgecolor=edgecolor[i]) 
+		ax[j][i].set_title(titlesJ[j] + ", " + titlesI[i])
+		ax[j][i].set(xlabel='Number of days', ylabel='Number of tickets')
+		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
+		ax[j][i].set_xticklabels(\
+			['{} - {}'.format(bins[i],bins[i+1]) \
+			for i,k in enumerate(hist[j][i])])
+		ax[j][i].legend()
 
 #	Make Y axis integer only.
 yint = []
+
 
 locs, labels = plt.yticks()
 for each in locs:
     yint.append(int(each))
 plt.yticks(yint)
-
 plt.show()
-
-# obsolete code
-'''
-#this was cultprit!!!
-plt.hist(npdelta, bins=bins_list)
-plt.xlabel('Number of days to resolve')
-plt.ylabel('Number of tickets')
-plt.title(r'Defect resolution data')
-plt.xticks(bins_list, bins_list_x_axis_ticks)
-'''
-'''
-plt.plot(bins, npdelta)
-plt.show()
-'''
-
-'''
-NP RANGE TOO UNFAMILIAR. Instead manipulate list and then convert to np before graphing
-#npjiraData = np.array(jiraData[1:], dtype=np.float)
-npjiraData = np.array(jiraData)
-
-npjiraData_date_closed=npjiraData[:,8:9]
-npjiraData_date_open=npjiraData[:,9:10]
-
-print(npjiraData_date_closed)
-print(type(npjiraData_date_closed))
-print(npjiraData_date_closed.shape[0])
-
-delta=[]
-
-for i in range(1, npjiraData_date_closed.shape[0]):
-    #npjiraData_date_closed[i][0]=npjiraData_date_closed[i][0].split(' ')[0]
-    #npjiraData_date_open[i][0]=npjiraData_date_open[i][0].split(' ')[0]
-    npjiraData_date_closed[i][0]=datetime.strptime(npjiraData_date_closed[i][0], '%m/%d/%Y %H:%M')
-    npjiraData_date_open[i][0]=datetime.strptime(npjiraData_date_open[i][0], '%m/%d/%Y %H:%M')
-    delta.append((npjiraData_date_closed[i][0]-npjiraData_date_open[i][0]).days)
-print(npjiraData_date_closed)
-print(npjiraData_date_open)
-print(delta)
-''
-t = np.arange(0., 5., 0.2)
-
-plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
-
-#plt.plot([1, 2, 3, 4], [10, 20, -4, 100], 'ro')
-plt.ylabel('some numbers')
-'''
