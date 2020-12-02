@@ -213,7 +213,6 @@ for j in range(0, len(ax)):
 #	Make Y axis integer only.
 yint = []
 
-
 locs, labels = plt.yticks()
 for each in locs:
     yint.append(int(each))
@@ -227,7 +226,7 @@ TICKETS_2D_IDX_TICKETS_OPENED=0
 TICKETS_2D_IDX_TICKETS_CLOSED=1
 TICKETS_2D_IDX_TICKETS_REJECTED=2
 TICKETS_2D_LABELS=["opened", "closed", "rejected"]
-TICKETS_2D_START_DATE=datetime.strptime("01/01/2019 12:00", '%m/%d/%Y %H:%M')
+TICKETS_2D_START_DATE=datetime.strptime("01/01/2020 12:00", '%m/%d/%Y %H:%M')
 
 for i in range(1, len(jiraData)):
 	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_OPENED_DATE])
@@ -241,5 +240,50 @@ for i in range(1, len(jiraData)):
 	if (jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip()):
 		tickets_2d[TICKETS_2D_IDX_TICKETS_REJECTED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_REJECTED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)	
 		
+print("tickets_2d:")
 print(tickets_2d)
+
+date_bins=[]
+NUMBER_OF_WEEKS_PER_YEAR=52
+date_week_labels=[]
+for i in range(0, NUMBER_OF_WEEKS_PER_YEAR):
+	date_bins.append(i * 7)
+	#date_week_labels.append('w'+ str(i+1))
+	date_week_labels.append(str(i+1))
+
+print("date_bins:")
+print(date_bins)
+print("date_week_labels: ")
+print(date_week_labels)
+titles_date=['Number of tickets opened/week (yr 2020)','Number of tickets closed/week (yr 2020)','Number of tickets rejected/week (yr 2020)']
+date_hist=[]
+for i in range(0, len(tickets_2d)):
+	print("setting date_hist[i]", i)
+	date_hist.append(np.histogram(tickets_2d[i], date_bins)[0])
+	
+fig, (ax1, ax2, ax3)  = plt.subplots(3, 1, figsize=(20, 20))
+ax=[ax1, ax2, ax3]
+plt.subplots_adjust(wspace=0.3, hspace=0.8)
+
+for i in range(0, len(ax)):
+	print("date_hist[i]", date_hist[i])
+
+	ax[i].bar(\
+			range(len(date_hist[i])), \
+			date_hist[i], width=0.8, \
+			color=color[i], edgecolor=edgecolor[i]) 
+	ax[i].set_title(titles_date[i])
+	ax[i].set(xlabel='Week No.', ylabel='Number of tickets')
+	ax[i].set_xticks([0.5+m for m,n in enumerate(date_hist[i])])
+	ax[i].set_xticklabels(date_week_labels[:-1])
+	ax[i].legend()	
+		
+yint = []
+xint = []
+
+locs, labels = plt.yticks()
+for each in locs:
+    yint.append(int(each))
+plt.yticks(yint)
+plt.show()
 	
