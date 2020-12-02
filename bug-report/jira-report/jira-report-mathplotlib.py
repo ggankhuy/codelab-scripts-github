@@ -218,7 +218,7 @@ locs, labels = plt.yticks()
 for each in locs:
     yint.append(int(each))
 plt.yticks(yint)
-plt.show()
+#plt.show()
 
 # start second plot containing weekly incoming and weekly fixed rate.
 
@@ -227,6 +227,7 @@ TICKETS_2D_IDX_TICKETS_OPENED=0
 TICKETS_2D_IDX_TICKETS_CLOSED=1
 TICKETS_2D_IDX_TICKETS_REJECTED=2
 TICKETS_2D_LABELS=["opened", "closed", "rejected"]
+TICKETS_2D_START_DATE=datetime.strptime("01/01/2019 12:00", '%m/%d/%Y %H:%M')
 
 for i in range(1, len(jiraData)):
 	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_OPENED_DATE])
@@ -234,18 +235,11 @@ for i in range(1, len(jiraData)):
 	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_REJECTED_DATE])
 	
 	if (jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip()):
-		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED].append(datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M'))
+		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
 	if (jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip()):
-		tickets_2d[TICKETS_2D_IDX_TICKETS_CLOSED].append(datetime.strptime(jiraData[i][IDX_COL_JIRA_CLOSED_DATE], '%m/%d/%Y %H:%M'))
+		tickets_2d[TICKETS_2D_IDX_TICKETS_CLOSED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_CLOSED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
 	if (jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip()):
-		tickets_2d[TICKETS_2D_IDX_TICKETS_REJECTED].append(datetime.strptime(jiraData[i][IDX_COL_JIRA_REJECTED_DATE], '%m/%d/%Y %H:%M'))
-	
-for i in range(0, len(tickets_2d)):
-	print("------ ", TICKETS_2D_LABELS[i], "-------")
-	for j in tickets_2d[i]:
-		print(j)
-	
-	
-	
-	
+		tickets_2d[TICKETS_2D_IDX_TICKETS_REJECTED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_REJECTED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)	
+		
+print(tickets_2d)
 	
