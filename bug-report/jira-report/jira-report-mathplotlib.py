@@ -221,12 +221,13 @@ plt.yticks(yint)
 
 # start second plot containing weekly incoming and weekly fixed rate.
 
+START_YEAR="2019"
 tickets_2d=[[], [], []]
 TICKETS_2D_IDX_TICKETS_OPENED=0
 TICKETS_2D_IDX_TICKETS_CLOSED=1
-TICKETS_2D_IDX_TICKETS_REJECTED=2
-TICKETS_2D_LABELS=["opened", "closed", "rejected"]
-TICKETS_2D_START_DATE=datetime.strptime("01/01/2020 12:00", '%m/%d/%Y %H:%M')
+TICKETS_2D_IDX_TICKETS_OPENED_QUARTERLY=2
+TICKETS_2D_LABELS=["opened", "closed", "opened-quarterly"]
+TICKETS_2D_START_DATE=datetime.strptime("01/01/"+ START_YEAR +" 12:00", '%m/%d/%Y %H:%M')
 
 for i in range(1, len(jiraData)):
 	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_OPENED_DATE])
@@ -237,29 +238,49 @@ for i in range(1, len(jiraData)):
 		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
 	if (jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip()):
 		tickets_2d[TICKETS_2D_IDX_TICKETS_CLOSED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_CLOSED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
-	if (jiraData[i][IDX_COL_JIRA_REJECTED_DATE].strip()):
-		tickets_2d[TICKETS_2D_IDX_TICKETS_REJECTED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_REJECTED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)	
+	if (jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip()):
+		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED_QUARTERLY].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)	
 		
 print("tickets_2d:")
 print(tickets_2d)
 
 date_bins=[]
+date_tick_labels=[]
+date_hist=[]
 NUMBER_OF_WEEKS_PER_YEAR=52
-date_week_labels=[]
-for i in range(0, NUMBER_OF_WEEKS_PER_YEAR):
-	date_bins.append(i * 7)
-	#date_week_labels.append('w'+ str(i+1))
-	date_week_labels.append(str(i+1))
+NUMBER_OF_QUARTERS_PER_YEAR=4
+TOTAL_NUMBER_OF_YEAR_SPANNED=[1, 1, 3]
+ticks=[NUMBER_OF_WEEKS_PER_YEAR, NUMBER_OF_WEEKS_PER_YEAR, NUMBER_OF_QUARTERS_PER_YEAR]
+tick_label_prefix=['','','Q']
+titles_date=['Number of tickets opened/week (yr '+START_YEAR+')','Number of tickets closed/week (yr '+START_YEAR+')','Number of tickets opened/Quarter (yr '+START_YEAR+')']
+x_label=['Week No.','Week No.','Quarter No.']
 
+for i in range(0, len(tickets_2d)):
+	tmpList=[]
+	tmpList1=[]
+	for j in range(0, ticks[i] * TOTAL_NUMBER_OF_YEAR_SPANNED[i]):
+		tmpList.append(j*int(365/ticks[i]))
+		
+		if int(j/ticks[i] >= 1):
+			print("Resetting tick No...")
+			currLabel=tick_label_prefix[i] + str(int(j+1-ticks[i]))
+		else:
+			currLabel=tick_label_prefix[i] + str(j+1)
+
+		print("j+1/ticks[i]/j/currLabel: ", j+1, ticks[i], j, currLabel)
+		
+		tmpList1.append(currLabel)
+	date_bins.append(tmpList)
+	date_tick_labels.append(tmpList1)
+	
 print("date_bins:")
 print(date_bins)
-print("date_week_labels: ")
-print(date_week_labels)
-titles_date=['Number of tickets opened/week (yr 2020)','Number of tickets closed/week (yr 2020)','Number of tickets rejected/week (yr 2020)']
-date_hist=[]
+print("date_tick_labels: ")
+print(date_tick_labels)
+
 for i in range(0, len(tickets_2d)):
 	print("setting date_hist[i]", i)
-	date_hist.append(np.histogram(tickets_2d[i], date_bins)[0])
+	date_hist.append(np.histogram(tickets_2d[i], date_bins[i])[0])
 	
 fig, (ax1, ax2, ax3)  = plt.subplots(3, 1, figsize=(20, 20))
 ax=[ax1, ax2, ax3]
@@ -273,9 +294,9 @@ for i in range(0, len(ax)):
 			date_hist[i], width=0.8, \
 			color=color[i], edgecolor=edgecolor[i]) 
 	ax[i].set_title(titles_date[i])
-	ax[i].set(xlabel='Week No.', ylabel='Number of tickets')
+	ax[i].set(xlabel=x_label[i], ylabel='Number of tickets')
 	ax[i].set_xticks([0.5+m for m,n in enumerate(date_hist[i])])
-	ax[i].set_xticklabels(date_week_labels[:-1])
+	ax[i].set_xticklabels(date_tick_labels[i][:-1])
 	ax[i].legend()	
 		
 yint = []
