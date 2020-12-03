@@ -263,7 +263,7 @@ for i in range(0, len(tickets_2d)):
 		
 		if int(j/ticks[i] >= 1):
 			print("Resetting tick No...")
-			currLabel=tick_label_prefix[i] + str(int(j+1-ticks[i]))
+			currLabel=tick_label_prefix[i] + str(int(1+(j)%ticks[i]))
 		else:
 			currLabel=tick_label_prefix[i] + str(j+1)
 
