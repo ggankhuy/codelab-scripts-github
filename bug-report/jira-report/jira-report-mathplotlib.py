@@ -18,6 +18,7 @@ IDX_COL_JIRA_ANALYZED_DATE=17
 
 CONFIG_SIZE_WORKFLOWS=3
 CONFIG_SIZE_PRIORITIES=3
+START_YEAR="2020"
 
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
@@ -221,7 +222,6 @@ plt.yticks(yint)
 
 # start second plot containing weekly incoming and weekly fixed rate.
 
-START_YEAR="2019"
 tickets_2d=[[], [], []]
 TICKETS_2D_IDX_TICKETS_OPENED=0
 TICKETS_2D_IDX_TICKETS_CLOSED=1
