@@ -12,7 +12,7 @@ CONFIG_OS=platform.platform()
 if re.search("Linux", CONFIG_OS):
     dir_delim="/"
 elif re.search("Windows", CONFIG_OS):
-    dir_delim="\"
+    dir_delim="\\"
 else:
     print("Unknown OS, can not continue.")
     quit(1)
