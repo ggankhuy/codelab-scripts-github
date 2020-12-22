@@ -26,9 +26,9 @@ try:
             print("Within that, also each gpu initialization within the particular ")
             print("gim initialization log further divided. ")
             print("*********************************************************")
-	    print("Usage: ", sys.argv[0], " file=<filename to be bisected>, ", ", init=<gim type>: either libgv or gim or both.")
+            print("Usage: ", sys.argv[0], " file=<filename to be bisected>, ", ", init=<gim type>: either libgv or gim or both.")
             print("*********************************************************")
-	    exit(0)
+            exit(0)
 except Exception as msg:
     print("Continuing...")
     
