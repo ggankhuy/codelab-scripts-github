@@ -96,13 +96,15 @@ print("split len: ", len(fp_content_gim_inits))
 if len(fp_content_gim_inits) == 1:
 	print("WARNING: split did not seem to occur.")
 
+parentDir=fileName+"-dir"
+os.mkdir(parentDir)
 for i in range(0, len(fp_content_gim_inits)):
-    subdir="gim-init-" + str(i)
+    subdir=parentDir +"\gim-init-" + str(i)
     print("Created subdirectory " + subdir)
     os.mkdir(subdir)
-    filename=subdir + "\\" + fileName + ".gim-init-" + str(i) + ".log"
-    print("filename: ", filename)
-    fpw=open(filename, "w")
+    filePath=subdir + "\\" + fileName + ".gim-init-" + str(i) + ".log"
+    print("filePath: ", filePath)
+    fpw=open(filePath, "w")
     fpw.write(fp_content_gim_inits[i])
     fpw.close()
     
