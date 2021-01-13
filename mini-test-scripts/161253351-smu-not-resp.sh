@@ -14,9 +14,7 @@ do
 	echo "--- LOOP COUNT $i ----"
 
 	echo "setting kernel 4.15... and vbios to $VBIOS_415"
-	for  i in {0..3} ; 
-		do $AMDVBFLASH_PATH -p $i $VBIOS_415
-	done
+	sshpass -p amd1234 ssh root@$HOST_IP "for i in {0..3} ; do echo flash gpu $i ... ; $AMDVBFLASH_PATH -f -p $i $VBIOS_415 ; done"
 	sshpass -p amd1234 ssh root@$HOST_IP 'cp /root/grub.4.15.log /etc/default/grub ; update-grub ; reboot'
 	sleep $EXTRA_SLEEP
 	for i in {0..60} ; 
@@ -32,14 +30,10 @@ do
 	echo "kernel: "
 	sshpass -p amd1234 ssh root@$HOST_IP 'uname -r'
 	echo "vbios:" 
-	for  i in {0..3} ; 
-		do $AMDVBFLASH_PATH -i
-	done
+	sshpass -p amd1234 ssh root@$HOST_IP "$AMDVBFLASH_PATH -i"
 
 	echo "setting kernel 5.4.38+ and vbios to $VBIOS_5438..."
-	for  i in {0..3} ; 
-		do $AMDVBFLASH_PATH -p $i $VBIOS_5438
-	done
+	sshpass -p amd1234 ssh root@$HOST_IP "for i in {0..3} ; do echo flash gpu $i ... ; $AMDVBFLASH_PATH -f -p $i $VBIOS_5438 ; done"
 	sshpass -p amd1234 ssh root@$HOST_IP 'cp grub.5.4.38.log /etc/default/grub ; update-grub ; reboot'
 	sleep $EXTRA_SLEEP
 	for i in {0..60} ; 
@@ -54,4 +48,6 @@ do
 	done	
 	echo "kernel: "
 	sshpass -p amd1234 ssh root@$HOST_IP 'uname -r'
+	echo "vbios:" 
+	sshpass -p amd1234 ssh root@$HOST_IP "$AMDVBFLASH_PATH -i"
 done	
