@@ -20,10 +20,15 @@ do
 	echo "setting kernel 4.15... and vbios to $VBIOS_415"
 	for i in {0..14}
 	do
-		sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "echo flash gpu $i ... ; $AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+		#echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "echo flash gpu $i ... ; $AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+		echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+		sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+		ret=$?
+		if [[ ! -z $ret ]] ; then echo "ret: $?. Can not continue." ; exit 1; fi
 	done
 	sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP 'cp /root/grub.4.15.log /etc/default/grub ; update-grub'
 	sleep $EXTRA_SLEEP
+	echo "sshpass -p $BMC_PW ssh $BMC_USER@$BMC_IP 'cd ~/BMC_Scripts/ ; python shut_down_system.py ; sleep 15; python boot_up_system.py'"
 	sshpass -p $BMC_PW ssh $BMC_USER@$BMC_IP 'cd ~/BMC_Scripts/ ; python shut_down_system.py ; sleep 15; python boot_up_system.py'
 	if [[ $? -ne 0 ]] ; then echo "BMC is not pingable, can not continue..." ; exit 1; fi
 	sleep $EXTRA_SLEEP
