@@ -5,3 +5,6 @@ cd cmake-3.16.5
 ./bootstrap
 make  -j8
 sudo make install 
+ret=`cat ~/.bashrc | grep CMAKE_ROOT`
+
+if [[ -z $ret ]] ; then echo "export CMAKE_ROOT=`which cmake`" >> ~/.bashrc ; fi
