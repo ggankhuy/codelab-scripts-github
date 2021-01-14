@@ -38,8 +38,8 @@ HOST_PW=amd1234
 HOST_USER=root
 
 HOST_RESPONSIVE=0
-CONFIG_DISABLE_FLASH_VBIOS=1
-CONFIG_DISABLE_HOST_DRV_BUILD=1
+CONFIG_DISABLE_FLASH_VBIOS=0
+CONFIG_DISABLE_HOST_DRV_BUILD=0
 
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
@@ -161,5 +161,5 @@ do
 	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
 done	
