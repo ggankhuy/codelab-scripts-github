@@ -2,6 +2,10 @@
 # For 5.4.39, flash 20201023 VBIOS
 # For 4.15 kernel, flash 19Q3 VBIOS.
 
+DATE=`date +%Y%m%d-%H-%M-%S`
+DIRNAME=161253351-result/$DATE/
+mkdir -p $DIRNAME
+
 # 	MKM ST 47 configuration
 
 HOST_IP="10.6.168.76"
@@ -34,7 +38,8 @@ HOST_PW=amd1234
 HOST_USER=root
 
 HOST_RESPONSIVE=0
-CONFIG_FAKE_FLASH_VBIOS=0
+CONFIG_DISABLE_FLASH_VBIOS=1
+CONFIG_DISABLE_HOST_DRV_BUILD=1
 
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
@@ -46,21 +51,29 @@ CONFIG_REBOOT=1
 #	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
 
 function build_install_legacy_gim() {
-	cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
-		"cd /git.co/cp-Gibraltar-GIM; ./dkms.sh gim 1.0" "modprobe gim")
-	for (( i=0; i < ${#cmds[@]}; i++ )); do
-		echo "cmd: ${cmds[$i]}" ; sleep 1
-		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
-	done
+	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -eq 1 ]] ; then
+		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
+			"cd /git.co/cp-Gibraltar-GIM; ./dkms.sh gim 1.0" "modprobe gim")
+		for (( i=0; i < ${#cmds[@]}; i++ )); do
+			echo "cmd: ${cmds[$i]}" ; sleep 1
+			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+		done
+	else
+		echo "Bypassing host driver build..."
+	fi
 }
 
 function build_install_libgv() {
-	cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git"  \
-		"cd /git.co/ad-hoc-scripts ; ./dkms.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
-	for (( i=0; i < ${#cmds[@]}; i++ )); do
-		echo "cmd: ${cmds[$i]}" ; sleep 1
-		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
-	done
+	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -eq 1 ]] ; then
+		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git"  \
+			"cd /git.co/ad-hoc-scripts ; ./dkms.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
+		for (( i=0; i < ${#cmds[@]}; i++ )); do
+			echo "cmd: ${cmds[$i]}" ; sleep 1
+			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+		done
+	else
+		echo "Bypassing host driver build..."
+	fi
 }
 
 function powercycle_server()
@@ -107,42 +120,46 @@ function powercycle_server()
 	if [[ $HOST_RESPONSIVE -ne 1 ]] ; then echo "Host is not responding after N? retries to powercycle. Can not continue..." ; exit 1; fi
 }
  
-for i in {0..3};
+for loopCnt in {0..3};
 do
-	echo "--- LOOP COUNT $i ----"
+	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
 	echo "setting kernel 4.15... and vbios to $VBIOS_415"
-	for i in {0..3}
+	for m in {0..3}
 	do
-		if [[ $CONFIG_FAKE_FLASH_VBIOS -eq 1 ]] ; then
+		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
-			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
-			
+			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_415"
 		else
-			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_415"
 		fi
 	done
 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "for k in {0..3} ; do virsh shutdown vats-test-0$k ; done ;"
 	build_install_legacy_gim
 	powercycle_server
 
-	echo "vbios:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i"
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\""
+	echo "vbios/gim:" 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg --clear ; for k in {0..3} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg" | tee -a $DIRNAME/$loopCnt.log
 
-	for i in {0..3}
+	for m in {0..3}
 	do
-		if [[ $CONFIG_FAKE_FLASH_VBIOS -eq 1 ]] ; then
+		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
-			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
+			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_5438"
 		else
-			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
+			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_5438"
 		fi
 	done
+
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "for k in {0..3} ; do virsh shutdown vats-test-0$k ; done ;"
 	build_install_libgv
 	powercycle_server
 
 	echo "vbios/gim:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i"
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\""
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg --clear ; for k in {0..3} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg" | tee -a $DIRNAME/$loopCnt.log
 done	
