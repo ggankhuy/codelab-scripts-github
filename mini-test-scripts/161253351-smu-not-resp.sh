@@ -34,7 +34,7 @@ HOST_PW=amd1234
 HOST_USER=root
 
 HOST_RESPONSIVE=0
-CONFIG_FAKE_FLASH_VBIOS=1
+CONFIG_FAKE_FLASH_VBIOS=0
 
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
@@ -46,24 +46,21 @@ CONFIG_REBOOT=1
 #	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
 
 function build_install_legacy_gim() {
-	mkdir /git.co/ ; pushd /git.co
-	#git clone https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM
-	git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git
-	cd Gibraltar-GIM
-	./dkms.sh gim 1.0
-	dmesg --clear
-	modprobe gim
-	popd
+	cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
+		"cd /git.co/cp-Gibraltar-GIM; ./dkms.sh gim 1.0" "modprobe gim")
+	for (( i=0; i < ${#cmds[@]}; i++ )); do
+		echo "cmd: ${cmds[$i]}" ; sleep 1
+		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+	done
 }
 
 function build_install_libgv() {
-	mkdir /git.co/ ; pushd /git.co
-	#git clone https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM
-	git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git
-	popd
-	/git.co/ad-hoc-scripts/dkms.sh gim 2.0.1.G.20201023
-	dmesg --clear
-	modprobe gim
+	cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git"  \
+		"cd /git.co/ad-hoc-scripts ; ./dkms.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
+	for (( i=0; i < ${#cmds[@]}; i++ )); do
+		echo "cmd: ${cmds[$i]}" ; sleep 1
+		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+	done
 }
 
 function powercycle_server()
@@ -130,7 +127,8 @@ do
 	powercycle_server
 
 	echo "vbios:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no root@$HOST_IP "$AMDVBFLASH_PATH -i"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\""
 
 	for i in {0..3}
 	do
@@ -138,12 +136,13 @@ do
 			sleep 1
 			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
 		else
-			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
 		fi
 	done
 	build_install_libgv
 	powercycle_server
 
-	echo "vbios:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no root@$HOST_IP "$AMDVBFLASH_PATH -i"
+	echo "vbios/gim:" 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\""
 done	
