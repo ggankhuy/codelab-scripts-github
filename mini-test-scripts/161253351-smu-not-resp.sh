@@ -51,7 +51,7 @@ CONFIG_REBOOT=1
 #	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
 
 function build_install_legacy_gim() {
-	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -eq 1 ]] ; then
+	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -ne 1 ]] ; then
 		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
 			"cd /git.co/cp-Gibraltar-GIM; ./dkms.sh gim 1.0" "modprobe gim")
 		for (( i=0; i < ${#cmds[@]}; i++ )); do
@@ -64,7 +64,7 @@ function build_install_legacy_gim() {
 }
 
 function build_install_libgv() {
-	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -eq 1 ]] ; then
+	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -ne 1 ]] ; then
 		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git"  \
 			"cd /git.co/ad-hoc-scripts ; ./dkms.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
 		for (( i=0; i < ${#cmds[@]}; i++ )); do
@@ -135,14 +135,14 @@ do
 		fi
 	done
 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "for k in {0..3} ; do virsh shutdown vats-test-0$k ; done ;"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in {1..4} ; do virsh shutdown vats-test-0$k ; done'
 	build_install_legacy_gim
 	powercycle_server
 
 	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg --clear ; for k in {0..3} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg" | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default ; dmesg --clear ; for k in {1..4} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
 
 	for m in {0..3}
 	do
@@ -154,12 +154,12 @@ do
 		fi
 	done
 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "for k in {0..3} ; do virsh shutdown vats-test-0$k ; done ;"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in {1..4} ; do virsh shutdown vats-test-0$k ; done'
 	build_install_libgv
 	powercycle_server
 
 	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg --clear ; for k in {0..3} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg" | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
 done	
