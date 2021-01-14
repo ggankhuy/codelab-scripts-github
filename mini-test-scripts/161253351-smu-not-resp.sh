@@ -51,9 +51,6 @@ CONFIG_DISABLE_HOST_DRV_BUILD=0
 
 CONFIG_REBOOT=1
 
-#	Power cycle the ST server. (Semitruck). Attempting this on non google server has unpredictable result. 
-#	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
-
 function build_install_legacy_gim() {
 	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -ne 1 ]] ; then
 		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
@@ -79,6 +76,9 @@ function build_install_libgv() {
 		echo "Bypassing host driver build..."
 	fi
 }
+
+#	Power cycle the ST server. (Semitruck). Attempting this on non google server has unpredictable result. 
+#	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
 
 function powercycle_server()
 {
