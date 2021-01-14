@@ -1,6 +1,10 @@
-# Alternativelyboot between 5.4.38 and 4.15 kernel. 
-# For 5.4.39, flash 20201023 VBIOS
-# For 4.15 kernel, flash 19Q3 VBIOS.
+# Alternatively boot between legacy and libgv gim version between powercycle.
+# Operational briefs are as follows:
+# 1. For every other boot build and install libgv and legacy-gim on other boots.
+# 2. For libgv flash latest libgv compatible VBIOS (i.e. currently D04), for legacy-gim, flash load Y03 VBIOS.
+# 3. Powercycle (for G servers) or reboot (for non-G servers)
+# 3. Load gim  (libgv or legacy-gim)
+# 4. Start all VM-s
 
 DATE=`date +%Y%m%d-%H-%M-%S`
 DIRNAME=161253351-result/$DATE/
@@ -120,7 +124,7 @@ function powercycle_server()
 	if [[ $HOST_RESPONSIVE -ne 1 ]] ; then echo "Host is not responding after N? retries to powercycle. Can not continue..." ; exit 1; fi
 }
  
-for loopCnt in {0..3};
+for loopCnt in {0..200};
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
