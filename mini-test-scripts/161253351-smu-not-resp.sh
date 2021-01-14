@@ -124,7 +124,7 @@ function powercycle_server()
 	if [[ $HOST_RESPONSIVE -ne 1 ]] ; then echo "Host is not responding after N? retries to powercycle. Can not continue..." ; exit 1; fi
 }
  
-for loopCnt in {0..200};
+for loopCnt in {0..3};
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
@@ -146,8 +146,10 @@ do
 	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default ; dmesg --clear ; for k in {1..4} ; do echo $k ; virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
-
+	echo " --- dmesg after modprobe gim-legacy ---" >> $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
 	for m in {0..3}
 	do
 		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
@@ -165,5 +167,8 @@ do
 	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
+	echo " --- dmesg after modprobe gim libgv ---" >> $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
 done	
