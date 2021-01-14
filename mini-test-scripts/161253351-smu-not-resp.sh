@@ -29,13 +29,47 @@ HOST_USER=root
 
 HOST_RESPONSIVE=0
 CONFIG_FAKE_FLASH_VBIOS=1
-CONFIG_FAKE_SET_KERNEL=1
+
+#	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
+#	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
+#	Powercycle is preferable test option over reboot. 
+
+CONFIG_REBOOT=1
 
 #	Power cycle the ST server. (Semitruck). Attempting this on non google server has unpredictable result. 
 #	If host is not responding after 3 tries, function will exit to terminal with exit code 1.
 
+function build_install_legacy_gim() {
+	mkdir /git.co/ ; pushd /git.co
+	#git clone https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM
+	git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git
+	cd Gibraltar-GIM
+	./dkms.sh gim 1.0
+	dmesg --clear
+	modprobe gim
+	popd
+}
+
+function build_install_libgv() {
+	mkdir /git.co/ ; pushd /git.co
+	#git clone https://ggghamd:amd1234A%23@github.com/AMD-CloudGPU/Gibraltar-GIM
+	git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git
+	popd
+	/git.co/ad-hoc-scripts/dkms.sh gim 2.0.1.G.20201023
+	dmesg --clear
+	modprobe gim
+}
+
 function powercycle_st_server()
 {
+	if [[ $CONFIG_REBOOT -eq 1 ]] ; then
+		echo "CONFIG_REBOOT is enabled. Rebooting instead of powercycling..." ; sleep 5
+		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "reboot"
+		return 
+	fi
+
+	echo "Powercycling ..." 
+
 	# Power cycle the server now.
 
 	HOST_RESPONSIVE=0
@@ -44,7 +78,7 @@ function powercycle_st_server()
 		do
 		echo "Trying to power cycle...Loop No. $j"
 		sleep $EXTRA_SLEEP
-		sshpass -p $BMC_PW ssh $BMC_USER@$BMC_IP 'cd ~/BMC_Scripts/ ; python shut_down_system.py ; sleep 15; python boot_up_system.py'
+		sshpass -p $BMC_PW ssh -o StrictHostKeyChecking=no $BMC_USER@$BMC_IP 'cd ~/BMC_Scripts/ ; python shut_down_system.py ; sleep 15; python boot_up_system.py'
 		sleep $EXTRA_SLEEP
 		for i in {0..60} ; 
 		do
@@ -70,50 +104,36 @@ do
 	do
 		if [[ $CONFIG_FAKE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
-			echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
 			
 		else
-			#sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+			#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
 			#ret=$?
 			#if [[ ! -z $ret ]] ; then echo "ret: $?. Can not continue." ; exit 1; fi
 		fi
 	done
 
-	if [[ $CONFIG_FAKE_SET_KERNEL -eq 1 ]] ; then
-		echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP 'cp /root/grub.4.15.log /etc/default/grub ; update-grub'
-	else
-		#sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP 'cp /root/grub.4.15.log /etc/default/grub ; update-grub'
-	fi
-
+	build_install_legacy_gim
 	powercycle_st_server
 
-	echo "kernel: "
-	sshpass -p amd1234 ssh root@$HOST_IP 'uname -r'
 	echo "vbios:" 
-	sshpass -p $HOST_PW ssh root@$HOST_IP "$AMDVBFLASH_PATH -i"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no root@$HOST_IP "$AMDVBFLASH_PATH -i"
 
 	echo "setting kernel 5.4.38+ and vbios to $VBIOS_5438..."
 	for i in {0..14}
 	do
 		if [[ $CONFIG_FAKE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
-			echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
+			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_5438"
 		else
-			#sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
+			#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $i $VBIOS_415"
 			#ret=$?
 			#if [[ ! -z $ret ]] ; then echo "ret: $?. Can not continue." ; exit 1; fi
 		fi
 	done
-	if [[ $CONFIG_FAKE_SET_KERNEL -eq 1 ]] ; then
-		echo sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP 'cp grub.5.4.38.log /etc/default/grub ; update-grub'
-	else
-		#sshpass -p $HOST_PW ssh $HOST_USER@$HOST_IP 'cp grub.5.4.38.log /etc/default/grub ; update-grub'
-	fi
-
+	build_install_libgv
 	powercycle_st_server
 
-	echo "kernel: "
-	sshpass -p $HOST_PW ssh root@$HOST_IP 'uname -r'
 	echo "vbios:" 
-	sshpass -p $HOST_PW ssh root@$HOST_IP "$AMDVBFLASH_PATH -i"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no root@$HOST_IP "$AMDVBFLASH_PATH -i"
 done	
