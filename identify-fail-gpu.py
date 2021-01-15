@@ -56,7 +56,7 @@ for i in sys.argv:
             fileName=i.split('=')[1]
             print("Found filename to be opened: ", fileName)
 
-    if re.search("pattern=", i):
+        if re.search("pattern=", i):
             pattern=i.split('=')[1]
             print("Found error pattern to be used", pattern)
 
