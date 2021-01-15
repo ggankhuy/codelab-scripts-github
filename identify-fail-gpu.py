@@ -4,9 +4,9 @@
 # Print unaffected gpu list.
 # Make sure they are exclusive.
 
-#	p1 - file name to search
-#	p2 - error pattern to search.
-#	p3 - gim-legacy, libgv or both.
+#    p1 - file name to search
+#    p2 - error pattern to search.
+#    p3 - gim-legacy, libgv or both.
 
 import sys
 import os
@@ -56,8 +56,8 @@ for i in sys.argv:
             fileName=i.split('=')[1]
             print("Found filename to be opened: ", fileName)
 
-	if re.search("pattern=", i):
-    	    pattern=i.split('=')[1]
+    if re.search("pattern=", i):
+            pattern=i.split('=')[1]
             print("Found error pattern to be used", pattern)
 
     except Exception as msg:
