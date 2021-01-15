@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import re
+import time
 
 from datetime import datetime, timedelta
 DEBUG=1
@@ -17,6 +18,7 @@ IDX_COL_JIRA_ANALYZED_DATE=17
 
 CONFIG_SIZE_WORKFLOWS=3
 CONFIG_SIZE_PRIORITIES=3
+START_YEAR="2020"
 
 color=['#aaaaff','#aaffaa','#ffaaaa']
 edgecolor=['#0000ff','#00ff00','#ff0000']
@@ -106,6 +108,7 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 	for k in range(0, CONFIG_SIZE_PRIORITIES):
 		tmpListK=[]
 		for i in range(1, len(jiraDataDates[j][k])):
+			print(jiraDataDates[j][k][i])
 			closedDate=datetime.strptime(jiraDataDates[j][k][i][1], '%m/%d/%Y %H:%M')
 			openDate=datetime.strptime(jiraDataDates[j][k][i][0], '%m/%d/%Y %H:%M')
 			tmpListK.append((closedDate-openDate).days)
@@ -136,19 +139,40 @@ for j in range(0, CONFIG_SIZE_WORKFLOWS):
 
 # Create bins for histogram
 
-bins = [0, 7, 14, 21, 28, 400] # your bins
+# bins:
+# outer: resolve, assessed, analyzed
+# inner: P0-pn], [P1], [P2]]
+
+bins = [\
+	[[0, 18, 100, 200], [0, 3, 400], [0, 3, 400]], \
+	[[0, 3, 200], [0, 3, 400], [0, 3, 400]], \
+	[[0, 3, 200], [0, 3, 400], [0, 3, 400]]\
+	] # your bins
+
+enable_flags=[\
+	[[1], [0], [0]], \
+	[[1], [0], [0]], \
+	[[1], [0], [0]]\
+	]
 data=npdelta
 
 # Create histogram data. 
 
 hist=[]
 
+counterj=0
 for j in data:
+	
 	tmpList=[]
+	counterk=0
 	for k in j:
-		tmpList.append(np.histogram(k, bins)[0])
+		print("bins[counterk]: ", bins[counterj][counterk])
+		#time.sleep(1)
+		tmpList.append(np.histogram(k, bins[counterj][counterk])[0])
 		print("curr hist: ", tmpList)
+		counterk+=1
 	hist.append(tmpList)
+	counterj+=1
 	
 print("hist: ")
 for i in hist:
@@ -158,9 +182,9 @@ for i in hist:
 	
 # Create plot with 3 subplots arranged horizontally, set total size of plot.
 
-fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15), sharex='all')
+fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9))  = plt.subplots(3, 3, figsize=(15, 15))
 #plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.3)
-plt.subplots_adjust(wspace=0.5, hspace=0.3)
+plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
 # Plot the histogram heights against integers on the x axis, specify fill and border colors and titles. 
 
@@ -180,17 +204,107 @@ for j in range(0, len(ax)):
 		ax[j][i].set_title(titlesJ[j] + ", " + titlesI[i])
 		ax[j][i].set(xlabel='Number of days', ylabel='Number of tickets')
 		ax[j][i].set_xticks([0.5+i for i,k in enumerate(hist[j][i])])
+		
 		ax[j][i].set_xticklabels(\
-			['{} - {}'.format(bins[i],bins[i+1]) \
-			for i,k in enumerate(hist[j][i])])
+			['{} - {}'.format(bins[j][i][m],bins[j][i][m+1]) \
+			for m,n in enumerate(hist[j][i])])
 		ax[j][i].legend()
+		
 
 #	Make Y axis integer only.
 yint = []
 
+locs, labels = plt.yticks()
+for each in locs:
+    yint.append(int(each))
+plt.yticks(yint)
+#plt.show()
+
+# start second plot containing weekly incoming and weekly fixed rate.
+
+tickets_2d=[[], [], []]
+TICKETS_2D_IDX_TICKETS_OPENED=0
+TICKETS_2D_IDX_TICKETS_CLOSED=1
+TICKETS_2D_IDX_TICKETS_OPENED_QUARTERLY=2
+TICKETS_2D_LABELS=["opened", "closed", "opened-quarterly"]
+TICKETS_2D_START_DATE=datetime.strptime("01/01/"+ START_YEAR +" 12:00", '%m/%d/%Y %H:%M')
+
+for i in range(1, len(jiraData)):
+	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_OPENED_DATE])
+	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_CLOSED_DATE])
+	print("converting to date format: ", jiraData[i][IDX_COL_JIRA_REJECTED_DATE])
+	
+	if (jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip()):
+		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
+	if (jiraData[i][IDX_COL_JIRA_CLOSED_DATE].strip()):
+		tickets_2d[TICKETS_2D_IDX_TICKETS_CLOSED].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_CLOSED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)
+	if (jiraData[i][IDX_COL_JIRA_OPENED_DATE].strip()):
+		tickets_2d[TICKETS_2D_IDX_TICKETS_OPENED_QUARTERLY].append((datetime.strptime(jiraData[i][IDX_COL_JIRA_OPENED_DATE], '%m/%d/%Y %H:%M')-TICKETS_2D_START_DATE).days)	
+		
+print("tickets_2d:")
+print(tickets_2d)
+
+date_bins=[]
+date_tick_labels=[]
+date_hist=[]
+NUMBER_OF_WEEKS_PER_YEAR=52
+NUMBER_OF_QUARTERS_PER_YEAR=4
+TOTAL_NUMBER_OF_YEAR_SPANNED=[1, 1, 3]
+ticks=[NUMBER_OF_WEEKS_PER_YEAR, NUMBER_OF_WEEKS_PER_YEAR, NUMBER_OF_QUARTERS_PER_YEAR]
+tick_label_prefix=['','','Q']
+titles_date=['Number of tickets opened/week (yr '+START_YEAR+')','Number of tickets closed/week (yr '+START_YEAR+')','Number of tickets opened/Quarter (yr '+START_YEAR+')']
+x_label=['Week No.','Week No.','Quarter No.']
+
+for i in range(0, len(tickets_2d)):
+	tmpList=[]
+	tmpList1=[]
+	for j in range(0, ticks[i] * TOTAL_NUMBER_OF_YEAR_SPANNED[i]):
+		tmpList.append(j*int(365/ticks[i]))
+		
+		if int(j/ticks[i] >= 1):
+			print("Resetting tick No...")
+			currLabel=tick_label_prefix[i] + str(int(1+(j)%ticks[i]))
+		else:
+			currLabel=tick_label_prefix[i] + str(j+1)
+
+		print("j+1/ticks[i]/j/currLabel: ", j+1, ticks[i], j, currLabel)
+		
+		tmpList1.append(currLabel)
+	date_bins.append(tmpList)
+	date_tick_labels.append(tmpList1)
+	
+print("date_bins:")
+print(date_bins)
+print("date_tick_labels: ")
+print(date_tick_labels)
+
+for i in range(0, len(tickets_2d)):
+	print("setting date_hist[i]", i)
+	date_hist.append(np.histogram(tickets_2d[i], date_bins[i])[0])
+	
+fig, (ax1, ax2, ax3)  = plt.subplots(3, 1, figsize=(20, 20))
+ax=[ax1, ax2, ax3]
+plt.subplots_adjust(wspace=0.3, hspace=0.8)
+
+for i in range(0, len(ax)):
+	print("date_hist[i]", date_hist[i])
+
+	ax[i].bar(\
+			range(len(date_hist[i])), \
+			date_hist[i], width=0.8, \
+			color=color[i], edgecolor=edgecolor[i]) 
+	ax[i].set_title(titles_date[i])
+	ax[i].set(xlabel=x_label[i], ylabel='Number of tickets')
+	ax[i].set_xticks([0.5+m for m,n in enumerate(date_hist[i])])
+	ax[i].set_xticklabels(date_tick_labels[i][:-1])
+	ax[i].legend()	
+		
+yint = []
+xint = []
 
 locs, labels = plt.yticks()
 for each in locs:
     yint.append(int(each))
 plt.yticks(yint)
 plt.show()
+	
