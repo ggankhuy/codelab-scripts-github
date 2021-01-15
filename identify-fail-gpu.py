@@ -111,10 +111,10 @@ for i in fp_content:
             if DEBUG:
                 print("Expression not matched.")
         
-print("GPU inventory: ")
+print("GPU inventory: (" + str(len(gpu_list_all)) + ")")
 for i in gpu_list_all:
     print(i)
 
-print("Failing GPU-s: ")
+print("GPU inventory: (" + str(len(gpu_list_fail)) + ")")
 for i in gpu_list_fail:
     print(i)
