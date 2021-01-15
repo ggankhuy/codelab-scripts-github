@@ -90,7 +90,7 @@ for i in fp_content:
     if re.search("AMD GIM probed GPU", i):
         if DEBUG:
             print("Found gpu: ", i)
-        gpu_list_all.append(i.strip().split()[-1])
+        gpu_list_all.append(re.sub("0000:", "", i.strip().split()[-1]))
 
     if re.search(pattern, i):
         # search for BDF:
@@ -99,19 +99,22 @@ for i in fp_content:
             if DEBUG:
                 print("expression matched: ", m.group(0)) 
             time.sleep(0)
-            if m.group(0):
-                if m.group(0) in gpu_list_fail:
+            result=re.sub("\]|\[","", m.group())
+            if result:
+                if result in gpu_list_fail:
                     if DEBUG:
-                        print("Warn: ", m.group(0), " is already in list")
+                        print("Warn: ", result, " is already in list")
                 else:
                     if DEBUG:
-                        print("Adding ", m.group(0))
-                    gpu_list_fail.append(m.group(0))
+                        print("Adding ", result)
+                    gpu_list_fail.append(result)
         else:
             if DEBUG:
                 print("Expression not matched.")
         
 print("GPU inventory: (" + str(len(gpu_list_all)) + ")")
+gpu_list_all.sort()
+gpu_list_fail.sort()
 for i in gpu_list_all:
     print(i)
 
