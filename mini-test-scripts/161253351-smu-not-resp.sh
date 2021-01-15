@@ -44,6 +44,7 @@ HOST_USER=root
 HOST_RESPONSIVE=0
 CONFIG_DISABLE_FLASH_VBIOS=0
 CONFIG_DISABLE_HOST_DRV_BUILD=0
+DROP_FOLDER_ROOT=/drop/20201023/
 
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
@@ -171,4 +172,15 @@ do
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
 	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
+
+    # launch vk examples for N hours.
+
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'cd $DROP_FOLDER_ROOT ; nohup ./run-test.sh 41 &' 
+
+    # sleep 3600 
+
+    sleep 7200
+	powercycle_server
+
+    # powercycle once more.    
 done	
