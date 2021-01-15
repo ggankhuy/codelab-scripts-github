@@ -94,7 +94,7 @@ for i in fp_content:
 
     if re.search(pattern, i):
         # search for BDF:
-        m=re.search("\[[0-9]+:[0-9]+:[0-9]\]", i)
+        m=re.search("\[[0-9a-f]+:[0-9a-f]+:[0-9]\]", i)
         if m:
             if DEBUG:
                 print("expression matched: ", m.group(0)) 
