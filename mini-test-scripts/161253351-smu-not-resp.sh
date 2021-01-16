@@ -52,6 +52,20 @@ DROP_FOLDER_ROOT=/drop/20201023/
 
 CONFIG_REBOOT=1
 
+function output_stat {
+   	echo "vbios/gim:" 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
+    echo " --- Building gim, loading and save the dmesg ---" | tee -a $DIRNAME/$loopCnt.log
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" > $DIRNAME/summary.log
+	echo " --- dmesg after modprobe gim-legacy ---" >> $DIRNAME/$loopCnt.log
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/$loopCnt.log
+	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >> tee -a $DIRNAME/$loopCnt.log
+}
+
 function build_install_legacy_gim() {
 	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -ne 1 ]] ; then
 		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/cp-Gibraltar-GIM.git"  \
@@ -124,13 +138,20 @@ function powercycle_server()
 	fi
 	if [[ $HOST_RESPONSIVE -ne 1 ]] ; then echo "Host is not responding after N? retries to powercycle. Can not continue..." ; exit 1; fi
 }
- 
-for loopCnt in {0..3};
+
+#   counter adapters
+
+gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i |  grep adapter -A 20 | wc -l"`
+gpu_count=$((gpu_count-2))
+
+echo "No. of adapters: $gpu_count"
+sleep 3
+for loopCnt in (seq 0 $LOOP_COUNT) ;
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
 	echo "setting kernel 4.15... and vbios to $VBIOS_415"
-	for m in {0..3}
+    for m in (seq 0 $gpu_count) ;
 	do
 		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
@@ -144,14 +165,8 @@ do
 	build_install_legacy_gim
 	powercycle_server
 
-	echo "vbios/gim:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	echo " --- dmesg after modprobe gim-legacy ---" >> $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
-	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
-	for m in {0..3}
+    output_stat
+    for m in (seq 0 $gpu_count) ;
 	do
 		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
@@ -165,19 +180,15 @@ do
 	build_install_libgv
 	powercycle_server
 
-	echo "vbios/gim:" 
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
-	echo " --- dmesg after modprobe gim libgv ---" >> $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
-	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
+    output_stat
 
     # launch vk examples for N hours.
 
+    echo "launching vk examples..."
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'cd $DROP_FOLDER_ROOT ; nohup ./run-test.sh 41 &' 
 
-    # sleep 3600 
+    echo "Sleeping for 2 hours..."
+    # sleep 2 hrs
 
     sleep 7200
 	powercycle_server
