@@ -32,7 +32,7 @@ VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531
 
 #	misc. configuration 
 
-LOOP_COUNT=3
+LOOP_COUNT=50
 EXTRA_SLEEP=14
 AMDVBFLASH_PATH=/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash
 
@@ -191,6 +191,8 @@ do
     # sleep 2 hrs
 
     sleep 7200
+	echo " --- dmesg after running VM examples  ---" >> $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
 	powercycle_server
 
     # powercycle once more.    
