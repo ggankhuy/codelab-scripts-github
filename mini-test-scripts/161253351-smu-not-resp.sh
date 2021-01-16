@@ -42,7 +42,7 @@ HOST_PW=amd1234
 HOST_USER=root
 
 HOST_RESPONSIVE=0
-CONFIG_DISABLE_FLASH_VBIOS=0
+CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 DROP_FOLDER_ROOT=/drop/20201023/
 
@@ -63,7 +63,7 @@ function output_stat {
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/$loopCnt.log
 	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
 	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >> tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/$loopCnt.log
 }
 
 function build_install_legacy_gim() {
@@ -146,12 +146,12 @@ gpu_count=$((gpu_count-2))
 
 echo "No. of adapters: $gpu_count"
 sleep 3
-for loopCnt in (seq 0 $LOOP_COUNT) ;
+for loopCnt in $(seq 0 $LOOP_COUNT) ;
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
 	echo "setting kernel 4.15... and vbios to $VBIOS_415"
-    for m in (seq 0 $gpu_count) ;
+    for m in $(seq 0 $gpu_count) ;
 	do
 		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
@@ -166,7 +166,7 @@ do
 	powercycle_server
 
     output_stat
-    for m in (seq 0 $gpu_count) ;
+    for m in $(seq 0 $gpu_count) ;
 	do
 		if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
 			sleep 1
@@ -185,7 +185,7 @@ do
     # launch vk examples for N hours.
 
     echo "launching vk examples..."
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'cd $DROP_FOLDER_ROOT ; nohup ./run-test.sh 41 &' 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 41 >> ./output.log &"
 
     echo "Sleeping for 2 hours..."
     # sleep 2 hrs
