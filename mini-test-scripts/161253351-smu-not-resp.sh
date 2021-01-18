@@ -7,8 +7,6 @@
 # 4. Start all VM-s
 
 DATE=`date +%Y%m%d-%H-%M-%S`
-DIRNAME=161253351-result/$DATE/
-mkdir -p $DIRNAME
 
 #	ST SEMI02 configuration
 
@@ -17,15 +15,15 @@ BMC_IP="10.216.52.51"
 VBIOS_5438=/drop/20201023/linux_host_package/vbios/NAVI12/Gemini
 VBIOS_415=$VBIOS_5438
 
-#	IXT70 configuration
-
-HOST_IP="10.216.66.51"
-VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
-VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
-
 #	IXT39 configuration
 
 HOST_IP="10.216.66.54"
+VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
+VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
+
+#	IXT70 configuration
+
+HOST_IP="10.216.66.51"
 VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
 VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 
@@ -54,6 +52,9 @@ CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 DROP_FOLDER_ROOT=/drop/20201023/
 
+DIRNAME=161253351-result/$DATE-$HOST_IP
+mkdir -p $DIRNAME
+
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
 #	Powercycle is preferable test option over reboot. 
@@ -64,14 +65,17 @@ function output_stat {
    	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
     echo " --- Building gim, loading and save the dmesg ---" | tee -a $DIRNAME/$loopCnt.log
-	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" | tee -a $DIRNAME/summary.log
+    echo " --- Building gim, loading and save the dmesg ---" > $DIRNAME/dmesg-gim-build-load.$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" > $DIRNAME/summary.log
-	echo " --- dmesg after modprobe gim-legacy ---" >> $DIRNAME/$loopCnt.log
-	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" >> $DIRNAME/dmesg-gim-build-load.$loopCnt.log
+	echo " --- dmesg after modprobe gim-legacy ---" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after modprobe gim-legacy ---" > $DIRNAME/dmesg-modprobe-gim.$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/$loopCnt.log
-	echo " --- dmesg after start all VM-S ---" >> $DIRNAME/$loopCnt.log
-	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' | tee -a $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/dmesg-modprobe-gim.$loopCnt.log
+	echo " --- dmesg after start all VM-S ---" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after start all VM-S ---" > $DIRNAME/dmesg-start-vm.$loopCnt.log.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/dmesg-start-vm.$loopCnt.log
 }
 
 function build_install_legacy_gim() {
@@ -149,6 +153,10 @@ function powercycle_server()
 
 #   counter adapters
 
+if [[ ! -f $AMDVBFLASH_PATH ]] ; then
+    echo "Unable to locate the $AMDVBFLASH_PATH. This is needed to count the No. of gpu-s."
+    exit 1
+fi
 gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i |  grep adapter -A 20 | wc -l"`
 gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
@@ -199,9 +207,10 @@ do
 
     echo "Sleeping for 4 hours..."
 
-    sleep 14400
+    sleep 7200
 	echo " --- dmesg after running tests + vk examples  ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >  $DIRNAME/dmesg-post-vats2-tests.$loopCnt.log
 	powercycle_server
 
     # powercycle once more.    
