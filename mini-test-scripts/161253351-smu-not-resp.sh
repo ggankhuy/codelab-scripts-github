@@ -110,7 +110,7 @@ function build_install_legacy_gim() {
 function build_install_libgv() {
 	if [[ $CONFIG_DISABLE_HOST_DRV_BUILD -ne 1 ]] ; then
 		cmds=( "mkdir /git.co/" "cd /git.co/ ; git clone https://ggghamd:amd1234A%23@github.com/ggghamd/ad-hoc-scripts.git"  \
-			"cd /git.co/ad-hoc-scripts ; ./dkms-gim.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
+			"cd /git.co/ad-hoc-scripts ; ./dkms.sh gim 2.0.1.G.20201023" "modprobe gim" "popd" )
 		for (( i=0; i < ${#cmds[@]}; i++ )); do
 			echo "cmd: ${cmds[$i]}" ; sleep 1
 			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
@@ -220,7 +220,7 @@ do
     # launch vk examples for N hours.
 
     echo "launching vk examples..."
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 18 41 > ./output.log &"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 18 41 > ./output.$loopCnt.log &"
 
     echo "Sleeping for 4 hours..."
 
