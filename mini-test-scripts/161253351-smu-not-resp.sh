@@ -15,12 +15,6 @@ BMC_IP="10.216.52.51"
 VBIOS_5438=/drop/20201023/linux_host_package/vbios/NAVI12/Gemini
 VBIOS_415=$VBIOS_5438
 
-#	IXT39 configuration
-
-HOST_IP="10.216.66.54"
-VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
-VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
-
 #	IXT70 configuration
 
 HOST_IP="10.216.66.51"
@@ -35,6 +29,12 @@ BMC_IP="10.6.170.182"
 #VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 VBIOS_5438=""
 VBIOS_415=""
+
+#	IXT39 configuration
+
+HOST_IP="10.216.66.54"
+VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
+VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 
 #	misc. configuration 
 
@@ -61,6 +61,22 @@ mkdir -p $DIRNAME
 
 CONFIG_REBOOT=1
 
+function output_stat_libgv {
+   	echo "vbios/gim:" 
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
+    echo " --- Building libgv, loading and save the dmesg ---" | tee -a $DIRNAME/$loopCnt.log
+    echo " --- Building libgv, loading and save the dmesg ---" > $DIRNAME/dmesg-libgv-build-load.$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" > $DIRNAME/summary.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" >> $DIRNAME/dmesg-gim-build-load.$loopCnt.log
+	echo " --- dmesg after modprobe libgv ---" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after modprobe libgv ---" > $DIRNAME/dmesg-modprobe-libgv.$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/dmesg-modprobe-libgv.$loopCnt.log
+	echo " --- dmesg after start all VM-S (libgv loaded) ---" | tee -a $DIRNAME/$loopCnt.log
+	echo " --- dmesg after start all VM-S (libgv loaded) ---" > $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/$loopCnt.log
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
+}
 function output_stat {
    	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
@@ -73,7 +89,7 @@ function output_stat {
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/dmesg-modprobe-gim.$loopCnt.log
 	echo " --- dmesg after start all VM-S ---" | tee -a $DIRNAME/$loopCnt.log
-	echo " --- dmesg after start all VM-S ---" > $DIRNAME/dmesg-start-vm.$loopCnt.log.log
+	echo " --- dmesg after start all VM-S ---" > $DIRNAME/dmesg-start-vm.$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in {1..4} ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/dmesg-start-vm.$loopCnt.log
 }
@@ -153,10 +169,10 @@ function powercycle_server()
 
 #   counter adapters
 
-if [[ ! -f $AMDVBFLASH_PATH ]] ; then
-    echo "Unable to locate the $AMDVBFLASH_PATH. This is needed to count the No. of gpu-s."
-    exit 1
-fi
+#if [[ ! -f $AMDVBFLASH_PATH ]] ; then
+#    echo "Unable to locate the $AMDVBFLASH_PATH. This is needed to count the No. of gpu-s."
+#    exit 1
+#fi
 gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i |  grep adapter -A 20 | wc -l"`
 gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
@@ -197,13 +213,12 @@ do
 	build_install_libgv
 	powercycle_server
 
-    output_stat
+    output_stat_libgv
 
     # launch vk examples for N hours.
 
     echo "launching vk examples..."
-	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 6 18 41 >> ./output.log &"
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 18 41 >> ./output.log &"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 18 41 > ./output.log &"
 
     echo "Sleeping for 4 hours..."
 
