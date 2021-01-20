@@ -48,7 +48,7 @@ HOST_PW=amd1234
 HOST_USER=root
 
 HOST_RESPONSIVE=0
-CONFIG_DISABLE_FLASH_VBIOS=1
+CONFIG_DISABLE_FLASH_VBIOS=0
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 DROP_FOLDER_ROOT=/drop/20201023/
 
@@ -182,14 +182,15 @@ do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
 	if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
-    	echo "setting kernel 4.15... and vbios to $VBIOS_415"
+    	echo "bypassing vbios flash..."
+	else
+    	echo "flashing vbios $VBIOS_415"
         for m in $(seq 0 $gpu_count) ;
 	    do
-			sleep 1
 			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_415"
-    	done
-	else
+            sleep 1
 			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_415"
+        done
   	fi
 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in {1..4} ; do virsh shutdown vats-test-0$k ; done'
@@ -199,14 +200,15 @@ do
     output_stat
 
 	if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
-    	echo "setting kernel 4.15... and vbios to $VBIOS_415"
+    	echo "bypassing vbios flash..."
+	else
+    	echo "flashing vbios $VBIOS_5438"
         for m in $(seq 0 $gpu_count) ;
 	    do
-			sleep 1
 			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_5438"
-    	done
-	else
+            sleep 1
 			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -f -p $m $VBIOS_5438"
+        done
   	fi
 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
