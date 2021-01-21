@@ -1,5 +1,12 @@
 # Alternatively boot between legacy and libgv gim version between powercycle.
 # Operational briefs are as follows:
+
+# Prerequisites for running the script:
+# - Verify you installed the vats2 (20201023)
+# - - Verify smi-lib available. 
+# - Make available amdvbflash tool and set path in AMDVBFLASH_PATH
+# - Make available the vbios binary path and set path in VBIOS_5438 and VBIOS_415
+
 # 1. For every other boot build and install libgv and legacy-gim on other boots.
 # 2. For libgv flash latest libgv compatible VBIOS (i.e. currently D04), for legacy-gim, flash load Y03 VBIOS.
 # 3. Powercycle (for G servers) or reboot (for non-G servers)
