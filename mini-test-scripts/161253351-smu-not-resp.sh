@@ -8,18 +8,18 @@
 
 DATE=`date +%Y%m%d-%H-%M-%S`
 
+#	IXT70 configuration
+
+HOST_IP="10.216.66.51"
+VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
+VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
+
 #	ST SEMI02 configuration
 
 HOST_IP="10.216.52.50"
 BMC_IP="10.216.52.51"
 VBIOS_5438=/drop/20201023/linux_host_package/vbios/NAVI12/Gemini
 VBIOS_415=$VBIOS_5438
-
-#	IXT70 configuration
-
-HOST_IP="10.216.66.51"
-VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
-VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 
 # 	MKM ST 47 configuration
 
@@ -54,6 +54,9 @@ DROP_FOLDER_ROOT=/drop/20201023/
 
 DIRNAME=161253351-result/$DATE-$HOST_IP
 mkdir -p $DIRNAME
+
+echo "host information: $HOST_IP, $HOST_USER, $HOST_PW, VBIOS_415: $VBIOS_415, VBIOS_5438: $VBIOS_5438"
+sleep 1
 
 #	Reboot the server instead of powercycle. Powercycle is only supported on ST or other G servers.
 #	If you set the CONFIG_REBOOT=0 and if it is not G server, result is not predictable.
@@ -169,10 +172,18 @@ function powercycle_server()
 
 #   counter adapters
 
-#if [[ ! -f $AMDVBFLASH_PATH ]] ; then
-#    echo "Unable to locate the $AMDVBFLASH_PATH. This is needed to count the No. of gpu-s."
-#    exit 1
-#fi
+ret=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP '/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash -i | grep AMDVBFLASH | wc -l'`
+echo $ret
+
+if [[ $ret == 0 ]] ; then
+    echo "$AMDVBFLASH_PATH can not be found on $HOST_IP..."
+    exit 1
+else    
+    echo "$AMDVBFLASH_PATH found, OK..."
+fi
+
+exit 0
+
 gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i |  grep adapter -A 20 | wc -l"`
 gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
