@@ -182,8 +182,6 @@ else
     echo "$AMDVBFLASH_PATH found, OK..."
 fi
 
-exit 0
-
 gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i |  grep adapter -A 20 | wc -l"`
 gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
@@ -231,11 +229,11 @@ do
     # launch vk examples for N hours.
 
     echo "launching vk examples..."
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test.sh 4 5 18 41 > ./output.$loopCnt.log &"
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test-161253351.sh > ./output.$loopCnt.log &"
 
     echo "Sleeping for 4 hours..."
+    sleep 14400
 
-    sleep 7200
 	echo " --- dmesg after running tests + vk examples  ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >  $DIRNAME/dmesg-post-vats2-tests.$loopCnt.log
