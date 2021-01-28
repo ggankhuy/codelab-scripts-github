@@ -5,7 +5,9 @@ DATE=`date +%Y%m%d-%H-%M-%S`
 mkdir $ROOT_DIR/log/
 for i in 4 5 18 38 41 4
 do
-	echo "test $i counter $counter"
+
+	echo "test $i counter $counter" 
+	echo "GG:  test $i counter $counter" > /dev/kmsg
 	sleep 3
 	for j in $(seq 1 4)
 		do virsh destroy vats-test-0$j
