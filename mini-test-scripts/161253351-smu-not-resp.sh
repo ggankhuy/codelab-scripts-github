@@ -28,6 +28,19 @@ BMC_IP="10.216.52.51"
 VBIOS_5438=/drop/20201023/linux_host_package/vbios/NAVI12/Gemini
 VBIOS_415=$VBIOS_5438
 
+# 	SJC SEMI05 configuration
+
+HOST_IP="10.216.52.74"
+BMC_IP="10.216.52.75"
+VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
+VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
+
+#	IXT39 configuration
+
+HOST_IP="10.216.66.54"
+VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
+VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
+
 # 	MKM ST 47 configuration
 
 HOST_IP="10.6.168.76"
@@ -36,12 +49,6 @@ BMC_IP="10.6.170.182"
 #VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 VBIOS_5438=""
 VBIOS_415=""
-
-#	IXT39 configuration
-
-HOST_IP="10.216.66.54"
-VBIOS_5438=/drop/20201023/linux_host_package/vbios/V340L/D0531800.D04
-VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531800.Y03
 
 #	misc. configuration 
 
@@ -57,6 +64,7 @@ HOST_USER=root
 HOST_RESPONSIVE=0
 CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
+CONFIG_DISABLE_GIM_LEGACY=1
 DROP_FOLDER_ROOT=/drop/20201023/
 
 DIRNAME=161253351-result/$DATE-$HOST_IP
@@ -197,25 +205,28 @@ for loopCnt in $(seq 0 $LOOP_COUNT) ;
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
 
-	if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
-    	echo "bypassing vbios flash..."
-	else
-    	echo "flashing vbios $VBIOS_415"
-        for m in $(seq 0 $gpu_count) ;
-	    do
-			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -fa -fv -p $m $VBIOS_415"
-            sleep 1
-			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -fa -fv -p $m $VBIOS_415"
-        done
-  	fi
+    if [[ $CONFIG_DISABLE_GIM_LEGACY -eq 1 ]] ; then
+        echo "Bypassing legacy GIM support..."
+    else
+    	if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
+        	echo "bypassing vbios flash..."
+    	else
+        	echo "flashing vbios $VBIOS_415"
+            for m in $(seq 0 $gpu_count) ;
+    	    do
+    			echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -fa -fv -p $m $VBIOS_415"
+                sleep 1
+    			sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -fa -fv -p $m $VBIOS_415"
+            done
+      	fi
 
-	echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
-    sleep 10
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count)  ; do virsh shutdown vats-test-0$k ; done'
-	build_install_legacy_gim
-	powercycle_server
-
-    output_stat
+    	echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
+        sleep 10
+    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count)  ; do virsh shutdown vats-test-0$k ; done'
+    	build_install_legacy_gim
+    	powercycle_server
+        output_stat
+    fi
 
 	if [[ $CONFIG_DISABLE_FLASH_VBIOS -eq 1 ]] ; then
     	echo "bypassing vbios flash..."
@@ -232,7 +243,6 @@ do
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
 	build_install_libgv
 	powercycle_server
-
     output_stat_libgv
 
     # launch vk examples for N hours.
@@ -241,12 +251,12 @@ do
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test-161253351.sh > ./output.$loopCnt.log &"
 
     echo "Sleeping for 4 hours..."
-    sleep 14400
+    sleep 28800
 
 	echo " --- dmesg after running tests + vk examples  ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >  $DIRNAME/dmesg-post-vats2-tests.$loopCnt.log
+    # powercycle once more.
 	powercycle_server
 
-    # powercycle once more.    
 done	
