@@ -3,7 +3,15 @@ ROOT_DIR=`pwd`
 counter=0
 DATE=`date +%Y%m%d-%H-%M-%S`
 mkdir $ROOT_DIR/log/
-for i in 4 5 18 38 41 4
+
+# 4 - guest driver reload 1
+# 5 - guest driver reload 2
+# 18 - reboot 1
+# 38 - 3dmark
+# 41 - yeti vk example
+# 43 - xgemm
+# 42 - yeti raw vk example
+for i in 4 5 18 38 41 43 42
 do
 
 	echo "test $i counter $counter" 

@@ -201,6 +201,14 @@ gpu_count=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_
 gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
 
+echo "Copying artifacts to target system:"
+for i in monitor.sh run-test-161253351.sh
+do
+    echo "copying $i..."
+    scp $i $HOST_USER@$HOST_IP:/drop/20201023/
+done
+
+
 for loopCnt in $(seq 0 $LOOP_COUNT) ;
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
