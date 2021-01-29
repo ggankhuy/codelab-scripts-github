@@ -53,7 +53,7 @@ VBIOS_415=""
 #	misc. configuration 
 
 LOOP_COUNT=1
-EXTRA_SLEEP=14
+EXTRA_SLEEP=60
 AMDVBFLASH_PATH=/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash
 
 BMC_PW=0penBmc
@@ -211,7 +211,7 @@ done
 
 if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
     echo "Launching monitor.sh on target..."
-    echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd /drop/20201023 ; nohup ./monitor.sh &"
+    echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
 else
     echo "Bypassing monitor.sh launch target..."
 fi
@@ -265,8 +265,8 @@ do
     echo "launching vk examples..."
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test-161253351.sh > ./output.$loopCnt.log &"
 
-    echo "Sleeping for 4 hours..."
-    sleep 28800
+    echo "Sleeping for 8 hours..."
+    sleep $((3600*8))
 
 	echo " --- dmesg after running tests + vk examples  ---" >> $DIRNAME/$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
