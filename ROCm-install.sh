@@ -1,7 +1,7 @@
 if [[ -z '$1'  ]] ; then echo "Usage: $0 <ip_address> <1=for installing rocm source> of the server to which rocm to be installed." ; exit 1 ; fi
 
-CONFIG_FORCE_VERSION=0
-CONFIG_VERSION=4.0
+CONFIG_FORCE_VERSION=1
+CONFIG_VERSION=3.8
 CONFIG_INTERVAL_SLEEP=15
 
 VM_IP=$1
