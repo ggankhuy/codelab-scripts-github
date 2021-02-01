@@ -65,7 +65,7 @@ HOST_RESPONSIVE=0
 CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 CONFIG_DISABLE_GIM_LEGACY=1
-CONFIG_LAUNCH_MONITOR=1
+CONFIG_LAUNCH_MONITOR=0
 DROP_FOLDER_ROOT=/drop/20201023/
 
 DIRNAME=161253351-result/$DATE-$HOST_IP
@@ -257,8 +257,19 @@ do
 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
 	build_install_libgv
+
 	powercycle_server
+
+	cmds=( "modprobe gim" "sleep 5" "modprobe -r gim" "sleep 5" "modprobe gim" )
+	for (( i=0; i < ${#cmds[@]}; i++ )); do
+		echo "cmd: ${cmds[$i]}" ; sleep 1
+		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+	done
+
     output_stat_libgv
+
+    echo "Sleeping for 30 minutes...")
+    sleep 1800
 
     # launch vk examples for N hours.
 
