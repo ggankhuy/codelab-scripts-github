@@ -31,3 +31,4 @@ git clone https://github.com/glfw/glfw.git
 cd glfw
 mkdir build ; cd build
 cmake .. ; make -j`nproc` ; make install
+ln -s /root/vulkan/1.2.162.1/x86_64/include/vulkan/ /usr/include/
