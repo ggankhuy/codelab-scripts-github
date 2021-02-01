@@ -8,9 +8,7 @@ wget -qO /etc/apt/sources.list.d/lunarg-vulkan-bionic.list http://packages.lunar
 for i in \
 "apt-get update" "apt-get dist-upgrade -y" \
 "sudo apt-get install libglm-dev cmake libxcb-dri3-0 libxcb-present0 libpciaccess0 libpng-dev libxcb-keysyms1-dev libxcb-dri3-dev libx11-dev g++ gcc g++-multilib libmirclient-dev libwayland-dev libxrandr-dev libxcb-ewmh-dev git python3 bison -y" \
-"apt-get install qt5-default qtwebengine5-dev -y" "apt update" \
-"apt update" "apt install vulkan-sdk -y" \
-"which vkvia" "vkvia vulkaninfo" "vkcube" ;
+"apt-get install qt5-default qtwebengine5-dev -y" "apt update" ;
 do
 	echo --------------------
 	echo "sh: Executing $i"
@@ -18,4 +16,18 @@ do
 done
 
 exit 0
+"apt update" "apt install vulkan-sdk -y" \
+"which vkvia" "vkvia vulkaninfo" "vkcube" ;
 
+#	Vulkan triangle app build setup.
+
+for i in libxinerama-dev libxcursor-dev libxi-dev
+	echo "Installing $i..."
+done
+	apt install $i -y
+mkdir /git.co
+cd /git.co
+git clone https://github.com/glfw/glfw.git
+cd glfw
+mkdir build ; cd build
+cmake .. ; make -j`nproc` ; make install
