@@ -127,8 +127,8 @@ if [[ $p1 == "setup" ]] ; then
 fi
 
 game=""
-GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" ) 
-GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE )
+GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" "helloggp") 
+GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE $GAME_HELLO_GGP_STANDALONE )
 
 for (( i=0 ; i < ${#GAME_NAMES_P1[@]} ; i++ )) ; do
     if [[ $p1 == ${GAME_NAMES_P1[$i]} ]] ; then
@@ -275,6 +275,13 @@ elif [[ $game -eq $GAME_CHASE ]] ; then
     GAME_EXECUTABLE=nba_debug_unopt.elf
     GAME_FOLDER="./"
     GAME_NAME=$GAME_CHASE
+elif [[ $game -eq $GAME_HELLO_GGP_STANDALONE ]] ; then
+    echo "GAME: CHASE" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=hello_ggp_standalone
+    DESTINATION_FOLDER=hello_ggp_standalone
+    GAME_EXECUTABLE=hello_ggp_standalone
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_HELLO_GGP_STANDALONE
 else
     echo "Unsupported game: $game" ; exit 1
 fi
