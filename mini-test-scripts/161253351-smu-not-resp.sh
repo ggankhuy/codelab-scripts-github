@@ -206,7 +206,7 @@ echo "Copying artifacts to target system:"
 for i in monitor.sh run-test-161253351.sh
 do
     echo "copying $i..."
-    scp $i $HOST_USER@$HOST_IP:/drop/20201023/
+    sshpass -p amd1234 scp -o StrictHostKeyChecking=no $i $HOST_USER@$HOST_IP:/drop/20201023/
 done
 
 for loopCnt in $(seq 0 $LOOP_COUNT) ;
@@ -267,7 +267,7 @@ do
         echo "Bypassing monitor.sh launch target..."
     fi
 
-    echo "Sleeping for 30 minutes...")
+    echo "Sleeping for 30 minutes..."
     sleep 1800
 
     # launch vk examples for N hours.
