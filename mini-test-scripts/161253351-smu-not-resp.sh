@@ -65,7 +65,7 @@ HOST_RESPONSIVE=0
 CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 CONFIG_DISABLE_GIM_LEGACY=1
-CONFIG_LAUNCH_MONITOR=0
+CONFIG_LAUNCH_MONITOR=1
 DROP_FOLDER_ROOT=/drop/20201023/
 
 DIRNAME=161253351-result/$DATE-$HOST_IP
@@ -209,13 +209,6 @@ do
     scp $i $HOST_USER@$HOST_IP:/drop/20201023/
 done
 
-if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
-    echo "Launching monitor.sh on target..."
-    echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
-else
-    echo "Bypassing monitor.sh launch target..."
-fi
-
 for loopCnt in $(seq 0 $LOOP_COUNT) ;
 do
 	echo "--- LOOP COUNT $loopCnt ----" | tee -a $DIRNAME/summary.log
@@ -257,7 +250,6 @@ do
 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
 	build_install_libgv
-
 	powercycle_server
 
 	cmds=( "modprobe gim" "sleep 5" "modprobe -r gim" "sleep 5" "modprobe gim" )
@@ -267,6 +259,13 @@ do
 	done
 
     output_stat_libgv
+
+    if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
+        echo "Launching monitor.sh on target..."
+        echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
+    else
+        echo "Bypassing monitor.sh launch target..."
+    fi
 
     echo "Sleeping for 30 minutes...")
     sleep 1800
