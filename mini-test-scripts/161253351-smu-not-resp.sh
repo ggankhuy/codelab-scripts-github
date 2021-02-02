@@ -53,7 +53,7 @@ VBIOS_415=""
 #	misc. configuration 
 
 LOOP_COUNT=1
-EXTRA_SLEEP=60
+EXTRA_SLEEP=120
 AMDVBFLASH_PATH=/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash
 
 BMC_PW=0penBmc
