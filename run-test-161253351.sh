@@ -4,22 +4,28 @@ counter=0
 DATE=`date +%Y%m%d-%H-%M-%S`
 mkdir $ROOT_DIR/log/
 
-for i in 4 5 18 38 39 41 42
+# 4 - guest driver reload 1
+# 5 - guest driver reload 2
+# 18 - reboot 1
+# 38 - 3dmark
+# 41 - yeti vk example
+# 43 - xgemm
+# 42 - yeti raw vk example
+for i in 4 5 18 38 41 43 42
 do
-	echo "test $i counter $counter"
-	sleep 1
+
+	echo "test $i counter $counter" 
+	echo "GG:  test $i counter $counter" > /dev/kmsg
+	sleep 3
 	for j in $(seq 1 4)
 		do virsh destroy vats-test-0$j
 	done
 	cd  $BASIC_QUERY_PATH
 	make
-	dmesg --clear
 	./alloc_vf_with_parameters > $ROOT_DIR/log/alloc_vf_parameters.loop-$counter.test-$i.log
-	dmesg  > $ROOT_DIR/log/dmesg.allov_vf_parameters.loop-$counter.test-$i.log
 	cd $ROOT_DIR
-	dmesg --clear
 	./run-test.sh $i > $ROOT_DIR/log/vats2.loop-$counter.test-$i.log
-	dmesg  > $ROOT_DIR/log/dmesg.vats2.loop-$counter.test-$i.log
+    dmesg > $ROOT_DIR/log/vats2.loop-$counter.test-$i.dmesg.log
 	counter=$((counter+1))
 done
 

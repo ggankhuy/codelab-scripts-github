@@ -25,6 +25,7 @@ do
 	./alloc_vf_with_parameters > $ROOT_DIR/log/alloc_vf_parameters.loop-$counter.test-$i.log
 	cd $ROOT_DIR
 	./run-test.sh $i > $ROOT_DIR/log/vats2.loop-$counter.test-$i.log
+    dmesg > $ROOT_DIR/log/vats2.loop-$counter.test-$i.dmesg.log
 	counter=$((counter+1))
 done
 
