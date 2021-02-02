@@ -262,7 +262,7 @@ do
 
     if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
         echo "Launching monitor.sh on target..."
-        echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
+        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
     else
         echo "Bypassing monitor.sh launch target..."
     fi
