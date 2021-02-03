@@ -10,7 +10,7 @@ for i in \
 "sudo apt-get install libglm-dev cmake libxcb-dri3-0 libxcb-present0 libpciaccess0 libpng-dev libxcb-keysyms1-dev libxcb-dri3-dev libx11-dev g++ gcc g++-multilib libmirclient-dev libwayland-dev libxrandr-dev libxcb-ewmh-dev git python3 bison -y" \
 "apt-get install qt5-default qtwebengine5-dev -y" "apt update" \
 "apt update" "apt install vulkan-sdk -y" \
-"which vkvia" "vkvia vulkaninfo" "vkcube" ;
+"which vkvia" "which vulkaninfo" ;
 do
 	echo --------------------
 	echo "sh: Executing $i"
@@ -31,3 +31,4 @@ mkdir build ; cd build
 cmake .. ; make -j`nproc` ; make install
 #ln -s /root/vulkan/1.2.162.1/x86_64/include/vulkan/ /usr/include/
 
+modprobe amdgpu ; vulkaninfo ; vkvia
