@@ -53,7 +53,7 @@ VBIOS_415=""
 #	misc. configuration 
 
 LOOP_COUNT=1
-EXTRA_SLEEP=60
+EXTRA_SLEEP=120
 AMDVBFLASH_PATH=/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash
 
 BMC_PW=0penBmc
@@ -206,15 +206,8 @@ echo "Copying artifacts to target system:"
 for i in monitor.sh run-test-161253351.sh
 do
     echo "copying $i..."
-    scp $i $HOST_USER@$HOST_IP:/drop/20201023/
+    sshpass -p amd1234 scp -o StrictHostKeyChecking=no $i $HOST_USER@$HOST_IP:/drop/20201023/
 done
-
-if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
-    echo "Launching monitor.sh on target..."
-    echo sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
-else
-    echo "Bypassing monitor.sh launch target..."
-fi
 
 for loopCnt in $(seq 0 $LOOP_COUNT) ;
 do
@@ -258,7 +251,24 @@ do
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'for k in $(seq 0 $gpu_count) ; do virsh shutdown vats-test-0$k ; done'
 	build_install_libgv
 	powercycle_server
+
+	cmds=( "modprobe gim" "sleep 5" "modprobe -r gim" "sleep 5" "modprobe gim" )
+	for (( i=0; i < ${#cmds[@]}; i++ )); do
+		echo "cmd: ${cmds[$i]}" ; sleep 1
+		sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "${cmds[$i]}"
+	done
+
     output_stat_libgv
+
+    if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
+        echo "Launching monitor.sh on target..."
+        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
+    else
+        echo "Bypassing monitor.sh launch target..."
+    fi
+
+    echo "Sleeping for 30 minutes..."
+    sleep 1800
 
     # launch vk examples for N hours.
 
