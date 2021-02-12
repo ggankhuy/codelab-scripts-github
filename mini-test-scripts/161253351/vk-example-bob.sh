@@ -1,3 +1,4 @@
+modprobe amdgpu
 cd /work/vats/package_script/run/ubuntu
 chmod 755 yeti_environment.sh
 ./yeti_environment.sh /work/ubuntu_guest_package/utilities/test-apps/yeti
