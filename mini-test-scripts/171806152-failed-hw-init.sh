@@ -70,7 +70,7 @@ do
         CONFIG_BMC_IP=`echo $var | cut -d '=' -f2`
         echo "CONFIG_BMC_IP: $CONFIG_BMC_IP"
 	ping -c 2 $CONFIG_BMC_IP
-	if [[ $? -ne 0 ]] ; then "$CONFIG_BMC_IP is not pingable..."; exit 1 ; fi
+	if [[ $? -ne 0 ]] ; then echo "$CONFIG_BMC_IP is not pingable..."; exit 1 ; fi
     fi
     if [[ ! -z `echo "$var" | grep "osip="` ]]  ; then
         CONFIG_OS_IP=`echo $var | cut -d '=' -f2`
