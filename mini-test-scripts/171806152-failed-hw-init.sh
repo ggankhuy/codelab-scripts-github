@@ -26,7 +26,7 @@ CONFIG_OS_USERNAME=root
 CONFIG_OS_PW=amd1234
 CONFIG_PING_TIMEOUT=300
 CONFIG_PING_INTERVAL=15
-
+EXTRA_SLEEP_SECONDS=60 # No. of seconds to sleep after ping is detected, to give O/S to boot complete booting.
 # POWER CYCLE TYPE
 
 CONFIG_PC_REBOOT=1
@@ -69,9 +69,15 @@ do
     if [[ ! -z `echo "$var" | grep "bmcip="` ]]  ; then
         CONFIG_BMC_IP=`echo $var | cut -d '=' -f2`
         echo "CONFIG_BMC_IP: $CONFIG_BMC_IP"
-	ping -c 2 $CONFIG_BMC_IP
-	if [[ $? -ne 0 ]] ; then echo "$CONFIG_BMC_IP is not pingable..."; exit 1 ; fi
+
+        if [[ $CONFIG_PC_REBOOT -eq 1 ]] ; then
+            echo "Reboot specified, bmc ping is bypassed."
+        else
+        	ping -c 2 $CONFIG_BMC_IP
+	        if [[ $? -ne 0 ]] ; then echo "$CONFIG_BMC_IP is not pingable..."; exit 1 ; fi            
+        fi
     fi
+
     if [[ ! -z `echo "$var" | grep "osip="` ]]  ; then
         CONFIG_OS_IP=`echo $var | cut -d '=' -f2`
         echo "CONFIG_OS_IP: $CONFIG_OS_IP"
@@ -89,15 +95,6 @@ for (( i=0 ; i < $CONFIG_ITER_POWERCYCLE ; i++ )) ; do
 	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tr -d '\n'`
 	echo "No. of gpu-s detected by lspci : $res " 
 	echo "No. of gpu-s detected by lspci : $res " | tee -a $DIRNAME/summary.log
-	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -ai | grep Adapter | wc -l" | tr -d '\n'`
-	echo "No. of gpu-s detected by amdvbflash: $res" 
-	echo "No. of gpu-s detected by amdvbflash: $res" | tee -a $DIRNAME/summary.log
-
-	for (( j=$CONFIG_GPU_FLASH_IDX_MIN ; j < $CONFIG_GPU_FLASH_IDX_MAX; j++ )) ; do
-		if [[ $CONFIG_ENABLE_CLEAR -eq 1 ]] ; then clear ; fi
-		echo "Flashing gpu $j..."
-		sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -fa -p $j $CONFIG_PATH_VBIOS"
-	done
 
 	if [[ $CONFIG_DEBUG_ENABLE_POWERCYCLE -ne 0 ]] ; then
 		echo "Powercycling..." 
@@ -123,8 +120,8 @@ for (( i=0 ; i < $CONFIG_ITER_POWERCYCLE ; i++ )) ; do
 			ping_stat=$?
 	
 			if [[ $ping_stat -eq 0 ]] ; then
-				echo "Can ping OS now..."
-				sleep 5
+				echo "Can ping OS now, give it a $EXTRA_SLEEP_SECONDS seconds..."
+				sleep $EXTRA_SLEEP_SECONDS
 				CONFIG_PING_TIMEOUT_ERROR=0
 				break
 			fi
@@ -143,4 +140,5 @@ for (( i=0 ; i < $CONFIG_ITER_POWERCYCLE ; i++ )) ; do
     for (( j=0 ; j < $CONFIG_ITER_GIM_RELOAD ; j++ )) ; do
     	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe gim ; dmesg" > $CONFIG_PATH_LOG/dmesg.after.gim.load.$i.$j.log
     	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe -r gim ; dmesg" > $CONFIG_PATH_LOG/dmesg.after.gim.unload.$i.$j.log
+    done
 done
