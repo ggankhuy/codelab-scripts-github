@@ -187,7 +187,7 @@ for i in range(0, len(fp_content_gim_inits)):
                     fpw1.write(j +'\n')
                     
             fpw1.close()
-            counter++
+            counter+=1
                     
 
 
