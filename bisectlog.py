@@ -146,6 +146,9 @@ for i in range(0, len(fp_content_gim_inits)):
     fpw.close()
     
     if not CONFIG_BISECT_OOO:
+    
+        # Bisect using the pattern.
+    
         fp_content_gpu_inits=re.split(gpu_init_delimiter, fp_content_gim_inits[i])
         
         for j in range(0, len(fp_content_gpu_inits)):
@@ -153,6 +156,9 @@ for i in range(0, len(fp_content_gim_inits)):
             fpw1.write(fp_content_gpu_inits[j])
             fpw1.close()
     else:
+    
+        # Construct gpu inventory bdf list, to be stored in gpu_list_all.
+    
         print("gpu_found_delimiter: ", gpu_found_delimiter) 
         for j in fp_content_gim_inits[i].split('\n'):    
             if re.search(gpu_found_delimiter, j):
@@ -161,11 +167,28 @@ for i in range(0, len(fp_content_gim_inits)):
                 gpu_list_all.append(re.sub("0000:", "", j.strip().split()[-1]))
                 
         print("GPU inventory: (" + str(len(gpu_list_all)) + ")")
-        gpu_list_all.sort()    
-		
+        gpu_list_all.sort()    		
         for j in gpu_list_all:
             print(j)
 
+        # For reach GPU inventory, re-scan this instance of gim init log and bisect into respective files a matching patter using k or k2. 
+            
+        counter=0
+        for k in gpu_list_all:
+            k1=re.sub(":", "-", k)
+            k2=re.sub("\.",":", k)
+            k2=re.sub("00","0", k2)
+            if DEBUG:
+                print("k2: ", k2)
+            fpw1=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + str(i) + ".gpu." + str(counter) +"." + str(k1) + ".log", "w")
+
+            for j in fp_content_gim_inits[i].split('\n'):    
+                if re.search(k, j) or re.search(k2, j):
+                    fpw1.write(j +'\n')
+                    
+            fpw1.close()
+            counter++
+                    
 
 
     
