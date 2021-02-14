@@ -14,7 +14,7 @@ import re
 import platform
 import time
 
-DEBUG=0
+DEBUG=1
 CONFIG_INIT_TYPE_GIM_INIT=1
 CONFIG_INIT_TYPE_LIBGV_INIT=2
 CONFIG_INIT_TYPE_BOTH_INIT=3 # used if log contains both libgv and gim.
@@ -46,7 +46,7 @@ try:
             print("Within that, also each gpu initialization within the particular ")
             print("gim initialization log further divided. ")
             print("*********************************************************")
-            print("Usage: ", sys.argv[0], " file=<filename to be bisected>, ", ", init=<gim type>: either libgv or gim or both.")
+            print("Usage: ", sys.argv[0], " file=<filename to be bisected>, init=<gim type>: either libgv or gim or both ")
             print("*********************************************************")
             exit(0)
 except Exception as msg:
@@ -58,6 +58,10 @@ for i in sys.argv:
         if re.search("file=", i):
             fileName=i.split('=')[1]
             print("Found filename to be opened: ", fileName)
+			
+        if re.search("ooo="):
+            if (i.split('=')[1] == "yes"):
+                print("Out of order log bisect is specified.")			
 
         if re.search("pattern=", i):
             pattern=i.split('=')[1]
@@ -101,7 +105,7 @@ elif CONFIG_INIT_TYPE==CONFIG_INIT_TYPE_GIM_INIT:
 elif CONFIG_INIT_TYPE==CONFIG_INIT_TYPE_BOTH_INIT:
     gim_init_delimiter="Start AMD open source GIM initialization|AMD GIM init"
     gpu_init_delimiter="AMD GIM start to probe device|SRIOV is supported"    
-    gpu_found_delimiter="AMD GIM probed GPU"
+    gpu_found_delimiter="AMD GIM probed GPU|found:"
     gpu_search_delimeter="\[[0-9a-f]+:[0-9a-f]+:[0-9]\]"
 else:
     print("Invalid init option, choose either 'gim' or 'libgv':", i)
@@ -132,6 +136,7 @@ for i in fp_content:
         gpu_list_all.append(re.sub("0000:", "", i.strip().split()[-1]))
 
     if re.search(pattern, i):
+        print(i)
         # search for BDF:
         m=re.search(gpu_search_delimeter, i)
         if m:
