@@ -82,8 +82,8 @@ CONFIG_REBOOT=1
 function output_stat_libgv {
    	echo "vbios/gim:" 
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "$AMDVBFLASH_PATH -i" | tee -a $DIRNAME/summary.log
-    echo " --- Building libgv, loading and save the dmesg ---" | tee -a $DIRNAME/$loopCnt.log
-    echo " --- Building libgv, loading and save the dmesg ---" > $DIRNAME/dmesg-libgv-build-load.$loopCnt.log
+    echo " --- loading libgv and save the dmesg ---" | tee -a $DIRNAME/$loopCnt.log
+    echo " --- loading libgv and save the dmesg ---" > $DIRNAME/dmesg-libgv-build-load.$loopCnt.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" > $DIRNAME/summary.log
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "modprobe -r gim ; dmesg --clear ; modprobe gim ; dmesg | grep \"GPU IOV MODULE\"" >> $DIRNAME/dmesg-gim-build-load.$loopCnt.log
 	echo " --- dmesg after modprobe libgv ---" | tee -a $DIRNAME/$loopCnt.log
@@ -205,7 +205,7 @@ echo "Copying artifacts to target system:"
 for i in monitor.sh run-test-161253351.sh
 do
     echo "copying $i..."
-    sshpass -p amd1234 scp -o StrictHostKeyChecking=no $i $HOST_USER@$HOST_IP:/drop/20201023/
+    sshpass -p amd1234 scp -o StrictHostKeyChecking=no $i $HOST_USER@$HOST_IP:/root/
 done
 
 for loopCnt in $(seq 0 $LOOP_COUNT) ;
@@ -218,7 +218,8 @@ do
 
     if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
         echo "Launching monitor.sh on target..."
-        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "nohup ./monitor.sh &"
+        CONFIG_FOLDER_MONITOR_APP=/usr/src/gim-2.0.1.G.20201023/smi-lib/examples/monitor/
+        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cp /root/monitor.sh $CONFIG_FOLDER_MONITOR_APP ; cd $CONFIG_FOLDER_MONITOR_APP ; make ; nohup ./monitor.sh > monitor.log &"
     else
         echo "Bypassing monitor.sh launch target..."
     fi
@@ -241,3 +242,4 @@ do
     fi
 
 done	
+echo "done..."
