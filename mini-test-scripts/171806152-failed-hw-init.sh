@@ -1,7 +1,7 @@
 # The script only works for semitrucks where bmc is accessible through ssh.
 
 DATE=`date +%Y%m%d-%H-%M-%S`
-DIRNAME=162454034-result/$DATE/
+DIRNAME=171896152-result/$DATE/
 mkdir -p $DIRNAME
 
 # GPU flash range
@@ -89,8 +89,8 @@ for (( i=0 ; i < $CONFIG_ITER_POWERCYCLE ; i++ )) ; do
 	CONFIG_PATH_LOG=$DIRNAME/$i/
 	mkdir -p $CONFIG_PATH_LOG
 	echo "Loop $i..."
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" > $CONFIG_PATH_LOG/lspci.log
-	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/amdbvflash.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp" > $CONFIG_PATH_LOG/$CONFIG_OS_IP.lspci.log
+	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "$CONFIG_PATH_AMDVBFLASH -i" >  $CONFIG_PATH_LOG/$CONFIG_OS_IP.amdbvflash.log
 	echo "--- iteration $i: ---" >> $DIRNAME/summary.log
 	res=`sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "lspci | grep -i amd | grep Disp | wc -l" | tr -d '\n'`
 	echo "No. of gpu-s detected by lspci : $res " 
@@ -138,7 +138,7 @@ for (( i=0 ; i < $CONFIG_ITER_POWERCYCLE ; i++ )) ; do
    	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg" > $CONFIG_PATH_LOG/dmesg.after.reboot.$i.log
 
     for (( j=0 ; j < $CONFIG_ITER_GIM_RELOAD ; j++ )) ; do
-    	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe gim ; dmesg" > $CONFIG_PATH_LOG/dmesg.after.gim.load.$i.$j.log
-    	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe -r gim ; dmesg" > $CONFIG_PATH_LOG/dmesg.after.gim.unload.$i.$j.log
+    	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe gim ; dmesg" > $CONFIG_PATH_LOG/$CONFIG_OS_IP.dmesg.after.gim.load.$i.$j.log
+    	sshpass -p $CONFIG_OS_PW ssh -o StrictHostKeyChecking=no $CONFIG_OS_USERNAME@$CONFIG_OS_IP "dmesg --clear ; modprobe -r gim ; dmesg" > $CONFIG_PATH_LOG/$CONFIG_OS_IP.dmesg.after.gim.unload.$i.$j.log
     done
 done
