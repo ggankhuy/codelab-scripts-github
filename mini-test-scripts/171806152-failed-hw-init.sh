@@ -1,4 +1,7 @@
-# The script only works for semitrucks where bmc is accessible through ssh.
+#Synopsys:
+# - for loop time (CONFIG_ITER_POWERCYCLE)
+# - - Powercycle or reboot (powercycle is only for ST only)
+# - - Once powercycle/reboot complete, load and unload GIM N-times (CONFIG_ITER_GIM_RELOAD)
 
 DATE=`date +%Y%m%d-%H-%M-%S`
 DIRNAME=171896152-result/$DATE/
