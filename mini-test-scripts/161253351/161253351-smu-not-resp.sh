@@ -51,7 +51,7 @@ VBIOS_415=/drop/drop-2019-q3-rc8-GOOD-install/drop-2019-q3-rc8/vbios/V340L/D0531
 
 #	misc. configuration 
 
-LOOP_COUNT=1
+LOOP_COUNT=0
 EXTRA_SLEEP=120
 AMDVBFLASH_PATH=/root/tools/amdvbflash/amdvbflash-4.68/amdvbflash
 
@@ -64,8 +64,10 @@ HOST_RESPONSIVE=0
 CONFIG_DISABLE_FLASH_VBIOS=1
 CONFIG_DISABLE_HOST_DRV_BUILD=0
 CONFIG_LAUNCH_MONITOR=1
-CONFIG_LAUNCH_VK_EXAMPLE=0
+CONFIG_LAUNCH_VK_EXAMPLE=1
 DROP_FOLDER_ROOT=/drop/20201023/
+VK_EXAMPLE_SCRIPT=vk-example-launch.sh
+RUN_TEST_SCRIPT=run-test-161253351.sh
 
 DIRNAME=161253351-result/$DATE-$HOST_IP
 mkdir -p $DIRNAME
@@ -78,6 +80,15 @@ sleep 1
 #	Powercycle is preferable test option over reboot. 
 
 CONFIG_REBOOT=1
+
+#   Unload gim.
+#   Clear dmesg.
+#   Load gim.
+#   Output dmesg after gim load to $DIRNAME/summary.log
+#   Output dmesg after gim load to $DIRNAME/dmesg-modprobe-libgv.$loopCnt.log
+#   Clear dmesg.
+#   Start all VM-s
+#   Output dmesg after all vm start to $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
 
 function output_stat_libgv {
    	echo "vbios/gim:" 
@@ -92,8 +103,11 @@ function output_stat_libgv {
 	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "dmesg" >>  $DIRNAME/dmesg-modprobe-libgv.$loopCnt.log
 	echo " --- dmesg after start all VM-S (libgv loaded) ---" | tee -a $DIRNAME/$loopCnt.log
 	echo " --- dmesg after start all VM-S (libgv loaded) ---" > $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in $(seq 0 $gpu_count) ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/$loopCnt.log
-	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in $(seq 0 $gpu_count) ; do virsh start vats-test-0$k ; done ; dmesg' >>  $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'echo virsh net-start default; dmesg --clear ; for k in $(seq 0 $gpu_count) ; do virsh start vats-test-0$k ; done'
+	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'echo virsh net-start default; dmesg --clear'
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'virsh net-start default; dmesg --clear ; for k in $(seq 0 $gpu_count) ; do virsh start vats-test-0$k ; done'
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
+	#sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/dmesg-start-vm.libgv.$loopCnt.log
 }
 function output_stat {
    	echo "vbios/gim:" 
@@ -202,7 +216,7 @@ gpu_count=$((gpu_count-2))
 echo "No. of adapters: $gpu_count"
 
 echo "Copying artifacts to target system:"
-for i in monitor.sh run-test-161253351.sh
+for i in monitor.sh $VK_EXAMPLE_SCRIPT $RUN_TEST_SCRIPT
 do
     echo "copying $i..."
     sshpass -p amd1234 scp -o StrictHostKeyChecking=no $i $HOST_USER@$HOST_IP:/root/
@@ -219,7 +233,13 @@ do
     if [[ $CONFIG_LAUNCH_MONITOR -eq 1 ]] ; then
         echo "Launching monitor.sh on target..."
         CONFIG_FOLDER_MONITOR_APP=/usr/src/gim-2.0.1.G.20201023/smi-lib/examples/monitor/
-        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cp /root/monitor.sh $CONFIG_FOLDER_MONITOR_APP ; cd $CONFIG_FOLDER_MONITOR_APP ; make ; nohup ./monitor.sh > monitor.log &"
+        ret=`sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "ps -ax | grep monitor.sh | grep -v grep"`
+        if [[ -z $ret ]] ; then
+            echo "monitor.sh is not running on the host, launching..."
+            sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cp /root/monitor.sh $CONFIG_FOLDER_MONITOR_APP ; cd $CONFIG_FOLDER_MONITOR_APP ; make ; nohup ./monitor.sh > monitor.log &"
+        else
+            echo "monitor.sh is already running on the host. Bypassing the monitor.sh launch: $ret"
+        fi
     else
         echo "Bypassing monitor.sh launch target..."
     fi
@@ -229,16 +249,16 @@ do
     if [[ $CONFIG_LAUNCH_VK_EXAMPLE -eq 1 ]] ; then
 
         echo "launching vk examples..."
-    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test-161253351.sh > ./output.$loopCnt.log &"
+    	
+        #sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP \
+        #"cd $DROP_FOLDER_ROOT ; pwd; nohup ./$VK_EXAMPLE_SCRIPT > ./output.$loopCnt.log &"
+        
+    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP \
+        "mv /root/$RUN_TEST_SCRIPT /drop/20201023 ; cd /drop/20201023 ; nohup ./$RUN_TEST_SCRIPT &"
+        
+        # For ever 15 minutes. Check dmesg log.
 
-        echo "Sleeping for 8 hours..."
-        sleep $((3600*8))
-
-    	echo " --- dmesg after running tests + vk examples  ---" >> $DIRNAME/$loopCnt.log
-    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >>  $DIRNAME/$loopCnt.log
-    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP 'dmesg' >  $DIRNAME/dmesg-post-vats2-tests.$loopCnt.log
-        # powercycle once more.
-        #powercycle_server
+        # powercycle_server
     fi
 
 done	

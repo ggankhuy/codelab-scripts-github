@@ -11,19 +11,10 @@ mkdir $ROOT_DIR/log/
 # 41 - yeti vk example
 # 43 - xgemm
 # 42 - yeti raw vk example
-for i in 4 5 18 38 41 43 42
+for i in 41
 do
-
 	echo "test $i counter $counter" 
 	echo "GG:  test $i counter $counter" > /dev/kmsg
-	sleep 3
-	for j in $(seq 1 4)
-		do virsh destroy vats-test-0$j
-	done
-	cd  $BASIC_QUERY_PATH
-	make
-	./alloc_vf_with_parameters > $ROOT_DIR/log/alloc_vf_parameters.loop-$counter.test-$i.log
-	cd $ROOT_DIR
 	./run-test.sh $i > $ROOT_DIR/log/vats2.loop-$counter.test-$i.log
     dmesg > $ROOT_DIR/log/vats2.loop-$counter.test-$i.dmesg.log
 	counter=$((counter+1))
