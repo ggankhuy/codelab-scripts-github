@@ -10,7 +10,7 @@ CONFIG_INIT_TYPE=None
 CONFIG_BISECT_OOO=0    # Used if the log of each gpu appears out of order in the log. In this case, function address will be used
 # to bisect. 
 fileName=None
-DEBUG=1
+DEBUG=0
 gpu_list_all=[]
 
 CONFIG_OS=platform.platform()
@@ -152,7 +152,19 @@ for i in range(0, len(fp_content_gim_inits)):
         fp_content_gpu_inits=re.split(gpu_init_delimiter, fp_content_gim_inits[i])
         
         for j in range(0, len(fp_content_gpu_inits)):
-            fpw1=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + str(i) + ".gpu" + str(j) + ".log", "w")
+        
+            k2=0
+            for k in fp_content_gpu_inits[j].split('\n'):
+                if re.search(gpu_found_delimiter, fp_content_gpu_inits[j]):
+                    if DEBUG:
+                        print("Found gpu: ", k)
+                    k1 = re.sub("0000:", "", k.strip().split()[-1])
+                    k2 = re.sub(":", ".", k1)
+                    print("k2: ", k2)
+                    break
+                
+            print("Writing to file... ")
+            fpw1=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + str(i) + ".gpu" + str(j) + "." + str(k2) + ".log", "w")
             fpw1.write(fp_content_gpu_inits[j])
             fpw1.close()
     else:
