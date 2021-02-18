@@ -53,21 +53,21 @@ except Exception as msg:
     print("Continuing...")
 
 for i in sys.argv:
-    print("Processing ", i)
+    print("---- Processing---- ", i)
     try:
-        if re.search("file=", i):
+        if re.search("file=", str(i)):
             fileName=i.split('=')[1]
             print("Found filename to be opened: ", fileName)
 			
-        if re.search("ooo="):
+        if re.search("ooo=", str(i)):
             if (i.split('=')[1] == "yes"):
                 print("Out of order log bisect is specified.")			
 
-        if re.search("pattern=", i):
+        if re.search("pattern=", str(i)):
             pattern=i.split('=')[1]
             print("Found error pattern to be used", pattern)
 
-        if re.search("init=", i):
+        if re.search("init=", str(i)):
             if i.split('=')[1] == "libgv":
                 print("Libgv selected.")
                 CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_LIBGV_INIT
@@ -81,6 +81,7 @@ for i in sys.argv:
                 exit(1)
                             
     except Exception as msg:
+        print(msg)
         print("No argument provided")
         print("Assuming init type is libgv...")
         CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_LIBGV_INIT
