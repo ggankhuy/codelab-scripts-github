@@ -250,11 +250,11 @@ do
 
         echo "launching vk examples..."
     	
-        #sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP \
-        #"cd $DROP_FOLDER_ROOT ; pwd; nohup ./$VK_EXAMPLE_SCRIPT > ./output.$loopCnt.log &"
-        
-    	sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP \
-        "mv /root/$RUN_TEST_SCRIPT /drop/20201023 ; cd /drop/20201023 ; nohup ./$RUN_TEST_SCRIPT &"
+        sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP \
+        "cd $DROP_FOLDER_ROOT ; pwd;./$VK_EXAMPLE_SCRIPT > ./output.$loopCnt.log"
+
+        #sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "mv /root/$RUN_TEST_SCRIPT $DROP_FOLDER_ROOT ; cd $DROP_FOLDER_ROOT ; pwd; nohup ./run-test-161253351.sh > ./output.$loopCnt.log
+        #sshpass -p $HOST_PW ssh -o StrictHostKeyChecking=no $HOST_USER@$HOST_IP "mv /root/$RUN_TEST_SCRIPT $DROP_FOLDER_ROOT ; cd $DROP_FOLDER_ROOT ; pwd; ./run-test-161253351.sh"        
         
         # For ever 15 minutes. Check dmesg log.
 
