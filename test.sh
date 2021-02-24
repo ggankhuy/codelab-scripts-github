@@ -1,2 +1,6 @@
-source ./common.sh
-scp_robust 
+for i in \
+"123" \
+"12333" \ ;
+do 
+echo $i 
+done
