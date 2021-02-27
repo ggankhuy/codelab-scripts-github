@@ -25,7 +25,7 @@
 # - open log files (libgv or gim)
 # - open log files and build dictionary
 # - Point to one line past after the line which indicates GIM is initialized.
-
+# - Construct dictionary.
 # - start loop:
 # - start scanning each line.
 # - for each dictionary element
@@ -43,7 +43,7 @@ FILE_NAME_MATCH_STRING="match-string.txt"
 FILE_NAME_TEST_STRING="test-string.txt"
 FILE_NAME_TEST_STRING="test-string-2.txt"
 try:
-    matchString=open(FILE_NAME_MATCH_STRING)
+    matchStringBlock=open(FILE_NAME_MATCH_STRING)
     testString=open(FILE_NAME_TEST_STRING)
 except Exception as msg:
     print("Failure opening file...")
@@ -51,29 +51,84 @@ except Exception as msg:
     quit(1)
 
 lastLineGimInit=0
+cursorTestFile=0
+counter=0
+testStringBlockContent=testString.readlines()
+cursorTestFile=len(testStringBlockContent)
+print("No. of lines read: ", cursorTestFile)
+testStringBlockContentProcessed=None
 
-testStringContent=testString.readlines()
-counter=len(testStringContent)
-print("No. of lines read: ", counter)
-testStringContentProcessed=None
-
-for i in reversed(testStringContent):
+for i in reversed(testStringBlockContent):
     if re.search("AMD GIM is Running", i):
-        print("Last line gim is finished initialized last time in this log: line: ", str(counter), str(i))
-        lastLineGimInit = counter
+        print("Last line gim is finished initialized last time in this log: line: ", str(cursorTestFile), str(i))
+        lastLineGimInit = cursorTestFile
         break
-    counter -= 1
+    cursorTestFile -= 1
     
-testStringContentProcessed=testStringContent[counter:]
+testStringBlockContentProcessed=testStringBlockContent[cursorTestFile:]
 
 if counter == 0:
     print("The log does not appear to have gim initialization log.")
 
 
 counter = 0
-for i in testStringContentProcessed:
+print("Printing first few lines of truncated string block:")
+for i in testStringBlockContentProcessed:
     print(i)
     counter += 1
-    if counter > 10:
-        quit(1)
+    if counter > 5:
+        break
 
+# Construct dictionary.
+
+'''
+DEBUG: gpuvsmi_set_num_vf_enabled
+[amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_SET_VF_NUM (type:26)
+[amdgv_vfmgr_set_vf_num:707] Set enabled VF number to 1
+'''
+
+print("Constructing dictionary for match string blocks.")
+dictmatchStringBlock={}
+
+currKey=None
+currValue=None
+
+testStringBlockContent=matchStringBlock.readlines()
+for i in testStringBlockContent:
+    print("type/content: ", type(i), i)
+    # If line is debug, then, signal new match string block.
+
+    if re.search("DEBUG: ", i):
+
+        # encountered next match string block. Add to the dictionary if it is not first occurrence.
+        # Because if it is first occurrence, search just started and nothing to add.
+
+        if currKey and currValue:
+            print("currKey",currKey)
+            dictmatchStringBlock[currKey] = currValue
+
+        # Reset the currValue to empty and currKey to new key found.
+
+        currKey=re.sub("DEBUG: ", "", i).strip()
+        print("currKey generated: ", currKey)
+        currValue=[]
+    else:
+    
+        # If not DEBUG line means, it is currValue.
+
+        currValue.append(i)
+        print("currValue so far: ", currValue)
+        
+    
+keys=list(dictmatchStringBlock.keys())
+values=list(dictmatchStringBlock.values())
+
+print("key size/type: ", len(keys), ", ", type(keys))
+print("values size/type: ", len(values), ", ", type(values))
+
+#for i in range(0, len(keys)):
+for i in range(0, 3):
+    print("i: ", i)
+    print("key: ", keys[i])
+    print("value: ", values[i])
+    print("")
