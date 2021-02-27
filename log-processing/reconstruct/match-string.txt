@@ -1,0 +1,74 @@
+DEBUG: gpuvsmi_set_num_vf_enabled
+[amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_SET_VF_NUM (type:26)
+[amdgv_vfmgr_set_vf_num:707] Set enabled VF number to 1
+
+DEBUG: gpuvsmi_allocate_vf
+[143888.683054] gim info libgv: [25:0:0][amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_ALLOC_VF (type:25)
+[143888.801410] gim info libgv: [25:0:0][vega10_gpuiov_set_vf_fb:188] VF0, fb_offset = 16 MB, fb_size = 8096 MB
+[143888.801494] gim info:(gim_map_vf_dev_res:109) Map region 0x386800000000 for length 8589934592
+[143888.801522] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:85] VF0 fb_offset=0x1000000 fb_offset_end=0x1fbff0000 fb_size=0x1faff0000
+[143889.045148] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:113] VF0, 0x1faff0000 bytes cleared with GPU
+[143889.045152] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:194] VF0, fb_offset_end=0x1fbff0000 fb_size_cleared=0x1faff0000 pattern[0]
+
+[143889.047013] DEBUG: gpuvsmi_free_vf
+[143889.047108] gim info libgv: [25:0:0][amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_FREE_VF (type:27)
+[143889.165413] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:85] VF0 fb_offset=0x1000000 fb_offset_end=0x1fbff0000 fb_size=0x1faff0000
+[143889.409150] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:113] VF0, 0x1faff0000 bytes cleared with GPU
+[143889.409155] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:194] VF0, fb_offset_end=0x1fbff0000 fb_size_cleared=0x1faff0000 pattern[0]
+[143889.409332] gim info libgv: [25:0:0][vega10_gpuiov_set_vf_fb:188] VF0, fb_offset = 0 MB, fb_size = 0 MB
+
+[143889.410128] DEBUG: gpuvsmi_gpu_reset
+[143889.410189] gim info libgv: [25:0:0][amdgv_sched_event_queue_push_ex:196] queue event SCHED_FORCE_RESET_GPU(0xff07) for VF0 of block(0x0)
+[143889.410194] gim info libgv: [25:0:0][amdgv_sched_process_event:1637] process event SCHED_FORCE_RESET_GPU (0xff07) for VF0 of block (0x0)
+[143889.529265] gim error libgv: [25:0:0][PF][amdgv_reset_gpu:153] Issuing Whole GPU reset type 0
+[143889.555059] gim info libgv: [25:0:0][vega10_reset_whole_gpu_reset:888] start whole gpu reset
+[143889.555435] gim info libgv: [25:0:0][vega10_toggle_disp_timer2:183] disable disp timer2
+[143889.560442] gim info libgv: [25:0:0][vega10_mode2_reset:846] mode2 reset success
+[143889.560445] gim info libgv: [25:0:0][vega10_enter_baco_state:728] Entering BACO...
+[143889.597174] gim info libgv: [25:0:0][vega10_enter_baco_state:754] Entering BACO Done
+[143889.705150] gim info libgv: [25:0:0][vega10_exit_baco_state:774] Exiting BACO...
+[143890.157632] gim info libgv: [25:0:0][vega10_exit_baco_state:787] Exit BACO completed
+[143890.157980] gim event libgv: [25:0:0][PF][amdgv_vbios_read_img_func:297] VBIOS hash has been invalidated
+[143890.158181] gim info libgv: [25:0:0][vega10_vbios_read_rom_from_reg:172] Reading VBios from ROM
+[143893.502009] gim info libgv: [25:0:0][amdgv_vbios_read_img_func:332] vbios starts: 0x55, 0xaa
+[143893.502010] gim info libgv: [25:0:0][amdgv_vbios_read_img_func:338] vbios version major 0x10 minor 0x1
+[143893.506888] gim info libgv: [25:0:0][amdgv_vbios_read_img_func:348] HASH f41f8a5974f3e8bc4fac186f5b90cff9622fb6e196032928dd83f3687d544148
+[143893.506909] gim info libgv: [25:0:0][amdgv_vbios_get_info:127] found anchor at 569
+[143893.506909] gim info libgv: [25:0:0][amdgv_vbios_get_info:138] build num: 527135
+[143893.506910] gim info libgv: [25:0:0][amdgv_vbios_get_info:140] part info: AMD_VEGA10_D05318_VDI_A1_HBM2_8GB_PASSIVEHS
+[143893.506911] gim info libgv: [25:0:0][amdgv_vbios_get_info:143] build date: 08/11/20 04:00
+[143893.506948] gim event libgv: [25:0:0][PF][amdgv_vbios_read_img_func:395] VBIOS hash has been updated
+[143893.507021] gim info libgv: [25:0:0][amdgv_vbios_atom_init:239] PCI I/O BAR is not found. Using MMIO to access ATOM BIOS
+[143893.507023] gim info libgv: ATOM BIOS: 113-D0531800-D04
+[143893.507024] gim info libgv: [25:0:0][amdgv_atomfirmware_get_fw_usage_fb:69] atom firmware requested 007fb7e0 2080kb fw 0kb drv
+[143893.507025] gim info libgv: [25:0:0][amdgv_atomfirmware_get_fw_usage_fb:75] vram used by fw start addr=0x1fedf8000
+[143893.507028] gim info libgv: [25:0:0][vega10_vbios_need_post:138] BIOS_SCRATCH_7 = 0x00000000
+[143893.507030] gim info libgv: [25:0:0][vega10_vbios_need_post:144] PCIE_DATA2 = 0x0
+[143893.507030] gim info libgv: [25:0:0][vega10_vbios_need_post:158] ATOM_ASIC_NEED_POST
+[143893.507031] gim info libgv: [25:0:0][amdgv_atomfirmware_post:220] Do a full post
+[143895.745187] gim info libgv: [25:0:0][vega10_vbios_hw_init:478] VBIOS posted successfully.
+[143895.745192] gim info libgv: [25:0:0][vega10_vbios_hw_init:487] MC_VM_FB base is at 0xf400000000
+[143895.745196] gim info libgv: [25:0:0][amdgv_atomfirmware_set_fw_usage_fb_guest:149] original atom firmware usage 007fb7e0 2080kb fw 0kb drv
+[143895.745199] gim info libgv: [25:0:0][amdgv_atomfirmware_set_fw_usage_fb_guest:166] set atom firmware usage 80000000 68kb fw 0kb drv
+[143895.745241] gim info libgv: [25:0:0][amdgv_atomfirmware_update_checksum:47] update guest vbios checksum to 0x60 
+[143895.745425] gim info libgv: [25:0:0][psp_v3_1_set_mb_int:1685] psp mailbox disabled for VF0
+[143895.745610] gim info libgv: [25:0:0][vega10_set_gfx_dpm_policy:241] set GFX DPM policy successfully
+[143895.745645] gim info libgv: [25:0:0][vega10_set_gfx_dpm_policy:258] activate GFX DPM policy successfully
+[143895.745717] gim info libgv: [25:0:0][vega10_set_gfx_dpm_policy:272] set GFX DPM max level successfully
+[143895.745814] gim info libgv: [25:0:0][vega10_enable_pci_atomic_request:297] Atomic Request Enabled
+[143895.745855] gim info libgv: [25:0:0][vega10_disable_pci_aer:284] Disable pci aer
+[143895.745875] gim info libgv: [25:0:0][vega10_ecc_mode_enable:189] ECC enabled for the adapter....
+[143895.746054] gim info libgv: [25:0:0][amdgv_gpuiov_init:873] allowed time for gpuiov cmd completion is 500ms
+[143895.746055] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:726] GPUIOV caps pos = 0x400
+[143895.746068] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:732] Total FB Available = 8176 MB
+[143895.746069] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:740] CSA = 32 MB, Max remaining FB size = 8144 MB
+[143895.746070] gim info libgv: [25:0:0][vega10_gpuiov_set_csa:164] set csa base to 32576 (*256KB)
+[143895.746110] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:760] UVD block offset = 0x70
+[143895.746124] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:767] VCE block offset = 0xa0
+[143895.746138] gim info libgv: [25:0:0][vega10_gpuiov_hw_init:774] GFX block offset = 0xd0
+[143895.853585] gim info libgv: [25:0:0][amdgv_vfmgr_set_pf_fb:134] PF FB size set to 16 MB
+[143895.854864] gim info libgv: [25:0:0][vega10_toggle_disp_timer2:181] enable disp timer2
+[143895.854869] gim info libgv: [25:0:0][vega10_ih_iv_ring_hw_init:380] rb_base_addr=0xf400001000
+[143895.854875] gim info libgv: [25:0:0][vega10_ih_iv_ring_hw_init:445] writeback_addr=0xf400002000
+[143895.855034] gim info libgv: [25:0:0][vega10_reset_whole_gpu_reset:914] complete whole gpu reset
+[143895.855035] gim info libgv: [25:0:0][handle_event_in_non_full_access:1540] finish VF0 reset.
