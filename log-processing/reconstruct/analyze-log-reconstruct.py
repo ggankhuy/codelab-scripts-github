@@ -37,3 +37,43 @@
 # - - - add this line to mismatch list.
 # - - - move cursor one line forward to next line.
 
+import re
+
+FILE_NAME_MATCH_STRING="match-string.txt"
+FILE_NAME_TEST_STRING="test-string.txt"
+FILE_NAME_TEST_STRING="test-string-2.txt"
+try:
+    matchString=open(FILE_NAME_MATCH_STRING)
+    testString=open(FILE_NAME_TEST_STRING)
+except Exception as msg:
+    print("Failure opening file...")
+    print(msg)
+    quit(1)
+
+lastLineGimInit=0
+
+testStringContent=testString.readlines()
+counter=len(testStringContent)
+print("No. of lines read: ", counter)
+testStringContentProcessed=None
+
+for i in reversed(testStringContent):
+    if re.search("AMD GIM is Running", i):
+        print("Last line gim is finished initialized last time in this log: line: ", str(counter), str(i))
+        lastLineGimInit = counter
+        break
+    counter -= 1
+    
+testStringContentProcessed=testStringContent[counter:]
+
+if counter == 0:
+    print("The log does not appear to have gim initialization log.")
+
+
+counter = 0
+for i in testStringContentProcessed:
+    print(i)
+    counter += 1
+    if counter > 10:
+        quit(1)
+
