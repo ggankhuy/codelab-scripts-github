@@ -38,6 +38,8 @@
 # - - - move cursor one line forward to next line.
 
 import re
+import time
+from fuzzywuzzy import fuzz
 
 FILE_NAME_MATCH_STRING="match-string.txt"
 FILE_NAME_TEST_STRING="test-string.txt"
@@ -116,8 +118,9 @@ for i in testStringBlockContent:
     
         # If not DEBUG line means, it is currValue.
 
-        currValue.append(i)
-        print("currValue so far: ", currValue)
+        if i.strip():
+            currValue.append(i.strip())
+            print("currValue so far: ", currValue)
         
     
 keys=list(dictmatchStringBlock.keys())
@@ -132,3 +135,17 @@ for i in range(0, 3):
     print("key: ", keys[i])
     print("value: ", values[i])
     print("")
+
+#   Outer loop: Start from test string line by line.
+#   Inner loop: iterate through dictionary.
+#   for each dict values, determine No. of lines 
+#   Grab next No. of lines from test string.
+
+for o in testStringBlockContentProcessed:
+    for i in list(dictmatchStringBlock.keys()):
+        currValue=dictmatchStringBlock[i]
+        print("currValue/len:")
+        print(currValue)
+        print(len(currValue))
+
+        time.sleep(10)
