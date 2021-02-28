@@ -57,12 +57,13 @@ except Exception as msg:
     print(msg)
     quit(1)
 
+TEST_MODE=1
 lastLineGimInit=0
 cursorTestFile=0
 counter=0
 testStringBlockContent=testString.readlines()
 cursorTestFile=len(testStringBlockContent)
-print("No. of lines read: ", cursorTestFile)
+print("No. of lines read from testFile: ", cursorTestFile)
 testStringBlockContentProcessed=None
 
 for i in reversed(testStringBlockContent):
@@ -116,7 +117,7 @@ for i in matchStringBlockContent:
         # Reset the currValue to empty and currKey to new key found.
 
         currKey=re.sub("DEBUG: ", "", i).strip()
-        if DEBUG or 1:
+        if DEBUG:
             print("currKey generated: ", currKey)
         currValue=[]
     else:
@@ -131,23 +132,25 @@ for i in matchStringBlockContent:
 #   Do this for last entry because, the dictionary assignment is at the start of loop code block.
 
 if currKey and currValue:
-    print("currKey: ",currKey)
+    if DEBUG:
+        print("currKey: ",currKey)
     dictmatchStringBlock[currKey] = currValue        
     
 keys=list(dictmatchStringBlock.keys())
 values=list(dictmatchStringBlock.values())
 
-print("key size/type: ", len(keys), ", ", type(keys))
-print("values size/type: ", len(values), ", ", type(values))
+if  DEBUG:
+    print("key size/type: ", len(keys), ", ", type(keys))
+    print("values size/type: ", len(values), ", ", type(values))
 
-#for i in range(0, len(keys)):
 for i in range(0, len(keys)):
     print("i: ", i)
     print("key: ", keys[i])
-    print("value: ")
-    for j in values[i]:
-        print(j)
-    print("")
+    if DEBUG:
+        print("value: ")
+        for j in values[i]:
+            print(j)
+        print("")
 
 #   Outer loop: Start from test string line by line.
 #   Inner loop: iterate through dictionary.
@@ -156,10 +159,22 @@ for i in range(0, len(keys)):
 
 print("Starting match loop...")
 
+LinesToSkip=0
 for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
+    if TEST_MODE:
+        if cursorTestString > 100:
+            break
+
+    if LinesToSkip-1 > 0:
+        print("Skipping line: ", str(cursorTestString))
+        LinesToSkip-=1
+        continue
     match_found=None
     print("****** iter: cursorTestString: ", str(cursorTestString), "******")
+    currTestBlockFirstLine=testStringBlockContentProcessed[cursorTestString:cursorTestString+2]
+    for i in currTestBlockFirstLine:
+        print(i)
 
     for i in list(dictmatchStringBlock.keys()):
         currValue=dictmatchStringBlock[i]
@@ -168,21 +183,24 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
         print("curr dict key:currValue/len:")
         print(i)
-        for j in currValue[0:3]:
-            print(j[0:MAX_CHAR_PER_LINE], "...")
-        print(len(currValue))
+
+        if DEBUG:
+            for j in currValue[0:3]:
+                print(j[0:MAX_CHAR_PER_LINE], "...")
+            print(len(currValue))
+        lines=len(currValue)
 
         # Construct match block.
 
-        lines=len(currValue)
         currTestBlock=testStringBlockContentProcessed[cursorTestString:cursorTestString+lines]
 
-        print("currTestBlock/len:")
-        for k in currTestBlock[0:5]:
-            print("...", k[80:MAX_CHAR_PER_LINE], "...")
-        print(len(currTestBlock))
-    
-        # concatenate string, both match and test string blocks.
+        if DEBUG:
+            print("currTestBlock/len:")
+            for k in currTestBlock[0:2]:
+                print("...", k[80:MAX_CHAR_PER_LINE+40], "...")
+            print(len(currTestBlock))
+
+        # Concatenate string, both match and test string blocks.
 
         match_string_concat=' '.join(currValue)
         test_string_concat=' '.join(currTestBlock)
@@ -204,6 +222,7 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
             print("Match!")
             cmds.append(i)
             match_found=1
+            LinesToSkip=len(currTestBlock)
             break
 
     # If match found is none. Add ? along with cursor Number to its cmds list.  
@@ -211,7 +230,10 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
     if not match_found:
         print("Match is not found for line[LineNo:]: ", "[", str(cursorTestString), "]", str(test_string_concat[0:80]))
         cmds.append("? : LineNo: " + str(lastLineGimInit + cursorTestString))
-    else:
-        cursorTestString+=len(currValue)
-        print("CursorTestString is set to: ", cursorTestString)
-    time.sleep(5)
+        LinesToSkip=0
+#    time.sleep(1)
+
+
+print("*** PRINTING CMDS: ***")
+for i in cmds:
+    print(i)
