@@ -1,7 +1,6 @@
 DEBUG: gpuvsmi_set_num_vf_enabled
 [amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_SET_VF_NUM (type:26)
 [amdgv_vfmgr_set_vf_num:707] Set enabled VF number to 1
-
 DEBUG: gpuvsmi_allocate_vf
 [143888.683054] gim info libgv: [25:0:0][amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_ALLOC_VF (type:25)
 [143888.801410] gim info libgv: [25:0:0][vega10_gpuiov_set_vf_fb:188] VF0, fb_offset = 16 MB, fb_size = 8096 MB
@@ -9,15 +8,13 @@ DEBUG: gpuvsmi_allocate_vf
 [143888.801522] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:85] VF0 fb_offset=0x1000000 fb_offset_end=0x1fbff0000 fb_size=0x1faff0000
 [143889.045148] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:113] VF0, 0x1faff0000 bytes cleared with GPU
 [143889.045152] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:194] VF0, fb_offset_end=0x1fbff0000 fb_size_cleared=0x1faff0000 pattern[0]
-
-[143889.047013] DEBUG: gpuvsmi_free_vf
+DEBUG: gpuvsmi_free_vf
 [143889.047108] gim info libgv: [25:0:0][amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_FREE_VF (type:27)
 [143889.165413] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:85] VF0 fb_offset=0x1000000 fb_offset_end=0x1fbff0000 fb_size=0x1faff0000
 [143889.409150] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:113] VF0, 0x1faff0000 bytes cleared with GPU
 [143889.409155] gim info libgv: [25:0:0][amdgv_misc_clear_vf_fb:194] VF0, fb_offset_end=0x1fbff0000 fb_size_cleared=0x1faff0000 pattern[0]
 [143889.409332] gim info libgv: [25:0:0][vega10_gpuiov_set_vf_fb:188] VF0, fb_offset = 0 MB, fb_size = 0 MB
-
-[143889.410128] DEBUG: gpuvsmi_gpu_reset
+DEBUG: gpuvsmi_gpu_reset
 [143889.410189] gim info libgv: [25:0:0][amdgv_sched_event_queue_push_ex:196] queue event SCHED_FORCE_RESET_GPU(0xff07) for VF0 of block(0x0)
 [143889.410194] gim info libgv: [25:0:0][amdgv_sched_process_event:1637] process event SCHED_FORCE_RESET_GPU (0xff07) for VF0 of block (0x0)
 [143889.529265] gim error libgv: [25:0:0][PF][amdgv_reset_gpu:153] Issuing Whole GPU reset type 0

@@ -43,7 +43,12 @@ from fuzzywuzzy import fuzz
 
 FILE_NAME_MATCH_STRING="match-string.txt"
 FILE_NAME_TEST_STRING="test-string.txt"
-FILE_NAME_TEST_STRING="test-string-2.txt"
+FILE_NAME_TEST_STRING="test-string-3.txt"
+MAX_CHAR_PER_LINE=120
+DEBUG = 0
+THRESHOLD_MIN_TOKEN_SET_RATIO=90
+cmds=[]
+
 try:
     matchStringBlock=open(FILE_NAME_MATCH_STRING)
     testString=open(FILE_NAME_TEST_STRING)
@@ -62,21 +67,17 @@ testStringBlockContentProcessed=None
 
 for i in reversed(testStringBlockContent):
     if re.search("AMD GIM is Running", i):
-        print("Last line gim is finished initialized last time in this log: line: ", str(cursorTestFile), str(i))
+        print("Last line gim is finished initialized last time in this log: Line No.: ", str(cursorTestFile), str(i))
         lastLineGimInit = cursorTestFile
         break
     cursorTestFile -= 1
     
 testStringBlockContentProcessed=testStringBlockContent[cursorTestFile:]
 
-if counter == 0:
-    print("The log does not appear to have gim initialization log.")
-
-
 counter = 0
 print("Printing first few lines of truncated string block:")
 for i in testStringBlockContentProcessed:
-    print(i)
+    print(i[0:MAX_CHAR_PER_LINE], "...")
     counter += 1
     if counter > 5:
         break
@@ -95,24 +96,28 @@ dictmatchStringBlock={}
 currKey=None
 currValue=None
 
-testStringBlockContent=matchStringBlock.readlines()
-for i in testStringBlockContent:
-    print("type/content: ", type(i), i)
+matchStringBlockContent=matchStringBlock.readlines()
+print
+for i in matchStringBlockContent:
     # If line is debug, then, signal new match string block.
 
+    if DEBUG: 
+        print("currLine:", i)
+        
     if re.search("DEBUG: ", i):
 
         # encountered next match string block. Add to the dictionary if it is not first occurrence.
         # Because if it is first occurrence, search just started and nothing to add.
 
         if currKey and currValue:
-            print("currKey",currKey)
+            print("currKey: ",currKey)
             dictmatchStringBlock[currKey] = currValue
 
         # Reset the currValue to empty and currKey to new key found.
 
         currKey=re.sub("DEBUG: ", "", i).strip()
-        print("currKey generated: ", currKey)
+        if DEBUG or 1:
+            print("currKey generated: ", currKey)
         currValue=[]
     else:
     
@@ -120,8 +125,14 @@ for i in testStringBlockContent:
 
         if i.strip():
             currValue.append(i.strip())
-            print("currValue so far: ", currValue)
-        
+            if DEBUG:
+                print("currValue so far: ", currValue)
+
+#   Do this for last entry because, the dictionary assignment is at the start of loop code block.
+
+if currKey and currValue:
+    print("currKey: ",currKey)
+    dictmatchStringBlock[currKey] = currValue        
     
 keys=list(dictmatchStringBlock.keys())
 values=list(dictmatchStringBlock.values())
@@ -130,10 +141,12 @@ print("key size/type: ", len(keys), ", ", type(keys))
 print("values size/type: ", len(values), ", ", type(values))
 
 #for i in range(0, len(keys)):
-for i in range(0, 3):
+for i in range(0, len(keys)):
     print("i: ", i)
     print("key: ", keys[i])
-    print("value: ", values[i])
+    print("value: ")
+    for j in values[i]:
+        print(j)
     print("")
 
 #   Outer loop: Start from test string line by line.
@@ -141,11 +154,64 @@ for i in range(0, 3):
 #   for each dict values, determine No. of lines 
 #   Grab next No. of lines from test string.
 
-for o in testStringBlockContentProcessed:
+print("Starting match loop...")
+
+for cursorTestString in range(0, len(testStringBlockContentProcessed)):
+
+    match_found=None
+    print("****** iter: cursorTestString: ", str(cursorTestString), "******")
+
     for i in list(dictmatchStringBlock.keys()):
         currValue=dictmatchStringBlock[i]
-        print("currValue/len:")
-        print(currValue)
+
+        # Print information.
+
+        print("curr dict key:currValue/len:")
+        print(i)
+        for j in currValue[0:3]:
+            print(j[0:MAX_CHAR_PER_LINE], "...")
         print(len(currValue))
 
-        time.sleep(10)
+        # Construct match block.
+
+        lines=len(currValue)
+        currTestBlock=testStringBlockContentProcessed[cursorTestString:cursorTestString+lines]
+
+        print("currTestBlock/len:")
+        for k in currTestBlock[0:5]:
+            print("...", k[80:MAX_CHAR_PER_LINE], "...")
+        print(len(currTestBlock))
+    
+        # concatenate string, both match and test string blocks.
+
+        match_string_concat=' '.join(currValue)
+        test_string_concat=' '.join(currTestBlock)
+
+        if DEBUG:
+            print("match_string_concat: \n", match_string_concat[0:80])
+            print("test_string_concat: \n", test_string_concat[0:80])
+
+        token_set_ratio=fuzz.token_set_ratio(match_string_concat, test_string_concat)
+        print("match percent (token_set_ratio): ", str(token_set_ratio))
+
+        # If match is above threshold, then move cursor forward in test string same number of lines as current match string block.
+        # and break out of inner loop. 
+        # (Break out of inner loop could be problematic in situation if two entries in match string blocks are very similar)
+        # Consider adding feature to iterate through every entry in the dictionary, gather match ratio for each on current window
+        # and pick maximum.
+
+        if token_set_ratio > THRESHOLD_MIN_TOKEN_SET_RATIO:
+            print("Match!")
+            cmds.append(i)
+            match_found=1
+            break
+
+    # If match found is none. Add ? along with cursor Number to its cmds list.  
+
+    if not match_found:
+        print("Match is not found for line[LineNo:]: ", "[", str(cursorTestString), "]", str(test_string_concat[0:80]))
+        cmds.append("? : LineNo: " + str(lastLineGimInit + cursorTestString))
+    else:
+        cursorTestString+=len(currValue)
+        print("CursorTestString is set to: ", cursorTestString)
+    time.sleep(5)
