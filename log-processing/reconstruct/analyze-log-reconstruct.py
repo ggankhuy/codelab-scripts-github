@@ -39,6 +39,8 @@
 
 import re
 import time
+import os
+import subprocess
 from fuzzywuzzy import fuzz
 
 FILE_NAME_MATCH_STRING="match-string.txt"
@@ -46,8 +48,18 @@ FILE_NAME_TEST_STRING="test-string.txt"
 FILE_NAME_TEST_STRING="test-string-3.txt"
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
-THRESHOLD_MIN_TOKEN_SET_RATIO=90
+THRESHOLD_MIN_TOKEN_SET_RATIO=70
 cmds=[]
+
+dateString=str(os.popen('date +%Y%m%d-%H-%M-%S').read()).strip()
+
+print("date string: ", dateString)
+ret=os.popen('mkdir ' + dateString).read()
+ret=os.popen('mkdir ' + dateString + "/bcompare").read()
+if ret:
+    print("ret: ", ret)
+    print("Error: rare instances where directory does exist!")
+    quit(1)
 
 try:
     matchStringBlock=open(FILE_NAME_MATCH_STRING)
@@ -57,7 +69,7 @@ except Exception as msg:
     print(msg)
     quit(1)
 
-TEST_MODE=1
+TEST_MODE=0
 lastLineGimInit=0
 cursorTestFile=0
 counter=0
@@ -159,6 +171,15 @@ for i in range(0, len(keys)):
 
 print("Starting match loop...")
 
+#   MatchSet will contain matching entries dictionary to do a bcompare with key + value.
+#   TestSet will contain simply the test set to do a compare against.
+#   if match fails for block of string, then MatchSet will put the corresponding TestBlock with !!! in front of it.
+
+fileNameMatchSet=dateString + "/bcompare/matchset.log"
+fileNameTestSet=dateString + "/bcompare/testset.log"
+fpMatchSet=open(fileNameMatchSet, 'w+')
+fpTestSet=open(fileNameTestSet, 'w+')
+
 LinesToSkip=0
 for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
@@ -223,6 +244,12 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
             cmds.append(i)
             match_found=1
             LinesToSkip=len(currTestBlock)
+
+            fpMatchSet.write("cmd: " + str(i) + '\n')
+            for k in currValue:
+                fpMatchSet.write(k + '\n')
+            for k in currTestBlock:
+                fpTestSet.write(k)
             break
 
     # If match found is none. Add ? along with cursor Number to its cmds list.  
@@ -231,9 +258,24 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
         print("Match is not found for line[LineNo:]: ", "[", str(cursorTestString), "]", str(test_string_concat[0:80]))
         cmds.append("? : LineNo: " + str(lastLineGimInit + cursorTestString))
         LinesToSkip=0
+
+        fpMatchSet.write("!!!! " + str(currTestBlockFirstLine[0]))
+        fpTestSet.write(str(currTestBlockFirstLine[0]))
+
 #    time.sleep(1)
 
+fileNameSummary=dateString + "/summary.log"
+fileNameDebugLog=dateString + "/debug.log"
+fpSummary=open(fileNameSummary, 'w+')
+fpDebug=open(fileNameDebugLog, 'w+')
 
 print("*** PRINTING CMDS: ***")
 for i in cmds:
     print(i)
+    fpSummary.write(i + '\n')
+
+fpSummary.close()
+fpDebug.close()
+
+fpMatchSet.close()
+fpTestSet.close()
