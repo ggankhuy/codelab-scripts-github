@@ -11,6 +11,7 @@ CONFIG_BISECT_OOO=0    # Used if the log of each gpu appears out of order in the
 # to bisect. 
 fileName=None
 DEBUG=0
+DEBUGL2=0
 gpu_list_all=[]
 
 CONFIG_OS=platform.platform()
@@ -150,26 +151,35 @@ for i in range(0, len(fp_content_gim_inits)):
         # Bisect using the pattern.
     
         fp_content_gpu_inits=re.split(gpu_init_delimiter, fp_content_gim_inits[i])
-        print("No. of gpu inits: ", len(fp_content_gpu_inits))
-        print("Len. of each gpu inits: ")
-        counter=0
-        for p in fp_content_gpu_inits:
-            print("len: ", str(len(p)))
-            fpTmp=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + ".gpu" + str(counter) + ".tmp.log", "w+")
-            fpTmp.write(p)
-            fpTmp.close()
-            counter+= 1
+        
+        if DEBUGL2:
+            print("No. of gpu inits: ", len(fp_content_gpu_inits))
+            print("Len. of each gpu inits: ")
+            counter=0
+        
+        if DEBUGL2:
+            for p in fp_content_gpu_inits:
+                print("len: ", str(len(p)))
+                fpTmp=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + ".gpu" + str(counter) + ".tmp.log", "w+")
+                fpTmp.write(p)
+                fpTmp.close()
+                counter+= 1
         
         for j in range(0, len(fp_content_gpu_inits)):
         
             valid_line=0
             k2=0
             
-            print("i/j/len(fp_content_gpu_inits): ", str(i), "/", str(j), "/", str(len(fp_content_gpu_inits[j])))
-            for k in fp_content_gpu_inits[j].split('\n'):
-                print("line k: , search pattern: ", k[0:80], ", ", str(gpu_found_delimiter))
+            if DEBUG:
+                print("i/j/len(fp_content_gpu_inits): ", str(i), "/", str(j), "/", str(len(fp_content_gpu_inits[j])))
+                
+            for k in fp_content_gpu_inits[j].split('\n'):            
+                if DEBUG:
+                    print("line k: , search pattern: ", k[0:80], ", ", str(gpu_found_delimiter))
+                
                 if re.search(gpu_found_delimiter, k):
-                    print("ok. match...")
+                    if DEBUG:
+                        print("ok. match...")
                     try:
                         k0=k.strip().split()[-1]
                     except Exception as msg:
@@ -178,19 +188,23 @@ for i in range(0, len(fp_content_gim_inits)):
                         break
                     print("k0: ", k0)
                     if not re.search("[0-9]", str(k0)): 
-                        print("Invalid line, bypassing (2): ")
+                        if DEBUG:
+                            print("Invalid line, bypassing (2): ")
                         break
-                    if DEBUG or 1:
+                    if DEBUG:
                         print("Found gpu: ", k)
                         
                     k1 = re.sub(":", ".", k.strip().split()[-1])
-                    print("k1: ", k1)
+                    if DEBUG:
+                        print("k1: ", k1)
                     k2 = re.sub(":", ".", k1)
-                    print("k2: ", k2)
+                    if DEBUG:
+                        print("k2: ", k2)
                     valid_line = 1
                     break
                 else:
-                    print("Invalid line(2)")
+                    if DEBUG:
+                        print("Invalid line(2)")
                
                 
             if valid_line:
@@ -199,7 +213,8 @@ for i in range(0, len(fp_content_gim_inits)):
                 fpw1.write(fp_content_gpu_inits[j])
                 fpw1.close()
             else:
-                print("Invalid device address found: ", k2)
+                if DEBUG:
+                    print("Invalid device address found: ", k2)
             
     else:
     
@@ -208,7 +223,7 @@ for i in range(0, len(fp_content_gim_inits)):
         print("gpu_found_delimiter: ", gpu_found_delimiter) 
         for j in fp_content_gim_inits[i].split('\n'):    
             if re.search(gpu_found_delimiter, j):
-                if DEBUG or 1:
+                if DEBUG:
                     print("Found gpu: ", j)
                 gpu_list_all.append(re.sub("0000:", "", j.strip().split()[-1]))
                 
