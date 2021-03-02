@@ -10,7 +10,8 @@ CONFIG_INIT_TYPE=None
 CONFIG_BISECT_OOO=0    # Used if the log of each gpu appears out of order in the log. In this case, function address will be used
 # to bisect. 
 fileName=None
-DEBUG=1
+DEBUG=0
+DEBUGL2=0
 gpu_list_all=[]
 
 CONFIG_OS=platform.platform()
@@ -82,14 +83,14 @@ if CONFIG_INIT_TYPE==CONFIG_INIT_TYPE_LIBGV_INIT:
     gpu_found_delimiter="AMD GIM probed GPU"
 elif CONFIG_INIT_TYPE==CONFIG_INIT_TYPE_GIM_INIT:
     gim_init_delimiter="AMD GIM init"
-    gpu_init_delimiter="SRIOV is supported"
+    gpu_init_delimiter="SRIOV is supported....."
     gpu_search_delimeter="[0-9a-f]+:[0-9a-f]+\.[0-9]"
-    gpu_found_delimiter="found:"
+    gpu_found_delimiter="\) found: [0-9a-f]"
 elif CONFIG_INIT_TYPE==CONFIG_INIT_TYPE_BOTH_INIT:
     gim_init_delimiter="Start AMD open source GIM initialization|AMD GIM init"
-    gpu_init_delimiter="AMD GIM start to probe device|SRIOV is supported"
+    gpu_init_delimiter="AMD GIM start to probe device|SRIOV is supported....."
     gpu_search_delimeter="\[[0-9a-f]+:[0-9a-f]+:[0-9]\]"
-    gpu_found_delimiter="AMD GIM probed GPU|found:"
+    gpu_found_delimiter="AMD GIM probed GPU|\) found: [0-9a-f]"
 else:
     print("Invalid init option, choose either 'gim' or 'libgv':", i)
     exit(1)
@@ -151,10 +152,70 @@ for i in range(0, len(fp_content_gim_inits)):
     
         fp_content_gpu_inits=re.split(gpu_init_delimiter, fp_content_gim_inits[i])
         
+        if DEBUGL2:
+            print("No. of gpu inits: ", len(fp_content_gpu_inits))
+            print("Len. of each gpu inits: ")
+            counter=0
+        
+        if DEBUGL2:
+            for p in fp_content_gpu_inits:
+                print("len: ", str(len(p)))
+                fpTmp=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + ".gpu" + str(counter) + ".tmp.log", "w+")
+                fpTmp.write(p)
+                fpTmp.close()
+                counter+= 1
+        
         for j in range(0, len(fp_content_gpu_inits)):
-            fpw1=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + str(i) + ".gpu" + str(j) + ".log", "w")
-            fpw1.write(fp_content_gpu_inits[j])
-            fpw1.close()
+        
+            valid_line=0
+            k2=0
+            
+            if DEBUG:
+                print("i/j/len(fp_content_gpu_inits): ", str(i), "/", str(j), "/", str(len(fp_content_gpu_inits[j])))
+                
+            for k in fp_content_gpu_inits[j].split('\n'):            
+                if DEBUG:
+                    print("line k: , search pattern: ", k[0:80], ", ", str(gpu_found_delimiter))
+                
+                if re.search(gpu_found_delimiter, k):
+                    if DEBUG:
+                        print("ok. match...")
+                    try:
+                        k0=k.strip().split()[-1]
+                    except Exception as msg:
+                        print("exception msg: ", msg)
+                        print("Invalid line, bypassing (1): ")
+                        break
+                    print("k0: ", k0)
+                    if not re.search("[0-9]", str(k0)): 
+                        if DEBUG:
+                            print("Invalid line, bypassing (2): ")
+                        break
+                    if DEBUG:
+                        print("Found gpu: ", k)
+                        
+                    k1 = re.sub(":", ".", k.strip().split()[-1])
+                    if DEBUG:
+                        print("k1: ", k1)
+                    k2 = re.sub(":", ".", k1)
+                    if DEBUG:
+                        print("k2: ", k2)
+                    valid_line = 1
+                    break
+                else:
+                    if DEBUG:
+                        print("Invalid line(2)")
+               
+                
+            if valid_line:
+                print("1. Writing to file... ")
+                fpw1=open(subdir + dir_delim + dir_delim + fileName + ".gim-init-" + str(i) + ".gpu" + str(j) + "." + str(k2) + ".log", "w")
+                fpw1.write(fp_content_gpu_inits[j])
+                fpw1.close()
+            else:
+                if DEBUG:
+                    print("Invalid device address found: ", k2)
+            
     else:
     
         # Construct gpu inventory bdf list, to be stored in gpu_list_all.
