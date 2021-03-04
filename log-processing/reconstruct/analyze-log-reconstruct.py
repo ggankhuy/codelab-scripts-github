@@ -41,6 +41,7 @@ import re
 import time
 import os
 import subprocess
+import sys
 from datetime import datetime
 
 from fuzzywuzzy import fuzz
@@ -48,6 +49,7 @@ from fuzzywuzzy import fuzz
 FILE_NAME_MATCH_STRING="match-string.txt"
 FILE_NAME_TEST_STRING="test-string.txt"
 FILE_NAME_TEST_STRING="test-string-3.txt"
+FILE_NAME_TARGET=None
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
 THRESHOLD_MIN_TOKEN_SET_RATIO=70
@@ -70,6 +72,47 @@ except Exception as msg:
     print(msg)
     quit(1)
 
+for i in sys.argv:
+    print("Processing ", i)
+    try:
+
+        if re.search("init=", str(i)):
+            if i.split('=')[1] == "libgv":
+                print("Libgv selected.")
+                CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_LIBGV_INIT
+            elif i.split("=")[1] == "gim":
+                print("gim selected.")
+                CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_GIM_INIT
+            elif i.split("=")[1] == "both":
+                CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_BOTH_INIT
+            else:
+                print("Invalid init option, choose either 'gim' or 'libgv':", i)
+                exit(1)
+                
+        if re.search("file=", str(i)):
+            fileName=i.split('=')[1]
+            print("Found filename to be opened: ", fileName)
+            FILE_NAME_TARGET=fileName
+                            
+        if re.search("ooo", str(i)):
+            if (i.split('=')[1] == "yes"):
+                print("Out of order log bisect is specified.")
+                CONFIG_BISECT_OOO=1
+            else:
+                print("Out of order log bisect is specified, but it is not yes.")
+
+    except Exception as msg:
+        print(msg)
+        print("  EXCEPTION: No argument provided")
+        print("  EXCEPTION: Assuming init type is libgv...")
+        CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_LIBGV_INIT
+
+if FILE_NAME_TARGET: 
+    print("Target file: ", FILE_NAME_TARGET)
+else:
+    print("Target file is not specified.", )
+    quit(1)
+    
 TEST_MODE=0
 lastLineGimInit=0
 cursorTestFile=0
