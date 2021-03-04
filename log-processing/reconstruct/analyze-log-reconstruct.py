@@ -41,6 +41,8 @@ import re
 import time
 import os
 import subprocess
+from datetime import datetime
+
 from fuzzywuzzy import fuzz
 
 FILE_NAME_MATCH_STRING="match-string.txt"
@@ -51,15 +53,14 @@ DEBUG = 0
 THRESHOLD_MIN_TOKEN_SET_RATIO=70
 cmds=[]
 
-dateString=str(os.popen('date +%Y%m%d-%H-%M-%S').read()).strip()
-
+# fails from cygwin.
+#dateString=str(os.popen('date +%Y%m%d-%H-%M-%S').read()).strip() 
+now = datetime.now()
+dateString=now.strftime("%d%m%Y-%H-%M-%S")
 print("date string: ", dateString)
-ret=os.popen('mkdir ' + dateString).read()
-ret=os.popen('mkdir ' + dateString + "/bcompare").read()
-if ret:
-    print("ret: ", ret)
-    print("Error: rare instances where directory does exist!")
-    quit(1)
+#ret=os.popen('mkdir ' + dateString).read()
+os.mkdir(dateString)
+os.mkdir(dateString + "/bcompare")
 
 try:
     matchStringBlock=open(FILE_NAME_MATCH_STRING)
