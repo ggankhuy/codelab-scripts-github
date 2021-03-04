@@ -52,7 +52,7 @@ FILE_NAME_TEST_STRING="test-string-3.txt"
 FILE_NAME_TARGET=None
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
-THRESHOLD_MIN_TOKEN_SET_RATIO=70
+THRESHOLD_MIN_TOKEN_SET_RATIO=65
 cmds=[]
 
 # fails from cygwin.
@@ -88,6 +88,14 @@ for i in sys.argv:
             else:
                 print("Invalid init option, choose either 'gim' or 'libgv':", i)
                 exit(1)
+
+        if re.search("threshold=", str(i)):
+            print("String match accuracy threshold specified: ")
+            try:
+                THRESHOLD_MIN_TOKEN_SET_RATIO=int(i.split('=')[1])
+            except Exception as msg:
+                printf("Error: threshold needs to be 0-100: ", THRESHOLD_MIN_TOKEN_SET_RATIO)
+                quit(1)
                 
         if re.search("file=", str(i)):
             fileName=i.split('=')[1]
@@ -114,6 +122,7 @@ else:
     quit(1)
     
 TEST_MODE=0
+CONFIG_EXCLUSE_GIM_INIT=1
 lastLineGimInit=0
 cursorTestFile=0
 counter=0
@@ -122,14 +131,17 @@ cursorTestFile=len(testStringBlockContent)
 print("No. of lines read from testFile: ", cursorTestFile)
 testStringBlockContentProcessed=None
 
-for i in reversed(testStringBlockContent):
-    if re.search("AMD GIM is Running", i):
-        print("Last line gim is finished initialized last time in this log: Line No.: ", str(cursorTestFile), str(i))
-        lastLineGimInit = cursorTestFile
-        break
-    cursorTestFile -= 1
-    
-testStringBlockContentProcessed=testStringBlockContent[cursorTestFile:]
+if not CONFIG_EXCLUSE_GIM_INIT:
+    for i in reversed(testStringBlockContent):
+        if re.search("AMD GIM is Running", i):
+            print("Last line gim is finished initialized last time in this log: Line No.: ", str(cursorTestFile), str(i))
+            lastLineGimInit = cursorTestFile
+            break
+        cursorTestFile -= 1
+        
+    testStringBlockContentProcessed=testStringBlockContent[cursorTestFile:]
+else:
+    testStringBlockContentProcessed=testStringBlockContent
 
 counter = 0
 print("Printing first few lines of truncated string block:")
@@ -140,12 +152,6 @@ for i in testStringBlockContentProcessed:
         break
 
 # Construct dictionary.
-
-'''
-DEBUG: gpuvsmi_set_num_vf_enabled
-[amdgv_gpumon_handle_sched_event:1488] process GPUMON event GPUMON_SET_VF_NUM (type:26)
-[amdgv_vfmgr_set_vf_num:707] Set enabled VF number to 1
-'''
 
 print("Constructing dictionary for match string blocks.")
 dictmatchStringBlock={}
@@ -241,6 +247,8 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
     for i in currTestBlockFirstLine:
         print(i)
 
+    currMax=0
+    currCmd=""
     for i in list(dictmatchStringBlock.keys()):
         currValue=dictmatchStringBlock[i]
 
@@ -276,29 +284,34 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
         token_set_ratio=fuzz.token_set_ratio(match_string_concat, test_string_concat)
         print("match percent (token_set_ratio): ", str(token_set_ratio))
-
-        # If match is above threshold, then move cursor forward in test string same number of lines as current match string block.
-        # and break out of inner loop. 
-        # (Break out of inner loop could be problematic in situation if two entries in match string blocks are very similar)
-        # Consider adding feature to iterate through every entry in the dictionary, gather match ratio for each on current window
-        # and pick maximum.
-
+        
+        # If match is above threshold, then move cursor forward in test string same number of lines as current match string block
+        # because there is guaranteed to be at least one match. But keep in the loop and and continue updating maximum match.
+        # At the end of the loop, maximum match will be assigned to corresponding currCmd command.
+        
         if token_set_ratio > THRESHOLD_MIN_TOKEN_SET_RATIO:
-            print("Match!")
-            cmds.append(i)
+            print("Match! : ", str(token_set_ratio))
             match_found=1
+            
+            if token_set_ratio > currMax:
+                currCmd=i
+                
+            print("Current max / command updated to: ", str(currMax), ", ", str(currCmd))
+            time.sleep(1)
             LinesToSkip=len(currTestBlock)
 
-            fpMatchSet.write("cmd: " + str(i) + '\n')
-            for k in currValue:
-                fpMatchSet.write(k + '\n')
-            for k in currTestBlock:
-                fpTestSet.write(k)
-            break
-
-    # If match found is none. Add ? along with cursor Number to its cmds list.  
-
-    if not match_found:
+    if match_found:
+        print("cmd is: ", str(currCmd))
+        cmds.append(currCmd)     
+        time.sleep(2)
+        fpMatchSet.write("------------------\ncmd: " + str(i) + '\n')
+        fpTestSet.write("------------------\ncmd: " + str(i) + '\n')
+        
+        for k in currValue:
+            fpMatchSet.write(k + '\n')
+        for k in currTestBlock:
+            fpTestSet.write(k)
+    else:    
         print("Match is not found for line[LineNo:]: ", "[", str(cursorTestString), "]", str(test_string_concat[0:80]))
         cmds.append("? : LineNo: " + str(lastLineGimInit + cursorTestString))
         LinesToSkip=0
