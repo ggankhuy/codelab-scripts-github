@@ -69,3 +69,58 @@ DEBUG: gpuvsmi_gpu_reset
 [143895.854875] gim info libgv: [25:0:0][vega10_ih_iv_ring_hw_init:445] writeback_addr=0xf400002000
 [143895.855034] gim info libgv: [25:0:0][vega10_reset_whole_gpu_reset:914] complete whole gpu reset
 [143895.855035] gim info libgv: [25:0:0][handle_event_in_non_full_access:1540] finish VF0 reset.
+DEBUG: "qemu: virsh start <VM_NAME>"
+audit: type=1400 audit(1614887301.756:155): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51432 comm="apparmor_parser"
+audit: type=1400 audit(1614887301.916:156): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51437 comm="apparmor_parser"
+audit: type=1400 audit(1614887302.076:157): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51440 comm="apparmor_parser"
+audit: type=1400 audit(1614887302.236:158): apparmor="STATUS" operation="profile_replace" info="same as current pro                       file, skipping" profile="unconfined" name="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51443 comm="apparmor_parser"
+virbr0: port 2(vnet0) entered blocking state
+virbr0: port 2(vnet0) entered disabled state
+device vnet0 entered promiscuous mode
+virbr0: port 2(vnet0) entered blocking state
+virbr0: port 2(vnet0) entered listening state
+audit: type=1400 audit(1614887302.404:159): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51463 comm="apparmor_parser"
+[38687.182786] vfio-pci 0000:c8:02.0: enabling device (0000 -> 0002)
+DEBUG: "qemu: virsh shutdown <VM_NAME>"
+[38948.858620] virbr0: port 2(vnet0) entered disabled state
+[38948.859986] device vnet0 left promiscuous mode
+[38948.859990] virbr0: port 2(vnet0) entered disabled state
+[38949.492435] audit: type=1400 audit(1614887565.795:166): apparmor="STATUS" operation="profile_remove" profile="unconfined" name="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51806 comm="apparmor_parser"
+DEBUG: "modprobe amdgpu guest VM"
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:192] VF_PF_MSGBUF_VALID received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:205] Received Event: VF0, event = 0x1
+gim info libgv: [c8:0:0][amdgv_sched_event_queue_push_ex:196] queue event REQ_GPU_INIT(0xef00) for VF0 of block(0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_process_event:1637] process event REQ_GPU_INIT (0xef00) for VF0 of block (0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_enter_full_access:843] start proccessing full access.
+gim info libgv: [c8:0:0][psp_v3_1_set_mb_int:1685] psp mailbox enabled for VF0
+gim info libgv: [c8:0:0][vega10_gpuiov_set_mmsch_vfgate:616] mmsch mb ints enabled schedid = 1
+gim info libgv: [c8:0:0][vega10_gpuiov_set_mmsch_vfgate:616] mmsch mb ints enabled schedid = 2
+gim info libgv: [c8:0:0][amdgv_vfmgr_update_pf2vf_message:942] One vf mode is ON
+gim info libgv: [c8:0:0][amdgv_vfmgr_update_pf2vf_message:973] PF2VF message succeed with feature flags(0x11).
+gim info libgv: [c8:0:0][amdgv_sched_enter_full_access:942] VF0 entered full access mode.
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:254] PF_VF_MSGBUF_ACK received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:192] VF_PF_MSGBUF_VALID received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:205] Received Event: VF0, event = 0x2
+gim info libgv: [c8:0:0][amdgv_sched_event_queue_push_ex:196] queue event REL_GPU_INIT(0xef01) for VF0 of block(0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_process_event:1637] process event REL_GPU_INIT (0xef01) for VF0 of block (0xf0)
+gim info libgv: [c8:0:0][vega10_gpuiov_set_mmsch_vfgate:616] mmsch mb ints disabled schedid = 1
+gim info libgv: [c8:0:0][vega10_gpuiov_set_mmsch_vfgate:616] mmsch mb ints disabled schedid = 2
+gim info libgv: [c8:0:0][psp_v3_1_set_mb_int:1685] psp mailbox disabled for VF0
+gim info libgv: [c8:0:0][amdgv_sched_exit_full_access:1039] VF0 exited full access.
+gim info libgv: [c8:0:0][amdgv_vfmgr_retrieve_vf2pf_message:1034] Guest Driver Message Header, Version=3, Size=1024
+gim info libgv: [c8:0:0][amdgv_vfmgr_retrieve_vf2pf_message:1035] Guest Driver Version=5.4.10
+DEBUG: "modprobe -r amdgpu guest VM"
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:192] VF_PF_MSGBUF_VALID received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:205] Received Event: VF0, event = 0x3
+gim info libgv: [c8:0:0][amdgv_sched_event_queue_push_ex:196] queue event REQ_GPU_FINI(0xef02) for VF0 of block(0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_process_event:1637] process event REQ_GPU_FINI (0xef02) for VF0 of block (0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_enter_full_access:843] start proccessing full access.
+gim info libgv: [c8:0:0][psp_v3_1_set_mb_int:1685] psp mailbox enabled for VF0
+gim info libgv: [c8:0:0][amdgv_sched_enter_full_access:942] VF0 entered full access mode.
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:254] PF_VF_MSGBUF_ACK received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:192] VF_PF_MSGBUF_VALID received
+gim info libgv: [c8:0:0][amdgv_ih_iv_ring_entry_process:205] Received Event: VF0, event = 0x4
+gim info libgv: [c8:0:0][amdgv_sched_event_queue_push_ex:196] queue event REL_GPU_FINI(0xef03) for VF0 of block(0xf0)
+gim info libgv: [c8:0:0][amdgv_sched_process_event:1637] process event REL_GPU_FINI (0xef03) for VF0 of block (0xf0)
+gim info libgv: [c8:0:0][psp_v3_1_set_mb_int:1685] psp mailbox disabled for VF0
+gim info libgv: [c8:0:0][amdgv_sched_exit_full_access:1039] VF0 exited full access.
