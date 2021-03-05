@@ -52,7 +52,7 @@ FILE_NAME_TEST_STRING="test-string-3.txt"
 FILE_NAME_TARGET=None
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
-THRESHOLD_MIN_TOKEN_SET_RATIO=65
+THRESHOLD_MIN_TOKEN_SET_RATIO=80
 cmds=[]
 
 # fails from cygwin.
@@ -295,21 +295,21 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
             
             if token_set_ratio > currMax:
                 currCmd=i
-                
-            print("Current max / command updated to: ", str(currMax), ", ", str(currCmd))
-            time.sleep(1)
-            LinesToSkip=len(currTestBlock)
-
+                currMax = token_set_ratio
+                currMatchValue = currValue
+                currMatchTestBlock = currTestBlock
+                print("Current max / command updated to: ", str(currMax), ", ", str(currCmd))
+                LinesToSkip=len(currTestBlock)
+            
     if match_found:
         print("cmd is: ", str(currCmd))
         cmds.append(currCmd)     
-        time.sleep(2)
-        fpMatchSet.write("------------------\ncmd: " + str(i) + '\n')
-        fpTestSet.write("------------------\ncmd: " + str(i) + '\n')
+        fpMatchSet.write("------------------\ncmd: " + str(currCmd) + '\n')
+        fpTestSet.write("------------------\ncmd: " + str(currCmd) + '\n')
         
-        for k in currValue:
+        for k in currMatchValue:
             fpMatchSet.write(k + '\n')
-        for k in currTestBlock:
+        for k in currMatchTestBlock:
             fpTestSet.write(k)
     else:    
         print("Match is not found for line[LineNo:]: ", "[", str(cursorTestString), "]", str(test_string_concat[0:80]))
@@ -318,8 +318,6 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
         fpMatchSet.write("!!!! " + str(currTestBlockFirstLine[0]))
         fpTestSet.write(str(currTestBlockFirstLine[0]))
-
-#    time.sleep(1)
 
 fileNameSummary=dateString + "/summary.log"
 fileNameDebugLog=dateString + "/debug.log"
