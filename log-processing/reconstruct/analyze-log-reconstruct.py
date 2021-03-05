@@ -47,12 +47,10 @@ from datetime import datetime
 from fuzzywuzzy import fuzz
 
 FILE_NAME_MATCH_STRING="match-string.txt"
-FILE_NAME_TEST_STRING="test-string.txt"
-FILE_NAME_TEST_STRING="test-string-3.txt"
 FILE_NAME_TARGET=None
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
-THRESHOLD_MIN_TOKEN_SET_RATIO=80
+THRESHOLD_MIN_TOKEN_SET_RATIO=75
 cmds=[]
 
 # fails from cygwin.
@@ -63,14 +61,6 @@ print("date string: ", dateString)
 #ret=os.popen('mkdir ' + dateString).read()
 os.mkdir(dateString)
 os.mkdir(dateString + "/bcompare")
-
-try:
-    matchStringBlock=open(FILE_NAME_MATCH_STRING)
-    testString=open(FILE_NAME_TEST_STRING)
-except Exception as msg:
-    print("Failure opening file...")
-    print(msg)
-    quit(1)
 
 for i in sys.argv:
     print("Processing ", i)
@@ -120,6 +110,15 @@ if FILE_NAME_TARGET:
 else:
     print("Target file is not specified.", )
     quit(1)
+    
+try:
+    matchStringBlock=open(FILE_NAME_MATCH_STRING)
+    testString=open(FILE_NAME_TARGET)
+except Exception as msg:
+    print("Failure opening file...")
+    print(msg)
+    quit(1)
+    
     
 TEST_MODE=0
 CONFIG_EXCLUSE_GIM_INIT=1
