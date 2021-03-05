@@ -70,16 +70,11 @@ DEBUG: gpuvsmi_gpu_reset
 [143895.855034] gim info libgv: [25:0:0][vega10_reset_whole_gpu_reset:914] complete whole gpu reset
 [143895.855035] gim info libgv: [25:0:0][handle_event_in_non_full_access:1540] finish VF0 reset.
 DEBUG: "qemu: virsh start <VM_NAME>"
-audit: type=1400 audit(1614887301.756:155): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51432 comm="apparmor_parser"
-audit: type=1400 audit(1614887301.916:156): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51437 comm="apparmor_parser"
-audit: type=1400 audit(1614887302.076:157): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51440 comm="apparmor_parser"
-audit: type=1400 audit(1614887302.236:158): apparmor="STATUS" operation="profile_replace" info="same as current pro                       file, skipping" profile="unconfined" name="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51443 comm="apparmor_parser"
 virbr0: port 2(vnet0) entered blocking state
 virbr0: port 2(vnet0) entered disabled state
 device vnet0 entered promiscuous mode
 virbr0: port 2(vnet0) entered blocking state
 virbr0: port 2(vnet0) entered listening state
-audit: type=1400 audit(1614887302.404:159): apparmor="STATUS" operation="profile_replace" profile="unconfined" name                       ="libvirt-9b180039-fedf-457c-8612-81ab179f72eb" pid=51463 comm="apparmor_parser"
 [38687.182786] vfio-pci 0000:c8:02.0: enabling device (0000 -> 0002)
 DEBUG: "qemu: virsh shutdown <VM_NAME>"
 [38948.858620] virbr0: port 2(vnet0) entered disabled state
@@ -218,15 +213,21 @@ gim info:(setup_sriov_gfx_dpm_policy:1216) activate virtualization GFX DPM polic
 gim info:(gim_probe:103) AMD GIM probe: pfCount = 1
 gim info:(SetNewAdapter:1431) *****
 DEBUG: "libgv initialization header"
-GPU IOV MODULE - version 2.2.1
-gim info:(gim_init:627) Copyright (c) 2014-2019 Advanced Micro Devices, Inc.
-gim info:(gim_conf_save:422) configurations:
-gim info:(gim_conf_init:514) INIT CONFIG
-gim info libgv: [amdgv_init_ex:170] warn: no implementation for interface: get_random_bytes
-gim info libgv: [amdgv_init_ex:170] warn: no implementation for interface: copy_from_user
-gim info libgv: [amdgv_init_ex:170] warn: no implementation for interface: copy_to_user
-gim info libgv: [amdgv_init_ex:185] module loaded - libgv 2.1.2
-gim info:(gim_probe:415) 
+[  805.029232] gim info:(gim_init:622) Start AMD open source GIM initialization
+[  805.029233] gim info:(gim_init:625) GPU IOV MODULE - version G.2.0.1
+[  805.029234] gim info:(gim_init:627) Copyright (c) 2014-2019 Advanced Micro Devices, Inc.
+[  805.029247] gim info:(gim_conf_save:422) configurations:
+               vf_num=1
+               fw_load_type=1
+               perf_mode=2
+               log_level=2
+               guard=1
+               sch_policy=0
+               fullaccess_timeout=3000
+               perf_mon_enable=0
+               skip_check_bgpu=0
+[  805.029248] gim info:(gim_conf_init:514) INIT CONFIG
+[  805.029250] gim info libgv: [amdgv_init_ex:185] module loaded - libgv 2.0.1
 DEBUG: "libgv initilaization: GPU initialization: "
 gim info libgv: [c7:0:0][amdgv_parse_config_opt:486] 1 VF will be enabled.
 gim info libgv: [c7:0:0][amdgv_device_func_sw_init:580] start sw_init of navi12_vbios_func
