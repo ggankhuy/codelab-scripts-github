@@ -70,11 +70,15 @@ DEBUG: gpuvsmi_gpu_reset
 [143895.855034] gim info libgv: [25:0:0][vega10_reset_whole_gpu_reset:914] complete whole gpu reset
 [143895.855035] gim info libgv: [25:0:0][handle_event_in_non_full_access:1540] finish VF0 reset.
 DEBUG: "qemu: virsh start <VM_NAME>"
-virbr0: port 2(vnet0) entered blocking state
-virbr0: port 2(vnet0) entered disabled state
-device vnet0 entered promiscuous mode
-virbr0: port 2(vnet0) entered blocking state
-virbr0: port 2(vnet0) entered listening state
+[36453.220105] virbr0: port 2(vnet0) entered blocking state
+[36453.220108] virbr0: port 2(vnet0) entered disabled state
+[36453.220254] device vnet0 entered promiscuous mode
+[36453.220574] virbr0: port 2(vnet0) entered blocking state
+[36453.220575] virbr0: port 2(vnet0) entered listening state
+[36454.454522] vfio-pci 0000:c8:02.0: enabling device (0000 -> 0002)
+[36455.243684] virbr0: port 2(vnet0) entered learning state
+[36457.259684] virbr0: port 2(vnet0) entered forwarding state
+[36457.259695] virbr0: topology change detected, propagating
 [38687.182786] vfio-pci 0000:c8:02.0: enabling device (0000 -> 0002)
 DEBUG: "qemu: virsh shutdown <VM_NAME>"
 [38948.858620] virbr0: port 2(vnet0) entered disabled state
@@ -400,3 +404,6 @@ gim info:(gim_init_thread_func:364) AMD GIM probed GPU(0) 0000:c7:00.0
 gim info:(gim_probe:415) 
 DEBUG: "Libgv finish initialization"
 gim info:(gim_init:670) AMD GIM is Running
+DEBUG: "gpuvsmi_reset_vf"
+gim info libgv: [46:0:0][amdgv_sched_event_queue_push_ex:196] queue event SCHED_FORCE_RESET_VF(0xff01) for VF0 of block(0xf0)
+gim info libgv: [46:0:0][amdgv_sched_process_event:1637] process event SCHED_FORCE_RESET_VF (0xff01) for VF0 of block (0xf0)
