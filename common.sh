@@ -12,7 +12,7 @@ GAME_CHASE=6
 GAME_MIYAGI=7
 GAME_GEORGETOWN=8
 GAME_HELLO_GGP_STANDALONE=9
-
+GAME_VK_EXAMPLE=10
 DATE=`date +%Y%m%d-%H-%M-%S`
 
 OPTION_EXTERNAL_IP=1
@@ -76,8 +76,8 @@ export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190413.tar.gz
 
 if [[ $OPTION_GGP_INSTALL_USE_DEB -eq 1 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190829.deb
-    export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
-    export GGP_BUNDLE_VERSION=ggp-eng-bundle_20200910.1.0.deb
+#    export GGP_BUNDLE_VERSION=ggp-eng-bundle-20200325.deb
+#    export GGP_BUNDLE_VERSION=ggp-eng-bundle_20200910.1.0.deb
 elif [[ $OPTION_GGP_INSTALL_USE_DEB -eq 0 ]] ; then
     export GGP_BUNDLE_VERSION=ggp-eng-bundle-20190518.tar.gz
 else
