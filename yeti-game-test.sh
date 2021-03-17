@@ -413,9 +413,12 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
     elif [[ $game -eq $GAME_VK_EXAMPLE ]] ; then
-        echo "vk examples specific steps.../None at this time/."
+        echo "vk examples specific steps.../None at this time/."	
+        #./TestExecutor --offscreen --disable-extension-secure-strings # for ubuntu only.
+        ./TestExecutor --offscreen 
     else
         echo "Unsupport nonstreaming game: $game"
+
     fi
     
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
