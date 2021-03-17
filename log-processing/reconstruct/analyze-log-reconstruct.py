@@ -253,8 +253,8 @@ for cursorTestString in range(0, len(testStringBlockContentProcessed)):
 
         # Print information.
 
-        print("curr dict key:currValue/len:")
-        print(i)
+        print("curr dict key:currValue/len(value):")
+        print(i, "/", len(currValue))
 
         if DEBUG:
             for j in currValue[0:3]:
