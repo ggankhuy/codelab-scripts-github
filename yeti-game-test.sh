@@ -127,8 +127,8 @@ if [[ $p1 == "setup" ]] ; then
 fi
 
 game=""
-GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" "helloggp") 
-GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE $GAME_HELLO_GGP_STANDALONE )
+GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" "helloggp" "vkexample") 
+GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE $GAME_HELLO_GGP_STANDALONE $GAME_VK_EXAMPLE )
 
 for (( i=0 ; i < ${#GAME_NAMES_P1[@]} ; i++ )) ; do
     if [[ $p1 == ${GAME_NAMES_P1[$i]} ]] ; then
@@ -282,6 +282,13 @@ elif [[ $game -eq $GAME_HELLO_GGP_STANDALONE ]] ; then
     GAME_EXECUTABLE=hello_ggp_standalone
     GAME_FOLDER="./"
     GAME_NAME=$GAME_HELLO_GGP_STANDALONE
+elif [[ $game -eq $GAME_VK_EXAMPLE ]] ; then
+    echo "GAME: CHASE" ; sleep $SLEEP_TIME
+    SOURCE_FOLDER=vk_examples
+    DESTINATION_FOLDER=vk_examples
+    GAME_EXECUTABLE=TestExecutor
+    GAME_FOLDER="./"
+    GAME_NAME=$GAME_VK_EXAMPLE
 else
     echo "Unsupported game: $game" ; exit 1
 fi
@@ -405,8 +412,13 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
             GAME_PARAM="--asset_root=/srv/game/conga -i /srv/game/conga/example_settings/demo_loop.json --output /log/conga/conga.$DATE.log" 
             ./benchmark --asset_root=/srv/game/assets -i /srv/game/assets/example_settings/demo_loop.json
         done
+    elif [[ $game -eq $GAME_VK_EXAMPLE ]] ; then
+        echo "vk examples specific steps.../None at this time/."	
+        #./TestExecutor --offscreen --disable-extension-secure-strings # for ubuntu only.
+        cd test_executor ; modprobe amdgpu; ./TestExecutor --offscreen 
     else
         echo "Unsupport nonstreaming game: $game"
+
     fi
     
 elif [[ $option -eq $OPTION_STREAM_2PC ]] ; then
