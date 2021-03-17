@@ -284,8 +284,8 @@ elif [[ $game -eq $GAME_HELLO_GGP_STANDALONE ]] ; then
     GAME_NAME=$GAME_HELLO_GGP_STANDALONE
 elif [[ $game -eq $GAME_VK_EXAMPLE ]] ; then
     echo "GAME: CHASE" ; sleep $SLEEP_TIME
-    SOURCE_FOLDER=TestExecutor
-    DESTINATION_FOLDER=TestExecutor
+    SOURCE_FOLDER=vk_examples
+    DESTINATION_FOLDER=vk_examples
     GAME_EXECUTABLE=TestExecutor
     GAME_FOLDER="./"
     GAME_NAME=$GAME_VK_EXAMPLE
@@ -415,7 +415,7 @@ if [[ $option -eq $OPTION_NOSTREAM ]] ; then
     elif [[ $game -eq $GAME_VK_EXAMPLE ]] ; then
         echo "vk examples specific steps.../None at this time/."	
         #./TestExecutor --offscreen --disable-extension-secure-strings # for ubuntu only.
-        ./TestExecutor --offscreen 
+        cd test_executor ; modprobe amdgpu; ./TestExecutor --offscreen 
     else
         echo "Unsupport nonstreaming game: $game"
 
