@@ -127,7 +127,7 @@ if [[ $p1 == "setup" ]] ; then
 fi
 
 game=""
-GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" "helloggp" "vkexample") 
+GAME_NAMES_P1=( "3dmark" "doom" "tr2" "quail" "conga" "odin" "chase" "helloggp" "vk_examples") 
 GAME_CODE=( $GAME_3DMARK $GAME_DOOM $GAME_TR2 $GAME_QUAIL $GAME_CONGA $GAME_ODIN $GAME_CHASE $GAME_HELLO_GGP_STANDALONE $GAME_VK_EXAMPLE )
 
 for (( i=0 ; i < ${#GAME_NAMES_P1[@]} ; i++ )) ; do
