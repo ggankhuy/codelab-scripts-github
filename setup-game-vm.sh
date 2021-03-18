@@ -100,8 +100,33 @@ CONFIG_USE_STATIC_IP=0
 DEBUG=1
 VM_IPS=()
 VM_NAMES=()
-p2=$2
-p1=$1
+#p2=$2
+#p1=$1
+
+if [[ $1 -eq "--help" ]] ; then
+    clear
+    echo "Usage: "
+    echo "$p0 host=<HOST_IP> - host IP on which to setup the launch game script."
+    echo "$p0 vats2=1 - set to 1 to support vats2 setup, otherwise support vats implicitly."
+    echo "$p0 extint=1 - set to 1 to support adding external net interface to each VM."
+fi
+for var in "$@"
+do
+    if [[ ! -z `echo "$var" | grep "host="` ]]  ; then
+        echo "host: $var"
+        p1=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "vats2="` ]]  ; then
+        echo "vats2 support: $var"
+        CONFIG_VATS2_SUPPORT=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "extint="` ]]  ; then
+        echo "add external interface: $var"
+        CONFIG_ADD_EXT_INTERFACE=`echo $var | cut -d '=' -f2`
+    fi
+done
 
 if [[ $p1 == "ixt39" ]] ; then
     CONFIG_HOST_IP=$CONFIG_IXT39_HOST_IP
