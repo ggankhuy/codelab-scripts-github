@@ -1,0 +1,259 @@
+DEBUG: amdgim_do_getvf
+gim info:(amdgim_do_getvf:1456) Set VF 0, BDF=25:02.0, fb_base=16,fb_size=4096,quota=3ms
+getvf:
+ PF:
+valid=1,
+mode = 1,
+fb_offset = 0,
+fb_size = 0,
+gfx_time_divider=0,
+gfx_time_quota = 21
+getvf:
+VF1:
+valid=1,
+mode = 1,
+fb_offset = 16,
+fb_size = 4096,
+gfx_time_divider=8,
+gfx_time_quota = 3
+
+DEBUG: relvf:
+
+gim info:(amdgim_do_relvf:1649) relvf triggering GPU 0000:25:00 hot reset...
+GPU 01: temperature is 29.00 C
+gim info:(gim_sched_reset_gpu:3714) Notify reset to active VFs
+gim info:(gim_sched_reset_gpu:3718) Trigger whole GPU reset to recover
+gim info:(gim_whole_gpu_reset:278) Whole GPU reset start...
+gim info:(save_msix_regs:107) table_size = 1 table_bir = 0x5 pba_bir = 0x5 table_offset = 0x10800 pba_offset = 0x10c00
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block1 done
+gim info:(get_active_function_id:304) block 1 active function id on pcicfg = 0x0
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block2 done
+gim info:(get_active_function_id:304) block 2 active function id on pcicfg = 0x0
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x89
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x88
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x0
+gim info:(ih_iv_ring_disable:462) disable iv ring successfully
+gim info:(gim_mode2_reset:175) mode 2 reset success
+gim info:(Vega10_EnterBACOState:336) Entering BACO...
+gim info:(Vega10_EnterBACOState:354) Entering BACO Done
+gim info:(Vega10_ExitBACOState:376) Exiting BACO...
+gim info:(Vega10_ExitBACOState:385) Exiting BACO Done
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(ATOM_CheckAsicStatus:485) ATOM_CheckAsicStatus - BIOS_SCRATCH_7 = 0x00000000
+gim info:(ATOM_CheckAsicStatus:487)   Isolate ATOM_ASIC_INIT_COMPLETE bit(s) = 0x00000000
+gim info:(ATOM_CheckAsicStatus:490)   RLC_CNTL = 0x00000000
+gim info:(ATOM_CheckAsicStatus:492)   Isolate RLC_CNTL__RLC_ENABLE_F32_MASK = 0x00000000
+gim info:(ATOM_CheckAsicStatus:500)  ATOM_ASIC_NEED_POST
+gim info:(gim_post_VBIOS:615) ASIC has not yet been posted. Init ASIC
+gim info:(ATOM_PostVBIOS:399) Do a asic init
+gim info:(ParseTable:1221) GPU 0000:25:4a0:0 ParseTable done, cost 1038 msec
+gim info:(gim_post_VBIOS:631) Post VBIOS successfully
+gim info:(ATOM_PostVBIOS:404) just load uCode
+gim info:(ParseTable:1221) GPU 0000:25:4a0:0 ParseTable done, cost 1682 msec
+gim info:(gim_post_VBIOS:631) Post VBIOS successfully
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(pci_gpu_iov_init:122) Total FB size @pos = 0x428 is 8176 MB
+gim info:(init_context_save_area:48) base =0x8144 size=1
+gim info:(init_fb_static:166) init_fb_static: per VF FB size = 8128MB
+gim info:(init_fb_static:175) init_fb_static: partition 0 base = 16MB, size= 8112MB
+gim info:(restore_msix_regs:161) table_bir = 0x5 pba_bir = 0x5 table_offset = 0x10800 pba_offset = 0x10c00
+gim info:(init_vf:2371) INIT_GPU to ADP1 PF0:0
+gim info:(set_active_functions:292) write block 0 pci_offset 0x4e0 active functions = 0x0
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(set_virtualization_mode:1234) Set Virtualization Mode to 0
+gim info:(setup_sriov_gfx_dpm_policy:1188) set virtualization GFX DPM policy success
+gim info:(setup_sriov_gfx_dpm_policy:1209) activate virtualization GFX DPM policy success
+gim info:(ih_iv_ring_disable:462) disable iv ring successfully
+gim info:(alloc_iv_ring:122) ADP1: ih->ivRingNumEntries = 128
+gim info:(alloc_iv_ring:125) ADP1: ih->ivRingSizeInBytes = 4096
+gim info:(ih_iv_ring_init:387) ADP1: ih->rptrDoorbell = 0000000009f084d4
+gim info:(ih_iv_ring_init:388) ADP1: ih->rptrDoorbellOffset = 0x1e8
+gim info:(ih_iv_ring_setupRPTR:490) write mmnbif_gpu_RCC_DOORBELL_APER_EN: 0x1
+gim info:(ih_iv_ring_init:399) init iv ring successfully
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block1 done
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block2 done
+gim info:(gim_whole_gpu_reset:439) PF FLR done...
+gim info:(gim_sched_reset_gpu:3726) Notify reset completion to active VFs
+gim info:(amdgim_do_relvf:1652) relvf triggered GPU 0000:25:00 hot reset success.
+
+getvf:
+ PF:
+valid=0,
+mode = 1,
+fb_offset = 0,
+fb_size = 0,
+gfx_time_divider=0,
+gfx_time_quota = 0
+getvf:
+VF1:
+valid=0,
+mode = 0,
+fb_offset = 0,
+fb_size = 0,
+gfx_time_divider=0,
+ gfx_time_quota = 500
+
+DEBUG: hot_reset
+
+gim info:(amdgim_op_hot_reset:1836) User start triggering GPU 0000:25:00 hot reset...
+GPU 01: temperature is 29.00 C
+gim info:(gim_sched_reset_gpu:3714) Notify reset to active VFs
+gim info:(gim_sched_reset_gpu:3718) Trigger whole GPU reset to recover
+gim info:(gim_whole_gpu_reset:278) Whole GPU reset start...
+gim info:(save_msix_regs:107) table_size = 1 table_bir = 0x5 pba_bir = 0x5 table_offset = 0x10800 pba_offset 
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block1 done
+gim info:(get_active_function_id:304) block 1 active function id on pcicfg = 0x0
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block2 done
+gim info:(get_active_function_id:304) block 2 active function id on pcicfg = 0x0
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x89
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x88
+gim info:(ih_irq_source_disable:654) disabled irq sourceID 0x0
+gim info:(ih_iv_ring_disable:462) disable iv ring successfully
+gim info:(gim_mode2_reset:175) mode 2 reset success
+gim info:(Vega10_EnterBACOState:336) Entering BACO...
+gim info:(Vega10_EnterBACOState:354) Entering BACO Done
+gim info:(Vega10_ExitBACOState:376) Exiting BACO...
+gim info:(Vega10_ExitBACOState:385) Exiting BACO Done
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(ATOM_CheckAsicStatus:485) ATOM_CheckAsicStatus - BIOS_SCRATCH_7 = 0x00000000
+gim info:(ATOM_CheckAsicStatus:487)   Isolate ATOM_ASIC_INIT_COMPLETE bit(s) = 0x00000000
+gim info:(ATOM_CheckAsicStatus:490)   RLC_CNTL = 0x00000000
+gim info:(ATOM_CheckAsicStatus:492)   Isolate RLC_CNTL__RLC_ENABLE_F32_MASK = 0x00000000
+gim info:(ATOM_CheckAsicStatus:500)  ATOM_ASIC_NEED_POST
+gim info:(gim_post_VBIOS:615) ASIC has not yet been posted. Init ASIC
+gim info:(ATOM_PostVBIOS:399) Do a asic init
+gim info:(ParseTable:1221) GPU 0000:25:4a0:0 ParseTable done, cost 1037 msec
+gim info:(gim_post_VBIOS:631) Post VBIOS successfully
+gim info:(ATOM_PostVBIOS:404) just load uCode
+gim info:(ParseTable:1221) GPU 0000:25:4a0:0 ParseTable done, cost 1682 msec
+gim info:(gim_post_VBIOS:631) Post VBIOS successfully
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(pci_gpu_iov_init:122) Total FB size @pos = 0x428 is 8176 MB
+gim info:(init_context_save_area:48) base =0x8144 size=1
+gim info:(init_fb_static:166) init_fb_static: per VF FB size = 8128MB
+gim info:(init_fb_static:175) init_fb_static: partition 0 base = 16MB, size= 8112MB
+gim info:(restore_msix_regs:161) table_bir = 0x5 pba_bir = 0x5 table_offset = 0x10800 pba_offset = 0x10c00
+gim info:(init_vf:2371) INIT_GPU to ADP1 PF0:0
+gim info:(set_active_functions:292) write block 0 pci_offset 0x4e0 active functions = 0x0
+gim info:(gim_clear_all_errors:71) PCIE cap pos 0x64
+gim info:(gim_clear_all_errors:79) AER ext cap pos 0x150
+gim info:(set_virtualization_mode:1234) Set Virtualization Mode to 0
+gim info:(setup_sriov_gfx_dpm_policy:1188) set virtualization GFX DPM policy success
+gim info:(setup_sriov_gfx_dpm_policy:1209) activate virtualization GFX DPM policy success
+gim info:(ih_iv_ring_disable:462) disable iv ring successfully
+gim info:(alloc_iv_ring:122) ADP1: ih->ivRingNumEntries = 128
+gim info:(alloc_iv_ring:125) ADP1: ih->ivRingSizeInBytes = 4096
+gim info:(ih_iv_ring_init:387) ADP1: ih->rptrDoorbell = 0000000009f084d4
+gim info:(ih_iv_ring_init:388) ADP1: ih->rptrDoorbellOffset = 0x1e8
+gim info:(ih_iv_ring_setupRPTR:490) write mmnbif_gpu_RCC_DOORBELL_APER_EN: 0x1
+gim info:(ih_iv_ring_init:399) init iv ring successfully
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block1 done
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block2 done
+gim info:(gim_whole_gpu_reset:439) PF FLR done...
+gim info:(gim_sched_reset_gpu:3726) Notify reset completion to active VFs
+gim info:(amdgim_op_hot_reset:1839) User triggered GPU 0000:25:00 hot reset success.
+
+DEBUG: clear vf frame buffer
+gim info:(amdgim_do_clrvffb:1192) Clean up frame buffer offset=10,size=4096MB
+
+
+DEBUG: vm start
+VFIO - User Level meta-driver version: 0.3
+vfio-pci 0000:22:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+vfio-pci 0000:25:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+vfio-pci 0000:44:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+vfio-pci 0000:47:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+audit: type=1400 audit(1616083194.135:11): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3" pid=3393 comm="apparmor_parser"
+audit: type=1400 audit(1616083194.135:12): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3//qemu_bridge_helper" pid=3393 comm="apparmor_parser"
+audit: type=1400 audit(1616083195.115:13): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3" pid=3427 comm="apparmor_parser"
+audit: type=1400 audit(1616083195.115:14): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3//qemu_bridge_helper" pid=3427 comm="apparmor_parser"
+virbr0: port 1(vnet0) entered blocking state
+virbr0: port 1(vnet0) entered disabled state
+device vnet0 entered promiscuous mode
+virbr0: port 1(vnet0) entered blocking state
+virbr0: port 1(vnet0) entered listening state
+audit: type=1400 audit(1616083196.131:15): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3" pid=3495 comm="apparmor_parser"
+audit: type=1400 audit(1616083196.131:16): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3//qemu_bridge_helper" pid=3495 comm="apparmor_parser"
+L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
+virbr0: port 1(vnet0) entered learning state
+vfio-pci 0000:22:02.0: enabling device (0000 -> 0002)
+device docker0 entered promiscuous mode
+IPv6: ADDRCONF(NETDEV_UP): macvtap0: link is not ready
+virbr0: port 1(vnet0) entered forwarding state
+virbr0: topology change detected, propagating
+
+DEBUG: VM shutdown
+ virbr0: port 1(vnet0) entered disabled state
+ device vnet0 left promiscuous mode
+ virbr0: port 1(vnet0) entered disabled state
+ audit: type=1400 audit(1616083398.011:17): apparmor="STATUS" operation="profile_remove" profile="unconfined" name="libvirt-e30b89e3-abe5-4eeb-8733-419bb2d7e5e3" pid=3584 comm="apparmor_parser"
+ vfio-pci 0000:22:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+ device docker0 left promiscuous mode
+
+DEBUG: Modprobe amdgpu
+gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+gim info:(signal_scheduler:2048) ADP0: do event 1 for VF:0
+gim info:(handle_req_gpu_init_access:1346) handle req_gpu_init_access event for VF:0 ((null))
+gim warning:(prepare_for_vf:1191) block 0 no need to prepare
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block1 done
+gim info:(get_active_function_id:304) block 1 active function id on pcicfg = 0x0
+gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block2 done
+gim info:(get_active_function_id:304) block 2 active function id on pcicfg = 0x0
+gim info:(handle_req_gpu_init_access:1479) ADP0: init and run new VF
+gim info:(init_vf:2371) INIT_GPU to ADP0 VF0:1
+gim info:(init_vf:2371) INIT_GPU to ADP0 VF0:2
+gim info:(init_vf:2371) INIT_GPU to ADP0 VF0:0
+gim info:(load_vbios:3524) FB.start = 0x387400000000, FB.size = 0x3875ffffffff
+gim info:(load_vbios:3539) VBios -> 55 AA 7F E9 F3 2 0 0
+gim info:(load_vbios:3552) update guest vbios checksum to 0x58
+gim warning:(resume_scheduler:2897) Restart sw Scheduler for 3000000 usec on block0
+gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+gim info:(signal_scheduler:2012) ADP0: do event 2 for VF:0
+gim info:(handle_rel_gpu_init_access:1536) ADP0: handle rel_gpu_init_access event for VF:0
+gim info:(amdgim_retrieve_vf2pf_message:854) Guest Driver Info, Version=2, Size=1024
+gim info:(amdgim_retrieve_vf2pf_message:866) Guest Driver Version=5.0.19.20.6
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block1 done
+gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block2 done
+gim info:(loop_once_for_all_active_VFs:1009) ADP0: Real Current VF: 0
+gim warning:(resume_scheduler:2897) Restart sw Scheduler for 500000 usec on block0
+gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+gim warning:(resume_scheduler:2897) Restart sw Scheduler for 500000 usec on block0
+
+DEBUG: modprobe -r amdgpu
+ gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+ gim info:(signal_scheduler:2048) ADP0: do event 3 for VF:0
+ gim info:(handle_req_gpu_fini_access:1594) ADP0: handle req_gpu_fini_access event for VF:0
+ gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block1 done
+ gim info:(get_active_function_id:304) block 1 active function id on pcicfg = 0x80
+ gim info:(disable_auto_hw_scheduling:521) DISABLE_GPU_AUTO_HW_SCHEDULING on block2 done
+ gim info:(get_active_function_id:304) block 2 active function id on pcicfg = 0x80
+ gim warning:(resume_scheduler:2897) Restart sw Scheduler for 3000000 usec on block0
+ gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+ gim info:(signal_scheduler:2012) ADP0: do event 4 for VF:0
+ gim info:(handle_rel_gpu_fini_access:1685) ADP0: handle rel_gpu_fini_access event for VF:0
+ gim info:(free_vf_block:2756) free VF0:0
+ gim info:(free_vf_block:2773) Free VF0:0 which is current running!
+ curr->
+ VF0:0
+
+ gim info:(free_vf_block:2756) free VF0:1
+ gim info:(set_active_functions:292) write block 1 pci_offset 0x480 active functions = 0x0
+ curr->
+ VF0:1
+
+ gim info:(free_vf_block:2756) free VF0:2
+ gim info:(set_active_functions:292) write block 2 pci_offset 0x4b0 active functions = 0x0
+ curr->
+ VF0:2
+
+ gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block1 done
+ gim info:(enable_auto_hw_scheduling:494) ENABLE_GPU_AUTO_HW_SWITCH on block2 done
+ gim info:(loop_once_for_all_active_VFs:1009) ADP0: Real Current VF: 0
+ gim warning:(resume_scheduler:2897) Restart sw Scheduler for 500000 usec on block0
+ gim info:(pause_scheduler:2858) Stop sw the Scheduler for block0
+ gim warning:(resume_scheduler:2897) Restart sw Scheduler for 500000 usec on block0
