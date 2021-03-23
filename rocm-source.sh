@@ -1,3 +1,5 @@
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 mkdir -p ~/ROCm/
 pushd  ~/ROCm/
 mkdir -p ~/bin/
