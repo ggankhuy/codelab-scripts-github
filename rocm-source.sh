@@ -1,16 +1,28 @@
+p1=$1
+CONFIG_VERSION=4.1
+if [[ -z $p1 ]] ; then
+    echo "Version not specified. Setting to default: $CONFIG_VERSION"
+else
+    CONFIG_VERSION=$p1
+fi
+
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false
-mkdir -p ~/ROCm/
-pushd  ~/ROCm/
+DIR_NAME=~/ROCm-$CONFIG_VERSION
+mkdir $DIR_NAME
+if [[ $? -ne 0 ]] ; then
+	echo "Directory is already there. Verify it is deleted or renamed before continue." ; exit 1
+fi
+pushd  $DIR_NAME
 mkdir -p ~/bin/
 echo "install repo..."
 apt install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 echo "repo init..."
-~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-4.1.x
+~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
 echo "repo sync..."
 ~/bin/repo sync
-echo "ROCm source is downloaded to ~/ROCm"
-echo "push ~/ROCm to get there..."
+echo "ROCm source is downloaded to $DIR_NAME"
+echo "push $DIR_NAME to get there..."
 popd
