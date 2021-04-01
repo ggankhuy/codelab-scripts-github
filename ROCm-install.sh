@@ -1,18 +1,42 @@
-p1=$1
-echo $p1
+INSTALL_ROCM_SRC=1
+INSTALL_ROCM_SRC_COPY=0
+INSTALL_ROCM_SRC_COPY_INSTALL=0
+CONFIG_FORCE_VERSION=1
+CONFIG_VERSION=4.0
+CONFIG_INTERVAL_SLEEP=60
+CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM=0
+
+for var in "$@"
+do
+    if [[ ! -z `echo "$var" | grep "ip="` ]]  ; then
+        echo "ip address: $var"
+        p1=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "src="` ]]  ; then
+        INSTALL_ROCM_SRC=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "sleep="` ]]  ; then
+        CONFIG_INTERVAL_SLEEP=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
+        CONFIG_VERSION=`echo $var | cut -d '=' -f2`
+    fi
+done
+
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then 
-    echo "Usage: $0 <ip_address> <1=for installing rocm source> of the server to which rocm to be installed." ; 
+    echo "Usage: $0 <parameters>."
+    echo "Parameters:"
+    echo "ip=<IP_address>"
+    echo "ver=<rocm version>"
+    echo "src=<1=download rocm source, 0=do not download rocm source>. Default will download the source."
+    echo "sleep=<wait time in seconds between reboots>"
     exit 0 ; 
 fi
 
-CONFIG_FORCE_VERSION=1
-CONFIG_VERSION=4.1
-CONFIG_INTERVAL_SLEEP=60
-CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM=1
 VM_IP=$p1
-INSTALL_ROCM_SRC=$2
-INSTALL_ROCM_SRC_COPY=0
-INSTALL_ROCM_SRC_COPY_INSTALL=0
 
 if [[ $CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM -ne 1 ]] ; then
     for i in "apt remove amdgpu-dkms -y" "apt remove amdgpu-dkms-firmware -y" "apt update -y" "apt dist-upgrade -y" "apt install libnuma-dev -y " "echo rebooting ; sleep $CONFIG_INTERVAL_SLEEP ; reboot" ; do
