@@ -33,12 +33,14 @@ setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
 mkdir -p $LOG_DIR
-cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee -a $LOG_DIR/llvm.log
-make -j$NPROC install | tee -a $LOG_DIR/llvm.log
+mkdir build ; cd build
+cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/llvm.log
+make -j$NPROC  | tee -a $LOG_DIR/llvm.log
+make install  | tee -a $LOG_DIR/llvm.log
 popd
 
 pushd rocBLAS
-./install.sh -icd | tee -a $LOG_DIR/rocBLAS.log
+./install.sh -icd | tee $LOG_DIR/rocBLAS.log
 popd
 
 
@@ -50,7 +52,7 @@ COMGR=~/ROCm/ROCm-CompilerSupport/lib/comgr
 
 mkdir -p "$DEVICE_LIBS/build"
 cd "$DEVICE_LIBS/build"
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee -a $LOG_DIR/ROCm-CompilerSupport.log
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee $LOG_DIR/ROCm-CompilerSupport.log
 make -j`nproc` ; make install | tee -a $LOG_DIR/ROCm-CompilerSupport.log
 
 mkdir -p "$COMGR/build"
@@ -69,7 +71,7 @@ OLDPWD=/root/ROCm/ROCclr
 
 setup_root_rocm_softlink
 mkdir build; cd build
-cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee -a $LOG_DIR/ROCclr.log
+cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee $LOG_DIR/ROCclr.log
 make -j$NPROC install | tee -a $LOG_DIR/ROCclr.log
 popd
 

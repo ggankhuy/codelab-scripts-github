@@ -1,7 +1,13 @@
+p1=$1
+if [[ -z $p1 ]] ; then
+	VERSION=3.16.8
+else
+	VERSION=$p1
+fi
 sudo apt install build-essential libssl-dev -y
-wget https://github.com/Kitware/CMake/releases/download/v3.16.5/cmake-3.16.5.tar.gz
-tar -zxvf cmake-3.16.5.tar.gz
-cd cmake-3.16.5
+wget https://github.com/Kitware/CMake/releases/download/v$VERSION/cmake-$VERSION.tar.gz
+tar -zxvf cmake-$VERSION.tar.gz
+cd cmake-$VERSION
 ./bootstrap
 make  -j8
 sudo make install 
