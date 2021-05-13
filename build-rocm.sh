@@ -4,11 +4,12 @@ if [[ -z $p1 ]] ; then
 	echo "You need to specify rocm version."
 	exit 1
 fi
+export PATH=$PATH:/opt/rocm-4.2.0/llvm/bin/
 pushd llvm-project
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$p1
-ROCM_INST_FOLDER=/opt/rocm-$p1-0/
+ROCM_INST_FOLDER=/opt/rocm-$p1.0/
 function setup_root_rocm_softlink () {
 	rm ~/ROCm
 	ln -s $ROCM_SRC_FOLDER  ~/ROCm
@@ -21,7 +22,7 @@ function setup_root_rocm_softlink () {
 
 function setup_opt_rocm_softlink () {
 	rm /opt/rocm
-	ln -s /opt/$ROCM_INST_FOLDER/ /opt/rocm
+	ln -s $ROCM_INST_FOLDER/ /opt/rocm
 
 	if [[ $? -ne  0 ]] ; then 
 		echo "Error during setting up the softlink /opt/rocm"
@@ -53,17 +54,22 @@ make test | tee -a $LOG_DIR/ROCm-CompilerSupport.log
 make install | tee -a $LOG_DIR/ROCm-CompilerSupport.log
 popd
 
-pushd ROCclr
-PWD=/root/ROCm/ROCclr/build
-OPENCL_DIR=/root/ROCm/ROCm-OpenCL-Runtime/
-ROCclr_DIR=/root/ROCm/ROCclr/
-OLDPWD=/root/ROCm/ROCclr
+pushd $ROCM_SRC_FOLDER/ROCclr
+PWD=$ROCM_SRC_FOLDER/ROCclr/build
+OPENCL_DIR=$ROCM_SRC_FOLDER/ROCm-OpenCL-Runtime/
+ROCclr_DIR=$ROCM_SRC_FOLDER/ROCclr/
+OLDPWD=$ROCM_SRC_FOLDER/ROCclr
 
 mkdir build; cd build
 cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee $LOG_DIR/ROCclr.log
 make -j$NPROC install | tee -a $LOG_DIR/ROCclr.log
 popd
 
+cd $ROCM_SRC_FOLDER/HIP
+mkdir build ; cd build
+cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/hip.log
+make -j$NPROC | tee -a $LOG_DIR/hip.log
+make install | tee -a $LOG_DIR/hip.log
 
 exit 0
 
