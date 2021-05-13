@@ -34,6 +34,20 @@ function setup_opt_rocm_softlink () {
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
+for i in rccl
+do
+	echo $building $i
+	pushd $ROCM_SRC_FOLDER/$i
+	mkdir build; cd build
+	cmake .. | tee $LOG_DIR/$i.log
+	make -j$NPROC | tee -a $LOG_DIR/$i.log
+	make install | tee -a $LOG_DIR/$i.log
+	popd
+done
+
+exit 0
+
+
 pushd $ROCM_SRC_FOLDER/ROCm-CompilerSupport
 cd lib/comgr/
 LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
@@ -70,8 +84,6 @@ mkdir build ; cd build
 cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/hip.log
 make -j$NPROC | tee -a $LOG_DIR/hip.log
 make install | tee -a $LOG_DIR/hip.log
-
-exit 0
 
 echo  qualified codes
 mkdir -p $LOG_DIR
