@@ -137,7 +137,19 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 	make -C ./build | tee -a $LOG_DIR/$CURR_BUILD
 	popd
 
-	CURR_BUILD=rocPRIM
+	for i in rocPRIM hipCUB
+	do
+		CURR_BUILD=$i
+		echo $building $i
+		pushd $ROCM_SRC_FOLDER/$i
+		mkdir build; cd build
+		rm -rf ./*
+		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
+		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make install | tee -a $LOG_DIR/$CURR_BUILD
+		popd
+	done
+
 
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
@@ -167,18 +179,6 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 		popd
 	done
 
-else
-	echo "Skipping over tested code..."
-fi
-
-	CURR_BUILD=llvm-project
-	pushd $CURR_BUILD
-	mkdir build ; cd build
-	cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
-	make -j$NPROC  | tee -a $LOG_DIR/$CURR_BUILD.log
-	make install  | tee -a $LOG_DIR/$CURR_BUILD.log
-	popd
-
 	apt install libsqlite3-dev libbz2-dev half libboost-all-dev -y
 	for i in MIOpen
 	do
@@ -192,3 +192,20 @@ fi
 		make install | tee -a $LOG_DIR/$CURR_BUILD
 		popd
 	done
+else
+	echo "Skipping over tested code..."
+fi
+
+	for i in rocPRIM hipCUB
+	do
+		CURR_BUILD=$i
+		echo $building $i
+		pushd $ROCM_SRC_FOLDER/$i
+		mkdir build; cd build
+		rm -rf ./*
+		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
+		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make install | tee -a $LOG_DIR/$CURR_BUILD
+		popd
+	done
+
