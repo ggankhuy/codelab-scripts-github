@@ -159,7 +159,7 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
 
-	for i in rocBLAS rocSPARSE
+	for i in rocBLAS rocSPARSE hipBLAS
 	do
 		CURR_BUILD=$i
 		echo $building $i
@@ -196,16 +196,13 @@ else
 	echo "Skipping over tested code..."
 fi
 
-	for i in rocPRIM hipCUB
+	#for i in rocBLAS rocSPARSE
+	for i in hipBLAS
 	do
 		CURR_BUILD=$i
 		echo $building $i
 		pushd $ROCM_SRC_FOLDER/$i
-		mkdir build; cd build
-		rm -rf ./*
-		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
-		make install | tee -a $LOG_DIR/$CURR_BUILD
+
+		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
 		popd
 	done
-
