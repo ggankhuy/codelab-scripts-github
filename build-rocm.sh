@@ -37,36 +37,41 @@ setup_opt_rocm_softlink
 
 ENABLE_CODE=0
 
+CURR_BUILD=llvm-project
 if [[ $ENABLE_CODE == 1 ]] ; then
-pushd llvm-project
+pushd $CURR_BUILD
 mkdir build ; cd build
-cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/llvm.log
-make -j$NPROC  | tee -a $LOG_DIR/llvm.log
-make install  | tee -a $LOG_DIR/llvm.log
+cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
+make -j$NPROC  | tee -a $LOG_DIR/$CURR_BUILD.log
+make install  | tee -a $LOG_DIR/$CURR_BUILD.log
 popd
 
-pushd rocBLAS
-./install.sh -icd | tee $LOG_DIR/rocBLAS.log
+CURR_BUILD=rocBLAS
+pushd $CURR_BUILD
+./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
 popd
 
-pushd $ROCM_SRC_FOLDER/ROCm-CompilerSupport
+CURR_BUILD=ROCm-CompilerSupport
+pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 cd lib/comgr/
 LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
 DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs/
-COMGR=$ROCM_SRC_FOLDER/ROCm-CompilerSupport/lib/comgr
+COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
 setup_root_rocm_softlink
+
 mkdir -p "$DEVICE_LIBS/build"
 cd "$DEVICE_LIBS/build"
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee $LOG_DIR/ROCm-CompilerSupport.log
-make -j`nproc` ; make install | tee -a $LOG_DIR/ROCm-CompilerSupport.log
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee $LOG_DIR/$CURR_BUILD.log
+make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+make install | tee -a $LOG_DIR/$CURR_BUILD.log
 
 mkdir -p "$COMGR/build"
 cd "$COMGR/build"
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  $LOG_DIR/ROCm-CompilerSupport.log
-make -j$NPROC  | tee -a $LOG_DIR/ROCm-CompilerSupport.log
-make test | tee -a $LOG_DIR/ROCm-CompilerSupport.log
-make install | tee -a $LOG_DIR/ROCm-CompilerSupport.log
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
+make -j$NPROC  | tee -a $LOG_DIR/$CURR_BUILD.log
+make test | tee -a $LOG_DIR/$CURR_BUILD.log
+make install | tee -a $LOG_DIR/$CURR_BUILD.log
 popd
 
 pushd $ROCM_SRC_FOLDER/ROCclr
@@ -80,32 +85,48 @@ cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | te
 make -j$NPROC install | tee -a $LOG_DIR/ROCclr.log
 popd
 
-cd $ROCM_SRC_FOLDER/HIP
+CURR_BUILD=HIP
+cd $ROCM_SRC_FOLDER/$CURR_BUILD
 mkdir build ; cd build
-cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/hip.log
-make -j$NPROC | tee -a $LOG_DIR/hip.log
-make install | tee -a $LOG_DIR/hip.log
+cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
+make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+make install | tee -a $LOG_DIR/$CURR_BUILD.log
+
+CURR_BUILD=ROCm-OpenCL-Runtime
+cd $ROCM_SRC_FOLDER/$CURR_BUILD
+mkdir -p build; cd build
+cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
+make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+make install | tee -a $LOG_DIR/$CURR_BUILD.log
+
+CURR_BUILD=rccl
+pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+./install.sh -idt | tee $LOG_DIR/$CURR_BUILD
+popd
+
+for i in rocm_smi_lib rocm_bandwidth_test rocminfo
+do
+	CURR_BUILD=$i
+	echo $building $i
+	pushd $ROCM_SRC_FOLDER/$i
+	mkdir build; cd build
+	rm -rf ./*
+	cmake .. | tee $LOG_DIR/$CURR_BUILD
+	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+	make install | tee -a $LOG_DIR/$CURR_BUILD
+	popd
+done
 
 else
 	echo "Skipping over tested code..."
 fi
 
-pushd $ROCM_SRC_FOLDER/rccl
-./install.sh -idt
-popd
-
-for i in rocm_smi_lib rocm_bandwidth_test rocminfo
-do
-	echo $building $i
-	pushd $ROCM_SRC_FOLDER/$i
-	mkdir build; cd build
-	rm -rf ./*
-	cmake .. | tee $LOG_DIR/$i.log
-	make -j$NPROC | tee -a $LOG_DIR/$i.log
-	make install | tee -a $LOG_DIR/$i.log
-	popd
-done
-
+CURR_BUILD=ROCmValidationSuite
+pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
+apt install libpciaccess-dev libpci-dev -y | tee  $LOG_DIR/$CURR_BUILD
+cmake ./ -B./build | tee -a $LOG_DIR/$CURR_BUILD
+make -C ./build | tee -a $LOG_DIR/$CURR_BUILD
+make install | tee -a $LOG_DIR/$CURR_BUILD
 exit 0
 
 
