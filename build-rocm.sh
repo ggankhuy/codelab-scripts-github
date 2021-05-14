@@ -192,17 +192,42 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 		make install | tee -a $LOG_DIR/$CURR_BUILD
 		popd
 	done
-else
-	echo "Skipping over tested code..."
-fi
+        CURR_BUILD=HIP-Examples
+        i=$CURR_BUILD
+        echo $building $i
+        pushd $ROCM_SRC_FOLDER/$i
+        ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
+        popd
 
-	#for i in rocBLAS rocSPARSE
-	for i in rocSPARSE hipSPARSE
+	# broken build on 4.1.
+
+	for i in rocALUTION
 	do
 		CURR_BUILD=$i
 		echo $building $i
 		pushd $ROCM_SRC_FOLDER/$i
-
-		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+		mkdir build ; cd build
+		cmake .. -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
+		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
 		popd
 	done
+
+        CURR_BUILD=HIP-Examples
+        i=$CURR_BUILD
+        echo $building $i
+        pushd $ROCM_SRC_FOLDER/$i
+        ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
+        popd
+
+	apt install -y texinfo bison flex
+        CURR_BUILD=ROCgdb
+        echo $building $CURR_BUILD
+        pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+        ./configure
+	make -j$NPROC
+        make
+	popd
+else
+	echo "Skipping over tested code..."
+fi
+
