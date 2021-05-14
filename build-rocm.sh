@@ -69,9 +69,16 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
+if [[ $REPO_ONLY == 0 ]] && [[ $NON_REPO_ONLY == 0 ]] ; then
+	REPO_ONLY=1
+	NON_REPO_ONLY=1
+fi
+
 echo "REPO_ONLY: $REPO_ONLY "
 echo "NON_REPO_ONLY: $NON_REPO_ONLY"
-sleep 5
+echo "CONFIG_TEST: $CONFIG_TEST"
+
+sleep 2
 
 if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	CURR_BUILD=llvm-project
@@ -301,9 +308,8 @@ else
 	echo "Skipping over tested code..."
 fi
 
-if [[ $NON_REPO_ONLY == 1 ]] ; then
+if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	echo "Installing non-rocm repo components build."
-
 	pip3 install --user tensorflow-rocm --upgrade
 
 else
