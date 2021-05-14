@@ -159,7 +159,7 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
 
-	for i in rocBLAS rocSPARSE hipBLAS
+	for i in rocBLAS rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
 		CURR_BUILD=$i
 		echo $building $i
@@ -197,7 +197,7 @@ else
 fi
 
 	#for i in rocBLAS rocSPARSE
-	for i in hipBLAS
+	for i in rocSPARSE hipSPARSE
 	do
 		CURR_BUILD=$i
 		echo $building $i
