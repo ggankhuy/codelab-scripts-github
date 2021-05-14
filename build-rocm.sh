@@ -238,22 +238,32 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
 	make install | tee -a $LOG_DIR/$CURR_BUILD
 	popd
+
+	CURR_BUILD=MIVisionX
+	echo $building $i
+	pushd $ROCM_SRC_FOLDER/$i
+	mkdir build; cd build
+	rm -rf ./*
+	python MIVisionX-setup.py
+	cmake .. | tee $LOG_DIR/$CURR_BUILD
+	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+	make install | tee -a $LOG_DIR/$CURR_BUILD
+	popd
+
+	#	sudo apt-get install scons mesa-common-dev libboost-all-dev rocprofiler-dev -y
+	sudo apt-get install scons mesa-common-dev libboost-all-dev -y
+	CURR_BUILD=RCP
+	i=$CURR_BUILD
+	echo $building $i
+	pushd $ROCM_SRC_FOLDER/$i
+	cd Build/Linux/ ; chmod 755 *sh
+	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
+	./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
+	popd
+
 else
 	echo "Skipping over tested code..."
 fi
 
 #	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM
 
-	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl
-	for i in clang-ocl
-	do
-		CURR_BUILD=$i
-		echo $building $i
-		pushd $ROCM_SRC_FOLDER/$i
-		mkdir build; cd build
-		rm -rf ./*
-		cmake .. | tee $LOG_DIR/$CURR_BUILD
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
-		make install | tee -a $LOG_DIR/$CURR_BUILD
-		popd
-	done
