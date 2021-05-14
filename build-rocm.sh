@@ -265,31 +265,4 @@ else
 	echo "Skipping over tested code..."
 fi
 
-#	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM
-
-	for i in rocm-cmake
-	do
-		CURR_BUILD=$i
-		echo $building $i
-		pushd $ROCM_SRC_FOLDER/$i
-		mkdir build; cd build
-		rm -rf ./*
-		cmake .. | tee $LOG_DIR/$CURR_BUILD
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
-		make install | tee -a $LOG_DIR/$CURR_BUILD
-		popd
-	done
-
-	for i in  ROCT-Thunk-Interface
-	do
-		CURR_BUILD=$i
-		echo $building $i
-		pushd $ROCM_SRC_FOLDER/$i
-		mkdir build; cd build
-		rm -rf ./*
-		cmake .. | tee $LOG_DIR/$CURR_BUILD
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
-		make install | tee -a $LOG_DIR/$CURR_BUILD
-		popd
-	done
 
