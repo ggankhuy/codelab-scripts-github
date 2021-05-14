@@ -1,14 +1,49 @@
-
+REPO_ONLY=0
+NON_REPO_ONLY=0
 p1=$1
-if [[ -z $p1 ]] ; then
+CONFIG_TEST=0
+for var in "$@"
+do
+    if [[ ! -z `echo "$var" | grep "repo_only"` ]]  ; then
+        echo "repo only specified: $var"
+        REPO_ONLY=1
+    fi
+
+    if [[ ! -z `echo "$var" | grep "non_repo_only"` ]]  ; then
+        echo "non-repo only specified: $var"
+        NON_REPO_ONLY=1
+    fi
+
+    if [[ ! -z `echo "$var" | grep "test"` ]]  ; then
+        echo "non-repo only specified: $var"
+        CONFIG_TEST=1
+    fi
+
+    if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
+        VERSION=`echo $var | cut -d '=' -f2`
+    fi
+done
+
+if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
+    echo "Usage: $0 <parameters>."
+    echo "Parameters:"
+    echo "repo_only - build only rocm repository components."
+    echo "non_repo_only - build onlu non-rocm repository components"
+    echo "ver=<rocm version> - specifying version is mandatory. i.e. 4.1, 4.2" 
+    echo "test - test run only, will not build qualified builds."
+
+    exit 0 ;
+fi
+
+if [[ -z $VERSION ]] ; then
 	echo "You need to specify rocm version."
 	exit 1
 fi
 export PATH=$PATH:/opt/rocm-4.2.0/llvm/bin/
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
-ROCM_SRC_FOLDER=~/ROCm-$p1
-ROCM_INST_FOLDER=/opt/rocm-$p1.0/
+ROCM_SRC_FOLDER=~/ROCm-$VERSION
+ROCM_INST_FOLDER=/opt/rocm-$VERSION.0/
 
 function setup_root_rocm_softlink () {
 	rm ~/ROCm
@@ -35,13 +70,12 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
-ENABLE_CODE=0
 
-if [[ $ENABLE_CODE == 1 ]] ; then
+if [[ $CONFIG_TEST == 0 ]] ; then
 	CURR_BUILD=llvm-project
 	pushd $CURR_BUILD
 	mkdir build ; cd build
-	cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
+	cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
 	make -j$NPROC  | tee -a $LOG_DIR/$CURR_BUILD.log
 	make install  | tee -a $LOG_DIR/$CURR_BUILD.log
 	popd
