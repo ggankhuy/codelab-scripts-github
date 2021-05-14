@@ -103,7 +103,7 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 
 	apt install gcc g++ make cmake libelf-dev libdw-dev -y
 
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src
 	do
 		CURR_BUILD=$i
 		echo $building $i
@@ -279,3 +279,4 @@ fi
 		make install | tee -a $LOG_DIR/$CURR_BUILD
 		popd
 	done
+
