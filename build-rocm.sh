@@ -35,6 +35,9 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
+ENABLE_CODE=0
+
+if [[ $ENABLE_CODE == 1 ]] ; then
 pushd llvm-project
 mkdir build ; cd build
 cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/llvm.log
@@ -83,6 +86,9 @@ cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $L
 make -j$NPROC | tee -a $LOG_DIR/hip.log
 make install | tee -a $LOG_DIR/hip.log
 
+else
+	echo "Skipping over tested code..."
+fi
 
 pushd $ROCM_SRC_FOLDER/rccl
 ./install.sh -idt
