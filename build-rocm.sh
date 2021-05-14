@@ -34,11 +34,16 @@ function setup_opt_rocm_softlink () {
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
-for i in rccl
+pushd $ROCM_SRC_FOLDER/rccl
+./install.sh -idt
+popd
+
+for i in rocm_smi_lib rocm_bandwidth_test rocminfo
 do
 	echo $building $i
 	pushd $ROCM_SRC_FOLDER/$i
 	mkdir build; cd build
+	rm -rf ./*
 	cmake .. | tee $LOG_DIR/$i.log
 	make -j$NPROC | tee -a $LOG_DIR/$i.log
 	make install | tee -a $LOG_DIR/$i.log
