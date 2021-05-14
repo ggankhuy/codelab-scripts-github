@@ -103,7 +103,7 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 
 	apt install gcc g++ make cmake libelf-dev libdw-dev -y
 
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half
 	do
 		CURR_BUILD=$i
 		echo $building $i
@@ -227,7 +227,20 @@ if [[ $ENABLE_CODE == 1 ]] ; then
 	make -j$NPROC
         make
 	popd
+
+	pip install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
+	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++
+
+	CURR_BUILD=AMDMIGraphX
+	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+	mkdir build; cd build
+	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD
+	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+	make install | tee -a $LOG_DIR/$CURR_BUILD
+	popd
 else
 	echo "Skipping over tested code..."
 fi
+
+#	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM
 
