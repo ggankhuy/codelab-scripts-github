@@ -4,13 +4,12 @@ p1=$1
 CONFIG_TEST=0
 for var in "$@"
 do
-    if [[ ! -z `echo "$var" | grep "repo_only"` ]]  ; then
-        echo "repo only specified: $var"
+    if [[ $var == "repo_only" ]]  ; then
+        echo repo only specified: $var
         REPO_ONLY=1
     fi
-
-    if [[ ! -z `echo "$var" | grep "non_repo_only"` ]]  ; then
-        echo "non-repo only specified: $var"
+    if [[ $var == "non_repo_only" ]]  ; then
+        echo non repo only specified: $var
         NON_REPO_ONLY=1
     fi
 
@@ -70,8 +69,11 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
+echo "REPO_ONLY: $REPO_ONLY "
+echo "NON_REPO_ONLY: $NON_REPO_ONLY"
+sleep 5
 
-if [[ $CONFIG_TEST == 0 ]] ; then
+if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	CURR_BUILD=llvm-project
 	pushd $CURR_BUILD
 	mkdir build ; cd build
@@ -299,4 +301,12 @@ else
 	echo "Skipping over tested code..."
 fi
 
+if [[ $NON_REPO_ONLY == 1 ]] ; then
+	echo "Installing non-rocm repo components build."
 
+	pip3 install --user tensorflow-rocm --upgrade
+
+else
+	echo "Bypassing non-rocm repo components build."
+
+fi
