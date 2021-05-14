@@ -5,11 +5,11 @@ if [[ -z $p1 ]] ; then
 	exit 1
 fi
 export PATH=$PATH:/opt/rocm-4.2.0/llvm/bin/
-pushd llvm-project
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$p1
 ROCM_INST_FOLDER=/opt/rocm-$p1.0/
+
 function setup_root_rocm_softlink () {
 	rm ~/ROCm
 	ln -s $ROCM_SRC_FOLDER  ~/ROCm
@@ -31,27 +31,20 @@ function setup_opt_rocm_softlink () {
 	fi
 }
 
+mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
-pushd $ROCM_SRC_FOLDER/rccl
-./install.sh -idt
+pushd llvm-project
+mkdir build ; cd build
+cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/llvm.log
+make -j$NPROC  | tee -a $LOG_DIR/llvm.log
+make install  | tee -a $LOG_DIR/llvm.log
 popd
 
-for i in rocm_smi_lib rocm_bandwidth_test rocminfo
-do
-	echo $building $i
-	pushd $ROCM_SRC_FOLDER/$i
-	mkdir build; cd build
-	rm -rf ./*
-	cmake .. | tee $LOG_DIR/$i.log
-	make -j$NPROC | tee -a $LOG_DIR/$i.log
-	make install | tee -a $LOG_DIR/$i.log
-	popd
-done
-
-exit 0
-
+pushd rocBLAS
+./install.sh -icd | tee $LOG_DIR/rocBLAS.log
+popd
 
 pushd $ROCM_SRC_FOLDER/ROCm-CompilerSupport
 cd lib/comgr/
@@ -90,16 +83,23 @@ cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $L
 make -j$NPROC | tee -a $LOG_DIR/hip.log
 make install | tee -a $LOG_DIR/hip.log
 
-echo  qualified codes
-mkdir -p $LOG_DIR
-mkdir build ; cd build
-cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$p1.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/llvm.log
-make -j$NPROC  | tee -a $LOG_DIR/llvm.log
-make install  | tee -a $LOG_DIR/llvm.log
+
+pushd $ROCM_SRC_FOLDER/rccl
+./install.sh -idt
 popd
 
-pushd rocBLAS
-./install.sh -icd | tee $LOG_DIR/rocBLAS.log
-popd
+for i in rocm_smi_lib rocm_bandwidth_test rocminfo
+do
+	echo $building $i
+	pushd $ROCM_SRC_FOLDER/$i
+	mkdir build; cd build
+	rm -rf ./*
+	cmake .. | tee $LOG_DIR/$i.log
+	make -j$NPROC | tee -a $LOG_DIR/$i.log
+	make install | tee -a $LOG_DIR/$i.log
+	popd
+done
+
+exit 0
 
 
