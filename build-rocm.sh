@@ -70,6 +70,8 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 echo "---" > $LOG_SUMMARY
+echo "ROCm components that failed build."
+echo "If you don't see the name here, then build was successful."
 
 if [[ $REPO_ONLY == 0 ]] && [[ $NON_REPO_ONLY == 0 ]] ; then
 	REPO_ONLY=1
