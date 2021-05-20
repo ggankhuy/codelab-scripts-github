@@ -358,6 +358,7 @@ fi
 
 if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	echo "Installing non-rocm repo components build."
+	apt install python3-setuptools -y
 	pip3 install --user tensorflow-rocm --upgrade
 
 else
