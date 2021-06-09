@@ -358,8 +358,21 @@ fi
 
 if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	echo "Installing non-rocm repo components build."
+
+	# install tensorflow.
+
 	apt install python3-setuptools -y
 	pip3 install --user tensorflow-rocm --upgrade
+
+	# install pytorch profiler kineto:
+
+	CURR_BUILD=pytorch-kineto
+	mkdir -p ~/non-rocm-repo/
+	pushd ~/non-rocm-repo/
+	git clone --recursive https://github.com/pytorch/kineto.git
+	cd kineto/libkineto/
+	mkdir build ; cd build  
+	cmake .. ; make -j`nproc` install | tee -a $LOG_DIR/$CURR_BUILD
 
 else
 	echo "Bypassing non-rocm repo components build."

@@ -1,9 +1,13 @@
-#builds=("-icd" "-icda gfx908:xnack-" "-icdn" "-icdna gfx908:xnack-")
-builds=("-icdn" "-icdna gfx908:xnack-")
+TEST_MODE=0
+builds=("-icd" "-icda gfx908:xnack-" "-icdn" "-icdna gfx908:xnack-")
+
+if  [[ $TEST_MODE -eq 1 ]] ; then
+    builds=("-icdn" "-icdna gfx908:xnack-")
+fi
 LOG_FOLDER=./log
-mkdir -p $LOG_FOLDER
 rm -rf ./build
 rm -rf ./$LOG_FOLDER
+mkdir -p $LOG_FOLDER
 for (( i=0 ; i < ${#builds[@]} ; i++ ))  ;do
     CURR_LOG=$LOG_FOLDER/build.${builds[$i]}.log
     echo $i: ${builds[$i]}
