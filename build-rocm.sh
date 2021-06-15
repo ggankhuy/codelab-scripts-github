@@ -2,8 +2,13 @@ REPO_ONLY=0
 NON_REPO_ONLY=0
 p1=$1
 CONFIG_TEST=0
+FAST_INSTALL=0
 for var in "$@"
 do
+    if [[ $var == "fast" ]]  ; then
+        echo fast installation specified: $var
+        FAST_INSTALL=1
+    fi
     if [[ $var == "repo_only" ]]  ; then
         echo repo only specified: $var
         REPO_ONLY=1
@@ -30,6 +35,7 @@ if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "non_repo_only - build onlu non-rocm repository components"
     echo "ver=<rocm version> - specifying version is mandatory. i.e. 4.1, 4.2" 
     echo "test - test run only, will not build qualified builds."
+    echo "fast - install only core components for fast build finish."
 
     exit 0 ;
 fi
@@ -38,12 +44,12 @@ if [[ -z $VERSION ]] ; then
 	echo "You need to specify rocm version."
 	exit 1
 fi
-export PATH=$PATH:/opt/rocm-4.2.0/llvm/bin/
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.0/
 LOG_SUMMARY=$LOG_DIR/build-summary.log
+export PATH=$PATH:/opt/rocm-$VERSION.0/llvm/bin/
 
 function setup_root_rocm_softlink () {
 	rm ~/ROCm
@@ -65,6 +71,8 @@ function setup_opt_rocm_softlink () {
 		exit 1
 	fi
 }
+
+start=$SECONDS
 
 mkdir -p $LOG_DIR
 setup_root_rocm_softlink
@@ -148,26 +156,44 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	make install | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
-	CURR_BUILD=ROCm-OpenCL-Runtime
-	cd $ROCM_SRC_FOLDER/$CURR_BUILD
-	mkdir -p build; cd build
-	cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make install | tee -a $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    if [[ $FAST_INSTALL -eq 0 ]] ; then	
+    	CURR_BUILD=ROCm-OpenCL-Runtime
+    	cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    	mkdir -p build; cd build
+    	cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make install | tee -a $LOG_DIR/$CURR_BUILD.log
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
-	CURR_BUILD=rccl
-	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-	./install.sh -idt | tee $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	popd
+    	CURR_BUILD=rccl
+    	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    	./install.sh -idt | tee $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	popd
+    fi
 
 	# for rocr_debug_agent!!
 
 	apt install gcc g++ make cmake libelf-dev libdw-dev -y
 
+    if [[ $FAST_INSTALL -eq 0 ]] ; then	
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
+	do
+		CURR_BUILD=$i
+		echo $building $i
+		pushd $ROCM_SRC_FOLDER/$i
+		mkdir build; cd build
+		cmake .. | tee $LOG_DIR/$CURR_BUILD
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make install | tee -a $LOG_DIR/$CURR_BUILD
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		popd
+	done
+    else
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
 	do
 		CURR_BUILD=$i
@@ -182,24 +208,27 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
+    fi
 
-	for i in  rocThrust
-	do
-		CURR_BUILD=$i
-		echo $building $i
-		pushd $ROCM_SRC_FOLDER/$i
-		mkdir build; cd build
-		rm -rf ./*
-		CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make install | tee -a $LOG_DIR/$CURR_BUILD
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		popd
-	done
+    if [[ $FAST_INSTALL -eq 0 ]] ; then	
+    	for i in  rocThrust
+    	do
+    		CURR_BUILD=$i
+    		echo $building $i
+    		pushd $ROCM_SRC_FOLDER/$i
+    		mkdir build; cd build
+    		rm -rf ./*
+    		CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD
+    		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+    		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    		make install | tee -a $LOG_DIR/$CURR_BUILD
+    		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    		popd
+    	done
+    fi
 
-
+    if [[ $FAST_INSTALL -eq 0 ]] ; then	
 	CURR_BUILD=ROCmValidationSuite
 	pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
 	apt install libpciaccess-dev libpci-dev -y | tee  $LOG_DIR/$CURR_BUILD
@@ -224,7 +253,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
-
 
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
@@ -299,7 +327,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
         popd
 
+    fi # if fast_install = 0.
+
 	apt install -y texinfo bison flex
+
+    if [[ $FAST_INSTALL -eq 0 ]] ; then	
         CURR_BUILD=ROCgdb
         echo $building $CURR_BUILD
         pushd $ROCM_SRC_FOLDER/$CURR_BUILD
@@ -352,6 +384,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	popd
 
+    fi # if fast_install.
 else
 	echo "Skipping over tested code..."
 fi
@@ -378,3 +411,6 @@ else
 	echo "Bypassing non-rocm repo components build."
 
 fi
+end=$SECONDS
+duration=$(($end-$start))
+echo "Build finished, build duration: $duration seconds."
