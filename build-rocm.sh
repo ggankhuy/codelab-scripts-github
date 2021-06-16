@@ -413,4 +413,4 @@ else
 fi
 end=$SECONDS
 duration=$(($end-$start))
-echo "Build finished, build duration: $duration seconds."
+echo "Build finished, build duration: $duration seconds or $((duration/60)) minutes."
