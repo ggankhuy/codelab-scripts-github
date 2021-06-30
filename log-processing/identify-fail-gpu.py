@@ -18,7 +18,7 @@ DEBUG=1
 CONFIG_INIT_TYPE_GIM_INIT=1
 CONFIG_INIT_TYPE_LIBGV_INIT=2
 CONFIG_INIT_TYPE_BOTH_INIT=3 # used if log contains both libgv and gim.
-CONFIG_INIT_TYPE=None
+CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_BOTH_INIT
 fileName=None
 pattern=None
 fp=None
@@ -40,13 +40,10 @@ else:
 try:
     if sys.argv[1] == "--help":
             print("*********************************************************")
-            print("Bisects extra long log from libgv into separate files. Each ")
-            print("time gim or libgv is initialized number of times, respective ")
-            print("folder is created. ")
-            print("Within that, also each gpu initialization within the particular ")
-            print("gim initialization log further divided. ")
+            print("Gathers gpu inventory. For each gpu search for error pattern during libgv init.")
+            print("Collapses the multiple occurrences/flooding of error messages per gpu.")
             print("*********************************************************")
-            print("Usage: ", sys.argv[0], " file=<filename to be bisected>, init=<gim type>: either libgv or gim or both ")
+            print("Usage: ", sys.argv[0], " file=<filename to be bisected>, pattern=<error pattern to be searched> init=<gim type>: either libgv or gim or both ")
             print("*********************************************************")
             exit(0)
 except Exception as msg:
