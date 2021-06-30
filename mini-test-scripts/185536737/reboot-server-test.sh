@@ -11,11 +11,11 @@
 # default values.
 
 ip=""
-CONFIG_INTERVAL_SLEEP=300
+CONFIG_INTERVAL_SLEEP=600
 CONFIG_HOST_IP=""
 CONFIG_HOST_USERNAME="root"
 CONFIG_HOST_PASSWORD="amd1234"
-CONFIG_ITERATION=10
+CONFIG_ITERATION=3
 LOG_DIR=./log/
 PATH_MONITOR="/home/mac-hq-02/tlee/GpuTools-2019-01-19/libsmi/monitor"
 PATH_PFX_RESET_SW_SCRIPT="/home/mac-hq-02/tlee/G_s_iotool/iotools-1.5/reset_switch"
@@ -76,15 +76,25 @@ while  [[ $i -le $CONFIG_ITERATION ]]
 do
     echo $i
     echo "rebooting $CONFIG_HOST_IP"
-    echo sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "echo rebooting... > /tmp/reboot.log; reboot"
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "echo rebooting... > /tmp/reboot.log; reboot"
     echo "sleeping for $CONFIG_INTERVAL_SLEEP seconds..."
-    sleep $CONFIG_INTERVAL_SLEEP
+
+    while [[ $j -le $CONFIG_INTERVAL_SLEEP ]] 
+    do
+        sleep 30
+        ping -c 4 $CONFIG_HOST_IP
+        if [[ $? -eq 0 ]] ; then
+            echo "Host is pingable. Not waiting until $CONFIG_INTERVAL_SLEEP. Will sleep for another 30 sec for ssh init."
+            sleep 30
+            break
+        fi
+    done
     
     ping -c 4 $CONFIG_HOST_IP
     if [[ $? -ne 0 ]] ; then echo "Host is not up after sleeping for $CONFIG_INTERVAL_SLEEP seconds. Try increasing sleep time." ; exit 1;  fi
     echo "Loading libgv..."
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "dmesg --clear ; modprobe gim ; dmesg" | tee -a $LOG_DIR/gimload.iter.$i.log 
-    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "rm /tmp/monitor.log  ; nohup bash -c 'for i in {0..100} ; do echo iteration >> /tmp/monitor.log; ./monitor  >> /tmp/monitor.log ; sleep 0.2 ; done '" 
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'for i in {0..100} ; do echo iteration >> /tmp/monitor.log; $PATH_MONITOR  > /tmp/monitor.$i.log ; sleep 0.2 ; done '" 
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "$PATH_PFX_RESET_SW_SCRIPT > /tmp/reset.log"
     i=$((i+1))
 done
