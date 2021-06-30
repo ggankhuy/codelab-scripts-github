@@ -1,5 +1,5 @@
 clear
-apt install -y dh-autoreconf
+apt install -y dh-autoreconf dkms
 echo ================================================
 echo "Verify prebuild.sh is 755-d on /usr/src/$1/ or /usr/src/<driver_name>"
 echo ================================================
