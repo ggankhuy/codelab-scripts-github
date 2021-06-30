@@ -94,7 +94,7 @@ do
     if [[ $? -ne 0 ]] ; then echo "Host is not up after sleeping for $CONFIG_INTERVAL_SLEEP seconds. Try increasing sleep time." ; exit 1;  fi
     echo "Loading libgv..."
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "dmesg --clear ; modprobe gim ; dmesg" | tee -a $LOG_DIR/gimload.iter.$i.log 
-    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'for i in {0..100} ; do echo iteration >> /tmp/monitor.log; $PATH_MONITOR  > /tmp/monitor.$i.log ; sleep 0.2 ; done '" 
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'for i in {0..100} ; do $PATH_MONITOR  >> /tmp/monitor.log ; sleep 0.2 ; done '" 
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "$PATH_PFX_RESET_SW_SCRIPT > /tmp/reset.log"
     i=$((i+1))
 done
