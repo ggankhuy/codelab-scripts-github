@@ -46,7 +46,12 @@ from datetime import datetime
 
 from fuzzywuzzy import fuzz
 
-FILE_NAME_MATCH_STRING="match-string.txt"
+CONFIG_INIT_TYPE_GIM_INIT=1
+CONFIG_INIT_TYPE_LIBGV_INIT=2
+CONFIG_INIT_TYPE_BOTH_INIT=3 # used if log contains both libgv and gim.
+CONFIG_INIT_TYPE=None
+
+FILE_NAME_MATCH_STRING="match-string.libgv.log"
 FILE_NAME_TARGET=None
 MAX_CHAR_PER_LINE=120
 DEBUG = 0
@@ -73,8 +78,9 @@ for i in sys.argv:
             elif i.split("=")[1] == "gim":
                 print("gim selected.")
                 CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_GIM_INIT
-            elif i.split("=")[1] == "both":
-                CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_BOTH_INIT
+                FILE_NAME_MATCH_STRING="match-string.gim.log"
+            #elif i.split("=")[1] == "both":
+            #    CONFIG_INIT_TYPE=CONFIG_INIT_TYPE_BOTH_INIT
             else:
                 print("Invalid init option, choose either 'gim' or 'libgv':", i)
                 exit(1)
@@ -112,6 +118,7 @@ else:
     quit(1)
     
 try:
+    print("Opening ", str(FILE_NAME_MATCH_STRING))
     matchStringBlock=open(FILE_NAME_MATCH_STRING)
     testString=open(FILE_NAME_TARGET)
 except Exception as msg:
