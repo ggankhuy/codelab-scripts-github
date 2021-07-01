@@ -19,6 +19,8 @@ CONFIG_ITERATION=3
 LOG_DIR=./log/
 PATH_MONITOR="/home/mac-hq-02/tlee/GpuTools-2019-01-19/libsmi/monitor"
 PATH_PFX_RESET_SW_SCRIPT="/home/mac-hq-02/tlee/G_s_iotool/iotools-1.5/reset_switch-2"
+CONFIG_FAST_RUN=1
+CONFIG_USE_MONITOR_SH=1
 
 function warm_reboot () {
     echo "sleeping for $CONFIG_INTERVAL_SLEEP seconds..."
@@ -93,9 +95,11 @@ mkdir -p $LOG_DIR
 i=0
 
 echo "rebooting $CONFIG_HOST_IP"
-warm_reboot
+if [[ $CONFIG_FAST_RUN -eq 0 ]] ; then 
+    warm_reboot 
+fi
 
-sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "ls -l /"
+sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "mkdir /log ; ls -l /"
 if [[ $? -ne 0 ]] ; then echo "ssh into terminal is failing, can not continue..." ; fi
 
 while  [[ $i -le $CONFIG_ITERATION ]] 
@@ -109,23 +113,49 @@ do
     #2.  Start Monitor deamon running in background in parallel, monitor all GPUs.
     #6.  Start Monitor Deamon running in background in parallel, monitor all GPUs.
 
-    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'for i in {0..100} ; do $PATH_MONITOR  >> /tmp/monitor.log ; sleep 0.2 ; done '" 
+    # Disabling for now. nohup bash -c still outputs to client ssh when issued on target ssh. This prevents the scripts from continuing.
+
+    if [[ $CONFIG_USE_MONITOR_SH -eq 1 ]] ; then
+        sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no ./monitor.sh $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP:/root/
+        sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup /root/monitor.sh > /log/monitor.sh &" 
+    else
+        #sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "rm /log/monitor.log ; nohup bash -c 'while true ; do $PATH_MONITOR  >> /log/monitor.log ; sleep 0.00002 ; done ' &" 
+        #sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'while true ; ' &" 
+        sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'i=0; while true ; do echo $i ; sleep 0.2 ; i=$((i+1)) ; done' &" 
+    fi
 
     #7.  Use the SMI API amdgv_disable_gpu_access() on all GPUs.
 
+    echo "check smi run"
     smi_run_flag=$((i%2))
 
     if [[ $smi_run_flag -eq 1 ]] ; then
         echo "iteration No. is odd: $i, running SMI flag." | tee  -a $LOG_DIR/smi.log
     fi
 
+    if [[ $CONFIG_FAST_RUN -eq 0 ]] ; then
+        echo "sleeping for 900 seconds."
+        sleep 900
+    else
+        echo "sleeping for 30 seconds."
+        sleep 30
+    fi
+
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "lspci -s 90:00.0 -x" | tee -a $LOG_DIR/90.0.0.before.sw.reset.$i.log 
+
     #3.  Apply the PFX switch reset script
     #8.  Apply the PFX switch reset script
 
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "dmesg" | tee -a $LOG_DIR/post-900s-sleep.$i.log 
+
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP \
-        "$PATH_PFX_RESET_SW_SCRIPT 0 140 0 0 > /tmp/reset-2.log"
+        "$PATH_PFX_RESET_SW_SCRIPT 0 140 0 0 >> /log/reset-2.log"
     sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP \
-        "$PATH_PFX_RESET_SW_SCRIPT 0 148 0 0 > /tmp/reset-3.log"
+        "$PATH_PFX_RESET_SW_SCRIPT 0 148 0 0 >> /log/reset-3.log"
+
+    sleep 5
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "lspci -s 90:00.0 -x" | tee -a $LOG_DIR/90.0.0.fter.sw.reset.$i.log 
+    sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "dmesg" | tee -a $LOG_DIR/post-reset-switch.$i.log 
 
     #4.  Warm reboot. Please collect the host kernel logs
     #9.  Warm reboot. Please collect the host kernel logs
