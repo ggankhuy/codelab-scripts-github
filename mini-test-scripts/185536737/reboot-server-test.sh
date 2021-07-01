@@ -19,7 +19,7 @@ CONFIG_ITERATION=3
 LOG_DIR=./log/
 PATH_MONITOR="/home/mac-hq-02/tlee/GpuTools-2019-01-19/libsmi/monitor"
 PATH_PFX_RESET_SW_SCRIPT="/home/mac-hq-02/tlee/G_s_iotool/iotools-1.5/reset_switch-2"
-CONFIG_FAST_RUN=1
+CONFIG_FAST_RUN=0
 CONFIG_USE_MONITOR_SH=1
 
 function warm_reboot () {
