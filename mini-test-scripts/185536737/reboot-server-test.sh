@@ -19,8 +19,10 @@ CONFIG_ITERATION=3
 LOG_DIR=./log/
 PATH_MONITOR="/home/mac-hq-02/tlee/GpuTools-2019-01-19/libsmi/monitor"
 PATH_PFX_RESET_SW_SCRIPT="/home/mac-hq-02/tlee/G_s_iotool/iotools-1.5/reset_switch-2"
+PATH_GPU_ACCESS_SCRIPT="/usr/src/gim-2.1.3.G.20210413/smi-lib/examples/restrict_hw_access/restrict_hw_access"
 CONFIG_FAST_RUN=0
 CONFIG_USE_MONITOR_SH=1
+CONFIG_ENABLE_GPU_ACCESS_SCRIPT=1
 
 function warm_reboot () {
     echo "sleeping for $CONFIG_INTERVAL_SLEEP seconds..."
@@ -118,19 +120,19 @@ do
     if [[ $CONFIG_USE_MONITOR_SH -eq 1 ]] ; then
         sshpass -p amd1234 scp -C -v -r -o StrictHostKeyChecking=no ./monitor.sh $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP:/root/
         sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup /root/monitor.sh > /log/monitor.sh &" 
-    else
-        #sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "rm /log/monitor.log ; nohup bash -c 'while true ; do $PATH_MONITOR  >> /log/monitor.log ; sleep 0.00002 ; done ' &" 
-        #sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'while true ; ' &" 
-        sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "nohup bash -c 'i=0; while true ; do echo $i ; sleep 0.2 ; i=$((i+1)) ; done' &" 
     fi
 
     #7.  Use the SMI API amdgv_disable_gpu_access() on all GPUs.
 
     echo "check smi run"
-    smi_run_flag=$((i%2))
+    #smi_run_flag=$((i%2))
 
-    if [[ $smi_run_flag -eq 1 ]] ; then
-        echo "iteration No. is odd: $i, running SMI flag." | tee  -a $LOG_DIR/smi.log
+    #if [[ $smi_run_flag -eq 1 ]] ; then
+    #    echo "iteration No. is odd: $i, running SMI flag." | tee  -a $LOG_DIR/smi.log
+    #fi
+
+    if [[ $CONFIG_ENABLE_GPU_ACCESS_SCRIPT -eq 1 ]] ; then
+        sshpass -p $CONFIG_HOST_PASSWORD ssh -o StrictHostKeyChecking=no $CONFIG_HOST_USERNAME@$CONFIG_HOST_IP "$PATH_GPU_ACCESS_SCRIPT disable; $PATH_GPU_ACCESS_SCRIPT query" | tee -a $LOG_DIR/disable_gpu_access.$i.log
     fi
 
     if [[ $CONFIG_FAST_RUN -eq 0 ]] ; then
