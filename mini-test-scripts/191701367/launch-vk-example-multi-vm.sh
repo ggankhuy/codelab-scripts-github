@@ -46,8 +46,13 @@ TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
 
 # limiting total vms.
 
-TOTAL_VMS=8
+TOTAL_VMS=14
 echo "TOTAL_VMS: $TOTAL_VMS"
+
+modprobe gim
+for i in $(seq, 1, 10) ; do virsh start  vats-test-0$i ; done
+for i in $(seq, 10, 14) ; do virsh start  vats-test-$i ; done
+sleep 300
 
 if [[ $CONFIG_DMESG_ONLY -ne 1 ]] ; then
     nohup ./monitor.sh &
