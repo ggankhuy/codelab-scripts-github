@@ -3,9 +3,10 @@ CONFIG_VATS2_SUPPORT=1
 CONFIG_ITERATIONS=50
 CONFIG_BY_PASS_XGEMM=0
 CONFIG_BARRIER_USE_WAIT=1 
+CONFIG_DMESG_ONLY=0
 
 DATE=`date +%Y%m%d-%H-%M-%S`
-DIRNAME=161384191-result/$DATE/
+DIRNAME=191701367-result/$DATE/
 mkdir -p $DIRNAME
 p0=$0
 p1=$1
@@ -39,7 +40,7 @@ if [[ $p1 -eq "all" ]] ; then
 fi
 
 echo "Backup host dmesg as dmesg-host-$DATE.log..."
-dmesg >/$DIRNAME/ dmesg-host-$DATE.log
+dmesg >$DIRNAME/dmesg-host-$DATE.log
 dmesg --clear
 TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
 
@@ -47,6 +48,11 @@ TOTAL_VMS=`virsh list --all | grep -i $VM_GREP_PATTERN | grep running | wc -l`
 
 TOTAL_VMS=8
 echo "TOTAL_VMS: $TOTAL_VMS"
+
+if [[ $CONFIG_DMESG_ONLY -ne 1 ]] ; then
+    nohup ./monitor.sh &
+    sleep 10
+fi
 
 for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     echo $DOUBLE_BAR
@@ -64,8 +70,23 @@ for (( n=0; n < $TOTAL_VMS; n++ ))  ; do
     echo VM_NAME: $VM_NAME, VM_INDEX: $VM_INDEX, VM_NO: $VM_NO, GPU_INDEX: $GPU_INDEX, VM_IP: $VM_IP
     sleep 1
 
-    if [[ $CONFIG_BY_PASS_XGEMM -ne 1 ]] ; then
-        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'hostname'
+    if [[ $CONFIG_DMESG_ONLY -ne 1 ]] ; then
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'cd /work/ubuntu_guest_package/utilities/test-apps/vk_examples/build_for_gibraltar ; dmesg --clear ; modprobe amdgpu ; rm *.log ; for i in {0..10} ; do ./run_vk_examples.sh ; done' > $DIRNAME/tmp.$n.log &
     fi
+done
+
+echo "dmesg loop."
+
+i=0
+while true
+do
+    echo iter $i:
+    for (( n=0; n < $TOTAL_VMS; n++ ))  ; 
+    do
+        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP 'dmesg' > $DIRNAME/dmesg.vm-$n.loop.$i.log &
+    done
+    i=$((i+1))
+    sleep 300
+    rm  monitor.log
 done
 
