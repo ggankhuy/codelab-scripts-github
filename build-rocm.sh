@@ -264,13 +264,23 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
 
-	for i in rocBLAS rocSPARSE rocSOLVER hipBLAS hipSPARSE
+	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
 		CURR_BUILD=$i
 		echo $building $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		popd
+	done
+	for i in rocBLAS
+	do
+		CURR_BUILD=$i
+		echo $building $i
+		pushd $ROCM_SRC_FOLDER/$i
+
+		./install.sh -icdn | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
