@@ -1,5 +1,5 @@
 diff --git a/test/MatrixTranspose_test/Makefile b/test/MatrixTranspose_test/Makefile
-index 758f8d9..9866ad2 100644
+index 758f8d9..f7127d7 100644
 --- a/test/MatrixTranspose_test/Makefile
 +++ b/test/MatrixTranspose_test/Makefile
 @@ -4,8 +4,14 @@ LIB_PATH  ?= $(ROOT_PATH)/build
@@ -25,7 +25,7 @@ index 758f8d9..9866ad2 100644
  OBJECTS = MatrixTranspose.o
 -FLAGS =-g $(INC_PATH:%=-I%) -I$(ROCM_PATH)/hsa/include/hsa -I$(ROCM_PATH)/hsa/include -I$(ROCM_PATH)/hip/include -I$(ROCM_PATH)/include -DLOCAL_BUILD=1 -DHIP_VDI=${HIP_VDI} -DITERATIONS=$(ITERATIONS) -DAMD_INTERNAL_BUILD=1
 +FLAGS =-g $(INC_PATH:%=-I%) \
-+    -I$(ROCM_PATH)/roctracer/include/hip_ostream_ops.h \
++    -I$(ROCM_PATH)/roctracer/include/ \
 +    -I$(ROCM_PATH)/hsa/include/hsa -I$(ROCM_PATH)/hsa/include \
 +    -I$(ROCM_PATH)/hip/include \
 +    -I$(ROCM_PATH)/include \
