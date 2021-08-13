@@ -428,11 +428,14 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	cd kineto/libkineto/
 	mkdir build ; cd build  
 	cmake .. ; make -j`nproc` install | tee -a $LOG_DIR/$CURR_BUILD
+    cd ../../..
+    pwd
 
     CURR_BUILD=rccl-tests
     git clone https://github.com/ROCmSoftwarePlatform/rccl-tests.git
-    cd $CURR_BUILD | tee -a $LOG_DIR/$CURR_BUILD.log
-    ./install.sh
+    cd $CURR_BUILD 
+    ./install.sh || tee -a $LOG_DIR/$CURR_BUILD.log
+    cd ..
     
     popd
 else
