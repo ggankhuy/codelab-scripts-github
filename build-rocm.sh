@@ -413,6 +413,9 @@ fi
 if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	echo "Installing non-rocm repo components build."
 
+	mkdir -p ~/non-rocm-repo/
+	pushd ~/non-rocm-repo/
+    
 	# install tensorflow.
 
 	apt install python3-setuptools -y
@@ -421,13 +424,17 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	# install pytorch profiler kineto:
 
 	CURR_BUILD=pytorch-kineto
-	mkdir -p ~/non-rocm-repo/
-	pushd ~/non-rocm-repo/
 	git clone --recursive https://github.com/pytorch/kineto.git
 	cd kineto/libkineto/
 	mkdir build ; cd build  
 	cmake .. ; make -j`nproc` install | tee -a $LOG_DIR/$CURR_BUILD
 
+    CURR_BUILD=rccl-tests
+    git clone https://github.com/ROCmSoftwarePlatform/rccl-tests.git
+    cd $CURR_BUILD | tee -a $LOG_DIR/$CURR_BUILD.log
+    ./install.sh
+    
+    popd
 else
 	echo "Bypassing non-rocm repo components build."
 
