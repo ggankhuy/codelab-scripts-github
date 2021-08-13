@@ -210,6 +210,17 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	done
     fi
 
+    for i in roctracer
+    do
+        CURR_BUILD=$i
+        echo $building $i
+        apt install rpm -y
+        pip3 install cppheaderparser
+        pushd $ROCM_SRC_FOLDER/$i
+        ./build.sh
+        popd
+    done
+
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
     	for i in  rocThrust
     	do
