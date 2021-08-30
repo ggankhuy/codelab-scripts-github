@@ -436,6 +436,17 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     cd $CURR_BUILD 
     ./install.sh || tee -a $LOG_DIR/$CURR_BUILD.log
     cd ..
+
+    CURR_BUILD=grpc
+    git clone -b v1.28.1 https://github.com/grpc/grpc
+    echo "curr dir 1: " ; pwd
+    cd $CURR_BUILD 
+    git submodule update --init
+    mkdir build ; cd build
+    cmake -DgRPC_INSTALL=ON -DBUILD_SHARED_LIBS=ON  ..
+    make -j`nproc` 
+    make install    
+    cd ../..
     
     popd
 else
