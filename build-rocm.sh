@@ -316,7 +316,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
-		cmake .. -DMIOPEN_BACKEND=HIP | tee $LOG_DIR/$CURR_BUILD
+		cmake .. -DMIOPEN_BACKEND=OpenCL | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -447,6 +447,29 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     make -j`nproc` 
     make install    
     cd ../..
+
+    # onnx + prereq (protobuf)
+    
+    CURR_BUILD=protobuf
+    git clone https://github.com/protocolbuffers/protobuf.git
+    cd $CURR_BUILD 
+    git checkout v3.16.0
+    git submodule update --init --recursive
+    mkdir build ; cd build
+    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
+    make -j`nproc` 
+    make install    
+    cd ../..
+
+    CURR_BUILD=onnx
+    export CMAKE_ARGS="-DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
+    git clone --recursive https://github.com/onnx/onnx.git
+    cd $CURR_BUILD 
+    set CMAKE_ARGS=-DONNX_USE_LITE_PROTO=ON
+    pip3 install -e.
+    cd ..
+
+    
     
     popd
 else
