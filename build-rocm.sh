@@ -1,8 +1,65 @@
+#Several variables dictate the speed and completeness of all builds:
+# FAST_INSTALL - intended for building subset of components as quickly as possible.
+# ESSENTIAL_INSTALL - intended for building only components whose binary package is not available (at least not found)
+# So that user can install prebuild packages.When this option is one, suboption ESSENTIAL_INSTALL_PACKAGES - will
+# install pre-built packages for all components.
+#  - B: build
+#  - I: install
+#  - P: install pre-build package
+#  - x: will not install
+#  - TBD - to be determined, more work needed to determine.
+#  - dontcare or DC - will install regardless of flag.
+#  - dontcareN or DCN - will not install regardless of flag.
+
+#---------------------------
+# varname 		| FAST_INSTALL	| ESSENTIAL_INSTALL 	|
+# llvm			| dontcare	| dontcare		|
+# device-libs		| dontcare	| dontcare		|
+# comgr			| DC		| DC			|
+# rocclr		| DC		| DC			|
+# HIP			| DC		| DC 			|
+# ROCm-OpenCL-Runtime	| BI		| TBD 			|
+# RCCL			| BI 		| TBD			|
+# rocm_smi_lib  	| BI		| TBD 			|
+# rocm_bandwidth_test 	| BI            | TBD                   |
+# rocminfo 		| BI            | TBD                   |
+# rocprofiler		| BI            | TBD                   |
+# rocr_debug_agent 	| x		| TBD			|
+# MIOpenGEMM 		| x             | TBD                   |
+# half 			| x             | TBD                   |
+# clang-ocl 		| x             | TBD                   |
+# rocm-cmake 		| x             | TBD                   |
+# ROCR-Runtime/src 	| x             | TBD                   |
+# ROCT-Thunk-Interface	| x             | TBD                   |
+# roctracer		| BI		| TBD			|
+# rocThrust		| x		| TBD			|
+# ROCmValidationSuite	| x		| TBD			|
+# rocPRIM		| x		| TBD			|
+# hipCUB		| x		| TBD			|
+# hipcc			| x	 	| TBD			|
+# rocSPARSE 		| x             | TBD                   |
+# rocSOLVER 		| x             | TBD                   |
+# hipBLAS 		| x             | TBD                   |
+# hipBLAS 		| x             | TBD                   |
+# rocBLAS		| x             | TBD                   |
+# rocRAND		| x             | TBD                   |
+# MIOpen		| x             | TBD                   |
+# rocALUTION		| x             | TBD                   |
+# rocGDB		| x             | TBD                   |
+# AMDMIGRAPHx		| x             | TBD                   |
+# MIVisionX		| x             | TBD                   |
+# RCP 			| x             | TBD                   |
+# 
+
+
+
 REPO_ONLY=0
 NON_REPO_ONLY=0
 p1=$1
 CONFIG_TEST=0
 FAST_INSTALL=0
+ESSENTIAL_INSTALL=1
+
 for var in "$@"
 do
     if [[ $var == "fast" ]]  ; then
