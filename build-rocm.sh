@@ -63,11 +63,13 @@ CONFIG_BUILD_PACKAGE=1
 if [[ $CONFIG_BUILD_PACKAGE ]] ; then
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
 	BUILD_TARGET=package
+    INSTALL_SH_PACKAGE="-p"
 	INSTALL_TARGET=package
 	apt install -y rpm
 	mkdir -p $CONFIG_BUILD_PKGS_LOC
 else
 	BUILD_TARGET=""
+    INSTALL_SH_PACKAGE=""
 	INSTALL_TARGET=install
 fi
 for var in "$@"
@@ -238,7 +240,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     	CURR_BUILD=rccl
     	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    	./install.sh -idt | tee $LOG_DIR/$CURR_BUILD
+    	./install.sh -idt $INSTALL_SH_PACKAGE | tee $LOG_DIR/$CURR_BUILD
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
     fi
@@ -251,7 +253,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
@@ -266,7 +268,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
@@ -282,7 +284,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     for i in roctracer
     do
         CURR_BUILD=$i
-        echo $building $i
+        echo building $i
         apt install rpm -y
         pip3 install cppheaderparser
         pushd $ROCM_SRC_FOLDER/$i
@@ -294,7 +296,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	for i in  rocThrust
     	do
     		CURR_BUILD=$i
-    		echo $building $i
+    		echo building $i
     		pushd $ROCM_SRC_FOLDER/$i
     		mkdir build; cd build
     		rm -rf ./*
@@ -322,7 +324,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocPRIM hipCUB
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
@@ -348,7 +350,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
@@ -358,7 +360,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocBLAS
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install.sh -icdn | tee $LOG_DIR/$CURR_BUILD.log
@@ -369,7 +371,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocRAND
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install -icd | tee $LOG_DIR/$CURR_BUILD.log
@@ -382,7 +384,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in MIOpen
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
@@ -400,7 +402,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocALUTION
 	do
 		CURR_BUILD=$i
-		echo $building $i
+		echo building $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build ; cd build
 		cmake .. -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
@@ -412,7 +414,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
         CURR_BUILD=HIP-Examples
         i=$CURR_BUILD
-        echo $building $i
+        echo building $i
         pushd $ROCM_SRC_FOLDER/$i
         ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -449,7 +451,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	popd
 
 	CURR_BUILD=MIVisionX
-	echo $building $i
+	echo building $i
 	pushd $ROCM_SRC_FOLDER/$i
 	mkdir build; cd build
 	python MIVisionX-setup.py
@@ -467,7 +469,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	sudo apt-get install scons mesa-common-dev libboost-all-dev -y
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	i=$CURR_BUILD
-	echo $building $i
+	echo building $i
 	pushd $ROCM_SRC_FOLDER/$i
 	cd Build/Linux/ ; chmod 755 *sh
 	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
