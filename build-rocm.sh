@@ -48,7 +48,7 @@
 # rocGDB		        | x         | TBD           |
 # AMDMIGRAPHx		    | x         | TBD           |
 # MIVisionX		        | x         | TBD           |
-# RCP 			        | x         | TBD           |
+# RCP(obsolete)         | x         | TBD           |
 # 
 
 
@@ -168,9 +168,9 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	mkdir build ; cd build
 	cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
+	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make $INSTALL_TARGET  | tee -a $LOG_DIR/$CURR_BUILD.log
+	make install | tee -a $LOG_DIR/$CURR_BUILD.log
 	popd
 
 	CURR_BUILD=ROCm-CompilerSupport
@@ -466,18 +466,19 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	popd
 
+    # Commented out because it seems obsolete, github shows last commit 2019. Keep for a while and delete 
+    # this code.
 	#	sudo apt-get install scons mesa-common-dev libboost-all-dev rocprofiler-dev -y
-	CURR_BUILD=RCP
-	sudo apt-get install scons mesa-common-dev libboost-all-dev -y
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	i=$CURR_BUILD
-	echo building $i
-	pushd $ROCM_SRC_FOLDER/$i
-	cd Build/Linux/ ; chmod 755 *sh
+	#CURR_BUILD=RCP
+	#sudo apt-get install scons mesa-common-dev libboost-all-dev -y
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+	#i=$CURR_BUILD
+	#echo building $i
+	#pushd $ROCM_SRC_FOLDER/$i
+	#cd Build/Linux/ ; chmod 755 *sh
 	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
-	./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	popd
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+	#popd
 
     fi # if fast_install.
 else
