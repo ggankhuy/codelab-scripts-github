@@ -60,12 +60,13 @@ CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=1
+apt install python3-setuptools rpm -y
+
 if [[ $CONFIG_BUILD_PACKAGE ]] ; then
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
 	BUILD_TARGET=package
     INSTALL_SH_PACKAGE="-p"
 	INSTALL_TARGET=package
-	apt install -y rpm
 	mkdir -p $CONFIG_BUILD_PKGS_LOC
 else
 	BUILD_TARGET=""
@@ -426,7 +427,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
         CURR_BUILD=ROCgdb
-        echo $building $CURR_BUILD
+        echo building $CURR_BUILD
         pushd $ROCM_SRC_FOLDER/$CURR_BUILD
         ./configure
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -435,9 +436,10 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	popd
 
 	CURR_BUILD=AMDMIGraphX
-	pip install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
+    echo building $CURR_BUILD
+    pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++
+	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee  $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
