@@ -213,9 +213,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	mkdir build; cd build
 	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee $LOG_DIR/ROCclr.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/ROCclr.log
+	#make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/ROCclr.log
+	make -j$NPROC | tee -a $LOG_DIR/ROCclr.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $INSTALL_TARGET | tee -a $LOG_DIR/ROCclr.log
+	#make -j$NPROC $INSTALL_TARGET | tee -a $LOG_DIR/ROCclr.log
+	make install | tee -a $LOG_DIR/ROCclr.log
 	popd
 
 	CURR_BUILD=HIP
@@ -223,9 +225,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	mkdir build ; cd build
 	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
+	make -j$NPROC $BUILD_TARGET| tee -a $LOG_DIR/$CURR_BUILD.log
+	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
+	#make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
+	make install | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
