@@ -223,7 +223,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	mkdir build ; cd build
 	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -234,7 +234,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	mkdir -p build; cd build
     	cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -259,7 +259,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -274,7 +274,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -303,7 +303,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     		rm -rf ./*
     		CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+    		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -330,7 +330,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		mkdir build; cd build
 		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -391,7 +391,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		rm -rf ./*
 		cmake .. -DMIOPEN_BACKEND=OpenCL | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -408,7 +408,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		mkdir build ; cd build
 		cmake .. -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
@@ -446,7 +446,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	mkdir build; cd build
 	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -456,11 +456,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	echo building $i
 	pushd $ROCM_SRC_FOLDER/$i
 	mkdir build; cd build
-	python MIVisionX-setup.py
+	#python MIVisionX-setup.py
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	cmake .. | tee $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD
+	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
