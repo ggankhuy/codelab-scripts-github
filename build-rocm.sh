@@ -401,7 +401,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
-		./install.sh -icdn | tee $LOG_DIR/$CURR_BUILD.log
+		./install.sh -icd -logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
