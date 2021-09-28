@@ -254,7 +254,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	apt install gcc g++ make cmake libelf-dev libdw-dev -y
 
-    if [[ $FAST_INSTALL -eq 0 ]] ; then	
+    if [[ $FAST_INSTALL -eq 1 ]] ; then	
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
 	do
 		CURR_BUILD=$i
@@ -393,7 +393,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
-		cmake .. -DMIOPEN_BACKEND=OpenCL | tee $LOG_DIR/$CURR_BUILD
+        cmake -DMIOPEN_BACKEND=OpenCL -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -434,55 +434,55 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         echo building $CURR_BUILD
         pushd $ROCM_SRC_FOLDER/$CURR_BUILD
         ./configure
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	popd
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make -j$NPROC
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	popd
 
-	CURR_BUILD=AMDMIGraphX
-    echo building $CURR_BUILD
-    pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee  $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	CURR_BUILD=AMDMIGraphX
+        echo building $CURR_BUILD
+        pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
-	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-	mkdir build; cd build
-	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	popd
+    	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee  $LOG_DIR/$CURR_BUILD
+      	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	mkdir build; cd build
+    	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	popd
 
-	CURR_BUILD=MIVisionX
-	echo building $i
-	pushd $ROCM_SRC_FOLDER/$i
-	mkdir build; cd build
-	#python MIVisionX-setup.py
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	cmake .. | tee $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	popd
+    	CURR_BUILD=MIVisionX
+    	echo building $i
+    	pushd $ROCM_SRC_FOLDER/$i
+    	mkdir build; cd build
+    	#python MIVisionX-setup.py
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	cmake .. | tee $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	popd
 
-    # Commented out because it seems obsolete, github shows last commit 2019. Keep for a while and delete 
-    # this code.
-	#	sudo apt-get install scons mesa-common-dev libboost-all-dev rocprofiler-dev -y
-	#CURR_BUILD=RCP
-	#sudo apt-get install scons mesa-common-dev libboost-all-dev -y
-	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	#i=$CURR_BUILD
-	#echo building $i
-	#pushd $ROCM_SRC_FOLDER/$i
-	#cd Build/Linux/ ; chmod 755 *sh
-	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
-	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	#popd
+        # Commented out because it seems obsolete, github shows last commit 2019. Keep for a while and delete 
+        # this code.
+    	#	sudo apt-get install scons mesa-common-dev libboost-all-dev rocprofiler-dev -y
+    	#CURR_BUILD=RCP
+    	#sudo apt-get install scons mesa-common-dev libboost-all-dev -y
+    	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	#i=$CURR_BUILD
+    	#echo building $i
+    	#pushd $ROCM_SRC_FOLDER/$i
+    	#cd Build/Linux/ ; chmod 755 *sh
+    	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
+    	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    	#popd
 
     fi # if fast_install.
 else
