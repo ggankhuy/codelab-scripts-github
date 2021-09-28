@@ -62,7 +62,8 @@ ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=1
 CONFIG_BYPASS_LLVM=0
 apt install python3-setuptools rpm -y
-
+t1=""
+f2=""
 if [[ $CONFIG_BUILD_PACKAGE ]] ; then
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
 	BUILD_TARGET=package
@@ -126,6 +127,21 @@ ROCM_INST_FOLDER=/opt/rocm-$VERSION.0/
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 export PATH=$PATH:/opt/rocm-$VERSION.0/llvm/bin/
 
+function build_entry () {
+    t2=$SECONDS
+    if  [[ ! -z $t1 ]] ; then
+        echo Build took $((t2-t1)) seconds | tee -a $LOG_SUMMARY
+        echo "............................." | tee -a $LOG_SUMMARY
+    else
+        echo "Did not log previous build" | tee -a $LOG_SUMMARY
+    fi
+    L_CURR_BUILD=$1
+    echo "............................." | tee -a $LOG_SUMMARY
+    echo " Building entry: $L_CURR_BUILD" | tee -a $LOG_SUMMARY
+    echo "............................." | tee -a $LOG_SUMMARY
+    t1=$SECONDS
+}
+
 function setup_root_rocm_softlink () {
 	rm ~/ROCm
 	ln -s $ROCM_SRC_FOLDER  ~/ROCm
@@ -170,6 +186,7 @@ sleep 2
 if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $CONFIG_BYPASS_LLVM == 0 ]] ; then
 		CURR_BUILD=llvm-project
+        build_entry $CURR_BUILD
 		pushd $CURR_BUILD
 		mkdir build ; cd build
 		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
@@ -182,6 +199,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		echo "Bypassing llvm..." ; sleep 5
 	fi
 	CURR_BUILD=ROCm-CompilerSupport
+    build_entry $CURR_BUILD
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 	cd lib/comgr/
 	LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
@@ -200,6 +218,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
 
+    CURR_BUILD=COMGR
+    build_entry $CURR_BUILD
 	mkdir -p "$COMGR/build"
 	cd "$COMGR/build"
 	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
@@ -218,6 +238,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	ROCclr_DIR=$ROCM_SRC_FOLDER/ROCclr/
 	OLDPWD=$ROCM_SRC_FOLDER/ROCclr
 
+    CURR_BUILD=ROCclr
+    build_entry $CURR_BUILD
 	mkdir build; cd build
 	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee $LOG_DIR/ROCclr.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -229,6 +251,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	popd
 
 	CURR_BUILD=HIP
+    build_entry $CURR_BUILD
 	cd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
 	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
@@ -242,6 +265,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
     	CURR_BUILD=ROCm-OpenCL-Runtime
+        build_entry $CURR_BUILD
     	cd $ROCM_SRC_FOLDER/$CURR_BUILD
     	mkdir -p build; cd build
     	cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
@@ -252,7 +276,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
     	CURR_BUILD=rccl
-    	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+        build_entry $CURR_BUILD
+   	    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     	./install.sh -idt $INSTALL_SH_PACKAGE | tee $LOG_DIR/$CURR_BUILD
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
@@ -266,7 +291,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
@@ -281,7 +306,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		cmake .. | tee $LOG_DIR/$CURR_BUILD
@@ -297,7 +322,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     for i in roctracer
     do
         CURR_BUILD=$i
-        echo building $i
+        build_entry $i
         apt install rpm -y
         pip3 install cppheaderparser
         pushd $ROCM_SRC_FOLDER/$i
@@ -309,7 +334,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	for i in  rocThrust
     	do
     		CURR_BUILD=$i
-    		echo building $i
+    		build_entry $i
     		pushd $ROCM_SRC_FOLDER/$i
     		mkdir build; cd build
     		rm -rf ./*
@@ -337,7 +362,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocPRIM hipCUB
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
@@ -363,7 +388,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
@@ -373,7 +398,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocBLAS
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install.sh -icdn | tee $LOG_DIR/$CURR_BUILD.log
@@ -384,7 +409,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocRAND
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
 		./install -icd | tee $LOG_DIR/$CURR_BUILD.log
@@ -397,7 +422,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in MIOpen
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
@@ -415,7 +440,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocALUTION
 	do
 		CURR_BUILD=$i
-		echo building $i
+		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build ; cd build
 		cmake .. -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
@@ -427,7 +452,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
         CURR_BUILD=HIP-Examples
         i=$CURR_BUILD
-        echo building $i
+        build_entry $i
         pushd $ROCM_SRC_FOLDER/$i
         ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -439,7 +464,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
         CURR_BUILD=ROCgdb
-        echo building $CURR_BUILD
+        build_entry $CURR_BUILD
         pushd $ROCM_SRC_FOLDER/$CURR_BUILD
         ./configure
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -448,7 +473,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	popd
 
     	CURR_BUILD=AMDMIGraphX
-        echo building $CURR_BUILD
+        build_entry $CURR_BUILD
         pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
@@ -465,7 +490,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	popd
 
     	CURR_BUILD=MIVisionX
-    	echo building $i
+    	build_entry $i
     	pushd $ROCM_SRC_FOLDER/$i
     	mkdir build; cd build
     	#python MIVisionX-setup.py
@@ -485,7 +510,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	#sudo apt-get install scons mesa-common-dev libboost-all-dev -y
     	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	#i=$CURR_BUILD
-    	#echo building $i
+    	#build_entry $i
     	#pushd $ROCM_SRC_FOLDER/$i
     	#cd Build/Linux/ ; chmod 755 *sh
     	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
@@ -511,6 +536,7 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	# install pytorch profiler kineto:
 
 	CURR_BUILD=pytorch-kineto
+    build_entry $CURR_BUILD
 	git clone --recursive https://github.com/pytorch/kineto.git
 	cd kineto/libkineto/
 	mkdir build ; cd build  
@@ -522,12 +548,14 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     pwd
 
     CURR_BUILD=rccl-tests
+    build_entry $CURR_BUILD
     git clone https://github.com/ROCmSoftwarePlatform/rccl-tests.git
     cd $CURR_BUILD 
     ./install.sh || tee -a $LOG_DIR/$CURR_BUILD.log
     cd ..
 
     CURR_BUILD=grpc
+    build_entry $CURR_BUILD
     git clone -b v1.28.1 https://github.com/grpc/grpc
     echo "curr dir 1: " ; pwd
     cd $CURR_BUILD 
@@ -541,6 +569,7 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     # onnx + prereq (protobuf)
     
     CURR_BUILD=protobuf
+    build_entry $CURR_BUILD
     git clone https://github.com/protocolbuffers/protobuf.git
     cd $CURR_BUILD 
     git checkout v3.16.0
@@ -552,6 +581,7 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     cd ../..
 
     CURR_BUILD=onnx
+    build_entry $CURR_BUILD
     export CMAKE_ARGS="-DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
     git clone --recursive https://github.com/onnx/onnx.git
     cd $CURR_BUILD 
@@ -559,8 +589,6 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     pip3 install -e.
     cd ..
 
-    
-    
     popd
 else
 	echo "Bypassing non-rocm repo components build."
