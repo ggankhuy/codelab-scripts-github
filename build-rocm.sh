@@ -60,6 +60,7 @@ CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=1
+CONFIG_BYPASS_LLVM=0
 apt install python3-setuptools rpm -y
 
 if [[ $CONFIG_BUILD_PACKAGE ]] ; then
@@ -75,6 +76,10 @@ else
 fi
 for var in "$@"
 do
+    if [[ $var == "llvmno" ]]  ; then
+        echo bypass llvm: $var
+       	CONFIG_BYPASS_LLVM=1
+    fi
     if [[ $var == "fast" ]]  ; then
         echo fast installation specified: $var
         FAST_INSTALL=1
@@ -163,16 +168,19 @@ echo "CONFIG_TEST: $CONFIG_TEST"
 sleep 2
 
 if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
-	CURR_BUILD=llvm-project
-	pushd $CURR_BUILD
-	mkdir build ; cd build
-	cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make install | tee -a $LOG_DIR/$CURR_BUILD.log
-	popd
-
+	if [[ $CONFIG_BYPASS_LLVM == 0 ]] ; then
+		CURR_BUILD=llvm-project
+		pushd $CURR_BUILD
+		mkdir build ; cd build
+		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm | tee $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make -j$NPROC | tee -a $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make install | tee -a $LOG_DIR/$CURR_BUILD.log
+		popd
+	else
+		echo "Bypassing llvm..." ; sleep 5
+	fi
 	CURR_BUILD=ROCm-CompilerSupport
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 	cd lib/comgr/
