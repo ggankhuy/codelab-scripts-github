@@ -51,8 +51,6 @@
 # RCP(obsolete)         | x         | TBD           |
 # 
 
-
-
 REPO_ONLY=0
 NON_REPO_ONLY=0
 p1=$1
@@ -62,6 +60,8 @@ ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=1
 CONFIG_BYPASS_LLVM=0
 apt install python3-setuptools rpm -y
+CONFIG_DISABLE_rocSOLVER=1
+CONFIG_DISABLE_hipBLAS=1
 t1=""
 f2=""
 if [[ $CONFIG_BUILD_PACKAGE ]] ; then
@@ -387,13 +387,18 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
-		CURR_BUILD=$i
-		build_entry $i
-		pushd $ROCM_SRC_FOLDER/$i
-
-		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		popd
+        echo "GG: CONFIG_DISABLE_$i: $((CONFIG_DISABLE_$i))"
+        sleep 10
+		if [[ $((CONFIG_DISABLE_$i)) == 1 ]] ; then
+ 			echo "Bypassing $i build..." >> $LOG_SUMMARY
+		else
+			CURR_BUILD=$i
+			build_entry $i
+			pushd $ROCM_SRC_FOLDER/$i
+    		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+    		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    		popd
+		fi
 	done
 	for i in rocBLAS
 	do
@@ -462,7 +467,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	apt install -y texinfo bison flex
 
-    if [[ $FAST_INSTALL -eq 0 ]] ; then	
+    echo "FAST_INSTALL: $FAST_INSTALL"
+    if [[ $FAST_INSTALL == 0 ]] ; then	
         CURR_BUILD=ROCgdb
         build_entry $CURR_BUILD
         pushd $ROCM_SRC_FOLDER/$CURR_BUILD
