@@ -496,7 +496,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	popd
 
     	CURR_BUILD=MIVisionX
-    	build_entry $i
+    	build_entry $CURR_BUILD
     	pushd $ROCM_SRC_FOLDER/$i
     	mkdir build; cd build
     	#python MIVisionX-setup.py
