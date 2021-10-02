@@ -497,7 +497,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     	CURR_BUILD=MIVisionX
     	build_entry $CURR_BUILD
-    	pushd $ROCM_SRC_FOLDER/$i
+    	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     	mkdir build; cd build
     	#python MIVisionX-setup.py
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
