@@ -13,4 +13,5 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 sudo docker run hello-world
 docker login --username=ggdocker000 --password=8981555aaa
+sudo usermod -aG docker $USER
 
