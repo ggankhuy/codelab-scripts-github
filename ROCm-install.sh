@@ -111,3 +111,5 @@ else
 	echo "Skipping rocm-source installation."
 fi
 sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP  'ls -l /opt/'
+sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP  'sudo usermod -a -G $LOGNAME'
+
