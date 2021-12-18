@@ -6,6 +6,22 @@ CONFIG_VERSION=4.0
 CONFIG_INTERVAL_SLEEP=60
 CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM=0
 
+TYPE_OS_UBUNTU1804="1" # OK.
+TYPE_OS_UBUNTU2004="2" # not supported yet.
+TYPE_OS_CENTOS8="3" # tested on Centos8 Stream. 4.3 not working, intest.
+TYPE_OS_RHEL7="4" # not supported yet.
+TYPE_OS_SLES=3 # not supported yet.
+PKG_INSTALLER=""
+yum_exist=`which yum`
+if [[ -z $? ]] ; then
+    echo "Installing yum packages..." ; sleep 3
+    yum install epel-release -y
+    yum install sshpass -y
+fi
+
+TYPE_OS=$TYPE_OS_UBUNTU1804
+#TYPE_OS=$TYPE_OS_CENTOS8
+
 for var in "$@"
 do
     if [[ ! -z `echo "$var" | grep "ip="` ]]  ; then
@@ -38,78 +54,149 @@ fi
 
 VM_IP=$p1
 
-if [[ $CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM -ne 1 ]] ; then
-    for i in "apt install -y git python python3 tree net-tools" "apt remove amdgpu-dkms -y" "apt remove amdgpu-dkms-firmware -y" "apt update -y" "apt dist-upgrade -y" "apt install libnuma-dev -y " "echo rebooting ; sleep $CONFIG_INTERVAL_SLEEP ; reboot" ; do
-            echo ----------
-            echo $i
-            echo ----------
-            sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
-    done
+#   Set O/S specific variables here.
 
-    sleep $CONFIG_INTERVAL_SLEEP
-    if [[ $CONFIG_FORCE_VERSION -eq 0 ]] ; then
-    	for i in "wget -qO - http://repo.radeon.com/rocm/apt/debian/rocm.gpg.key | sudo apt-key add -" \
-    		"echo 'cd ~/ROCm/' >> ~/.bashrc" \
-    	        "echo 'deb [arch=amd64] http://repo.radeon.com/rocm/apt/debian/ xenial main' | sudo tee /etc/apt/sources.list.d/rocm.list" \
-    	        "apt update" "apt install rocm-dkms -y" "modprobe amdgpu" "/opt/rocm/bin/rocminfo" "apt install clinfo -y" "clinfo"; 
-    	do
-    	        echo ----------
-    	        echo $i
-    	        echo ----------
-    	        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
-    	done
-    else
-    	for i in "wget -qO - http://repo.radeon.com/rocm/apt/$CONFIG_VERSION/rocm.gpg.key | sudo apt-key add -" \
-    		"echo 'cd ~/ROCm/' >> ~/.bashrc" \
-    	        "echo 'deb [arch=amd64] http://repo.radeon.com/rocm/apt/$CONFIG_VERSION/ xenial main' | sudo tee /etc/apt/sources.list.d/rocm.list" \
-    	        "apt update" "apt install rocm-dkms -y" "modprobe amdgpu" "/opt/rocm/bin/rocminfo" "apt install clinfo -y" "clinfo"; 
-    	do
-    	        echo ----------
-    	        echo $i
-    	        echo ----------
-    	        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
-    	done
-    fi
-else
-    echo "Bypassing rocm installation for test purpose..."
-fi
+case $TYPE_OS in 
+	$TYPE_OS_UBUNTU1804)
+    PKG_INSTALLER=apt
+	;;
+	$TYPE_OS_CENTOS8)
+    PKG_INSTALLER=yum
+	;;
+	*)
+	echo "Unsupported OS. OS code: ." $TYPE_OS
+	;;
+esac
 
-if [[ $INSTALL_ROCM_SRC -eq 1 ]] ; then
-	if [[ $INSTALL_ROCM_SRC_COPY -eq 1 ]] ; then
-        echo "Copying the rocm-source.sh script..."
-		sshpass -p amd1234 scp ./rocm-source.sh root@$VM_IP:/root
-        if [[ $? -ne 0 ]] ; then echo "failed to scp..." ; exit ; fi
-		
-		if [[ $INSTALL_ROCM_SRC_COPY_INSTALL -eq 1 ]] ; then
-		        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "cd ; ./rocm-source.sh $CONFIG_VERSION"
-		fi
-		
+function install_rocm_ubuntu1804() {
+	echo "Installing for Ubuntu1804."
+    cmdArr=( "apt install -y git python python3 tree net-tools" "apt remove amdgpu-dkms -y"  "apt remove amdgpu-dkms-firmware -y" "apt update -y" \
+    "apt dist-upgrade -y" "apt install libnuma-dev -y" "reboot")
+	if [[ $CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM -ne 1 ]] ; then
+        for i in "${cmdArr[@]}" ; do
+ 	            echo ---------- ; echo $i ; echo ---------- ; sleep 3 
+	            sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
+	    done
+
+	    sleep $CONFIG_INTERVAL_SLEEP
+
+        # Force version option is no longer necessary, always force since no force to latest versions since 4.3 does not work with 
+        # this script anymore.
+
+	    if [[ $CONFIG_FORCE_VERSION -eq 0 ]] ; then
+            repoUrlBase="http://repo.radeon.com/rocm/apt/debian/"
+	    else
+            repoUrlBase="http://repo.radeon.com/rocm/apt/$CONFIG_VERSION/"
+	    fi
+
+        cmdArr=("wget -qO - $repoUrlBase/rocm.gpg.key | sudo apt-key add -" "echo 'cd ~/ROCm/' >> ~/.bashrc" \
+            "echo 'deb [arch=amd64] $repoUrlBase xenial main' | sudo tee /etc/apt/sources.list.d/rocm.list" \
+            "apt update" "apt install rocm-dkms -y" "modprobe amdgpu" "/opt/rocm/bin/rocminfo" "apt install clinfo -y" "clinfo")
+    	for i in "${cmdArr[@]}" ; do
+      	        echo ---------- ; echo issuing cmd: $i ; echo ---------- ; sleep 3
+    	        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
+       	done
 	else
-		# following block not working and duplicate of rocm-source...
-		echo "You specified to install rocm source. CONFIG_VERSION: $CONFIG_VERSION."
-        sleep 10
-		for i in "git config --global user.email \"you@example.com\"" \
-            "git config --global user.name \"Your Name\"" \
-            "git config --global color.ui false" \
-			"mkdir -p ~/ROCm-$CONFIG_VERSION/" \
-			"mkdir -p ~/bin/" \
-			"echo 'cd ~/ROCm-$CONFIG_VERSION' >> ~/.bashrc" \
-			"apt install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo" \
-			"chmod a+x ~/bin/repo" \
-			"pwd" \
-			"cd ~/ROCm-$CONFIG_VERSION ; ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x ; ~/bin/repo sync"
-		do
-			echo -
-			echo $i 
-			echo - 
-	        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
-            sleep 1
-		done
-		
+	    echo "Bypassing rocm installation for test purpose..."
 	fi
-else
-	echo "Skipping rocm-source installation."
-fi
+}
+
+function install_rocm_centos8() {
+	echo "Installing for Centos8."
+    if [[ $CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM -ne 1 ]] ; then
+        if [[ $CONFIG_FORCE_VERSION -ne 0 ]] ; then
+            repoUrlBase="https://repo.radeon.com/rocm/yum/$CONFIG_VERSION"
+        else 
+            repoUrlBase="https://repo.radeon.com/rocm/yum/rpm"
+        fi
+
+        cmdArrPrereq=("yum install git python -y")
+        cmdArr=("sudo rpm --import https://repo.radeon.com/rocm/rocm.gpg.key" "sudo yum install -y epel-release" \
+            "sudo yum install -y dkms kernel-headers-`uname -r` kernel-devel-`uname -r`" \
+            "echo '[ROCm]' >  /etc/yum.repos.d/rocm.repo" \
+            "echo 'name=ROCm' >>  /etc/yum.repos.d/rocm.repo" \
+            "echo 'baseurl=$repoUrlBase' >>  /etc/yum.repos.d/rocm.repo" \
+            "echo 'enabled=1' >>  /etc/yum.repos.d/rocm.repo" \
+            "echo 'enabled=1' >>  /etc/yum.repos.d/rocm.repo" \
+            "echo 'gpgcheck=1' >>  /etc/yum.repos.d/rocm.repo" \
+            "echo 'gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key' >>  /etc/yum.repos.d/rocm.repo" \
+            "yum install rocm-dkms" \
+            "reboot")
+        for i in "${cmdArrPrereq[@]}" ; do 
+            echo ---------- ; echo $i ; echo ---------- ; sleep 3 ; sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i 
+        done
+        for i in "${cmdArr[@]}" ; do 
+            echo ---------- ; echo $i ; echo ---------- ; sleep 3 ; sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
+        done
+
+        echo "Sleeping for $CONFIG_INTERVAL_SLEEP while rebooting..."
+        sleep $CONFIG_INTERVAL_SLEEP
+        echo "Testing the installation..."
+
+        cmdArr=("/opt/rocm/bin/rocminfo" "/opt/rocm/opencl/bin/clinfo")
+        for i in "${cmdArr[@]}" ; do
+            echo ---------- ; echo $i ; echo ---------- ; sleep 3
+            sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
+        done
+    else
+        echo "Bypassing rocm installation for test purpose..."
+    fi
+}
+
+function install_src_common() {
+    if [[ $INSTALL_ROCM_SRC -eq 1 ]] ; then
+    	if [[ $INSTALL_ROCM_SRC_COPY -eq 1 ]] ; then
+            echo "Copying the rocm-source.sh script..."
+    		sshpass -p amd1234 scp ./rocm-source.sh root@$VM_IP:/root
+            if [[ $? -ne 0 ]] ; then echo "failed to scp..." ; exit ; fi
+    		
+    		if [[ $INSTALL_ROCM_SRC_COPY_INSTALL -eq 1 ]] ; then
+    		        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "cd ; ./rocm-source.sh $CONFIG_VERSION"
+    		fi
+    		
+    	else
+    		# following block not working and duplicate of rocm-source...
+    		echo "You specified to install rocm source. CONFIG_VERSION: $CONFIG_VERSION."
+            sleep 3
+            cmdArr=("git config --global user.email \"you@example.com\"" \
+                "git config --global user.name \"Your Name\"" \
+                "git config --global color.ui false" \
+                "mkdir -p ~/ROCm-$CONFIG_VERSION/" \
+                "mkdir -p ~/bin/" \
+                "echo 'cd ~/ROCm-$CONFIG_VERSION' >> ~/.bashrc" \
+                "$PKG_INSTALLER install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo" \
+                "chmod a+x ~/bin/repo" \
+                "pwd" \
+                "cd ~/ROCm-$CONFIG_VERSION ; ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x ; ~/bin/repo sync")
+
+    		for i in "${cmdArr[@]}" ; do
+    			echo - ; echo $i ; echo -  ; sleep 3
+    	        sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP $i
+                sleep 1
+    		done
+    		
+    	fi
+    else
+    	echo "Skipping rocm-source installation."
+    fi
+}
+    
+#   Start the installation.
+
+case $TYPE_OS in 
+	$TYPE_OS_UBUNTU1804)
+	install_rocm_ubuntu1804
+	;;
+	$TYPE_OS_CENTOS8)
+	install_rocm_centos8
+	;;
+	*)
+	echo "Unsupported OS. OS code: " $TYPE_OS
+	;;
+esac
+
+install_src_common
+
 sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP  'ls -l /opt/'
 sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP  'sudo usermod -a -G video $LOGNAME ; cat /etc/group  | grep video'
 
