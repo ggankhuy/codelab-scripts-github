@@ -81,6 +81,7 @@ import argparse
 import os
 import shlex
 import datetime
+import inspect
 
 # Set ROCm Release Package Distribution repo baseURL below
 # External ROCM release baseurl for rpm/yum: http://repo.radeon.com/rocm/yum
@@ -128,11 +129,16 @@ DOWNLOAD_DESTDIR = "./"
 
 def print_fcn_entry(function):
     def inner(*args, **kwargs):
-        print("DBG: entered: ", function.__name__)
+
+        fcn_args=inspect.signature(function).parameters.values()
+        print("DBG: entered: ", function.__name__, "()")
+        print("DBG:   parameters: ")
+        for x, y in zip(args, fcn_args):
+            print("DBG:    ", y,"=", x)
         function(*args, **kwargs)
         print("DBG: exited: ", function.__name__)
         return function(*args, **kwargs)
-    return inner    
+    return inner
 
 @print_fcn_entry
 def check_rock_dkms(pkgtype):
