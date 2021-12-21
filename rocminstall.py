@@ -129,6 +129,11 @@ DOWNLOAD_DESTDIR = "./"
 def print_fcn_entry(function):
     def inner(*args, **kwargs):
         print("DBG: entered: ", function.__name__)
+        cnt=0
+        for i in args:
+            cnt+=1
+            print("    arg", cnt, ": ", i)
+        
         function(*args, **kwargs)
         print("DBG: exited: ", function.__name__)
         return function(*args, **kwargs)
