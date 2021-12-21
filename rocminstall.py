@@ -129,7 +129,6 @@ DOWNLOAD_DESTDIR = "./"
 
 def print_fcn_entry(function):
     def inner(*args, **kwargs):
-
         fcn_args=inspect.signature(function).parameters.values()
         print("DBG: entered: ", function.__name__, "()")
         print("DBG:   parameters: ")
