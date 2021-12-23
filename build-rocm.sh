@@ -53,13 +53,14 @@
 
 REPO_ONLY=0
 NON_REPO_ONLY=0
+PKG_EXEC=yum
 p1=$1
 CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_BYPASS_LLVM=0
-apt install python3-setuptools rpm -y
+$PKG_EXECinstall python3-setuptools rpm -y
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 t1=""
@@ -285,7 +286,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	# for rocr_debug_agent!!
 
-	apt install gcc g++ make cmake libelf-dev libdw-dev -y
+	$PKG_EXECinstall gcc g++ make cmake libelf-dev libdw-dev -y
 
     if [[ $FAST_INSTALL -eq 1 ]] ; then	
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
@@ -323,7 +324,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     do
         CURR_BUILD=$i
         build_entry $i
-        apt install rpm -y
+        $PKG_EXECinstall rpm -y
         pip3 install cppheaderparser
         pushd $ROCM_SRC_FOLDER/$i
         ./build.sh
@@ -351,7 +352,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 	CURR_BUILD=ROCmValidationSuite
 	pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
-	apt install libpciaccess-dev libpci-dev -y | tee  $LOG_DIR/$CURR_BUILD
+	$PKG_EXECinstall libpciaccess-dev libpci-dev -y | tee  $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	cmake ./ -B./build | tee -a $LOG_DIR/$CURR_BUILD
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -422,7 +423,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
 
-	apt install libsqlite3-dev libbz2-dev half libboost-all-dev -y
+	$PKG_EXECinstall libsqlite3-dev libbz2-dev half libboost-all-dev -y
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	for i in MIOpen
 	do
@@ -465,7 +466,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     fi # if fast_install = 0.
 
-	apt install -y texinfo bison flex
+	$PKG_EXECinstall -y texinfo bison flex
 
     echo "FAST_INSTALL: $FAST_INSTALL"
     if [[ $FAST_INSTALL == 0 ]] ; then	
@@ -536,7 +537,7 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     
 	# install tensorflow.
 
-	apt install python3-setuptools -y
+	$PKG_EXECinstall python3-setuptools -y
 	pip3 install --user tensorflow-rocm --upgrade
 
 	# install pytorch profiler kineto:
