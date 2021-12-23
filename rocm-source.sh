@@ -5,7 +5,7 @@ if [[ -z $p1 ]] ; then
 else
     CONFIG_VERSION=$p1
 fi
-
+PKG_NAME=yum
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false
@@ -17,7 +17,7 @@ fi
 pushd  $DIR_NAME
 mkdir -p ~/bin/
 echo "install repo..."
-apt install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+$PKG_NAME  install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 echo "repo init..."
 ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
