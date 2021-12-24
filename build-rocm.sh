@@ -60,7 +60,7 @@ FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_BYPASS_LLVM=0
-if [[ $PKG_EXEC -eq "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release -y ; fi
+if [[ $PKG_EXEC -eq "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release gcc -y ; fi
 $PKG_EXEC install python3-setuptools rpm -y
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
