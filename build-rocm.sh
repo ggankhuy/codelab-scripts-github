@@ -200,16 +200,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	else
 		echo "Bypassing llvm..." ; sleep 5
 	fi
-	CURR_BUILD=ROCm-CompilerSupport
-    build_entry $CURR_BUILD
-	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-	cd lib/comgr/
-	LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
-	DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs/
-	COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
 	setup_root_rocm_softlink
 
+	CURR_BUILD=ROCm-Device-Libs
+	DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir -p "$DEVICE_LIBS/build"
 	cd "$DEVICE_LIBS/build"
 	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee $LOG_DIR/$CURR_BUILD.log
@@ -219,6 +214,13 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
+
+	CURR_BUILD=ROCm-CompilerSupport
+    build_entry $CURR_BUILD
+	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+	cd lib/comgr/
+	LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
+	COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
     CURR_BUILD=COMGR
     build_entry $CURR_BUILD
@@ -280,7 +282,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	CURR_BUILD=rccl
         build_entry $CURR_BUILD
    	    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    	./install.sh -idt $INSTALL_SH_PACKAGE | tee $LOG_DIR/$CURR_BUILD
+    	./install.sh -idt $INSTALL_SH_PACKAGE | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
     fi
@@ -296,11 +298,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
-		cmake .. | tee $LOG_DIR/$CURR_BUILD
+		cmake .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
@@ -311,11 +313,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
-		cmake .. | tee $LOG_DIR/$CURR_BUILD
+		cmake .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
@@ -340,11 +342,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     		pushd $ROCM_SRC_FOLDER/$i
     		mkdir build; cd build
     		rm -rf ./*
-    		CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD
+    		CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     		popd
     	done
@@ -353,11 +355,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 	CURR_BUILD=ROCmValidationSuite
 	pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
-	$PKG_EXEC install libpciaccess-dev libpci-dev -y | tee  $LOG_DIR/$CURR_BUILD
+	$PKG_EXEC install libpciaccess-dev libpci-dev -y | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	cmake ./ -B./build | tee -a $LOG_DIR/$CURR_BUILD
+	cmake ./ -B./build | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -C ./build | tee -a $LOG_DIR/$CURR_BUILD
+	make -C ./build | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	popd
 
@@ -367,22 +369,22 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
-		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD
+		CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
 
 	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
-	CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=ON ../. | tee $LOG_DIR/$CURR_BUILD
+	CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=ON ../. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j$NPROC $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+	make -j$NPROC $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	popd
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
@@ -433,11 +435,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
-        cmake -DMIOPEN_BACKEND=OpenCL -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD
+        cmake -DMIOPEN_BACKEND=OpenCL -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+		make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
@@ -482,18 +484,18 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
     	CURR_BUILD=AMDMIGraphX
         build_entry $CURR_BUILD
-        pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD
+        pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
     	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee  $LOG_DIR/$CURR_BUILD
+    	rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee $LOG_DIR/$CURR_BUILD.log
       	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	mkdir build; cd build
-    	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD
+    	CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
 
@@ -503,11 +505,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	mkdir build; cd build
     	#python MIVisionX-setup.py
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	cmake .. | tee $LOG_DIR/$CURR_BUILD
+    	cmake .. | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	make -j$NPROC $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+    	make $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
 
@@ -521,7 +523,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	#build_entry $i
     	#pushd $ROCM_SRC_FOLDER/$i
     	#cd Build/Linux/ ; chmod 755 *sh
-    	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD
+    	#./build_rcp.sh skip-hsaprofiler | tee  $LOG_DIR/$CURR_BUILD.log
     	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	#popd
 
@@ -548,10 +550,10 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
 	git clone --recursive https://github.com/pytorch/kineto.git
 	cd kineto/libkineto/
 	mkdir build ; cd build  
-	cmake .. | tee -a $LOG_DIR/$CURR_BUILD
-	make -j`nproc` $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+	cmake .. | tee -a $LOG_DIR/$CURR_BUILD.log
+	make -j`nproc` $BUILD_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -j`nproc` $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD
+	make -j`nproc` $INSTALL_TARGET | tee -a $LOG_DIR/$CURR_BUILD.log
     cd ../../..
     pwd
 
