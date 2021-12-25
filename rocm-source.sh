@@ -5,7 +5,7 @@ if [[ -z $p1 ]] ; then
 else
     CONFIG_VERSION=$p1
 fi
-PKG_NAME=yum
+PKG_NAME=apt
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false

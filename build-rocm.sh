@@ -60,8 +60,6 @@ FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_BYPASS_LLVM=0
-if [[ $PKG_EXEC -eq "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release gcc -y ; fi
-$PKG_EXEC install python3-setuptools rpm -y
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 t1=""
@@ -104,7 +102,21 @@ do
     if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
         VERSION=`echo $var | cut -d '=' -f2`
     fi
+
+    if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
+        MINOR_VERSION=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "pkg="` ]]  ; then
+        PKG_EXEC=`echo $var | cut -d '=' -f2`
+        echo Set pkg exec to $PKG_EXEC
+    fi
 done
+
+echo Set pkg exec to $PKG_EXEC
+
+if [[ $PKG_EXEC == "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release gcc -y ; fi
+$PKG_EXEC install python3-setuptools rpm -y
 
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
@@ -125,9 +137,10 @@ fi
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$VERSION
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.0/
+MINOR_VERSION=2
+ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION/
 LOG_SUMMARY=$LOG_DIR/build-summary.log
-export PATH=$PATH:/opt/rocm-$VERSION.0/llvm/bin/
+export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
 
 function build_entry () {
     t2=$SECONDS
