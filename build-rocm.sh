@@ -105,6 +105,7 @@ do
 
     if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
         MINOR_VERSION=`echo $var | cut -d '=' -f2`
+	echo "minor version: $MINOR_VERSION" ; sleep 5
     fi
 
     if [[ ! -z `echo "$var" | grep "pkg="` ]]  ; then
@@ -137,8 +138,7 @@ fi
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$VERSION
-MINOR_VERSION=2
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION/
+ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
 
