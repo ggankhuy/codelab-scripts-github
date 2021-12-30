@@ -1,5 +1,5 @@
-echo "set tabsize 4" >> ~/.bashrc
-echo :set tabstospaces " >> ~/.bashrc
-echo "set tabsize 4" >> /root/.bashrc
-echo :set tabstospaces " >> /root/.bashrc
+echo "set tabsize 4" > ~/.nanorc
+echo "set tabstospaces " >> ~/.nanorc
+echo "set tabsize 4" > /root/.nanorc
+echo "set tabstospaces " >> /root/.nanorc
 
