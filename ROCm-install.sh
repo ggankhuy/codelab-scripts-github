@@ -13,27 +13,6 @@ TYPE_OS_RHEL7="4" # not supported yet.
 TYPE_OS_SLES=3 # not supported yet.
 PKG_EXEC=""
 
-OS_NAME=sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP "`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`"
-echo "OS_NAME: $OS_NAME"
-sleep 10
-case "$OS_NAME" in
-   "Ubuntu")
-      echo "Ubuntu is detected..."
-      PKG_EXEC=apt
-      ;;
-   "CentOS Linux")
-      echo "CentOS is detected..."
-      PKG_EXEC=yum
-      echo "Installing yum packages..." ; sleep 3
-      yum install epel-release -y
-      yum install sshpass -y
-fi
-      ;;
-   *)
-     echo "Unsupported O/S, exiting..." ; exit 1
-     ;;
-esac
-
 TYPE_OS=$TYPE_OS_UBUNTU1804
 #TYPE_OS=$TYPE_OS_CENTOS8
 
@@ -68,6 +47,27 @@ if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
 fi
 
 VM_IP=$p1
+
+OS_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP \
+"cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '\"' -f2"`
+echo "OS_NAME: $OS_NAME"
+sleep 3
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      echo "Installing yum packages..." ; sleep 3
+      yum install epel-release -y
+      yum install sshpass -y
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac
 
 function install_rocm_ubuntu1804() {
 	echo "Installing for Ubuntu1804."
@@ -184,16 +184,18 @@ function install_src_common() {
     
 #   Start the installation.
 
-case $TYPE_OS in 
-	$TYPE_OS_UBUNTU1804)
-	install_rocm_ubuntu1804
-	;;
-	$TYPE_OS_CENTOS8)
-	install_rocm_centos8
-	;;
-	*)
-	echo "Unsupported OS. OS code: " $TYPE_OS
-	;;
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      install_rocm_ubuntu1804
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      install_rocm_centos8
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
 esac
 
 install_src_common
