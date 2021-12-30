@@ -6,7 +6,23 @@ if [[ -z $p1 ]] ; then
 else
     CONFIG_VERSION=$p1
 fi
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo "OS_NAME: $OS_NAME"
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_NAME=apt
+      ;;
+   "CentoS")
+      echo "CentOS is detected..."
+      PKG_NAME=yum
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac
 
+sleep 4
 PKG_NAME=apt
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
