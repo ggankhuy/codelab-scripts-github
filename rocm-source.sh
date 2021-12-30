@@ -13,7 +13,7 @@ case "$OS_NAME" in
       echo "Ubuntu is detected..."
       PKG_NAME=apt
       ;;
-   "CentoS")
+   "CentOS Linux")
       echo "CentOS is detected..."
       PKG_NAME=yum
       ;;
