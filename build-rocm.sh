@@ -53,7 +53,6 @@
 
 REPO_ONLY=0
 NON_REPO_ONLY=0
-PKG_EXEC=apt
 p1=$1
 CONFIG_TEST=0
 FAST_INSTALL=0
@@ -64,6 +63,26 @@ CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 t1=""
 f2=""
+
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo "OS_NAME: $OS_NAME"
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac
+
+sleep 3
+PKG_EXEC=apt
+
 if [[ ! -z $CONFIG_BUILD_PACKAGE ]] ; then
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
 	BUILD_TARGET=package

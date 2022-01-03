@@ -11,13 +11,7 @@ TYPE_OS_UBUNTU2004="2" # not supported yet.
 TYPE_OS_CENTOS8="3" # tested on Centos8 Stream. 4.3 not working, intest.
 TYPE_OS_RHEL7="4" # not supported yet.
 TYPE_OS_SLES=3 # not supported yet.
-PKG_INSTALLER=""
-yum_exist=`which yum`
-if [[ -z $? ]] ; then
-    echo "Installing yum packages..." ; sleep 3
-    yum install epel-release -y
-    yum install sshpass -y
-fi
+PKG_EXEC=""
 
 TYPE_OS=$TYPE_OS_UBUNTU1804
 #TYPE_OS=$TYPE_OS_CENTOS8
@@ -54,18 +48,25 @@ fi
 
 VM_IP=$p1
 
-#   Set O/S specific variables here.
-
-case $TYPE_OS in 
-	$TYPE_OS_UBUNTU1804)
-    PKG_INSTALLER=apt
-	;;
-	$TYPE_OS_CENTOS8)
-    PKG_INSTALLER=yum
-	;;
-	*)
-	echo "Unsupported OS. OS code: ." $TYPE_OS
-	;;
+OS_NAME=`sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$VM_IP \
+"cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '\"' -f2"`
+echo "OS_NAME: $OS_NAME"
+sleep 3
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      echo "Installing yum packages..." ; sleep 3
+      yum install epel-release -y
+      yum install sshpass -y
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
 esac
 
 function install_rocm_ubuntu1804() {
@@ -164,7 +165,7 @@ function install_src_common() {
                 "mkdir -p ~/ROCm-$CONFIG_VERSION/" \
                 "mkdir -p ~/bin/" \
                 "echo 'cd ~/ROCm-$CONFIG_VERSION' >> ~/.bashrc" \
-                "$PKG_INSTALLER install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo" \
+                "$PKG_EXEC install curl -y && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo" \
                 "chmod a+x ~/bin/repo" \
                 "pwd" \
                 "cd ~/ROCm-$CONFIG_VERSION ; ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x ; ~/bin/repo sync")
@@ -183,16 +184,18 @@ function install_src_common() {
     
 #   Start the installation.
 
-case $TYPE_OS in 
-	$TYPE_OS_UBUNTU1804)
-	install_rocm_ubuntu1804
-	;;
-	$TYPE_OS_CENTOS8)
-	install_rocm_centos8
-	;;
-	*)
-	echo "Unsupported OS. OS code: " $TYPE_OS
-	;;
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      install_rocm_ubuntu1804
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      install_rocm_centos8
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
 esac
 
 install_src_common
