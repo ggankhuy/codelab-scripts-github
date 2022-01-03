@@ -31,7 +31,8 @@ do
         break
     fi
     
-    if [[ $counter -gt 5 ]]  ; then break ; fi
+    # this line is for test only for limited iteration.
+    #if [[ $counter -gt 5 ]]  ; then break ; fi
 done
 
 echo "Done searching, please look into $RESULT_LOG for search result."
