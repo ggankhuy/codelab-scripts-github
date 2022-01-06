@@ -71,7 +71,7 @@ esac
 
 function install_rocm_ubuntu1804() {
 	echo "Installing for Ubuntu1804."
-    cmdArr=( "apt install -y git python python3 tree net-tools" "apt remove amdgpu-dkms -y"  "apt remove amdgpu-dkms-firmware -y" "apt update -y" \
+    cmdArr=( "apt install -y git python3 tree net-tools" "apt remove amdgpu-dkms -y"  "apt remove amdgpu-dkms-firmware -y" "apt update -y" \
     "apt dist-upgrade -y" "apt install libnuma-dev -y" "reboot")
 	if [[ $CONFIG_DEBUG_BYPASS_INSTALLATION_ROCM -ne 1 ]] ; then
         for i in "${cmdArr[@]}" ; do
