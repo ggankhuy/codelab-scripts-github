@@ -9,6 +9,5 @@ else
     echo "volume $VOLUME_NAME does not exist. Creating one..."    
     sudo docker volume create --name $VOLUME_NAME
 fi
-alias drun='sudo docker run -it --network=host --device=/dev/kfd --device=/dev/dri --ipc=host --shm-size 16G --group-add video --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $HOME/dockerx:/dockerx --mount source=$VOLUME_NAME,target=/data'
-drun rocm/tensorflow:latest
+sudo docker run -it --network=host --device=/dev/kfd --device=/dev/dri --ipc=host --shm-size 16G --group-add video --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $HOME/dockerx:/dockerx --mount source=$VOLUME_NAME,target=/data rocm/tensorflow:latest
 
