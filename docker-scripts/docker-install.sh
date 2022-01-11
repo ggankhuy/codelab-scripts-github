@@ -18,7 +18,7 @@ function docker_install_apt() {
 }
 
 function docker_install_yum() {
-    sudo yum install epel-release
+    sudo yum install epel-release -y
     #sudo yum-config-manager --enable centos-extras
     sudo yum remove docker \
                   docker-client \
@@ -28,7 +28,7 @@ function docker_install_yum() {
                   docker-latest-logrotate \
                   docker-logrotate \
                   docker-engine
-    sudo yum install -y yum-utils
+    sudo yum install -y yum-utils -y
     sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
@@ -60,4 +60,4 @@ case "$OS_NAME" in
      ;;
 esac
 
-docker_install_apt
+docker_install_yum
