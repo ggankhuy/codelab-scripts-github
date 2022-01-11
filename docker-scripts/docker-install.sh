@@ -39,25 +39,20 @@ function docker_install_yum() {
     sudo docker run hello-world
 }
 
-OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '\' -f2`
-
-echo "OS_NAME: $OS_NAME"
-sleep 3
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo OS_NAME: $OS_NAME
 case "$OS_NAME" in
    "Ubuntu")
-        echo "Ubuntu is detected..."
-        PKG_EXEC=apt
-        docker_install_apt
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      docker_install_apt
       ;;
    "CentOS Linux")
-        echo "CentOS is detected..."
-        PKG_EXEC=yum
-        echo "Installing yum packages..." ; sleep 3
-        #docker_install_yum
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      docker_install_yum
       ;;
    *)
-     echo "Unsupported O/S, exiting..."
+     echo "Unsupported O/S, exiting..." ; exit 1
      ;;
 esac
-
-docker_install_yum
