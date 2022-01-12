@@ -34,9 +34,6 @@ function docker_install_yum() {
     https://download.docker.com/linux/centos/docker-ce.repo
     sudo yum-config-manager --enable docker-ce-test
     sudo yum install docker-ce docker-ce-cli containerd.io --allowerasing -y
-    sudo systemctl start docker
-    sudo docker login --username=$DOCKER_USER --password=$DOCKER_PASS
-    sudo docker run hello-world
 }
 
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
@@ -56,3 +53,7 @@ case "$OS_NAME" in
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
 esac
+
+sudo systemctl start docker
+sudo docker login --username=$DOCKER_USER --password=$DOCKER_PASS
+sudo docker run hello-world
