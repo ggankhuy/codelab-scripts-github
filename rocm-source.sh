@@ -16,13 +16,13 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
+      ln -s /usr/bin/python3  /usr/bin/python
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
 esac
 
-PKG_EXEC=apt
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false
