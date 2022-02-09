@@ -17,7 +17,7 @@
 # device-libs		    | dontcare	| dontcare		|
 # comgr			        | DC		| DC			|
 # rocclr		        | DC		| DC			|
-# HIP			        | DC		| DC 			|
+# hipamd		        | DC		| DC 			|
 # ROCm-OpenCL-Runtime	| BI		| TBD 			|
 # RCCL			        | BI 		| TBD			|
 # rocm_smi_lib  	    | BI		| TBD 			|
@@ -57,7 +57,7 @@ p1=$1
 CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
-CONFIG_BUILD_PACKAGE=""
+CONFIG_BUILD_PACKAGE=0
 CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
@@ -297,15 +297,15 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
    	make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
    	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
-	CURR_BUILD=HIP
+	CURR_BUILD=hipamd
     build_entry $CURR_BUILD
 	cd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
 
-    export HIPAMD_DIR="$(readlink -f hipamd.git)"
-    export HIP_DIR="$(readlink -f hip.git)"
-    export ROCclr_DIR="$(readlink -f ROCclr.git)"
-    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime.git)"
+    export HIPAMD_DIR="$(readlink -f hipamd)"
+    export HIP_DIR="$(readlink -f hip)"
+    export ROCclr_DIR="$(readlink -f ROCclr)"
+    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
     echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
     sleep 10
 
@@ -467,7 +467,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
 
-	$PKG_EXEC install libsqlite3-dev libbz2-dev half libboost-all-dev -y
+	$PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	for i in MIOpen
 	do
@@ -493,7 +493,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build ; cd build
-		cmake .. -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
+
+		cmake .. -DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
