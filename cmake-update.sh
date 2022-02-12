@@ -14,7 +14,7 @@ case "$OS_NAME" in
       PKG_EXEC=apt
       sudo apt install build-essential libssl-dev -y
       ;;
-   "CentOS Linux")
+   "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
       ln -s /usr/bin/python3  /usr/bin/python

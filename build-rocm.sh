@@ -71,7 +71,7 @@ case "$OS_NAME" in
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
       ;;
-   "CentOS Linux")
+   "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
       ;;
@@ -79,9 +79,6 @@ case "$OS_NAME" in
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
 esac
-
-sleep 3
-PKG_EXEC=apt
 
 if [[ ! -z $CONFIG_BUILD_PACKAGE ]] ; then
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
