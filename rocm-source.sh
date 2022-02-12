@@ -18,6 +18,11 @@ case "$OS_NAME" in
       PKG_EXEC=yum
       ln -s /usr/bin/python3  /usr/bin/python
       ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ln -s /usr/bin/python3  /usr/bin/python
+      ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
