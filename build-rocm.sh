@@ -71,6 +71,10 @@ case "$OS_NAME" in
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
       ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
