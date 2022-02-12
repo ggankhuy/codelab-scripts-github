@@ -84,17 +84,20 @@ case "$OS_NAME" in
      ;;
 esac
 
-if [[ ! -z $CONFIG_BUILD_PACKAGE ]] ; then
+if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
+    echo "will build packages..."
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
 	BUILD_TARGET=package
     INSTALL_SH_PACKAGE="-p"
 	INSTALL_TARGET=package
 	mkdir -p $CONFIG_BUILD_PKGS_LOC
 else
+    echo "will not build packages..."
 	BUILD_TARGET=""
     INSTALL_SH_PACKAGE=""
 	INSTALL_TARGET=install
 fi
+sleep 1
 for var in "$@"
 do
     if [[ $var == "llvmno" ]]  ; then
