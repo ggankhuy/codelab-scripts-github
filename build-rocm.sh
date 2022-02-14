@@ -206,9 +206,18 @@ start=$SECONDS
 mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
+
 echo "---" > $LOG_SUMMARY
+echo "BUILD PLATFORM: " >> $LOG_SUMMARY
+
+sudo dmidecode -t 1 >> $LOG_SUMMARY
+cat /etc/os-release  | egrep "^NAME=|^VERSION=" >> $LOG_SUMMARY
+uname -r >> $LOG_SUMMARY
+
+echo "---" >> $LOG_SUMMARY
 echo "ROCm components that failed build." >> $LOG_SUMMARY
 echo "If you don't see the name here, then build was successful." >> $LOG_SUMMARY
+echo "---" >> $LOG_SUMMARY
 
 if [[ $REPO_ONLY == 0 ]] && [[ $NON_REPO_ONLY == 0 ]] ; then
 	REPO_ONLY=1
