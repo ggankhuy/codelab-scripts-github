@@ -306,13 +306,14 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	cd $ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir build ; cd build
 
+    pushd ../..
     export HIPAMD_DIR="$(readlink -f hipamd)"
     export HIP_DIR="$(readlink -f hip)"
     export ROCclr_DIR="$(readlink -f ROCclr)"
     export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
     echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
-    sleep 10
-
+    popd
+    sudo ln -s $ROCM_SRC_FOLDER/HIP $ROCM_SRC_FOLDER/hip
 	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make -j$NPROC $BUILD_TARGET2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
