@@ -97,7 +97,6 @@ else
     INSTALL_SH_PACKAGE=""
 	INSTALL_TARGET=install
 fi
-sleep 1
 for var in "$@"
 do
     if [[ $var == "llvmno" ]]  ; then
@@ -143,7 +142,6 @@ if [[ $PKG_EXEC == "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 
 $PKG_EXEC install python3-setuptools rpm -y
 if [[ $PKG_EXEC == "yum" ]] ; then
     echo "installing development tools..."
-    sleep 10
     $PKG_EXEC groupinstall "Development Tools" -y
 fi
 
@@ -241,14 +239,16 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         build_entry $CURR_BUILD
 		pushd $CURR_BUILD
 		mkdir build ; cd build
-		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$VERMINOR/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release"
+        sleep 10
+		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		popd
 	else
-		echo "Bypassing llvm..." ; sleep 5
+		echo "Bypassing llvm..."
 	fi
 
 	setup_root_rocm_softlink
@@ -453,7 +453,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
 	do
         echo "GG: CONFIG_DISABLE_$i: $((CONFIG_DISABLE_$i))"
-        sleep 10
 		if [[ $((CONFIG_DISABLE_$i)) == 1 ]] ; then
  			echo "Bypassing $i build..." >> $LOG_SUMMARY
 		else
