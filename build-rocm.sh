@@ -75,12 +75,12 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
