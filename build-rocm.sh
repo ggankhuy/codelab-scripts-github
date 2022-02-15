@@ -70,14 +70,17 @@ case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
+  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
@@ -485,7 +488,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
 
-	$PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	for i in MIOpen
 	do
