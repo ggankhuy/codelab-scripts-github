@@ -141,6 +141,11 @@ echo Set pkg exec to $PKG_EXEC
 
 if [[ $PKG_EXEC == "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release gcc -y ; fi
 $PKG_EXEC install python3-setuptools rpm -y
+if [[ $PKG_EXEC == "yum" ]] ; then
+    echo "installing development tools..."
+    sleep 10
+    $PKG_EXEC groupinstall "Development Tools" -y
+fi
 
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
@@ -236,7 +241,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         build_entry $CURR_BUILD
 		pushd $CURR_BUILD
 		mkdir build ; cd build
-		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.0/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+		cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$VERMINOR/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -249,6 +254,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	setup_root_rocm_softlink
 
 	CURR_BUILD=ROCm-Device-Libs
+    build_entry $CURR_BUILD
 	DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir -p "$DEVICE_LIBS/build"
 	cd "$DEVICE_LIBS/build"
@@ -332,6 +338,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
+    exit 0
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 
     	CURR_BUILD=rccl
@@ -344,8 +351,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	# for rocr_debug_agent!!
 
-	$PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev -y
-
+	$PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
     if [[ $FAST_INSTALL -eq 1 ]] ; then	
 	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
 	do
