@@ -338,7 +338,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
-    exit 0
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 
     	CURR_BUILD=rccl
