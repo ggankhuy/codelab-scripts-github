@@ -19,6 +19,10 @@ case "$OS_NAME" in
       echo "CentOS is detected..."
       PKG_EXEC=yum
       ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
