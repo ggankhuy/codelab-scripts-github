@@ -49,6 +49,11 @@ case "$OS_NAME" in
       PKG_EXEC=yum
       docker_install_yum
       ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      docker_install_yum
+      ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
