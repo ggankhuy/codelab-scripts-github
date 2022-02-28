@@ -148,6 +148,9 @@ if [[ $PKG_EXEC == "yum" ]] ; then
     $PKG_EXEC groupinstall "Development Tools" -y
 fi
 
+echo "Upgrading pip..."
+pip3 install --upgrade pip
+
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
     echo "Parameters:"
@@ -472,7 +475,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
-		./install.sh -icd -logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+		#./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
