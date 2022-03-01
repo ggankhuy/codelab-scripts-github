@@ -28,6 +28,8 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
+    hipError_t  ret;
+    /*
     int * devCount;
     hipGetDeviceCount(devCount);
     printf("No. of devices: %u.\n", devCount);
@@ -45,9 +47,10 @@ int main (void) {
     return 1;
 
     hipSetDevice(0);
-    hipMallocManaged(&a, N * sizeof(*dev_a));
-    hipMallocManaged(&a, N * sizeof(*dev_b));
-    hipMallocManaged(&a, N * sizeof(*dev_c));
+    */
+    ret = hipMallocManaged(&a, N * sizeof(*dev_a));
+    ret = hipMallocManaged(&b, N * sizeof(*dev_b));
+    ret = hipMallocManaged(&c, N * sizeof(*dev_c));
 
 	for (int i = 0; i < N ; i ++ ) {
 		a[i]  = i;
@@ -57,7 +60,7 @@ int main (void) {
 
 	for (int i = 0; i < N ; i+=LOOPSTRIDE ) {
         printf("Before add: a/b: %d, %d.\n", a[i], b[i]);
-	}
+  	}
 
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
