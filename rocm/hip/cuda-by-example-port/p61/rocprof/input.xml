@@ -1,0 +1,9 @@
+# Filter by dispatches range, GPU index and kernel names
+        <metric
+          # range formats: "3:9", "3:", "3"
+	  range=""
+          # list of gpu indexes "0,1,2,3"
+          gpu_index="0"
+          # list of matched sub-strings "Simple1,Conv1,SimpleConvolution"
+          kernel="add"
+        ></metric>
