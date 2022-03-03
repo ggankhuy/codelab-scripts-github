@@ -1,6 +1,7 @@
 p1=$1
 SUDO=sudo
 CONFIG_VERSION=4.1
+HOME_DIR=`pwd`
 if [[ -z $p1 ]] ; then
     echo "Version not specified. Setting to default: $CONFIG_VERSION"
 else
@@ -31,7 +32,7 @@ esac
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false
-DIR_NAME=~/ROCm-$CONFIG_VERSION
+DIR_NAME=$HOME_DIR/ROCm-$CONFIG_VERSION
 mkdir $DIR_NAME
 
 if [[ $? -ne 0 ]] ; then
