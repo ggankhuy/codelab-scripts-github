@@ -170,6 +170,12 @@ fi
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$VERSION
+export ROCM_SRC_FOLDER=~/ROCm-$VERSION
+
+if [[ -z `cat ~/.bashrc | grep ROCM_SRC_FOLDER` ]] ; then
+    echo "export ROCM_SRC_FOLDER=~/ROCm-$VERSION" >> ~/.bashrc
+fi
+
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
@@ -335,7 +341,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
     popd
     sudo ln -s $ROCM_SRC_FOLDER/HIP $ROCM_SRC_FOLDER/hip
-	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" -DCMAKE_INSTALL_PREFIX=$PWD/install .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make -j$NPROC $BUILD_TARGET2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 	make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
@@ -475,8 +481,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
-		#./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
-		./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+		#./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
