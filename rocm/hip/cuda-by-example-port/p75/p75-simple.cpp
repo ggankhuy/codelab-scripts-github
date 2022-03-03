@@ -1,29 +1,32 @@
+#include <stdio.h>
+#include "hip/hip_runtime.h"
+
 #define imin(a,b) (a<b?a:b)
 
-const int N = 8192
-const int threadsPerBlock = 256
-const int blocksPerGrid = imin (32, (N+threadsPerBlock-1)/(threadsPerBlock);
+const int N = 8192;
+const int threadsPerBlock = 256;
+const int blocksPerGrid = imin (32, (N+threadsPerBlock-1)/(threadsPerBlock));
 
 __global__ void dot(float * a, float *b, float *c) {
 
     // arrSize = threads in block.
 
     __shared__ float arr1[threadsPerBlock];
-    int gid = hipThreadIdx_x  + hipBlockIdx_x * hipblockDim_x;
+    int gid = hipThreadIdx_x  + hipBlockIdx_x * hipBlockDim_x;
     int lid = hipThreadIdx_x;
 
     float product = 0;
      
     while ( gid < N) {
         product += a[gid] * b[gid];
-        gid += hipBlockDim_x  * gridDim_x;
+        gid += hipBlockDim_x  * hipGridDim_x;
     }
     arr1[lid] = product;
     __syncthreads();
 
     // reductions.
     
-    int i  hipBlockDim_x/2;
+    int i =  hipBlockDim_x/2;
     while (i != 0 ) {
         if (lid < i) {
             arr1[lid] += arr1[lid + i];
@@ -39,7 +42,7 @@ int main( void ) {
 
     // partial c holds array len of block size.
 
-    float *a, *b, *c, *partial_c;
+    float *a, *b, c, *partial_c;
     float *dev_a, *dev_b, *dev_c, *dev_partial_c;
  
     a = (float*) malloc(N * sizeof(float));
@@ -63,12 +66,12 @@ int main( void ) {
     hipMemcpy(partial_c, dev_partial_c, blocksPerGrid*sizeof(float), hipMemcpyDeviceToHost);
 
     c = 0;
-    for (int i = 0; i < blocksPerGrid; i++) {       
+    for (int i = 0; i < blocksPerGrid; i++) {
         c += partial_c[i];
     }
 
     #define sum_squares(x) (x*(x+1)*(2*x+1)/6)
-    printf("Does gpu value %.6g= %.6g?\n", c, 2 * sum_squares((float) (N-1));
+    printf("Does gpu value %.6g= %.6g?\n", c, 2 * sum_squares((float) (N-1)));
     
     hipFree(dev_a);
     hipFree(dev_b);
