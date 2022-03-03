@@ -148,6 +148,9 @@ if [[ $PKG_EXEC == "yum" ]] ; then
     $PKG_EXEC groupinstall "Development Tools" -y
 fi
 
+echo "Upgrading pip..."
+pip3 install --upgrade pip
+
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
     echo "Parameters:"
