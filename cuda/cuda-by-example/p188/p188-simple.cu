@@ -18,9 +18,9 @@ int main (void) {
 	int *dev_a, *dev_b, *dev_c;
     int *a, *b, *c;
 
-    cudaHostAlloc((void**)&a, N * sizeof(*dev_a), cudaHostAllocWriteCombined|cudaHostAllocMapped);
-    cudaHostAlloc((void**)&b, N * sizeof(*dev_a), cudaHostAllocWriteCombined|cudaHostAllocMapped);
-    cudaHostAlloc((void**)&c, N * sizeof(*dev_a), cudaHostAllocWriteCombined|cudaHostAllocMapped);
+    cudaHostAlloc((void**)&a, N * sizeof(*dev_a), cudaHostAllocDefault);
+    cudaHostAlloc((void**)&b, N * sizeof(*dev_a), cudaHostAllocDefault);
+    cudaHostAlloc((void**)&c, N * sizeof(*dev_a), cudaHostAllocDefault);
 
     cudaMalloc((void**)&dev_a, N * sizeof(*dev_a));
     cudaMalloc((void**)&dev_b, N * sizeof(*dev_b));
