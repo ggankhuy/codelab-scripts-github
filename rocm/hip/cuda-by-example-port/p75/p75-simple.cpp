@@ -3,81 +3,72 @@
 
 #define imin(a,b) (a<b?a:b)
 
-const int N = 8192;
-const int threadsPerBlock = 256;
+const int N = 512;
+const int threadsPerBlock = 128;
 const int blocksPerGrid = imin (32, (N+threadsPerBlock-1)/(threadsPerBlock));
+#define LOOPSTRIDE 64
+__global__ void dot(int * a, int *b, int *c) {
 
-__global__ void dot(float * a, float *b, float *c) {
+    // gid = index into array relative to global memory (vram).
+    // lid = index into array relative to current block.
 
-    // arrSize = threads in block.
-
-    __shared__ float arr1[threadsPerBlock];
     int gid = hipThreadIdx_x  + hipBlockIdx_x * hipBlockDim_x;
     int lid = hipThreadIdx_x;
 
-    float product = 0;
-     
-    while ( gid < N) {
-        product += a[gid] * b[gid];
-        gid += hipBlockDim_x  * hipGridDim_x;
-    }
-    arr1[lid] = product;
+    // will be created on every block.
+
+    __shared__ int arrShared[threadsPerBlock];
+
+    arrShared[lid] = a[gid] + b[gid];
+
+    // do a lot of computations on arrShared. (not implemented).
+
     __syncthreads();
 
-    // reductions.
-    
-    int i =  hipBlockDim_x/2;
-    while (i != 0 ) {
-        if (lid < i) {
-            arr1[lid] += arr1[lid + i];
-        }
-        __syncthreads();
-        i /= 2;
-    }
-    if (lid == 0)
-        c[hipBlockIdx_x] = arr1[0];
+    // copy result to vram. 
+
+    c[gid] = arrShared[lid];
 }
 
 int main( void ) {
 
     // partial c holds array len of block size.
 
-    float *a, *b, c, *partial_c;
-    float *dev_a, *dev_b, *dev_c, *dev_partial_c;
+    int *a, *b, *c;
+    int *dev_a, *dev_b, *dev_c;
  
-    a = (float*) malloc(N * sizeof(float));
-    b = (float*) malloc(N * sizeof(float));
+    a = (int*) malloc(N * sizeof(int));
+    b = (int*) malloc(N * sizeof(int));
+    c = (int*) malloc(N * sizeof(int));
 
-    partial_c = (float *) malloc(N * sizeof(float));
-
-    hipMalloc((void**)&dev_a, N * sizeof(float));
-    hipMalloc((void**)&dev_b, N * sizeof(float));
-    hipMalloc((void**)&dev_partial_c, blocksPerGrid * sizeof(float));
+    hipMalloc((void**)&dev_a, N * sizeof(int));
+    hipMalloc((void**)&dev_b, N * sizeof(int));
+    hipMalloc((void**)&dev_c, N * sizeof(int));
 
     for (int i = 0; i < N ; i++) {
         a[i] = i;
-        b[i] = i*2;
+        b[i] = i + 2;
+        c[i] = 999;
     }
 
-    hipMemcpy(dev_a, a, N*sizeof(float), hipMemcpyHostToDevice);
-    hipMemcpy(dev_b, b, N*sizeof(float), hipMemcpyHostToDevice);
+    for (int i = 0; i < N; i+=LOOPSTRIDE )
+        printf("Before add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]);
 
-    dot <<<blocksPerGrid, threadsPerBlock>>>(dev_a, dev_b, dev_partial_c);
-    hipMemcpy(partial_c, dev_partial_c, blocksPerGrid*sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(dev_a, a, N*sizeof(int), hipMemcpyHostToDevice);
+    hipMemcpy(dev_b, b, N*sizeof(int), hipMemcpyHostToDevice);
 
-    c = 0;
-    for (int i = 0; i < blocksPerGrid; i++) {
-        c += partial_c[i];
-    }
+    dot <<<blocksPerGrid, threadsPerBlock>>>(dev_a, dev_b, dev_c);
 
-    #define sum_squares(x) (x*(x+1)*(2*x+1)/6)
-    printf("Does gpu value %.6g= %.6g?\n", c, 2 * sum_squares((float) (N-1)));
-    
+    hipMemcpy(c, dev_c, N*sizeof(int), hipMemcpyDeviceToHost);
+
+    for (int i = 0; i < N; i+=LOOPSTRIDE )
+        printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]);
+
     hipFree(dev_a);
     hipFree(dev_b);
-    hipFree(dev_partial_c);
+    hipFree(dev_c);
     
     free(a);
     free(b);
-    free(partial_c);
+    free(c);
 }
