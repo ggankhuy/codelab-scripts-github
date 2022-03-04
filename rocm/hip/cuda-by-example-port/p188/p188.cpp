@@ -76,20 +76,21 @@ int main()
     printf("main: entered.\n");
 
     float MB  = (float)100 * SIZE * sizeof(int) / 1024 / 1024;
+    float GB  = (float)100 * SIZE * sizeof(int) / 1024 / 1024 / 1024;
     elapsedTime = hip_mem_alloc_test(SIZE, true, ALLOC_NORMAL);
     printf("Time using hipMalloc: %3.1f ms.\n", elapsedTime);
-    printf("\tMB/s during copy up: %3.1f.\n", MB / (elapsedTime / 1000));
+    printf("\tGB/s during copy up: %3.1f.\n", GB / (elapsedTime / 1000));
 
     elapsedTime = hip_mem_alloc_test(SIZE, false, ALLOC_NORMAL);
     printf("Time using hipMalloc: %3.1f ms.\n", elapsedTime);
-    printf("\tMB/s during copy down: %3.1f.\n", MB / (elapsedTime / 1000));
+    printf("\tGB/s during copy down: %3.1f.\n", GB / (elapsedTime / 1000));
 
 	
     elapsedTime = hip_mem_alloc_test(SIZE, true, ALLOC_PAGE_LOCKED);
     printf("Time using hipHostMalloc: %3.1f ms.\n", elapsedTime);
-    printf("\tMB/s during copy up: %3.1f.\n", MB / (elapsedTime / 1000));
+    printf("\tGB/s during copy up: %3.1f.\n", GB / (elapsedTime / 1000));
 
     elapsedTime = hip_mem_alloc_test(SIZE, false, ALLOC_PAGE_LOCKED);
     printf("Time using hipHostMalloc: %3.1f ms.\n", elapsedTime);
-    printf("\tMB/s during copy down: %3.1f.\n", MB / (elapsedTime / 1000));
+    printf("\tGB/s during copy down: %3.1f.\n", GB / (elapsedTime / 1000));
 }
