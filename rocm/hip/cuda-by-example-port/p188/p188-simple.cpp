@@ -1,3 +1,5 @@
+/*Basic vector sum using hipHostMalloc - pinned aka page locked memory */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 

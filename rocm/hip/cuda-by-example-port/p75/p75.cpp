@@ -1,3 +1,5 @@
+/* dot product using shared memory */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 

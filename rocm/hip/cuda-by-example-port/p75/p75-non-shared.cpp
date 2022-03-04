@@ -1,3 +1,5 @@
+/* doc vector not using shared memory for comparison. WIP */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
@@ -11,23 +13,13 @@ __global__ void dot(float * a, float *b, float *c) {
 
     // arrSize = threads in block.
 
-    float arr1[threadsPerBlock];
     int gid = hipThreadIdx_x  + hipBlockIdx_x * hipBlockDim_x;
-    int lid = hipThreadIdx_x;
-
-    float product = 0;
      
     while ( gid < N) {
         c[gid] = a[gid] * b[gid];
         gid += hipBlockDim_x  * hipGridDim_x;
     }
 
-    /*
-    arr1[lid] = product;
-    __syncthreads();
-    */
-    // reductions.
-    
     int i =  N/2;
     while (i != 0 ) {
         if (lid < i) {

@@ -1,3 +1,5 @@
+/*Basic vector sum using managedMemory hipMallocManaged */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
@@ -9,44 +11,12 @@ __global__ void add(int *a, int*b, int *c) {
 	c[tid] = a[tid] + b[tid];
 }
 
-/*
-int managed_memory = 0;
-HIPCHECK(hipDeviceGetAttribute(&managed_memory,
- hipDeviceAttributeManagedMemory,p_gpuDevice));
-if (!managed_memory ) {
- printf ("info: managed memory access not supported on the device %d\n Skipped\n",
-p_gpuDevice);
-}
-else {
- HIPCHECK(hipSetDevice(p_gpuDevice));
- HIPCHECK(hipMallocManaged(&Hmm, N * sizeof(T)));
-. . .
-}*/
-
 int main (void) {
     int *a, *b, *c;
     int i ;
 
     hipError_t  ret;
-    /*
-    int * devCount;
-    hipGetDeviceCount(devCount);
-    printf("No. of devices: %u.\n", devCount);
-    
-    if (*devCount < 1) {
-        printf("Unable to find gpu.\n");
-        return 1;
-    }
-    
-    int managed_memory = 0;
-    hipDeviceGetAttribute(&managed_memory, hipDeviceAttributeManagedMemory, 0);
-    if (!managed_memory ) {
-         printf ("info: managed memory access not supported on the device %d\n Skipped\n", 0);
-    } 
-    return 1;
 
-    hipSetDevice(0);
-    */
     ret = hipMallocManaged(&a, N * sizeof(*a));
     ret = hipMallocManaged(&b, N * sizeof(*b));
     ret = hipMallocManaged(&c, N * sizeof(*c));

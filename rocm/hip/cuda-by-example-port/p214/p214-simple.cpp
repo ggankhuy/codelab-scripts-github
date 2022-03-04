@@ -1,3 +1,5 @@
+/*Basic vector sum using hipHostMalloc - zero copy allocation */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 

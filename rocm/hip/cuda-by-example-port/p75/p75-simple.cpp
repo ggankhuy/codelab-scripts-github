@@ -1,3 +1,5 @@
+/*Basic vector sum involving shared memory to hold sums */ 
+
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
