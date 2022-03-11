@@ -461,7 +461,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
 
-	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
+	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE rocFFT
 	do
         echo "GG: CONFIG_DISABLE_$i: $((CONFIG_DISABLE_$i))"
 		if [[ $((CONFIG_DISABLE_$i)) == 1 ]] ; then
