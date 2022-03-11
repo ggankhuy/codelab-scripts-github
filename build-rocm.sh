@@ -75,12 +75,12 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg -y
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
@@ -505,7 +505,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
-        cmake -DMIOPEN_BACKEND=OpenCL -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD.log
+        cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
