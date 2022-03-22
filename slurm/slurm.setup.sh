@@ -22,33 +22,28 @@ case "$OS_NAME" in
 esac
 
 # following seems worked for munge build:
-origin  https://github.com/dun/munge.git (fetch)
-origin  https://github.com/dun/munge.git (push)
+git clone https://github.com/dun/munge.git
 
-  122  libtoolize --force
-  123  aclocal
-  124  autoheader
-  125  autoconf
-  126  ./configure
-  127  $ autoreconf -vif
-  128  yum install autoreconf
-  129  yum whatprovides autoreconf
-  130  yum install -y autoconf
-  131  autoreconf -i
-  132  ./configure 
-  133  ./configure                   --prefix=/usr                 --sysconfdir=/etc             --localstatedir=/var          --runstatedir=/run  
-  134  ./configure                   --prefix=/usr                 --sysconfdir=/etc             --localstatedir=/var          --runstatedir=/run
-  135  ./configure                   --prefix=/usr                 --sysconfdir=/etc             --localstatedir=/var        
-  136  make -j8
-  137  make check
-  138  make install
-  139  history
+cd munge
+autoreconf -i
+./configure              \
+     --prefix=/usr            \
+     --sysconfdir=/etc        \
+     --localstatedir=/var     \
+     --runstatedir=/run       \
+make -j`nproc` 
+make install
+
 
 git clone https://github.com/SchedMD/slurm.git
 cd slurm
-./configure 
+chmod 755 configure
+./configure --prefix=/slurm --sysconfdir=/slurm-conf
 make `nproc`
 make install
+cp ./slurmctld.service /etc/systemd/system/slurmctld.service
+systemctl enable slurmctld
+systemctl start slurmctld
 cd ..
 
 
