@@ -55,4 +55,11 @@ cp slurmdbd.service /etc/systemd/system/slurmdbd.service
 systemctl enable slurmdbd
 systemctl start slurmdbd
 
+if [[ -z `cat ~/.bashrc | grep slurm/bin` ]] ; then
+	echo "inserting path /slurm/bin to bashrc..."
+	echo "export PATH=$PATH:/slurm/bin" >> ~/.bashrc
+else
+	echo "path /slurm/bin already in bashrc..."
+fi
+
 
