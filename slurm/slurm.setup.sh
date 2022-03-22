@@ -1,3 +1,4 @@
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
    "Ubuntu")
@@ -30,10 +31,12 @@ autoreconf -i
      --prefix=/usr            \
      --sysconfdir=/etc        \
      --localstatedir=/var     \
-     --runstatedir=/run       \
+#For some reason this is not working.
+
+#     --runstatedir=/run       \
 make -j`nproc` 
 make install
-
+cd ..
 
 git clone https://github.com/SchedMD/slurm.git
 cd slurm
@@ -43,12 +46,13 @@ echo "slurm:amd1234" | chpasswd slurm
 ./configure --prefix=/slurm --sysconfdir=/slurm-conf
 make `nproc`
 make install
-cp ./slurmctld.service /etc/systemd/system/slurmctld.service
+cd ..
+pwd
+cp slurmctld.service /etc/systemd/system/slurmctld.service
 systemctl enable slurmctld
 systemctl start slurmctld
-cp ./slurmdbd.service /etc/systemd/system/slurmdbd.service
+cp slurmdbd.service /etc/systemd/system/slurmdbd.service
 systemctl enable slurmdbd
 systemctl start slurmdbd
-cd ..
 
 
