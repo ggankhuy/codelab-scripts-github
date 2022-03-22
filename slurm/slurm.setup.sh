@@ -31,12 +31,23 @@ autoreconf -i
      --prefix=/usr            \
      --sysconfdir=/etc        \
      --localstatedir=/var     \
+     --with-runstatedir=/run
 #For some reason this is not working.
 
 #     --runstatedir=/run       \
 make -j`nproc` 
 make install
 cd ..
+
+adduser munge
+echo "munge:amd1234" | chpasswd munge
+mkdir -p /run/munge
+chown -R munge: /etc/munge/ /var/log/munge/ /var/lib/munge/ /run/munge/
+sudo -u munge /usr/sbin/mungekey --verbose
+# should create /etc/munge/munge.key
+chmod 600 /etc/munge/munge.key
+systemctl enable munge
+systemctl start munge
 
 git clone https://github.com/SchedMD/slurm.git
 cd slurm
