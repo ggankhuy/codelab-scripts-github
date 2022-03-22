@@ -38,12 +38,17 @@ make install
 git clone https://github.com/SchedMD/slurm.git
 cd slurm
 chmod 755 configure
+adduser slurm
+echo "slurm:amd1234" | chpasswd slurm
 ./configure --prefix=/slurm --sysconfdir=/slurm-conf
 make `nproc`
 make install
 cp ./slurmctld.service /etc/systemd/system/slurmctld.service
 systemctl enable slurmctld
 systemctl start slurmctld
+cp ./slurmdbd.service /etc/systemd/system/slurmdbd.service
+systemctl enable slurmdbd
+systemctl start slurmdbd
 cd ..
 
 
