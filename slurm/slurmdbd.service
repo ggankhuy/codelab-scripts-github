@@ -1,0 +1,13 @@
+[Unit]
+Description=Slurm
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=slurm
+ExecStart=/slurm/sbin/slurmdbd
+
+[Install]
+WantedBy=multi-user.target
