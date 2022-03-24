@@ -75,12 +75,12 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg -y
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
@@ -148,6 +148,9 @@ if [[ $PKG_EXEC == "yum" ]] ; then
     $PKG_EXEC groupinstall "Development Tools" -y
 fi
 
+echo "Upgrading pip..."
+pip3 install --upgrade pip
+
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
     echo "Parameters:"
@@ -167,6 +170,12 @@ fi
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 ROCM_SRC_FOLDER=~/ROCm-$VERSION
+export ROCM_SRC_FOLDER=~/ROCm-$VERSION
+
+if [[ -z `cat ~/.bashrc | grep ROCM_SRC_FOLDER` ]] ; then
+    echo "export ROCM_SRC_FOLDER=~/ROCm-$VERSION" >> ~/.bashrc
+fi
+
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
@@ -332,7 +341,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
     popd
     sudo ln -s $ROCM_SRC_FOLDER/HIP $ROCM_SRC_FOLDER/hip
-	cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/ROCclr/build;/opt/rocm/" .. | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" -DCMAKE_INSTALL_PREFIX=$PWD/install .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make -j$NPROC $BUILD_TARGET2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 	make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
@@ -452,7 +461,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 
 	# rocSPARSE needs rocPRIM. Need to add test!!!!
 
-	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE
+	for i in rocSPARSE rocSOLVER hipBLAS hipSPARSE rocFFT
 	do
         echo "GG: CONFIG_DISABLE_$i: $((CONFIG_DISABLE_$i))"
 		if [[ $((CONFIG_DISABLE_$i)) == 1 ]] ; then
@@ -472,7 +481,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
 
-		./install.sh -icd -logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
 	done
@@ -496,7 +505,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build; cd build
 		rm -rf ./*
-        cmake -DMIOPEN_BACKEND=OpenCL -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD.log
+        cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
