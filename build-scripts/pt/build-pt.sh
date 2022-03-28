@@ -68,3 +68,21 @@ rm -rf /usr/bin/python
 echo ln -s $PATH_PYTHON_U /usr/bin/python
 ln -s $PATH_PYTHON_U /usr/bin/python
 
+$EXEC_PATH_CONDA install -y astunparse numpy ninja pyyaml mkl mkl-include setuptools cmake cffi typing_extensions future six requests dataclasses
+cd ..
+
+# building pytorch
+echo "Building pytorch..."
+git clone --recursive https://github.com/pytorch/pytorch
+cd pytorch
+git submodule sync
+git submodule update --init --recursive --jobs 0
+
+pip3 install --upgrade setuptools
+pip3 install --upgrade pip
+pip3 install --upgrade distlib
+
+export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+python tools/amd_build/build_amd.py 2>&1  | tee build-pytorch.log
+PYTORCH_ROCM_ARCH=gfx908 python setup.py install
+
