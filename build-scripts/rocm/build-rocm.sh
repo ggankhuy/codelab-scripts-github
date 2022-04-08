@@ -64,6 +64,18 @@ CONFIG_DISABLE_hipBLAS=1
 t1=""
 f2=""
 
+    
+soft_link_this_script=`readlink $0`
+echo "soft link: $soft_link_this_script"
+base_dir_api=`dirname $soft_link_this_script`
+echo "base_dir_api: $base_dir_api" 
+base_dir_this_script=`dirname $0`
+echo "base_dir_this_script: $base_dir_this_script" 
+source $base_dir_api/patch.sh
+patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api
+exit 0
+
+
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
@@ -480,6 +492,10 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		CURR_BUILD=$i
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
+
+        base_dir_api=`dirname `readlink $0``
+        echo "base_dir_api: $base_dir_api" 
+        source $base_dir_api/patch.sh
 
 		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
