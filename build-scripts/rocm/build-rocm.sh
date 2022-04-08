@@ -72,6 +72,10 @@ base_dir_this_script=`dirname $0`
 echo "base_dir_this_script: $base_dir_this_script" 
 source $base_dir_api/patch.sh
 
+        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api
+exit 0
+
+
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
