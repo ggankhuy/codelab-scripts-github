@@ -487,9 +487,11 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	do
 		CURR_BUILD=$i
 		build_entry $i
+		pushd $ROCM_SRC_FOLDER/
+        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
+        cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
+        popd
 		pushd $ROCM_SRC_FOLDER/$i
-
-        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api
 		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		popd
