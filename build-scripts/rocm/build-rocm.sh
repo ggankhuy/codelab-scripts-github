@@ -514,10 +514,10 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		CURR_BUILD=$i
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
-        cmake -P install_deps.cmake --minimum --prefix | tee $LOG_DIR/$CURR_BUILD.log
+        cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD.log
 		mkdir build; cd build
 		rm -rf ./*
-        cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | -a tee $LOG_DIR/$CURR_BUILD.log
+        CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | -a tee $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
