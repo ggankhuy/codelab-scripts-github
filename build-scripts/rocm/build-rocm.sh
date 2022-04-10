@@ -108,6 +108,8 @@ else
     INSTALL_SH_PACKAGE=""
 	INSTALL_TARGET=install
 fi
+
+sleep 3
 for var in "$@"
 do
     if [[ $var == "llvmno" ]]  ; then
@@ -514,15 +516,22 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		CURR_BUILD=$i
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/$i
-        cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-dep.log
+        cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-1.log
 		mkdir build; cd build
 		rm -rf ./*
-        CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. | -a tee $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        pwd 2>&1 | tee $LOG_DIR/$CURR_BUILD-2.log
+        CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1." >> $LOG_SUMMARY ; fi
+
+		echo "make -j$NPROC $BUILD_TARGET 2>&1" | tee $LOG_DIR/$CURR_BUILD-3.log
+		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-3.log
+
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 2." >> $LOG_SUMMARY ; fi
+		echo "make $INSTALL_TARGET 2>&1" | tee $LOG_DIR/$CURR_BUILD-4.log
+
+		make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-4.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3." >> $LOG_SUMMARY ; fi
+
 		popd
 	done
 
