@@ -83,12 +83,12 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel -y
+      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
@@ -318,13 +318,13 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     CURR_BUILD=ROCclr
     build_entry $CURR_BUILD
 	mkdir build; cd build
-	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. | tee $LOG_DIR/ROCclr.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	#make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/ROCclr.log
-	make -j$NPROC 2>&1 | tee -a $LOG_DIR/ROCclr.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	#make -j$NPROC $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/ROCclr.log
-	make install 2>&1 | tee -a $LOG_DIR/ROCclr.log
+	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
+	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+
+	make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
+	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+
+	make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
 	popd
 
   	CURR_BUILD=ROCm-OpenCL-Runtime
@@ -437,12 +437,13 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 	CURR_BUILD=ROCmValidationSuite
 	pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
-	$PKG_EXEC install libpciaccess-dev libpci-dev -y | tee $LOG_DIR/$CURR_BUILD.log
+    mkdir build ; cd build
+	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+	cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+	make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	cmake ./ -B./build 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-	make -C ./build 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
 	popd
 
 	for i in rocPRIM hipCUB
@@ -544,10 +545,12 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		pushd $ROCM_SRC_FOLDER/$i
 		mkdir build ; cd build
 
-		cmake .. -DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		cmake .. -DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD-1.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1" >> $LOG_SUMMARY ; fi
+		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 2" >> $LOG_SUMMARY ; fi
+		make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-3.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3" >> $LOG_SUMMARY ; fi
 		popd
 	done
 
