@@ -132,7 +132,7 @@ for i in $ROCM_PATH_1 $ROCM_PATH_2 ; do
     else
         export PATH=$PATH:$i
     fi
-    echo PATH2: $PATH
+
     if [[ -z `cat ~/.bashrc | grep "PATH.*$i"` ]] ; then
         echo "updating bashrc with $i..."
         if [[ -z `cat ~/.bashrc | grep PATH` ]] ; then
@@ -147,11 +147,7 @@ for i in $ROCM_PATH_1 $ROCM_PATH_2 ; do
     fi
 done
 
-bash
-sleep 3
-clang
 echo $PATH
-exit 0
 
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
