@@ -51,6 +51,45 @@
 # RCP(obsolete)         | x         | TBD           |
 # 
 
+for var in "$@"
+do
+    if [[ $var == "llvmno" ]]  ; then
+        echo bypass llvm: $var
+       	CONFIG_BYPASS_LLVM=1
+    fi
+    if [[ $var == "fast" ]]  ; then
+        echo fast installation specified: $var
+        FAST_INSTALL=1
+    fi
+    if [[ $var == "repo_only" ]]  ; then
+        echo repo only specified: $var
+        REPO_ONLY=1
+    fi
+    if [[ $var == "non_repo_only" ]]  ; then
+        echo non repo only specified: $var
+        NON_REPO_ONLY=1
+    fi
+
+    if [[ ! -z `echo "$var" | grep "test"` ]]  ; then
+        echo "non-repo only specified: $var"
+        CONFIG_TEST=1
+    fi
+
+    if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
+        VERSION=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
+        MINOR_VERSION=`echo $var | cut -d '=' -f2`
+	echo "minor version: $MINOR_VERSION" ; 
+    fi
+
+    if [[ ! -z `echo "$var" | grep "pkg="` ]]  ; then
+        PKG_EXEC=`echo $var | cut -d '=' -f2`
+        echo Set pkg exec to $PKG_EXEC
+    fi
+done
+
 REPO_ONLY=0
 NON_REPO_ONLY=0
 p1=$1
@@ -71,7 +110,6 @@ export ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
-export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
     
 soft_link_this_script=`readlink $0`
 echo "soft link: $soft_link_this_script"
@@ -81,21 +119,40 @@ base_dir_this_script=`dirname $0`
 echo "base_dir_this_script: $base_dir_this_script" 
 source $base_dir_api/patch.sh
 
-if [[ $PATH =~ "/opt/rocm-5.0.0/llvm/bin" ]] ; then
-    echo "Path already satisfied1..."
-else
-    export PATH=$PATH:"/opt/rocm-5.0.0/llvm/bin"
-fi
+ROCM_PATH_1=/opt/rocm-$VERSION.$MINOR_VERSION/bin
+ROCM_PATH_2=/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin
 
-if [[ $PATH =~ "/opt/rocm-5.0.0/bin" ]] ; then
-    echo "Path already satisfied2..."
-else
-    export PATH=$PATH:"/opt/rocm-5.0.0/bin"
-fi
+for i in $ROCM_PATH_1 $ROCM_PATH_2 ; do 
+    echo i: $i
+    echo ---
+    echo PATH1: $PATH
 
-clang 
-echo $PATH
+    if [[ `echo $PATH | grep $i` ]] ; then
+        echo "Path already satisfied2"
+    else
+        export PATH=$PATH:$i
+    fi
+    echo PATH2: $PATH
+    if [[ -z `cat ~/.bashrc | grep "PATH.*$i"` ]] ; then
+        echo "updating bashrc with $i..."
+        if [[ -z `cat ~/.bashrc | grep PATH` ]] ; then
+            echo "export PATH statement does not exist.."
+            echo "export PATH=$PATH:$i" >> ~/.bashrc
+        else
+            echo "adding to export PATH statement"
+            sudo sed -i "s|.*PATH.*|export PATH=$PATH:$i|g" ~/.bashrc ; cat ~/.bashrc
+        fi
+    else    
+        echo "bashrc already updated with $i"
+    fi
+done
+
+bash
 sleep 3
+clang
+echo $PATH
+exit 0
+
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
@@ -133,45 +190,6 @@ else
 fi
 
 sleep 3
-for var in "$@"
-do
-    if [[ $var == "llvmno" ]]  ; then
-        echo bypass llvm: $var
-       	CONFIG_BYPASS_LLVM=1
-    fi
-    if [[ $var == "fast" ]]  ; then
-        echo fast installation specified: $var
-        FAST_INSTALL=1
-    fi
-    if [[ $var == "repo_only" ]]  ; then
-        echo repo only specified: $var
-        REPO_ONLY=1
-    fi
-    if [[ $var == "non_repo_only" ]]  ; then
-        echo non repo only specified: $var
-        NON_REPO_ONLY=1
-    fi
-
-    if [[ ! -z `echo "$var" | grep "test"` ]]  ; then
-        echo "non-repo only specified: $var"
-        CONFIG_TEST=1
-    fi
-
-    if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
-        VERSION=`echo $var | cut -d '=' -f2`
-    fi
-
-    if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
-        MINOR_VERSION=`echo $var | cut -d '=' -f2`
-	echo "minor version: $MINOR_VERSION" ; sleep 5
-    fi
-
-    if [[ ! -z `echo "$var" | grep "pkg="` ]]  ; then
-        PKG_EXEC=`echo $var | cut -d '=' -f2`
-        echo Set pkg exec to $PKG_EXEC
-    fi
-done
-
 echo Set pkg exec to $PKG_EXEC
 
 if [[ $PKG_EXEC == "yum" ]] ; then echo "Installing epel-release ..." ; sleep 1 ;yum install epel-release gcc -y ; fi
