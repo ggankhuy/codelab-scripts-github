@@ -63,6 +63,15 @@ CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 t1=""
 f2=""
+
+LOG_DIR=/log/rocmbuild/
+NPROC=`nproc`
+ROCM_SRC_FOLDER=~/ROCm-$VERSION
+export ROCM_SRC_FOLDER=~/ROCm-$VERSION
+ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
+LOG_SUMMARY=$LOG_DIR/build-summary.log
+LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
     
 soft_link_this_script=`readlink $0`
 echo "soft link: $soft_link_this_script"
@@ -93,17 +102,17 @@ case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
-  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y
+  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
@@ -191,18 +200,11 @@ if [[ -z $VERSION ]] ; then
 	echo "You need to specify rocm version."
 	exit 1
 fi
-LOG_DIR=/log/rocmbuild/
-NPROC=`nproc`
-ROCM_SRC_FOLDER=~/ROCm-$VERSION
-export ROCM_SRC_FOLDER=~/ROCm-$VERSION
 
 if [[ -z `cat ~/.bashrc | grep ROCM_SRC_FOLDER` ]] ; then
     echo "export ROCM_SRC_FOLDER=~/ROCm-$VERSION" >> ~/.bashrc
 fi
 
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
-LOG_SUMMARY=$LOG_DIR/build-summary.log
-export PATH=$PATH:/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin/
 
 function build_entry () {
     t2=$SECONDS
@@ -246,7 +248,7 @@ mkdir -p $LOG_DIR
 setup_root_rocm_softlink
 setup_opt_rocm_softlink
 
-echo "---" > $LOG_SUMMARY
+echo "---" >> $LOG_SUMMARY
 echo "BUILD PLATFORM: " >> $LOG_SUMMARY
 
 sudo dmidecode -t 1 >> $LOG_SUMMARY
