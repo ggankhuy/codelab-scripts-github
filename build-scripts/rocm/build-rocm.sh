@@ -72,6 +72,21 @@ base_dir_this_script=`dirname $0`
 echo "base_dir_this_script: $base_dir_this_script" 
 source $base_dir_api/patch.sh
 
+if [[ $PATH =~ "/opt/rocm-5.0.0/llvm/bin" ]] ; then
+    echo "Path already satisfied1..."
+else
+    export PATH=$PATH:"/opt/rocm-5.0.0/llvm/bin"
+fi
+
+if [[ $PATH =~ "/opt/rocm-5.0.0/bin" ]] ; then
+    echo "Path already satisfied2..."
+else
+    export PATH=$PATH:"/opt/rocm-5.0.0/bin"
+fi
+
+clang 
+echo $PATH
+sleep 3
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
@@ -83,18 +98,17 @@ case "$OS_NAME" in
    "CentOS Linux")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
-      $PKG_EXEC install sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
-esac
-
+esac 
 if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
     echo "will build packages..."
 	CONFIG_BUILD_PKGS_LOC=/rocm-packages/
