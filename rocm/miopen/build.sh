@@ -19,7 +19,7 @@ FILENAME=tensor_ops
 ln -s ../$FILENAME.cpp
 #ln -s ../testing.hpp .
 hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -I/root/ROCm-4.5/MIOpen/src/include/ -std=c++14
-hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -std=c++14
+#hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -std=c++14
 #hipcc $FILENAME.o /opt/rocm-4.5.2/lib/libMIOpen.so
-#hipcc $FILENAME.o /opt/rocm-4.5.2/lib/libMIOpen.so.1 /usr/lib64/libboost_filesystem.so
+hipcc $FILENAME.o /opt/rocm-4.5.2/lib/libMIOpen.so.1 /usr/lib64/libboost_filesystem.so
 
