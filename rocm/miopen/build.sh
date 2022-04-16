@@ -15,7 +15,7 @@ mkdir build
 cd build
 #FILENAME=testing_axpby
 FILENAME=example_axpyi
-FILENAME=tensor_ops
+FILENAME=miopen-test
 ln -s ../$FILENAME.cpp
 #ln -s ../testing.hpp .
 hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -I/root/ROCm-4.5/MIOpen/src/include/ -std=c++14
