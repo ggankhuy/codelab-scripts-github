@@ -11,13 +11,19 @@
 # 3. User may be able to chug along by moving directories here and there specially from client directory but 
 # this is a messy operation and defeats to purpose of having hipblas API.
 
+# tensor_ops: builds ok with tensor.hpp/gpu_mem.hpp softlink.
+
 mkdir build
 cd build
 #FILENAME=testing_axpby
-FILENAME=example_axpyi
+#FILENAME=example_axpyi
 FILENAME=miopen-test
+FILENAME=tensor_ops
+FILENAME=tensor_ops-2
 ln -s ../$FILENAME.cpp
 #ln -s ../testing.hpp .
+ln -s ../tensor.hpp .
+ln -s ../gpu_mem.hpp .
 hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -I/root/ROCm-4.5/MIOpen/src/include/ -std=c++14
 #hipcc -c $FILENAME.cpp -I/git/codelab/gpu/rocm/miopen -std=c++14
 #hipcc $FILENAME.o /opt/rocm-4.5.2/lib/libMIOpen.so
