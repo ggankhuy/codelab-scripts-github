@@ -339,6 +339,22 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	popd
 
+	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
+	for i in ROCR-Runtime/src 
+	do
+		CURR_BUILD=ROCR-Runtime
+		build_entry ROCR-Runtime
+		pushd $ROCM_SRC_FOLDER/$i
+		mkdir build; cd build
+		cmake -DIMAGE_SUPPORT=OFF .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		popd
+	done
+
 	pushd $ROCM_SRC_FOLDER/ROCclr
 	PWD=$ROCM_SRC_FOLDER/ROCclr/build
 	OPENCL_DIR=$ROCM_SRC_FOLDER/ROCm-OpenCL-Runtime/
@@ -419,7 +435,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
     else
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
+	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCT-Thunk-Interface
 	do
 		CURR_BUILD=$i
 		build_entry $i
@@ -463,6 +480,20 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     		popd
     	done
     fi
+
+	for i in rocBLAS
+	do
+		CURR_BUILD=$i
+		build_entry $i
+		pushd $ROCM_SRC_FOLDER/
+        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
+        cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
+        popd
+		pushd $ROCM_SRC_FOLDER/$i
+		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		popd
+	done
 
     if [[ $FAST_INSTALL -eq 0 ]] ; then	
 	CURR_BUILD=ROCmValidationSuite
@@ -515,19 +546,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     		popd
 		fi
-	done
-	for i in rocBLAS
-	do
-		CURR_BUILD=$i
-		build_entry $i
-		pushd $ROCM_SRC_FOLDER/
-        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
-        cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
-        popd
-		pushd $ROCM_SRC_FOLDER/$i
-		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
-		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-		popd
 	done
 
 	for i in rocRAND
