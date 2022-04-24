@@ -161,10 +161,12 @@ case "$OS_NAME" in
       echo "CentOS is detected..."
       PKG_EXEC=yum
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
+  	  $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
       PKG_EXEC=yum
+  	  $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
       ;;
    *)
@@ -310,7 +312,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
 	mkdir -p "$DEVICE_LIBS/build"
 	cd "$DEVICE_LIBS/build"
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee $LOG_DIR/$CURR_BUILD.log
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. | tee $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -339,7 +341,21 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 	popd
 
-	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
+	for i in rocminfo
+	do
+		CURR_BUILD=$i
+		build_entry $i
+		pushd $ROCM_SRC_FOLDER/$i
+		mkdir build; cd build
+		cmake -DCMAKE_PREFIX_PATH=/opt/rocm -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+		popd
+	done
+
 	for i in ROCR-Runtime/src 
 	do
 		CURR_BUILD=ROCR-Runtime
@@ -412,16 +428,15 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	CURR_BUILD=rccl
         build_entry $CURR_BUILD
    	    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    	./install.sh -idt $INSTALL_SH_PACKAGE | tee $LOG_DIR/$CURR_BUILD.log
+    	./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
     fi
 
 	# for rocr_debug_agent!!
 
-	$PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
     if [[ $FAST_INSTALL -eq 1 ]] ; then	
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler
+	for i in rocm_smi_lib rocm_bandwidth_test rocprofiler
 	do
 		CURR_BUILD=$i
 		build_entry $i
