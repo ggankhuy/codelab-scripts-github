@@ -6,11 +6,12 @@ DB32_SUMMARY=db32-summary.log
 
 function countbits() {
     bitcount=0
+    p1=$1
     for i in {0..32} ; do
-        if [[ ! -z `echo $1 >> $i` ]] ; then
-            bitcount=$((bitcount+1))
-        fi
+        bitVal=$((p1 >> $i & 1))
+        bitcount=$((bitcount+$bitVal))
     done
+    echo bitcount for p1=$p1 : $bitcount
     return $bitcount
 }
 
