@@ -38,6 +38,7 @@ while IFS= read -r line; do
 	    done
 	    echo "===========================" | tee -a $DB32_LOG
 	    echo "device: $i" | tee -a $DB32_LOG
+	    echo "device: $i" | tee -a $DB32_SUMMARY
 	    echo "===========================" | tee -a $DB32_LOG
 	    cat $DB32_FILE | grep csselect >> -a $DB32_LOG2
 	    ./db32 exe $DB32_FILE 2>&1 | tee -a $DB32_LOG
@@ -63,8 +64,8 @@ while IFS= read -r line; do
             fi
             echo "val: $val"
         done < $DB32_CURR_GPU_LOG
-        echo "TOTAL CG   DISABLED: $TOTAL_CG_DIS"
-        echo "TOTAL USER DISABLED: $TOTAL_USER_DIS"
+        echo "TOTAL CG   DISABLED: $TOTAL_CG_DIS" | tee -a  $DB32_SUMMARY
+        echo "TOTAL USER DISABLED: $TOTAL_USER_DIS" | tee -a $DB32_SUMMARY
     fi
     
 done < $LOG_FILE_CSSELECT
