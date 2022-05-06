@@ -36,7 +36,7 @@
 //#include <miopen/tensor_ops.hpp>
 //#include <utility>
 
-//#include "driver.hpp"
+#include "driver.hpp"
 //#include "get_handle.hpp"
 //#include "tensor_holder.hpp"
 //#include "verify.hpp"
@@ -45,7 +45,7 @@
 
 int main(int argc, const char* argv[]) { 
     
-    //tensor<int> a;
+    tensor<int> a;
 
     //printf("size of tensor: %d.\n", sizeof(a));
     return 0;
