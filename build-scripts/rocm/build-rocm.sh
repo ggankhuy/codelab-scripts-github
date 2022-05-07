@@ -110,6 +110,10 @@ export ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
     
 soft_link_this_script=`readlink $0`
 echo "soft link: $soft_link_this_script"
@@ -155,7 +159,8 @@ case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
-  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev rubydev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+      gem install json
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
@@ -502,8 +507,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		CURR_BUILD=$i
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/
-        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
-        cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
+        #patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
+        #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
         popd
 		pushd $ROCM_SRC_FOLDER/$i
 		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
@@ -641,8 +646,29 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
 
+    # onnx/amdmigraphx + prereq (protobuf)
+    
+    CURR_BUILD=protobuf
+    build_entry $CURR_BUILD
+
+    git clone https://github.com/protocolbuffers/protobuf.git
+    cd $CURR_BUILD 
+    git checkout v3.16.0
+    git submodule update --init --recursive
+    mkdir build ; cd build
+    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
+    make -j`nproc` 
+    make $INSTALL_TARGET    
+    cd ../..
+
+
     	CURR_BUILD=AMDMIGraphX
         build_entry $CURR_BUILD
+
+        
+       #./tools/install_prereqs.sh
+
+        # following commented lines replaced by install_prereqs.sh, hopefully, intest.
         pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
@@ -657,6 +683,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
+
+    exit 0
 
     	CURR_BUILD=MIVisionX
     	build_entry $CURR_BUILD
@@ -731,20 +759,6 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     git submodule update --init
     mkdir build ; cd build
     cmake -DgRPC_INSTALL=ON -DBUILD_SHARED_LIBS=ON  ..
-    make -j`nproc` 
-    make $INSTALL_TARGET    
-    cd ../..
-
-    # onnx + prereq (protobuf)
-    
-    CURR_BUILD=protobuf
-    build_entry $CURR_BUILD
-    git clone https://github.com/protocolbuffers/protobuf.git
-    cd $CURR_BUILD 
-    git checkout v3.16.0
-    git submodule update --init --recursive
-    mkdir build ; cd build
-    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
     make -j`nproc` 
     make $INSTALL_TARGET    
     cd ../..
