@@ -1,8 +1,8 @@
 LOG_FILE_CSSELECT=csselect.log
-DB32_FILE=db32.mac
-DB32_LOG=db32.log
-DB32_LOG2=db32-2.log
-DB32_SUMMARY=db32-summary.log
+FUSE_FILE=fuse.mac
+FUSE_LOG=fuse.log
+FUSE_LOG2=fuse2.log
+FUSE_SUMMARY=fuse-summary.log
 
 function countbits() {
     bitcount=0
@@ -29,22 +29,22 @@ while IFS= read -r line; do
     if [[ ! -z `echo $line | grep "Other Display Controller"` ]] ; then
         i=`echo $line | tr -s ' ' | cut -d ' ' -f1`
         echo "i: $i"
-    	echo -ne "" > $DB32_FILE
-	    echo csselect $i >> $DB32_FILE 
+    	echo -ne "" > $FUSE_FILE
+	    echo csselect $i >> $FUSE_FILE 
 	    for j in 40000000 40010000 40020000 40030000 40040000 40050000 40060000 40070000 ; do
-		    echo regw32 30800 $j >> $DB32_FILE
-		    echo regr32 89bc >> $DB32_FILE
-		    echo regr32 89c0 >> $DB32_FILE
+		    echo regw32 30800 $j >> $FUSE_FILE
+		    echo regr32 89bc >> $FUSE_FILE
+		    echo regr32 89c0 >> $FUSE_FILE
 	    done
-	    echo "===========================" | tee -a $DB32_LOG
-	    echo "device: $i" | tee -a $DB32_LOG
-	    echo "device: $i" | tee -a $DB32_SUMMARY
-	    echo "===========================" | tee -a $DB32_LOG
-	    cat $DB32_FILE | grep csselect >> -a $DB32_LOG2
-	    ./db32 exe $DB32_FILE 2>&1 | tee -a $DB32_LOG
-        DB32_CURR_GPU_LOG=db32.$i.log
-	    ./db32 exe $DB32_FILE 2>&1 | tee -a $DB32_LOG
-        ./db32 exe $DB32_FILE 2>&1 | tee $DB32_CURR_GPU_LOG
+	    echo "===========================" | tee -a $FUSE_LOG
+	    echo "device: $i" | tee -a $FUSE_LOG
+	    echo "device: $i" | tee -a $FUSE_SUMMARY
+	    echo "===========================" | tee -a $FUSE_LOG
+	    cat $FUSE_FILE | grep csselect >> -a $FUSE_LOG2
+	    ./db32 exe $FUSE_FILE 2>&1 | tee -a $FUSE_LOG
+        FUSE_CURR_GPU_LOG=fuse.$i.log
+	    ./db32 exe $FUSE_FILE 2>&1 | tee -a $FUSE_LOG
+        ./db32 exe $FUSE_FILE 2>&1 | tee $FUSE_CURR_GPU_LOG
         TOTAL_CG_DIS=0
         TOTAL_USER_DIS=0
 
@@ -63,9 +63,9 @@ while IFS= read -r line; do
                 TOTAL_USER_DIS=$((TOTAL_USER_DIS + 0x$valBits))
             fi
             echo "val: $val"
-        done < $DB32_CURR_GPU_LOG
-        echo "TOTAL CG   DISABLED: $TOTAL_CG_DIS" | tee -a  $DB32_SUMMARY
-        echo "TOTAL USER DISABLED: $TOTAL_USER_DIS" | tee -a $DB32_SUMMARY
+        done < $FUSE_CURR_GPU_LOG
+        echo "TOTAL CG   DISABLED: $TOTAL_CG_DIS" | tee -a  $FUSE_SUMMARY
+        echo "TOTAL USER DISABLED: $TOTAL_USER_DIS" | tee -a $FUSE_SUMMARY
     fi
     
 done < $LOG_FILE_CSSELECT
