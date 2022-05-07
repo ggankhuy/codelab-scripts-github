@@ -684,8 +684,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
 
-    exit 0
-
     	CURR_BUILD=MIVisionX
     	build_entry $CURR_BUILD
     	pushd $ROCM_SRC_FOLDER/$CURR_BUILD
