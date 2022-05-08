@@ -160,8 +160,9 @@ case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
-  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev rubydev numactl libudev1 libudev-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
-      if [[ $? -ne 0 ]] ; then echo "Not all packages are installed" ; exit 0 ; fi 
+      apt-get update
+  	  $PKG_EXEC install python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+      #if [[ $? -ne 0 ]] ; then echo "Not all packages are installed" ; exit 0 ; fi 
       gem install json
         
       ;;
