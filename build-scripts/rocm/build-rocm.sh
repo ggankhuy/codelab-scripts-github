@@ -159,8 +159,10 @@ case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
       PKG_EXEC=apt
-  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev rubydev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev rubydev numactl libudev libudev-dev-y 2>&1 | tee -a $LOG_SUMMARY_L2 
+      if [[ $? -ne 0 ]] ; then echo "Not all packages are installed" ; exit 0 ; fi 
       gem install json
+        
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
@@ -361,6 +363,21 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
 
+    for i in ROCT-Thunk-Interface
+    do
+        CURR_BUILD=$i
+        build_entry $i
+        pushd $ROCM_SRC_FOLDER/$i
+        mkdir build; cd build
+        cmake .. | tee $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        popd
+    done
+
 	for i in ROCR-Runtime/src 
 	do
 		CURR_BUILD=ROCR-Runtime
@@ -457,7 +474,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	done
     else
 	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCT-Thunk-Interface
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake
 	do
 		CURR_BUILD=$i
 		build_entry $i
