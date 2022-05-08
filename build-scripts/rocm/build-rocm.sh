@@ -154,16 +154,28 @@ done
 
 echo $PATH
 
+# package requirements:
+# u1804:
+#   ROCmValidationSuite: pciutil, pciutils-dev
+#   rccl: chrpath
+#   libudev1 libudev-dev
+#   rocr_debug_agent: libdw libdw-dev
+
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
    "Ubuntu")
-      echo "Ubuntu is detected..."
-      PKG_EXEC=apt
-      apt-get update
-  	  $PKG_EXEC install python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
-      #if [[ $? -ne 0 ]] ; then echo "Not all packages are installed" ; exit 0 ; fi 
-      gem install json
+        echo "Ubuntu is detected..."
+        PKG_EXEC=apt
+        apt-get update
+        for i in python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
+        do  
+            $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+            if [[ $? -ne 0 ]] ; then 
+                echo "Failed to install $i" | tee -a $LOG_SUMMARY_L2 ; 
+            fi 
+        done
+      #gem install json
         
       ;;
    "CentOS Linux")
@@ -208,6 +220,9 @@ fi
 
 echo "Upgrading pip..."
 pip3 install --upgrade pip
+# roctracer: cppheaderparser
+# rocBLAS: pyaml?
+ip3 install cppheaderparser pyaml
 
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
@@ -401,17 +416,17 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	ROCclr_DIR=$ROCM_SRC_FOLDER/ROCclr/
 	OLDPWD=$ROCM_SRC_FOLDER/ROCclr
 
-    CURR_BUILD=ROCclr
-    build_entry $CURR_BUILD
-	mkdir build; cd build
-	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    #CURR_BUILD=ROCclr
+    #build_entry $CURR_BUILD
+	#mkdir build; cd build
+	#cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
 
-	make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+	#make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
 
-	make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
-	popd
+	#make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
+	#popd
 
   	CURR_BUILD=ROCm-OpenCL-Runtime
     build_entry $CURR_BUILD
@@ -452,9 +467,14 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	CURR_BUILD=rccl
         build_entry $CURR_BUILD
    	    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+        # this no longer working.
     	./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	popd
+        # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
+        #mkdir build ; cd build 
+        #CXX=/opt/rocm/bin/hipcc cmake .. 2>&1 | tee -a $CURR_BUILD
+        #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
+    	#popd
     fi
 
 	# for rocr_debug_agent!!
@@ -497,7 +517,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         CURR_BUILD=$i
         build_entry $i
         $PKG_EXEC install rpm -y
-        pip3 install cppheaderparser
         pushd $ROCM_SRC_FOLDER/$i
         ./build.sh
         popd
