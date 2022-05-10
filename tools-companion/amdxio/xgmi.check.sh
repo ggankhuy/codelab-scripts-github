@@ -11,18 +11,18 @@ do
             echo "Installing..."
             echo "cd `pwd`; `pwd`/$0" >> $INST_PATH
         fi
+        exit 0
     else
         echo "..."
     fi
     echo "done.."
 done
-exit 0
 
 AMDXIO_PATH=.
 LOG_PATH=/log/xgmi-stat/
 DATE=`date +%Y%m%d-%H-%M-%S`
 if [[ ! -f $AMDXIO_PATH/AMDXIO ]] ; then 
-    echo "Can not find AMDXIO path: $AMDXIO_PATH/AMDXIO"
+    echo "Can not find AMDXIO path: $AMDXIO_PATH/AMDXIO. Please put the AMDXIO tool in the same folder as in this script..."
     exit 1
 fi
 LOG_PATH_CURR_BOOT=$LOG_PATH/$DATE
