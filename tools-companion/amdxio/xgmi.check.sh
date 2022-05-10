@@ -1,13 +1,23 @@
+echo "entered..."
 for var in "$@"
 do
-
-    if [[ ! -z `echo "$var" | grep "install"` ]]  ; then
-        PATH=`echo $var | cut -d '=' -f2`
-        
-        echo "cd `pwd`; `pwd`/$0" >> /etc/rc.local
-        exit 0
+    echo "var: $var"
+    if [[ $var =~ "install" ]] ; then
+        INST_PATH=`echo $var | cut -d '=' -f2`
+        echo "inst path: $INST_PATH"
+        if [[ `cat $INST_PATH | grep "cd.*AMDXIO"` ]] ; then
+            echo "Already installed..."
+        else
+            echo "Installing..."
+            echo "cd `pwd`; `pwd`/$0" >> $INST_PATH
+        fi
+    else
+        echo "..."
     fi
+    echo "done.."
 done
+exit 0
+
 AMDXIO_PATH=.
 LOG_PATH=/log/xgmi-stat/
 DATE=`date +%Y%m%d-%H-%M-%S`
