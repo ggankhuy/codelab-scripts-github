@@ -110,6 +110,10 @@ export ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
     
 soft_link_this_script=`readlink $0`
 echo "soft link: $soft_link_this_script"
@@ -121,8 +125,9 @@ source $base_dir_api/patch.sh
 
 ROCM_PATH_1=/opt/rocm-$VERSION.$MINOR_VERSION/bin
 ROCM_PATH_2=/opt/rocm-$VERSION.$MINOR_VERSION/llvm/bin
+ROCM_PATH_3=/opt/rocm-$VERSION.$MINOR_VERSION/hip/bin/
 
-for i in $ROCM_PATH_1 $ROCM_PATH_2 ; do 
+for i in $ROCM_PATH_1 $ROCM_PATH_2 $ROCM_PATH_3 ; do 
     echo i: $i
     echo ---
     echo PATH1: $PATH
@@ -149,13 +154,29 @@ done
 
 echo $PATH
 
+# package requirements:
+# u1804:
+#   ROCmValidationSuite: pciutil, pciutils-dev
+#   rccl: chrpath
+#   libudev1 libudev-dev
+#   rocr_debug_agent: libdw libdw-dev
+
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
    "Ubuntu")
-      echo "Ubuntu is detected..."
-      PKG_EXEC=apt
-  	  $PKG_EXEC install sqlite3 libsqlite3-dev libbz2-dev half libboost-all-dev -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+        echo "Ubuntu is detected..."
+        PKG_EXEC=apt
+        apt-get update
+        for i in python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
+        do  
+            $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+            if [[ $? -ne 0 ]] ; then 
+                echo "Failed to install $i" | tee -a $LOG_SUMMARY_L2 ; 
+            fi 
+        done
+      #gem install json
+        
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
@@ -199,6 +220,9 @@ fi
 
 echo "Upgrading pip..."
 pip3 install --upgrade pip
+# roctracer: cppheaderparser
+# rocBLAS: pyaml?
+ip3 install cppheaderparser pyaml
 
 if [[ $p1 == '--help' ]] || [[ $p1 == "" ]]   ; then
     echo "Usage: $0 <parameters>."
@@ -356,6 +380,21 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		popd
 	done
 
+    for i in ROCT-Thunk-Interface
+    do
+        CURR_BUILD=$i
+        build_entry $i
+        pushd $ROCM_SRC_FOLDER/$i
+        mkdir build; cd build
+        cmake .. | tee $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+        if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+        popd
+    done
+
 	for i in ROCR-Runtime/src 
 	do
 		CURR_BUILD=ROCR-Runtime
@@ -377,17 +416,17 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	ROCclr_DIR=$ROCM_SRC_FOLDER/ROCclr/
 	OLDPWD=$ROCM_SRC_FOLDER/ROCclr
 
-    CURR_BUILD=ROCclr
-    build_entry $CURR_BUILD
-	mkdir build; cd build
-	cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    #CURR_BUILD=ROCclr
+    #build_entry $CURR_BUILD
+	#mkdir build; cd build
+	#cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
 
-	make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
-	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+	#make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
+	#if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
 
-	make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
-	popd
+	#make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
+	#popd
 
   	CURR_BUILD=ROCm-OpenCL-Runtime
     build_entry $CURR_BUILD
@@ -428,9 +467,14 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	CURR_BUILD=rccl
         build_entry $CURR_BUILD
    	    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+        # this no longer working.
     	./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    	popd
+        # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
+        #mkdir build ; cd build 
+        #CXX=/opt/rocm/bin/hipcc cmake .. 2>&1 | tee -a $CURR_BUILD
+        #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
+    	#popd
     fi
 
 	# for rocr_debug_agent!!
@@ -452,7 +496,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 	done
     else
 	#for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCR-Runtime/src ROCT-Thunk-Interface
-	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake  ROCT-Thunk-Interface
+	for i in rocm_smi_lib rocm_bandwidth_test rocminfo rocprofiler rocr_debug_agent MIOpenGEMM half clang-ocl rocm-cmake
 	do
 		CURR_BUILD=$i
 		build_entry $i
@@ -473,7 +517,6 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         CURR_BUILD=$i
         build_entry $i
         $PKG_EXEC install rpm -y
-        pip3 install cppheaderparser
         pushd $ROCM_SRC_FOLDER/$i
         ./build.sh
         popd
@@ -502,8 +545,8 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
 		CURR_BUILD=$i
 		build_entry $i
 		pushd $ROCM_SRC_FOLDER/
-        patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
-        cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
+        #patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
+        #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
         popd
 		pushd $ROCM_SRC_FOLDER/$i
 		./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
@@ -641,8 +684,29 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     	popd
 
+    # onnx/amdmigraphx + prereq (protobuf)
+    
+    CURR_BUILD=protobuf
+    build_entry $CURR_BUILD
+
+    git clone https://github.com/protocolbuffers/protobuf.git
+    cd $CURR_BUILD 
+    git checkout v3.16.0
+    git submodule update --init --recursive
+    mkdir build ; cd build
+    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
+    make -j`nproc` 
+    make $INSTALL_TARGET    
+    cd ../..
+
+
     	CURR_BUILD=AMDMIGraphX
         build_entry $CURR_BUILD
+
+        
+       #./tools/install_prereqs.sh
+
+        # following commented lines replaced by install_prereqs.sh, hopefully, intest.
         pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD.log
     	if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 
@@ -731,20 +795,6 @@ if [[ $NON_REPO_ONLY == 1 ]] && [[ $CONFIG_TEST == 0 ]]; then
     git submodule update --init
     mkdir build ; cd build
     cmake -DgRPC_INSTALL=ON -DBUILD_SHARED_LIBS=ON  ..
-    make -j`nproc` 
-    make $INSTALL_TARGET    
-    cd ../..
-
-    # onnx + prereq (protobuf)
-    
-    CURR_BUILD=protobuf
-    build_entry $CURR_BUILD
-    git clone https://github.com/protocolbuffers/protobuf.git
-    cd $CURR_BUILD 
-    git checkout v3.16.0
-    git submodule update --init --recursive
-    mkdir build ; cd build
-    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
     make -j`nproc` 
     make $INSTALL_TARGET    
     cd ../..
