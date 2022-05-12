@@ -8,7 +8,8 @@ function countbits() {
     bitcount=0
     p1=$1
     for i in {0..32} ; do
-        bitVal=$((p1 >> $i & 1))
+        bitVal=$((((0x$p1)) >> $i))
+        bitVal=$((bitVal &1 ))
         bitcount=$((bitcount+$bitVal))
     done
     echo bitcount for p1=$p1 : $bitcount
