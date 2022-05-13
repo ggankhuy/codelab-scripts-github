@@ -41,6 +41,17 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
+
+DATE=`date +%Y%m%d-%H-%M-%S`
+LOGFILE_KERNEL_OS=$DATE-kernel-os.log
+LOGFILE_CPU=$DATE-cpu.log
+LOGFILE_DMESG=$DATE-dmesg.log
+LOGFILE_MEM==$DATE-mem.log
+LOGFILE_LSPCI=$DATE-lspci.log
+LOGFILE_ROCM_SMI=$DATE-rocm-smi.log
+LOGFILE_ROCMINFO=$DATE-rocminfo.log
+LOG_FOLDER=./log-$DATE
+sudo mkdir $LOG_FOLDER
 echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
 /bin/date
 
@@ -53,13 +64,13 @@ else
 fi
 echo "===== Section: OS Distribution         ==============="
 # Print OS type
-/bin/uname -a
+/bin/uname -a 2>&1 | sudo tee $LOG_FOLDER/$LOGFILE_KERNEL_OS
 # OS release
-/bin/cat /etc/os-release
+/bin/cat /etc/os-release 2>&1 | sudo tee $LOG_FOLDER/$LOGFILE_KERNEL_OS
 
 # Kernel boot parameters
 echo "===== Section: Kernel Boot Parameters  ==============="
-/bin/cat /proc/cmdline
+/bin/cat /proc/cmdline 2>&1 | sudo tee $LOG_FOLDER/$LOGFILE_CPU
 
 # System log related to GPU
 echo "===== Section: dmesg GPU/DRM/ATOM/BIOS ==============="
@@ -110,13 +121,15 @@ else
     echo "ROCmTechSupportNotFound: journalctl utility not found!"
 fi
 
+dmesg | sudo tee $LOG_FOLDER/$LOGFILE_DMESG
+
 # CPU information
 echo "===== Section: CPU Information         ==============="
-/usr/bin/lscpu
+/usr/bin/lscpu | sudo tee -a $LOG_FOLDER/$LOGFILE_CPU
 
 # Memory information
 echo "===== Section: Memory Information      ==============="
-/usr/bin/lsmem
+/usr/bin/lsmem $LOG_FOLDER/$LOGFILE_MEM
 
 # Hardware Information
 echo "===== Section: Hardware Information    ==============="
@@ -177,18 +190,21 @@ echo "===== Section: dmidecode Information   ==============="
 
 # PCI peripheral information
 echo "===== Section: lspci verbose output    ==============="
+
+
 if [ -f /usr/bin/lspci ]
 then
-    /usr/bin/lspci -vvvt
-    /usr/bin/lspci -vvv
+    /usr/bin/lspci -vvvt  | sudo tee $LOG_FOLDER/$LOGFILE_LSPCI
+    /usr/bin/lspci -vvv | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
 elif [ -f /usr/sbin/lspci ]
 then
-    /usr/sbin/lspci -vvvt
-    /usr/sbin/lspci -vvv
+    /usr/sbin/lspci -vvvt | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
+    /usr/sbin/lspci -vvv | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
 elif [ -f /sbin/lspci ]
 then
-    /sbin/lspci -vvvt
-    /sbin/lspci -vvv
+    /sbin/lspci -vvvt | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
+    /sbin/lspci -vvv| sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
+
 else
     echo "ROCmTechSupportNotFound: lspci utility not found!"
 fi
@@ -243,25 +259,27 @@ fi
 
 # ROCm SMI 
 echo "===== Section: ROCm SMI                ==============="
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
+if [ -f `which rocm-smi` ]
 then
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi | sudo tee $$LOG_FOLDER/$LOGFILE_ROCM_SMI
 else
-    echo " $ROCM_VERSION/bin/rocm-smi NOT FOUND !!! "
+    echo " rocm-smi NOT FOUND !!! "
 fi
 
 # ROCm SMI - FW version
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
+if [ -f `which rocm-smi` ]
 then
     echo "===== Section: ROCm SMI showhw         ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showhw
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showhw | sudo tee -a $$LOG_FOLDER/$LOGFILE_ROCM_SMI
+else
+    echo "rocm-smi NOT FOUND !!! "
 fi
 
 # ROCm PCIe Clock
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
     echo "===== Section: ROCm SMI pcieclk clock  ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -c | /bin/grep "pcie"
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -c | /bin/grep "pcie" | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
 fi
 
     echo "===== Section: GPU PCIe Link Config    ==============="
@@ -286,21 +304,24 @@ fi
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
     echo "===== Section: ROCm SMI showxgmierr    ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showxgmierr
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showxgmierr | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
 fi
 
 # ROCm SMI - FW version clocks etc.
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
     echo "===== Section: ROCm SMI clocks         ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -cga
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -cga | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
 fi
 
 # ROCm Agent Information
-if [ -f $ROCM_VERSION/bin/rocminfo ]
+
+if [ -f `which rocminfo` ] 
 then
     echo "===== Section: rocminfo                ==============="
-    $ROCM_VERSION/bin/rocminfo
+    rocminfo | sudo tee $LOG_FOLDER/$LOGFILE_ROCMINFO
+else	
+	echo "rocminfo not found!!!"
 fi
 
 # OpenCL Agent Information
