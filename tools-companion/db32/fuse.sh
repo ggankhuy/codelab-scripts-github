@@ -17,6 +17,7 @@ function countbits() {
 }
 
 
+if [[ ! -f ./db32 ]] ; then echo "Can not find db32 in current direcotry." ; exit 1 ; fi
 ./db32 cmd csselect 2>&1 | tee $LOG_FILE_CSSELECT &
 
 PID_LAST=$!
