@@ -3,7 +3,7 @@ FUSE_FILE=fuse.mac
 FUSE_LOG=fuse.log
 FUSE_LOG2=fuse2.log
 FUSE_SUMMARY=fuse-summary.log
-
+DEBUG=0
 function countbits() {
     bitcount=0
     p1=$1
@@ -25,7 +25,7 @@ sleep 3
 kill $PID_LAST
 sed -i 's/\*//g' $LOG_FILE_CSSELECT
 echo "Reading back Display controllers only..."
-
+echo -ne "" > $FUSE_SUMMARY
 while IFS= read -r line; do
     if [[ ! -z `echo $line | grep "Other Display Controller"` ]] ; then
         i=`echo $line | tr -s ' ' | cut -d ' ' -f1`
@@ -45,6 +45,7 @@ while IFS= read -r line; do
 	    ./db32 exe $FUSE_FILE 2>&1 | tee -a $FUSE_LOG
         FUSE_CURR_GPU_LOG=fuse.$i.log
 	    ./db32 exe $FUSE_FILE 2>&1 | tee -a $FUSE_LOG
+
         ./db32 exe $FUSE_FILE 2>&1 | tee $FUSE_CURR_GPU_LOG
         TOTAL_CG_DIS=0
         TOTAL_USER_DIS=0
@@ -70,5 +71,13 @@ while IFS= read -r line; do
     fi
     
 done < $LOG_FILE_CSSELECT
-exit 0
 
+rm -rf fuse.*.log
+rm -rf $LOG_FILE_CSSELECT
+rm -rf $FUSE_LOG
+clear
+
+echo "---------------------------------"
+echo "Fuse information:"
+echo "---------------------------------"
+cat $FUSE_SUMMARY
