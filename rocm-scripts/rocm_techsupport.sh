@@ -6,7 +6,9 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.29
+# Fork: ggankhuy@amd.com
+# Revision: V1.30
+# V1.30: added tar option, simplified many commands, add log outputs.
 # V1.29: check 5.0 version
 # V1.28: add timestamp
 # V1.27: grab repo setup info
