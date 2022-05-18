@@ -50,6 +50,10 @@ LOGFILE_MEM==$DATE-mem.log
 LOGFILE_LSPCI=$DATE-lspci.log
 LOGFILE_ROCM_SMI=$DATE-rocm-smi.log
 LOGFILE_ROCMINFO=$DATE-rocminfo.log
+LOGFILE_DMIDECODE=$DATE-dmidecode.log
+CONFIG_ENABLE_HISTORY=1
+LOGFILE_HISTORY=$DATE-logfile-history.log
+LOGFILE_BOOTINFO=$DATE-logfile-bootinfo.log
 LOG_FOLDER=./log-$DATE
 sudo mkdir $LOG_FOLDER
 echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
@@ -86,6 +90,8 @@ else
 fi
 
 dockerchk=`/bin/grep cpuset /proc/1/cgroup | /usr/bin/awk 'BEGIN {FS=":"} {print $3}'`
+echo dockercheck: $dockercheck...
+sleep 5
 if [ "$dockerchk" != "/" ]
 then
     echo "Section: Current boot logs"
@@ -186,25 +192,18 @@ fi
 
 # DMIdecode information - BIOS etc
 echo "===== Section: dmidecode Information   ==============="
-/usr/sbin/dmidecode
+
+if [[ `which dmidecode` ]] ; then
+    sudo dmidecode | sudo tee $LOG_FOLDER/$LOGFILE_DMIDECODE
+fi
 
 # PCI peripheral information
 echo "===== Section: lspci verbose output    ==============="
 
 
-if [ -f /usr/bin/lspci ]
-then
-    /usr/bin/lspci -vvvt  | sudo tee $LOG_FOLDER/$LOGFILE_LSPCI
-    /usr/bin/lspci -vvv | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
-elif [ -f /usr/sbin/lspci ]
-then
-    /usr/sbin/lspci -vvvt | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
-    /usr/sbin/lspci -vvv | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
-elif [ -f /sbin/lspci ]
-then
-    /sbin/lspci -vvvt | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
-    /sbin/lspci -vvv| sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI
-
+if [[ `which lspci` ]] ; then
+    lspci -t | sudo tee $LOG_FOLDER/$LOGFILE_LSPCI
+    lspci -vvv  | sudo tee -a $LOG_FOLDER/$LOGFILE_LSPCI    
 else
     echo "ROCmTechSupportNotFound: lspci utility not found!"
 fi
@@ -257,66 +256,31 @@ else
     echo "    Ex: sudo apt install rocm-bandwidth-test "
 fi
 
-# ROCm SMI 
-echo "===== Section: ROCm SMI                ==============="
-if [ -f `which rocm-smi` ]
-then
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi | sudo tee $$LOG_FOLDER/$LOGFILE_ROCM_SMI
+# ROCm SMI # why not just use show all?
+if [ -f `which rocm-smi` ] ; then
+    echo "===== Section: ROCm SMI                ==============="
+    rocm-smi --showall | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
 else
     echo " rocm-smi NOT FOUND !!! "
 fi
 
-# ROCm SMI - FW version
-if [ -f `which rocm-smi` ]
-then
-    echo "===== Section: ROCm SMI showhw         ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showhw | sudo tee -a $$LOG_FOLDER/$LOGFILE_ROCM_SMI
-else
-    echo "rocm-smi NOT FOUND !!! "
-fi
+# should get dynamically the number of gpus.
 
-# ROCm PCIe Clock
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
-then
-    echo "===== Section: ROCm SMI pcieclk clock  ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -c | /bin/grep "pcie" | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
-fi
-
-    echo "===== Section: GPU PCIe Link Config    ==============="
-for i in $(seq 0 8)
+echo "===== Section: GPU PCIe Link Config    ==============="
+GPUs=`lspci | grep Disp`
+for i in $(seq 0 $GPUs)
 do
     echo "GPU $i PCIe Link Width Speed: "
     cat /sys/class/drm/card$i/device/current_link_width
     cat /sys/class/drm/card$i/device/current_link_speed
 done
 
-    echo "===== Section: KFD PIDs sysfs kfd proc ==============="
+echo "===== Section: KFD PIDs sysfs kfd proc ==============="
 ls /sys/class/kfd/kfd/proc/
-
-# ROCm SMI - RAS info
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
-then
-    echo "===== Section: ROCm SMI showrasinfo all==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showrasinfo all
-fi
-
-# ROCm SMI - xgmierr
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
-then
-    echo "===== Section: ROCm SMI showxgmierr    ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showxgmierr | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
-fi
-
-# ROCm SMI - FW version clocks etc.
-if [ -f $ROCM_VERSION/bin/rocm-smi ]
-then
-    echo "===== Section: ROCm SMI clocks         ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -cga | sudo tee -a $LOG_FOLDER/$LOGFILE_ROCM_SMI
-fi
 
 # ROCm Agent Information
 
-if [ -f `which rocminfo` ] 
+if [[ -f `which rocminfo` ]]
 then
     echo "===== Section: rocminfo                ==============="
     rocminfo | sudo tee $LOG_FOLDER/$LOGFILE_ROCMINFO
@@ -325,16 +289,29 @@ else
 fi
 
 # OpenCL Agent Information
-if [ -f $ROCM_VERSION/opencl/bin/x86_64/clinfo ]
+if [[ `which clinfo` ]]
 then
     echo "===== Section: clinfo                  ==============="
-    $ROCM_VERSION/opencl/bin/x86_64/clinfo
-fi
-# path in 3.5
-if [ -f $ROCM_VERSION/opencl/bin/clinfo ]
-then
-    echo "===== Section: clinfo                  ==============="
-    $ROCM_VERSION/opencl/bin/clinfo
+    clinfo
 fi
 
+#command history
+if [[ $CONFIG_ENABLE_HISTORY -eq 1 ]] ; then
+    export HISTTIMEFORMAT="%F %T " ; history  | sudo tee $LOG_FOLDER/$LOGFILE_HISTORY
+else
+    echo "Gather history is disabled."
+fi
+
+#grub
+echo " ===== Section: boot information          ================" 
+echo "grub: /etc/default/grub"
+cat /etc/default/grub | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
+echo "/sys/firmware/efi: "
+ls -l /sys/firmware/efi | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
+echo "grub.cfg for efi mode: "
+cat /boot/efi/EFI/centos/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
+cat /boot/grub2/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
+
+echo "Creating tar..."
+tar -cvf $DATE.tar $LOG_FOLDER/*
 
