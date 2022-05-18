@@ -1,0 +1,9 @@
+KFD=/usr/local/bin/run_kfdtest.sh
+LOG_FOLDER=log
+mkdir $LOG_FOLDER -p
+
+for i in {0..7} ; do
+    dmesg --clear
+    $KFD -n $i -p core 2>&1 | sudo tee $LOG_FOLDER/kfd.gpu.$i.log
+    dmesg | sudo tee $LOG_FOLDER/kfd.gpu.$i.dmesg.log
+done
