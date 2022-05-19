@@ -4,6 +4,6 @@ mkdir $LOG_FOLDER -p
 
 for i in {0..7} ; do
     dmesg --clear
-    $KFD -n $i -p core 2>&1 | sudo tee $LOG_FOLDER/kfd.gpu.$i.log
+    $KFD -n $i 2>&1 | sudo tee $LOG_FOLDER/kfd.gpu.$i.log
     dmesg | sudo tee $LOG_FOLDER/kfd.gpu.$i.dmesg.log
 done
