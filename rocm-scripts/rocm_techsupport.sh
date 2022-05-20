@@ -54,8 +54,8 @@ LOGFILE_ROCM_SMI=$DATE-rocm-smi.log
 LOGFILE_ROCMINFO=$DATE-rocminfo.log
 LOGFILE_DMIDECODE=$DATE-dmidecode.log
 CONFIG_ENABLE_HISTORY=1
-LOGFILE_HISTORY=$DATE-logfile-history.log
-LOGFILE_BOOTINFO=$DATE-logfile-bootinfo.log
+LOGFILE_HISTORY=$DATE-history.log
+LOGFILE_BOOTINFO=$DATE-bootinfo.log
 LOG_FOLDER=./log-$DATE
 sudo mkdir $LOG_FOLDER
 echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
@@ -298,22 +298,27 @@ then
 fi
 
 #command history
+
 if [[ $CONFIG_ENABLE_HISTORY -eq 1 ]] ; then
-    export HISTTIMEFORMAT="%F %T " ; history  | sudo tee $LOG_FOLDER/$LOGFILE_HISTORY
+    echo "Gathering history..."
+    export HISTTIMEFORMAT="%F %T " ; history 2>&1 | sudo tee $LOG_FOLDER/$LOGFILE_HISTORY
 else
     echo "Gather history is disabled."
 fi
 
 #grub
+
 echo " ===== Section: boot information          ================" 
-echo "grub: /etc/default/grub"
+echo "grub: /etc/default/grub" | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /etc/default/grub | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
-echo "/sys/firmware/efi: "
+echo "/sys/firmware/efi: " | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
 ls -l /sys/firmware/efi | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
-echo "grub.cfg for efi mode: "
+echo "grub.cfg for efi mode: " | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/efi/EFI/centos/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/grub2/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 
 echo "Creating tar..."
 tar -cvf $DATE.tar $LOG_FOLDER/*
 
+echo "Watchdog info: /proc/sys/kernel/watchdog_thres: " | sudo tee -a $LOGFILE_CPU
+cat /proc/sys/kernel/watchdog_thresh | sudo tee -a $LOGFILE_CPU
