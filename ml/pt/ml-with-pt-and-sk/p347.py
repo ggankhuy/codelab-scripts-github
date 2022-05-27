@@ -1,4 +1,4 @@
-from neuralnet import NeuralNetMLP
+#from neuralnet import NeuralNetMLP
 
 # the code along may not execute unless you put add'l driver code.
 import numpy as np
