@@ -13,15 +13,19 @@ if [[ ! -f $RVS ]] ; then
     exit 1
 fi
 
+echo "START..." >> $LOG_SUMMARY
+
 #for i in gst_single.conf pqt_single.conf pebb_single.conf babel.conf gpup_single.conf  ; do
-for i in babel.conf ; do
+for i in {1..14} ; do
+    FILE=pqt_single-$i.conf
     DATE=`date +%Y%m%d-%H-%M-%S`
-    LOG_FOLDER=$LOG_FOLDER_BASE.$i/$DATE
+
+    LOG_FOLDER=$LOG_FOLDER_BASE/$DATE_FIXED/$FILE
     mkdir $LOG_FOLDER -p
     dmesg --clear
     echo $DATE | sudo tee -a $LOG_SUMMARY
     echo $RVS -c $i | sudo tee -a $LOG_SUMMARY
-    $RVS -c $RVS_CONFIG_ROOT/$i 2>&1 | sudo tee -a $LOG_FOLDER/rvs.gpu.$i.log
+    $RVS -d 4  -c $RVS_CONFIG_ROOT/$FILE 2>&1 | sudo tee -a $LOG_FOLDER/rvs.gpu.action-$i.log
     dmesg | sudo tee $LOG_FOLDER/rvs.gpu.$i.dmesg.log
     sleep 30
 done
