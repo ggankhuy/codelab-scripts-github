@@ -10,7 +10,7 @@ for i in {2..9} ; do
     dmesg | sudo tee $LOG_FOLDER/kfd.gpu.$i.dmesg.log
     t2a=$SECONDS
     perGpuTime=$((t2a-t1a))
-    echo "gpu $i run time: $perGpuTime | tee -a $LOG_SUMMARY
+    echo "gpu $i run time: $perGpuTime" | tee -a $LOG_SUMMARY
 done
 t2=$SECONDS
 totalTime=$((t2-t1))
