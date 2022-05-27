@@ -1,4 +1,5 @@
 #from neuralnet import NeuralNetMLP
+import neuralnet
 
 # the code along may not execute unless you put add'l driver code.
 import numpy as np
@@ -11,6 +12,8 @@ def int_to_onehot(y, num_labels):
         ary[i, val]  = 1
     return any
 
+#inheritance not working!
+#class NeuralNetMLP(neuralnet):
 class NeuralNetMLP:
     def __init__(self, num_features, num_hidden, num_classes, random_seed=123):
         super().__init__()
@@ -113,17 +116,10 @@ class NeuralNetMLP:
         d_loss_d_b_h = np.sum((d_loss__a_h * d_a_h__d_z_h), axis=0)
 
         return (d_loss__dw_oiut, d_loss__db_out, d_loss__d_w_h, d_loss__d_b_h)
-
-
-   
-        
-
-
-
-        
-        
-            
     
+model=NeuralNetMLP(num_features=28*28, num_hidden=50, num_classes=10)
+print(model)
 
-
-
+# following prints not working because inheritance of neuralnet class not working!
+#print(model.summary)
+#print(model.layers)
