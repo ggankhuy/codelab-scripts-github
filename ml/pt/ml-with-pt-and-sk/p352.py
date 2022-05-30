@@ -1,8 +1,27 @@
 #from neuralnet import NeuralNetMLP
 import neuralnet
+import numpy as np
+num_epochs=50
+minibatch_size=100
 
 # the code along may not execute unless you put add'l driver code.
-import numpy as np
+
+def minibatch_generator(X, y, minibatch_size):
+    DEBUG = 1
+
+    if DEBUG:
+        print("X, y, minibatch_size: ", X, y, minibatch_size)
+   
+    indices = np.arange(X.shape[0])
+    np.random.shuffle(indices)
+
+    if DEBUG:
+        print("indices.shape: ", indices.shape)
+    
+    for start_idx in range(0, indices.shape[0] - minibatch_size + 1, minibatch_size):
+        batch_idx = indices[start_idx:start_idx + minibatch_size]
+        yield X[batch_idx], y[batch_idx]
+
 def sigmoid(z):
     return 1./(1. + np.exp(-z))
 
@@ -153,3 +172,31 @@ print(model)
 # following prints not working because inheritance of neuralnet class not working!
 #print(model.summary)
 #print(model.layers)
+
+# iterate over training epochs
+
+'''
+# not working beause x_train, y_train not init-d.
+for i in range(num_epochs):
+
+    # iterate over minibatches
+
+    minibatch_gen = minibatch_generator(X_train, y_train, minibatch_size)
+
+    for X_train_mini, y_train_mini in minibatch_gen:
+        break
+    break
+
+    print("X_train_mini.shape: ", X_train_mini.shape)        
+    print("y_train_mini.shape: ", y_train_mini.shape)
+'''
+
+def mse_loss(targets, probas, num_labels=10):
+    onehost_targets - int_to_onehot(targets, num_labels=num_labels)
+    return np.mean((onehost_targets - probas) ** 2 )
+
+def accuracy(targets, predicted_labels):
+    return np.mean(predicted_labels == targets)
+
+
+
