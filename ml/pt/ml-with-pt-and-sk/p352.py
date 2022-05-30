@@ -44,7 +44,7 @@ def minibatch_generator(X, y, minibatch_size):
     DEBUG = 1
 
     if DEBUG:
-        print("X, y, minibatch_size: ", X, y, minibatch_size)
+        print("X, y, minibatch_size: ", X.shape, y.shape, minibatch_size)
    
     indices = np.arange(X.shape[0])
     np.random.shuffle(indices)
@@ -63,7 +63,7 @@ def int_to_onehot(y, num_labels):
     ary=np.zeros((y.shape[0], num_labels))
     for i, val in enumerate(y):
         ary[i, val]  = 1
-    return any
+    return ary
 
 #inheritance not working!
 #class NeuralNetMLP(neuralnet):
@@ -100,7 +100,7 @@ class NeuralNetMLP:
             print("weight_out: ", self.weight_out.shape)
             print("bias_out: ", self.bias_out.shape)
 
-    def forward(self, X):
+    def forward(self, x):
         DEBUG=1
         if DEBUG:
             print("forward entered...")
@@ -199,6 +199,20 @@ class NeuralNetMLP:
         d_loss_d_b_h = np.sum((d_loss__a_h * d_a_h__d_z_h), axis=0)
 
         return (d_loss__dw_oiut, d_loss__db_out, d_loss__d_w_h, d_loss__d_b_h)
+
+def mse_loss(targets, probas, num_labels=10):
+    DEBUG=1
+    if DEBUG:
+        print("mse_loss: entered...")
+        print("targets.shape, probas.shape, num_label: ", targets.shape, probas.shape, num_labels)
+
+    onehot_targets = int_to_onehot(targets, num_labels=num_labels)
+    print("onehot_targets.shape: ", onehot_targets.shape)
+
+    return np.mean((onehot_targets - probas) ** 2 )
+
+def accuracy(targets, predicted_labels):
+    return np.mean(predicted_labels == targets)
     
 model=NeuralNetMLP(num_features=28*28, num_hidden=50, num_classes=10)
 print(model)
@@ -223,12 +237,13 @@ for i in range(num_epochs):
     print("X_train_mini.shape: ", X_train_mini.shape)        
     print("y_train_mini.shape: ", y_train_mini.shape)
 
-def mse_loss(targets, probas, num_labels=10):
-    onehost_targets - int_to_onehot(targets, num_labels=num_labels)
-    return np.mean((onehost_targets - probas) ** 2 )
+_, probas = model.forward(X_valid)
 
-def accuracy(targets, predicted_labels):
-    return np.mean(predicted_labels == targets)
-
+print("probas: ", probas.shape)
+mse=mse_loss(y_valid, probas)
+print(f'Initial validation MSE: {mse:.1f}')
+predicted_labels = np.argmax(probas, axis=1)
+acc=accuracy(y_valid, predicted_labels)
+print(f'Initial validation accuracy: {acc*100:.1f}%')
 
 
