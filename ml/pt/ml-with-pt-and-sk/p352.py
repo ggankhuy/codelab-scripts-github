@@ -1,8 +1,42 @@
 #from neuralnet import NeuralNetMLP
 import neuralnet
 import numpy as np
+from sklearn.datasets import fetch_openml
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
+DEBUG=1
 num_epochs=50
 minibatch_size=100
+
+X,y = fetch_openml('mnist_784', version=1, return_X_y=True)
+X=X.values
+y=y.astype(int).values
+print(X.shape)
+print(y.shape)
+
+X = ((X/255.)-0.5)*2
+
+fig, ax = plt.subplots(nrows=2, ncols=5, sharex=True, sharey=True)
+ax=ax.flatten()
+
+'''
+for i in range(10):
+    img = X[y==1][0].reshape(28, 28)
+    ax[i].imshow(img, cmap='Greys')
+ax[0].set_xticks([])
+ax[0].set_yticks([])
+plt.tight_layout()
+plt.show()
+'''
+X_temp, X_test, y_temp, t_test = train_test_split(X, y, test_size=10000, random_state=123, stratify=y)
+X_train, X_valid, y_train, y_valid = train_test_split(X_temp, y_temp, test_size=5000, random_state=123, stratify=y_temp)
+
+if DEBUG:
+    print("X_test, X_train, X_valid shapes: ", X_test.shape, X_train.shape, X_valid.shape)
+    print("y_train, y_valid shapes: ", y_train.shape, y_valid.shape)
+
+# done with from p344.py
 
 # the code along may not execute unless you put add'l driver code.
 
@@ -175,7 +209,6 @@ print(model)
 
 # iterate over training epochs
 
-'''
 # not working beause x_train, y_train not init-d.
 for i in range(num_epochs):
 
@@ -189,7 +222,6 @@ for i in range(num_epochs):
 
     print("X_train_mini.shape: ", X_train_mini.shape)        
     print("y_train_mini.shape: ", y_train_mini.shape)
-'''
 
 def mse_loss(targets, probas, num_labels=10):
     onehost_targets - int_to_onehot(targets, num_labels=num_labels)
