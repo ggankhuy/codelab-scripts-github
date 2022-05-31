@@ -213,7 +213,25 @@ def mse_loss(targets, probas, num_labels=10):
 
 def accuracy(targets, predicted_labels):
     return np.mean(predicted_labels == targets)
-    
+
+def compute_mse_and_acc(nnet, X, y, num_labels=10, minibatch_size=100):
+    mse, correct_pred, num_examples = 0., 0, 0
+    minibatch_gen = minibatch_generator(X, y, minibatch_size)
+
+    for i, (features, targets) in enumerate(minibatch_gen):
+        _, probas = nnet.forward(features)
+        predicted_labels = np.argmax(probas, axis=1)
+        onehot_targets = int_to_onehot(targets, num_labels = num_labels)
+        loss = np.mean((onehot_targets - probas)**2)
+        correct_pred += (predicted_labels == targets).sum()
+        num_examples += targets.shape[0]
+        mse += loss
+
+    mse  = mse / i
+    acc = correct_pred / num_examples 
+    return mse, acc
+
+            
 model=NeuralNetMLP(num_features=28*28, num_hidden=50, num_classes=10)
 print(model)
 
@@ -237,7 +255,9 @@ for i in range(num_epochs):
     print("X_train_mini.shape: ", X_train_mini.shape)        
     print("y_train_mini.shape: ", y_train_mini.shape)
 
+'''
 _, probas = model.forward(X_valid)
+
 
 print("probas: ", probas.shape)
 mse=mse_loss(y_valid, probas)
@@ -246,4 +266,8 @@ predicted_labels = np.argmax(probas, axis=1)
 acc=accuracy(y_valid, predicted_labels)
 print(f'Initial validation accuracy: {acc*100:.1f}%')
 
+'''
+mse, acc = compute_mse_and_acc(model, X_valid, y_valid)
+print(f'Initial valid MSE: {mse:.1f}')
+print(f'Initial valida accuracy: {acc*100:.1f}%')
 
