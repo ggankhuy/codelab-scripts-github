@@ -1,0 +1,10 @@
+[url "ssh://gerritgitmaster/"]
+        pushInsteadOf = ssh://gerritgit/
+[user]
+        name = Guyen Gankhuyag
+        email = guyen.gankhuyag@amd.com
+[review "git.amd.com:8080"]
+        uploadtopic = true
+[pull]
+        rebase = true
+
