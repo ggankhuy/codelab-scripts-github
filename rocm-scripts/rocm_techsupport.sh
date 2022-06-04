@@ -53,6 +53,7 @@ LOGFILE_LSPCI=$DATE-lspci.log
 LOGFILE_ROCM_SMI=$DATE-rocm-smi.log
 LOGFILE_ROCMINFO=$DATE-rocminfo.log
 LOGFILE_DMIDECODE=$DATE-dmidecode.log
+LOGFILE_AMDGPU_PARAMS=$DATE-amdgpu-params.log
 CONFIG_ENABLE_HISTORY=1
 LOGFILE_HISTORY=$DATE-history.log
 LOGFILE_BOOTINFO=$DATE-bootinfo.log
@@ -316,6 +317,20 @@ ls -l /sys/firmware/efi | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 echo "grub.cfg for efi mode: " | sudo tee  $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/efi/EFI/centos/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
 cat /boot/grub2/grub.cfg | sudo tee -a $LOG_FOLDER/$LOGFILE_BOOTINFO
+
+echo " ====== kmod /amdgpu/ driver parameters =================="
+kmod_params=`modinfo amdgpu | grep parm | tr -d ' ' | cut -d ':' -f2`
+
+for i in $kmod_params ; do
+    filename=`find /sys -name $i`
+    if [[ -f $filename ]] ; then
+        value=`cat $filename`
+        echo $filename: $value1: $value | tee -a $LOG_FOLDER/$LOGFILE_AMDGPU_PARAMS 
+    else
+        echo "bypassing $i /not a file/"
+    fi
+
+done
 
 echo "Creating tar..."
 tar -cvf $DATE.tar $LOG_FOLDER/*
