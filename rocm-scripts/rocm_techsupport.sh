@@ -337,3 +337,9 @@ tar -cvf $DATE.tar $LOG_FOLDER/*
 
 echo "Watchdog info: /proc/sys/kernel/watchdog_thres: " | sudo tee -a $LOGFILE_CPU
 cat /proc/sys/kernel/watchdog_thresh | sudo tee -a $LOGFILE_CPU
+
+echo "Gathering ipmi sel log:"
+
+# Check some info in bmc against something in dmidecode to make sure it is the right bmc.
+
+ipmitool -I lanplus -H $BMCIP  -U $BMCUSER -P $BMCPASSWORD sel elist
