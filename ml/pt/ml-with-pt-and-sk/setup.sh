@@ -1,3 +1,6 @@
+# tested on centos 8 stream ok, needs testing on ubuntu if needed, likely break.
+# may need to test as nonroot user.
+
 counter=0
 LOG_FOLDER=./log
 mkdir -p $LOG_FOLDER
