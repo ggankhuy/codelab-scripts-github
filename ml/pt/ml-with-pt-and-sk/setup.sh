@@ -21,7 +21,7 @@ do
     echo $SINGLE_BAR | tee $LOG_FOLDER/setup.yum.$counter.log
     echo "DBG: executing '$i'..." | tee -a $LOG_FOLDER/setup.yum.$counter.log
     echo $SINGLE_BAR  | tee -a $LOG_FOLDER/setup.yum.$counter.log
-    yum install -y $i 2>&1 | tee -a setup.$counter.log
+    yum install -y $i 2>&1 | tee -a $LOG_FOLDER/setup.yum.$counter.log
     counter=$((counter+1))
 done 
 
