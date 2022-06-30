@@ -196,8 +196,12 @@ fi
 # DMIdecode information - BIOS etc
 echo "===== Section: dmidecode Information   ==============="
 
-if [[ `which dmidecode` ]] ; then
+which dmidecode
+ret=$?
+if [[ $ret ]] ; then
     sudo dmidecode | sudo tee $LOG_FOLDER/$LOGFILE_DMIDECODE
+else
+    echo "dmidecode is not found " sudo tee $LOG_FOLDER/$LOGFILE_DMIDECODE
 fi
 
 # PCI peripheral information
@@ -323,7 +327,10 @@ kmod_params=`modinfo amdgpu | grep parm | tr -d ' ' | cut -d ':' -f2`
 
 for i in $kmod_params ; do
     filename=`find /sys -name $i`
-    if [[ -f $filename ]] ; then
+    echo "filename : $filename"
+    sleep 3
+#    if [[ -f $filename ]] ; then
+    if  test  -f $filename ; then
         value=`cat $filename`
         echo $filename: $value1: $value | tee -a $LOG_FOLDER/$LOGFILE_AMDGPU_PARAMS 
     else
