@@ -4,7 +4,7 @@ pip3 install --upgrade pip 2>&1 | tee pip.install.upgrade.log
 for i in \
 "python3 -m pip3 install --upgrade pip" \
 "yum update -y" \
-"yum install zlib python-devel -y"
+"yum install zlib kernel-devel python3-devel -y"
 do
     echo "------------------------------" | tee setup.$counter.log
     #echo "DBG: executing '$i'..." | tee -a setup.$counter.log
@@ -14,7 +14,7 @@ do
 done 
 
 counter=0
-for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0
+for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0 cloudpickle
 do
     echo "------------------------------" | tee setup.pip3.$counter.log
     echo "DBG: executing '$i'..." | tee -a setup.pip3.$counter.log
