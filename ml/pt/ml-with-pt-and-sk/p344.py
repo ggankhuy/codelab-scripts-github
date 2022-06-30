@@ -1,5 +1,5 @@
 from sklearn.datasets import fetch_openml
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 X,y = fetch_openml('mnist_784', version=1, return_X_y=True)
 X=X.values
 y=y.astype(int).values
@@ -16,6 +16,6 @@ for i in range(10):
     ax[i].imshow(img, cmap='Greys')
 ax[0].set_xticks([])
 ax[0].set_yticks([])
-plt.tight_layout()
-plt.show()
+#plt.tight_layout()
+#plt.show()
 
