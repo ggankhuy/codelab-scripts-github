@@ -4,17 +4,19 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 
 t=torch.arange(6, dtype=torch.float32)
-print(t)
+print("t:", t)
 
 data_loader=DataLoader(t)
 for i in data_loader:
-    print(i)
+    print(i, ", ", i.dtype)
 
 
 data_loader=DataLoader(t, batch_size=3, drop_last=False)
 for i, batch in enumerate(data_loader, 1):
     print(f'batch {i}:', batch)
     
+for  batch in data_loader:
+    print(f'batch: ', batch)
 
 torch.manual_seed(1)
 t_x = torch.rand([4,3], dtype=torch.float32)
