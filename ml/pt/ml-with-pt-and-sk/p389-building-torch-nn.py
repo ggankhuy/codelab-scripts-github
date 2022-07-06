@@ -10,12 +10,13 @@ from torch.utils.data import DataLoader
 
 X_train = np.arange(10, dtype='float32').reshape((10, 1))
 y_train = np.array([1.0, 1.3, 3.1, 2.0, 5.0, 6.3, 6.6, 7.4, 8.0, 9.0], dtype='float32')
+'''
 plt.plot(X_train, y_train, 'o', markersize=10)
 plt.xlabel('x')
 plt.ylabel('y')
 plt.plot(X_train, y_train)
 plt.show()
-
+'''
 X_train_norm = (X_train - np.mean(X_train)) / np.std(X_train)
 X_train_norm = torch.from_numpy(X_train_norm)
 y_train = torch.from_numpy(y_train)
