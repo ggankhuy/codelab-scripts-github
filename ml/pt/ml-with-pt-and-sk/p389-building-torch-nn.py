@@ -4,7 +4,8 @@ import torch
 import numpy as np
 #import matplotlib as plt
 import matplotlib.pyplot as plt
-
+DBG=0
+ENABLE_PLOT=0
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
@@ -44,6 +45,8 @@ for epoch in range(num_epochs):
     for x_batch, y_batch in train_dl:
         pred = model(x_batch)
         loss = loss_fn(pred, y_batch)
+        if DBG:
+            print("loss: ", loss, "loss.shape: ", loss.shape)
         loss.backward()
     with torch.no_grad():
         weight -= weight.grad * learning_rate
@@ -59,6 +62,7 @@ X_test = np.linspace(0,9, num=100, dtype='float32').reshape(-1, 1)
 X_test_norm = (X_test - np.mean(X_train)) / np.std(X_train)
 X_test_norm = torch.from_numpy(X_test_norm)
 y_pred = model(X_test_norm).detach().numpy()
+
 fig = plt.figure(figsize=(13,5))
 ax = fig.add_subplot(1,2,1)
 plt.plot(X_train_norm, y_train, 'o', markersize=10)
@@ -67,4 +71,6 @@ plt.legend(['Training examples','Linear reg.'], fontsize=15)
 ax.set_xlabel('x', size=15)
 ax.set_ylabel('y', size=15)
 ax.tick_params(axis='both', which='major', labelsize=15)
-plt.show()
+
+if ENABLE_PLOT:
+    plt.show()
