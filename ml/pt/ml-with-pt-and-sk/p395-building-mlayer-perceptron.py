@@ -71,3 +71,9 @@ correct = (torch.argmax(pred_test, dim=1) == y_test).float()
 accuracy = correct.mean()
 print(f'Test Acc.: {accuracy:.4f}')
 
+# saving and reloading the trained model (p399)
+
+path='iris_classifier.pt'
+torch.save(model.state_dict(), path)
+
+
