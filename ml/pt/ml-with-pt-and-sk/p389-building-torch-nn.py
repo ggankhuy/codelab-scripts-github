@@ -1,3 +1,5 @@
+# to display graph, loginto system with ssh -l root -X <ipaddr>
+
 import torch
 import numpy as np
 #import matplotlib as plt
@@ -8,12 +10,13 @@ from torch.utils.data import DataLoader
 
 X_train = np.arange(10, dtype='float32').reshape((10, 1))
 y_train = np.array([1.0, 1.3, 3.1, 2.0, 5.0, 6.3, 6.6, 7.4, 8.0, 9.0], dtype='float32')
+'''
 plt.plot(X_train, y_train, 'o', markersize=10)
 plt.xlabel('x')
 plt.ylabel('y')
 plt.plot(X_train, y_train)
 plt.show()
-
+'''
 X_train_norm = (X_train - np.mean(X_train)) / np.std(X_train)
 X_train_norm = torch.from_numpy(X_train_norm)
 y_train = torch.from_numpy(y_train)
@@ -50,3 +53,18 @@ for epoch in range(num_epochs):
 
     if epoch % log_epochs == 0:
         print(f'Epoch {epoch} Loss {loss.item():.4f}')    
+
+print('Final parameters: ', weight.item(), bias.item())
+X_test = np.linspace(0,9, num=100, dtype='float32').reshape(-1, 1)
+X_test_norm = (X_test - np.mean(X_train)) / np.std(X_train)
+X_test_norm = torch.from_numpy(X_test_norm)
+y_pred = model(X_test_norm).detach().numpy()
+fig = plt.figure(figsize=(13,5))
+ax = fig.add_subplot(1,2,1)
+plt.plot(X_train_norm, y_train, 'o', markersize=10)
+plt.plot(X_test_norm, y_pred, '--', lw=3)
+plt.legend(['Training examples','Linear reg.'], fontsize=15)
+ax.set_xlabel('x', size=15)
+ax.set_ylabel('y', size=15)
+ax.tick_params(axis='both', which='major', labelsize=15)
+plt.show()

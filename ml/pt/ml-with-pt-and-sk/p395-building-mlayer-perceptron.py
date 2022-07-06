@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import torch.nn as nn
+import matplotlib.pyplot as plt
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
@@ -61,7 +62,19 @@ for epoch in range(num_epochs):
     loss_hist[epoch] /= len(train_dl.dataset)
     accuracy_hist[epoch] /= len(train_dl.dataset)
 
+fig=plt.figure(figsize=(12, 5))
+ax = fig.add_subplot(1,2,1)
+ax.plot(loss_hist, lw=3)
+ax.set_title('Training loss', size=15)
+ax.set_xlabel('Epoch', size=15)
+ax.tick_params(axis='both', which ='major', labelsize=15)
 
+ax=fig.add_subplot(1,2,2)
+ax.plot(accuracy_hist, lw=3)
+ax.set_title('Training accuracy', size=15)
+ax.set_xlabel('Epoch', size=15)
+ax.tick_params(axis='both', which='major', labelsize=15)
+plt.show()
 
 X_test_norm = (X_test - np.mean(X_train)) / np.std(X_train)
 X_test_norm = torch.from_numpy(X_test_norm).float()
