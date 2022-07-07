@@ -1,5 +1,5 @@
-# this is a variation of p419 with custom model implemented with minimal change from p419 as possible for 
-# code comparison but did not implement all code in the book for example in p423-426.
+# This is a full implementation in page p423-p425.
+
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
