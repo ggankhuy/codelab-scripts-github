@@ -79,7 +79,7 @@ git submodule sync
 
 git submodule update --init --recursive --jobs 0
 
-for i in setuptools pip distlib pyyaml 
+for i in setuptools pip distlib pyyaml  ; do
     pip3 install --upgrade $i
 done
 
