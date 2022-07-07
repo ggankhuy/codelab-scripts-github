@@ -76,11 +76,12 @@ echo "Building pytorch..."
 git clone --recursive https://github.com/pytorch/pytorch
 cd pytorch
 git submodule sync
+
 git submodule update --init --recursive --jobs 0
 
-pip3 install --upgrade setuptools
-pip3 install --upgrade pip
-pip3 install --upgrade distlib
+for i in setuptools pip distlib pyyaml 
+    pip3 install --upgrade $i
+done
 
 export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 python tools/amd_build/build_amd.py 2>&1  | tee build-pytorch.log
