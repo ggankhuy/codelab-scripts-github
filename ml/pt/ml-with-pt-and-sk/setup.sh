@@ -27,7 +27,7 @@ done
 
 
 counter=0
-for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0 cloudpickle
+for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0 cloudpickle mlxtend
 do
     echo $SINGLE_BAR | tee $LOG_FOLDER/setup.pip3.$counter.log
     echo "DBG: executing '$i'..." | tee -a $LOG_FOLDER/setup.pip3.$counter.log

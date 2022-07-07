@@ -1,3 +1,6 @@
+# this is a variation of p419 with custom model implemented with minimal change from p419 as possible for 
+# code comparison but did not implement all code in the book for example in p423-426.
+
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -30,14 +33,29 @@ plt.ylabel(r'$x_2$', size=15)
 if ENABLE_PLOT:
     plt.show()
 
-model=nn.Sequential(\
-    nn.Linear(2, 4), \
-    nn.ReLU(), \
-    nn.Linear(4, 4), \
-    nn.ReLU(), \
-    nn.Linear(4, 1), \
-    nn.Sigmoid(), \
-)
+class MyModule(nn.Module):
+    def __init__(self):
+        super().__init__()
+        l1=nn.Linear(2,4)
+        a1=nn.ReLU()
+        l2=nn.Linear(4,4)
+        a2=nn.ReLU()
+        l3=nn.Linear(4,1)
+        a3=nn.Sigmoid()
+        l=[i1, a1, l2, a2, l3, a3]
+        self.module_list = nn.ModuleList(l)
+
+    def forward(self, x):
+        for f in self.module_list:
+            x=f(x)
+        return x
+
+    def predict(self, x):
+        x=torch.tensor(x, dtype=torch.float32)
+        pred=self.forward(x)[:, 0]
+        return (pred>=0.5).float()
+
+model=MyModule()
 print(model)
 
 loss_fn=nn.BCELoss()

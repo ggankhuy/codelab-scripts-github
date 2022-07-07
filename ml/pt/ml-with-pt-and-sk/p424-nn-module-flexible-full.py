@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
+from mlxtend.plotting import plot_decision_regions
 
 ENABLE_PLOT=0
 torch.manual_seed(1)
@@ -32,14 +33,29 @@ plt.ylabel(r'$x_2$', size=15)
 if ENABLE_PLOT:
     plt.show()
 
-model=nn.Sequential(\
-    nn.Linear(2, 4), \
-    nn.ReLU(), \
-    nn.Linear(4, 4), \
-    nn.ReLU(), \
-    nn.Linear(4, 1), \
-    nn.Sigmoid(), \
-)
+class MyModule(nn.Module):
+    def __init__(self):
+        super().__init__()
+        l1=nn.Linear(2,4)
+        a1=nn.ReLU()
+        l2=nn.Linear(4,4)
+        a2=nn.ReLU()
+        l3=nn.Linear(4,1)
+        a3=nn.Sigmoid()
+        l=[l1, a1, l2, a2, l3, a3]
+        self.module_list = nn.ModuleList(l)
+
+    def forward(self, x):
+        for f in self.module_list:
+            x=f(x)
+        return x
+
+    def predict(self, x):
+        x=torch.tensor(x, dtype=torch.float32)
+        pred=self.forward(x)[:, 0]
+        return (pred>=0.5).float()
+
+model=MyModule()
 print(model)
 
 loss_fn=nn.BCELoss()
@@ -85,18 +101,21 @@ for i in history:
     print("len: ", len(i))
 fig = plt.figure(figsize=(16,4))
 
-ax = fig.add_subplot(1,2,1)
+ax = fig.add_subplot(1,3,1)
 ax.plot(history[0], lw=4)
 ax.plot(history[1], lw=4)
-ax.legend(['Train loss', 'Validation'], fontsize=15)
+ax.legend(['Train loss', 'Validation loss'], fontsize=15)
 ax.set_xlabel('Epochs', size=15)
 
-
-ax=fig.add_subplot(1,2,2)
+ax=fig.add_subplot(1,3,2)
 ax.plot(history[2], lw=4)
 ax.plot(history[3], lw=4)
 ax.legend(['Train acc', 'Validation acc'], fontsize=15)
 ax.set_xlabel('Epochs', size=15)
+
+ax=fig.add_subplot(1,3,3)
+plot_decision_regions(X=x_valid.numpy(), y=y_valid.numpy().astype(np.integer), clf=model)
+ax.set_xlabel(r'$x_1$', size=15)
 plt.show()
 plt.plot
           
