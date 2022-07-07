@@ -42,7 +42,7 @@ class MyModule(nn.Module):
         a2=nn.ReLU()
         l3=nn.Linear(4,1)
         a3=nn.Sigmoid()
-        l=[i1, a1, l2, a2, l3, a3]
+        l=[l1, a1, l2, a2, l3, a3]
         self.module_list = nn.ModuleList(l)
 
     def forward(self, x):
