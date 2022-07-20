@@ -8,7 +8,8 @@ USER=root
 
 DATE=`date +%Y%m%d-%H-%M-%S`
 OUTPUT_DIR=fba-212-$DATE
-CONFIG_IP_GUEST=10.216.54.96
+CONFIG_IP_GUEST=10.216.64.100
+CONFIG_PORT_GUEST=30115
 LOOP_COUNT=3
 SINGLE_BAR="-----------------------------"
 DOUBLE_BAR="============================="
@@ -41,7 +42,7 @@ for loop in {1..10} ; do
         ;do
         echo "$SINGLE_BAR"
         echo --- $cmd ---
-        sshpass -p $PW ssh -o StrictHostKeyChecking=no $USER@$CONFIG_IP_GUEST $cmd
+        sshpass -p $PW ssh -p $CONFIG_PORT_GUEST -o StrictHostKeyChecking=no $USER@$CONFIG_IP_GUEST $cmd
         ret=$?
         
         #if [[ $ret != 0 && $ret != 1 ]] ; then 
@@ -59,4 +60,4 @@ for loop in {1..10} ; do
     done
 done
 
-sudo sshpass -p $PW scp -o StrictHostKeyChecking=no -r $USER@$CONFIG_IP_GUEST:~/fba-212 $OUTPUT_DIR
+sudo sshpass -p $PW scp  -p $CONFIG_PORT_GUEST -o StrictHostKeyChecking=no -r $USER@$CONFIG_IP_GUEST:~/fba-212 $OUTPUT_DIR
