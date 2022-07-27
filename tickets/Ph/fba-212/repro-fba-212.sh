@@ -30,9 +30,11 @@ function wait_host_up() {
 #                "sudo reboot" \
 #                "sudo dmesg | sudo tee fba-212/dmesg.after.reboot.'$loop'.log" \
 #                "/usr/local/bin/run_kfdtest.sh 2>&1 | sudo tee fba-212/$loop.kfdtest.log " \
+#                "/usr/local/bin/kfdtest --gtest_filter=-*LargestSysBuffero* 2>&1 | sudo tee fba-212/$loop.kfdtest.log " \
+#                "sudo /opt/rocm-5.0.1/rvs/rvs -c /opt/rocm-5.0.1/rvs/conf/gst_single.conf 2>&1 | sudo tee fba-212/$loop.rvs.gst.test.log" \
 
 wait_host_up
-for loop in {1..5} ; do
+for loop in {1..10} ; do
     echo $DOUBLE_BAR
     echo "Current loop: $loop........"
 
