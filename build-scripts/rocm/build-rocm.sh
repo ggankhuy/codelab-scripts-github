@@ -51,6 +51,9 @@
 # RCP(obsolete)         | x         | TBD           |
 # 
 
+REPO_ONLY=0
+NON_REPO_ONLY=0
+    
 for var in "$@"
 do
     if [[ $var == "llvmno" ]]  ; then
@@ -77,6 +80,7 @@ do
 
     if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
         VERSION=`echo $var | cut -d '=' -f2`
+	echo "major version: $MINOR_VERSION" ; 
     fi
 
     if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
@@ -90,8 +94,7 @@ do
     fi
 done
 
-REPO_ONLY=0
-NON_REPO_ONLY=0
+sleep 1
 p1=$1
 CONFIG_TEST=0
 FAST_INSTALL=0
@@ -627,6 +630,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-1.log
 		mkdir build; cd build
 		rm -rf ./*
+        echo "current dir: "  | tee $LOG_DIR/$CURR_BUILD-2.log
         pwd 2>&1 | tee $LOG_DIR/$CURR_BUILD-2.log
         CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1." >> $LOG_SUMMARY ; fi
