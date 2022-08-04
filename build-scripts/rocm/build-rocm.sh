@@ -94,8 +94,14 @@ do
     fi
 done
 
-sleep 1
 p1=$1
+p0=$0
+
+if [[ $p0 != "./build-rocm.sh" ]] ; then
+    echo "build-rocm.sh must run from current directory."
+    exit 1
+fi
+
 CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
@@ -108,8 +114,9 @@ f2=""
 
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
-ROCM_SRC_FOLDER=~/ROCm-$VERSION
-export ROCM_SRC_FOLDER=~/ROCm-$VERSION
+#ROCM_SRC_FOLDER=~/ROCm-$VERSION
+ROCM_SRC_FOLDER=`pwd`
+export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
@@ -245,7 +252,7 @@ if [[ -z $VERSION ]] ; then
 fi
 
 if [[ -z `cat ~/.bashrc | grep ROCM_SRC_FOLDER` ]] ; then
-    echo "export ROCM_SRC_FOLDER=~/ROCm-$VERSION" >> ~/.bashrc
+    echo "export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER" >> ~/.bashrc
 fi
 
 
