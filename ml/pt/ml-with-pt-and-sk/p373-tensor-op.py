@@ -6,11 +6,13 @@ import torch
 import numpy as np
 np.set_printoptions(precision=3)
 
+cuda = torch.device('cuda')
+
 # creating tensor from array, np.array
 
 a=[1,2,3]
 b=np.array([4,5,6], dtype=np.int32)
-t_a=torch.tensor(a)
+t_a=torch.tensor(a, device=cuda)
 t_b=torch.from_numpy(b)
 print(t_a)
 print(t_b)
