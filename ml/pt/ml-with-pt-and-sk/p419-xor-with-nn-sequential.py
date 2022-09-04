@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
+import time 
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 ENABLE_PLOT=0
@@ -15,10 +16,17 @@ y=np.ones(len(x))
 y[x[:,0] * x[:, 1]<0]=0
 n_train=100
 
-x_train=torch.tensor(x[:n_train, :], dtype=torch.float32, device='gpu')
-y_train=torch.tensor(y[:n_train], dtype=torch.float32, device='gpu')
-x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32, device='gpu')
-y_valid=torch.tensor(y[n_train:], dtype=torch.float32, device='gpu')
+'''
+x_train=torch.tensor(x[:n_train, :], dtype=torch.float32)
+y_train=torch.tensor(y[:n_train], dtype=torch.float32)
+x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32)
+y_valid=torch.tensor(y[n_train:], dtype=torch.float32)
+
+'''
+x_train=torch.tensor(x[:n_train, :], dtype=torch.float32, device='cuda')
+y_train=torch.tensor(y[:n_train], dtype=torch.float32, device='cuda')
+x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32, device='cuda')
+y_valid=torch.tensor(y[n_train:], dtype=torch.float32, device='cuda')
 
 fig=plt.figure(figsize=(6,6))
 
@@ -41,6 +49,8 @@ train_ds=TensorDataset(x_train, y_train)
 batch_size = 2
 torch.manual_seed(1)
 train_dl = DataLoader(train_ds, batch_size, shuffle=True)
+print("train_dl type: ", type(train_dl))
+#time.sleep(3)
 
 torch.manual_seed(1)
 num_epochs=200
@@ -53,6 +63,10 @@ def train(model, num_epochs, train_dl, x_valid, y_valid):
 
     for epoch in range(num_epochs):
         for x_batch, y_batch in train_dl:
+            x_batch = x_batch.to('cuda')
+            y_batch = y_batch.to('cuda')
+            print("x_batch/device, y_batch type/device: ", type(x_batch), x_batch.device, type(y_batch), y_batch.device)
+#           time.sleep(3)
             pred=model(x_batch)[:, 0]
             loss=loss_fn(pred, y_batch)
             loss.backward()
