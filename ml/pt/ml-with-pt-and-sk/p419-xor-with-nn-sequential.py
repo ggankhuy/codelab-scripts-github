@@ -4,8 +4,9 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
-
 ENABLE_PLOT=0
+gpu = torch.device('cuda')
+
 torch.manual_seed(1)
 np.random.seed(1)
 x=np.random.uniform(low=-1, high=1, size=(200, 2))
@@ -14,10 +15,10 @@ y=np.ones(len(x))
 y[x[:,0] * x[:, 1]<0]=0
 n_train=100
 
-x_train=torch.tensor(x[:n_train, :], dtype=torch.float32)
-y_train=torch.tensor(y[:n_train], dtype=torch.float32)
-x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32)
-y_valid=torch.tensor(y[n_train:], dtype=torch.float32)
+x_train=torch.tensor(x[:n_train, :], dtype=torch.float32, device='gpu')
+y_train=torch.tensor(y[:n_train], dtype=torch.float32, device='gpu')
+x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32, device='gpu')
+y_valid=torch.tensor(y[n_train:], dtype=torch.float32, device='gpu')
 
 fig=plt.figure(figsize=(6,6))
 
