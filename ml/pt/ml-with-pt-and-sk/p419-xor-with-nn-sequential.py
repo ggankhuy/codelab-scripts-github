@@ -40,6 +40,7 @@ if ENABLE_PLOT:
     plt.show()
 
 model=nn.Sequential(nn.Linear(2, 1), nn.Sigmoid())
+model.to('cuda')
 print(model)
 
 loss_fn=nn.BCELoss()
@@ -63,9 +64,7 @@ def train(model, num_epochs, train_dl, x_valid, y_valid):
 
     for epoch in range(num_epochs):
         for x_batch, y_batch in train_dl:
-            x_batch = x_batch.to('cuda')
-            y_batch = y_batch.to('cuda')
-            print("x_batch/device, y_batch type/device: ", type(x_batch), x_batch.device, type(y_batch), y_batch.device)
+#           print("x_batch/device, y_batch type/device: ", type(x_batch), x_batch.device, type(y_batch), y_batch.device)
 #           time.sleep(3)
             pred=model(x_batch)[:, 0]
             loss=loss_fn(pred, y_batch)
@@ -97,13 +96,14 @@ ax.plot(history[1], lw=4)
 ax.legend(['Train loss', 'Validation'], fontsize=15)
 ax.set_xlabel('Epochs', size=15)
 
+if ENABLE_PLOT:
+    ax=fig.add_subplot(1,2,2)
+    ax.plot(history[2], lw=4)
+    ax.plot(history[3], lw=4)
+    ax.legend(['Train acc', 'Validation acc'], fontsize=15)
+    ax.set_xlabel('Epochs', size=15)
+    plt.show()
+    plt.plot
 
-ax=fig.add_subplot(1,2,2)
-ax.plot(history[2], lw=4)
-ax.plot(history[3], lw=4)
-ax.legend(['Train acc', 'Validation acc'], fontsize=15)
-ax.set_xlabel('Epochs', size=15)
-plt.show()
-plt.plot
           
         
