@@ -6,7 +6,10 @@ import time
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 ENABLE_PLOT=0
-gpu = torch.device('cuda')
+CONFIG_USE_ROCM=1
+
+if CONFIG_USE_ROCM:
+    gpu = torch.device('cuda')
 
 torch.manual_seed(1)
 np.random.seed(1)
@@ -16,17 +19,16 @@ y=np.ones(len(x))
 y[x[:,0] * x[:, 1]<0]=0
 n_train=100
 
-'''
-x_train=torch.tensor(x[:n_train, :], dtype=torch.float32)
-y_train=torch.tensor(y[:n_train], dtype=torch.float32)
-x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32)
-y_valid=torch.tensor(y[n_train:], dtype=torch.float32)
-
-'''
-x_train=torch.tensor(x[:n_train, :], dtype=torch.float32, device='cuda')
-y_train=torch.tensor(y[:n_train], dtype=torch.float32, device='cuda')
-x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32, device='cuda')
-y_valid=torch.tensor(y[n_train:], dtype=torch.float32, device='cuda')
+if not CONFIG_USE_ROCM:
+    x_train=torch.tensor(x[:n_train, :], dtype=torch.float32)
+    y_train=torch.tensor(y[:n_train], dtype=torch.float32)
+    x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32)
+    y_valid=torch.tensor(y[n_train:], dtype=torch.float32)
+else:
+    x_train=torch.tensor(x[:n_train, :], dtype=torch.float32, device='cuda')
+    y_train=torch.tensor(y[:n_train], dtype=torch.float32, device='cuda')
+    x_valid=torch.tensor(x[n_train:, :], dtype=torch.float32, device='cuda')
+    y_valid=torch.tensor(y[n_train:], dtype=torch.float32, device='cuda')
 
 fig=plt.figure(figsize=(6,6))
 
@@ -40,7 +42,10 @@ if ENABLE_PLOT:
     plt.show()
 
 model=nn.Sequential(nn.Linear(2, 1), nn.Sigmoid())
-model.to('cuda')
+
+if CONFIG_USE_ROCM:
+    model.to('cuda')
+
 print(model)
 
 loss_fn=nn.BCELoss()
