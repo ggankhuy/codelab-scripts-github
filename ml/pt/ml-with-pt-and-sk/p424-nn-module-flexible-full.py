@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
+import code
+
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 from mlxtend.plotting import plot_decision_regions
@@ -84,7 +86,9 @@ def train(model, num_epochs, train_dl, x_valid, y_valid):
     accuracy_hist_valid = [0] * num_epochs
 
     for epoch in range(num_epochs):
+        print("\nEpoch: ", epoch, ": ", end=" ")
         for x_batch, y_batch in train_dl:
+            print(".", end="")
             pred=model(x_batch)[:, 0]
             loss=loss_fn(pred, y_batch)
             loss.backward()
@@ -102,6 +106,9 @@ def train(model, num_epochs, train_dl, x_valid, y_valid):
         is_correct = ((pred>=0.5).float() == y_valid).float()
         accuracy_hist_valid[epoch] += is_correct.mean()
 
+        print("loss/accuracy: ", loss.item(), "/", is_correct.mean(), end="")
+
+#       code.interact(local=locals())
     return loss_hist_train, loss_hist_valid, accuracy_hist_train, accuracy_hist_valid
 
 history=train(model, num_epochs, train_dl, x_valid, y_valid)
