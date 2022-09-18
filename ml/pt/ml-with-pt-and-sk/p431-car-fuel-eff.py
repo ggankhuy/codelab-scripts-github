@@ -58,7 +58,7 @@ x_test_numeric = torch.tensor(df_test_norm[numeric_column_names].values)
 x_test = torch.cat([x_test_numeric, origin_encoded], 1).float()
 
 y_train = torch.tensor(df_train_norm['MPG'].values).float()
-y_test = torch.tensor(df_test_norm['MPG'].values)/float()
+y_test = torch.tensor(df_test_norm['MPG'].values).float()
 
 train_ds = TensorDataset(x_train, y_train)
 batch_size = 8
