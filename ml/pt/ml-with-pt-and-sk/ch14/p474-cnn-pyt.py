@@ -1,9 +1,11 @@
+import torch
 import torchvision
 from torchvision import transforms
 from torch.utils.data import Subset
 from torch.utils.data import DataLoader
-
+import torch.nn as nn
 import matplotlib.pyplot as plt
+import code
 
 CONFIG_ENABLE_PLOT=0
 
@@ -22,10 +24,10 @@ valid_dl = DataLoader(mnist_valid_dataset, batch_size, shuffle=False)
 
 model=nn.Sequential()
 model.add_module('conv1', nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2))
-model.add_module('relu1', nn.Relu())
-model.add_module('pool11, nn.MaxPool2d(kernel_size=2))
+model.add_module('ReLU1', nn.ReLU())
+model.add_module('pool1', nn.MaxPool2d(kernel_size=2))
 model.add_module('conv2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2))
-model.add_module('relu2', nn.Relu())
+model.add_module('ReLU2', nn.ReLU())
 model.add_module('pool2', nn.MaxPool2d(kernel_size=2))
 
 x=torch.ones((4,1,28,28))
@@ -34,10 +36,13 @@ print(model(x).shape)
 model.add_module('flatten', nn.Flatten())
 x=torch.ones((4,1,28,28))
 model.add_module('fc1', nn.Linear(3136, 1024))
-model.add_module('relu3', nn.Relu())
+model.add_module('ReLU3', nn.ReLU())
 model.add_module('dropout', nn.Dropout(p=0.5))
 model.add_module('fc2', nn.Linear(1024,10))
 model.add_module('softmax', nn.Softmax(dim=1))
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 def train(model, num_epochs, train_dl, valid_dl):
     loss_hist_train = [0] * num_epochs
@@ -54,7 +59,7 @@ def train(model, num_epochs, train_dl, valid_dl):
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
-            loss_hist_train[epoch] += loss.item()*y_batch_size(0)
+            loss_hist_train[epoch] += loss.item()*y_batch.size(0)
             is_correct = (torch.argmax(pred, dim=1) == y_batch).float()
             accuracy_hist_train[epoch] += is_correct.sum()
 
@@ -106,7 +111,7 @@ is_correct = (torch.argmax(pred, dim=1) == mnist_test_dataset.targets).float()
 print(f'Test accuracy: {is_correct.mean():.4f}')
 
 if CONFIG_ENABLE_PLOT:
-    fig=plt.figure(figure=(12, 4__
+    fig=plt.figure(figure=(12, 4))
    
     for i in range(12):
         ax=fig.add_subplot(2,6,i+1)
@@ -117,7 +122,7 @@ if CONFIG_ENABLE_PLOT:
         y_pred = torch.argmax(pred)
         ax.imshow(img, cmap='gray_r')
         ax.text(0.9, 0.1, y_pred.item(),
-            size=15, color='blue'
+            size=15, color='blue',
             horizontalalignment='center',
             verticalalignment='center',
             transform=ax.transAxes)
