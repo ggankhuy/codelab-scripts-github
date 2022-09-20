@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import code
 
 from torchtext.datasets import IMDB
@@ -17,8 +18,9 @@ import re
 from collections import Counter, OrderedDict
 
 def tokenizer(text):
-    text = re.sub('<[^?]', '', text)
-    emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(\D\P)', text.lower())
+    text = re.sub('<[^>]*>', '', text)
+    emoticons = re.findall(
+           '(?::|;|=)(?:-)?(?:\)|\(|D|P)', text.lower())
     text = re.sub('[\W]+', ' ' , text.lower()) + \
         ' '.join(emoticons).replace('-', '')
     
@@ -35,7 +37,7 @@ print('Vocab-size:', len(token_counts))
 # 3. encoding each unique token into integres
 
 from torchtext.vocab import vocab
-sorted_by_freq_tuples = sorted(token_coutns.items(), key=lambda x: x[1], reverse=True)
+sorted_by_freq_tuples = sorted(token_counts.items(), key=lambda x: x[1], reverse=True)
 ordered_dict = OrderedDict(sorted_by_freq_tuples)
 vocab = vocab(ordered_dict)
 vocab.insert_token('<pad>', 0)
@@ -67,20 +69,20 @@ def collate_batch(batch):
 
 # Take a small batch
 
-from torch.util.data import DataLoader
+from torch.utils.data import DataLoader
 dataloader = DataLoader(train_dataset, batch_size=4, shuffle=False, collate_fn=collate_batch)
 
 text_batch, label_batch, length_batch = next(iter(dataloader))
 print(text_batch)
 print(label_batch)
-print(length_patch)
+print(length_batch)
 
-batdh_size=32
+batch_size=32
 train_dl=DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
 valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
 test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
    
-embedding=nn.Embedding(num_embedding=10, embedding_dim=3, padding_idx=0)
+embedding=nn.Embedding(num_embeddings=10, embedding_dim=3, padding_idx=0)
 
 # a batch of 2 samples of 4 indices each
 
@@ -112,7 +114,7 @@ model(torch.randn(5,3,64))
 
 '''        
 class RNN(nn.Module):
-    def __init__(self, input_size, hidden_size):
+    def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size):
         super().__init__()
         self.embedding=nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         self.rnn=nn.LSTM(embed_dim, rnn_hidden_size, batch_first=True)
@@ -142,7 +144,7 @@ model=RNN(vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size)
 def train(dataloader):
     model.train()
     total_acc, total_loss=0,0
-    for text_batch, label_batch, lengths in dataloder:
+    for text_batch, label_batch, lengths in dataloader:
         optimizer.zero_grad()
         pred=model(text_batch, lengths)[:,0]
         loss=loss_fn(pred, label_batch)
