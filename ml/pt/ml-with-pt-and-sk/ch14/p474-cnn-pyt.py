@@ -1,3 +1,8 @@
+# x - input matrix, usually a bitmap image.
+# w - kernel/filter = smaller moving array over x. 
+# p - padding, extra spacing around original bitmap image.
+# s - stride. Incremental move amount by kernel/filter.
+
 import torch
 import torchvision
 from torchvision import transforms
@@ -23,6 +28,7 @@ train_dl = DataLoader(mnist_train_dataset, batch_size, shuffle=True)
 valid_dl = DataLoader(mnist_valid_dataset, batch_size, shuffle=False)
 
 model=nn.Sequential()
+model.to('cuda')
 model.add_module('conv1', nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2))
 model.add_module('ReLU1', nn.ReLU())
 model.add_module('pool1', nn.MaxPool2d(kernel_size=2))
@@ -30,11 +36,10 @@ model.add_module('conv2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size
 model.add_module('ReLU2', nn.ReLU())
 model.add_module('pool2', nn.MaxPool2d(kernel_size=2))
 
-x=torch.ones((4,1,28,28))
-print(model(x).shape)
+x=torch.ones((4,1,28,28), device='cuda')
+#print(model(x).shape)
 
 model.add_module('flatten', nn.Flatten())
-x=torch.ones((4,1,28,28))
 model.add_module('fc1', nn.Linear(3136, 1024))
 model.add_module('ReLU3', nn.ReLU())
 model.add_module('dropout', nn.Dropout(p=0.5))
@@ -82,8 +87,9 @@ def train(model, num_epochs, train_dl, valid_dl):
             f'{accuracy_hist_train[epoch]:.4f} val_accuracy: '
             f'{accuracy_hist_valid[epoch]:.4f}')
 
-#   code.interact(local=locals())
     return loss_hist_train, loss_hist_valid, accuracy_hist_train, accuracy_hist_valid
+
+#code.interact(local=locals())
 
 torch.manual_seed(1)
 num_epochs=20
