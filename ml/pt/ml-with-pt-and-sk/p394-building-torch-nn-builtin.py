@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
-
+import code
 import torch.nn as nn
 
 learning_rate = 0.001
@@ -33,6 +33,7 @@ output_size = 1
 model = nn.Linear(input_size, output_size)
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
+code.interact(local=locals())
 for epoch in range(num_epochs):
     for x_batch, y_batch in train_dl:
 

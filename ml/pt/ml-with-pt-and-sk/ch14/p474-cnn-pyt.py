@@ -2,6 +2,7 @@
 # w - kernel/filter = smaller moving array over x. 
 # p - padding, extra spacing around original bitmap image.
 # s - stride. Incremental move amount by kernel/filter.
+# o - final result, feature map.
 
 import torch
 import torchvision
@@ -9,10 +10,16 @@ from torchvision import transforms
 from torch.utils.data import Subset
 from torch.utils.data import DataLoader
 import torch.nn as nn
+import matplotlib
 import matplotlib.pyplot as plt
 import code
+import numpy as np
+import PyQt5
 
-CONFIG_ENABLE_PLOT=0
+print(matplotlib.get_backend())
+#matplotlib.use("tkagg")
+
+CONFIG_ENABLE_PLOT=1
 
 image_path = "./"
 
@@ -92,12 +99,12 @@ def train(model, num_epochs, train_dl, valid_dl):
 #code.interact(local=locals())
 
 torch.manual_seed(1)
-num_epochs=20
+num_epochs=2
 hist=train(model, num_epochs, train_dl, valid_dl)
 
 if CONFIG_ENABLE_PLOT: 
     x_arr = np.arange(len(hist[0])) + 1
-    fig = pl.figure(figsize=(12,4))
+    fig = plt.figure(figsize=(12,4))
     ax = fig.add_subplot(1,2,1)
     ax.plot(x_arr, hist[0], '-0', label='Train Loss')
     ax.plot(x_arr, hist[1], '--<', label='Validation Loss')
@@ -108,14 +115,16 @@ if CONFIG_ENABLE_PLOT:
     ax.plot(x_arr, hist[3], '--<', label='Validatin Acc')
 
     ax.legend(fontsize=15)
-    ax.set_xlabels('Epoch', size=15)
+    ax.set_xlabel('Epoch', size=15)
     ax.set_ylabel('Accuracy', size=15)
     plt.show()
-
+    plt.plot
+    plt.savefig("p474.plot1.jpg", dpi=300)
 pred=model(mnist_test_dataset.data.unsqueeze(1) / 255. )
 is_correct = (torch.argmax(pred, dim=1) == mnist_test_dataset.targets).float()
 print(f'Test accuracy: {is_correct.mean():.4f}')
 
+'''
 if CONFIG_ENABLE_PLOT:
     fig=plt.figure(figure=(12, 4))
    
@@ -133,3 +142,4 @@ if CONFIG_ENABLE_PLOT:
             verticalalignment='center',
             transform=ax.transAxes)
     plt.show()
+'''

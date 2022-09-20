@@ -76,6 +76,7 @@ for hidden_unit in hidden_units:
 
 all_layers.append(nn.Linear(hidden_units[-1], 1))
 model = nn.Sequential(*all_layers)
+code.interact(local=locals())
 loss_fn = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 torch.manual_seed(1)
