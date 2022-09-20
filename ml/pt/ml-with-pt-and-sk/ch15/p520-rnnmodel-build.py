@@ -1,3 +1,10 @@
+import torch
+import code
+
+from torchtext.datasets import IMDB
+train_dataset = IMDB(split='train')
+test_dataset =IMDB(split='test')
+
 # 1. create dataset
 from torch.utils.data.dataset import random_split
 
@@ -11,7 +18,7 @@ from collections import Counter, OrderedDict
 
 def tokenizer(text):
     text = re.sub('<[^?]', '', text)
-    emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(\D\P)', text.lower()
+    emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(\D\P)', text.lower())
     text = re.sub('[\W]+', ' ' , text.lower()) + \
         ' '.join(emoticons).replace('-', '')
     
@@ -28,19 +35,18 @@ print('Vocab-size:', len(token_counts))
 # 3. encoding each unique token into integres
 
 from torchtext.vocab import vocab
-sorted_by_freq_tuples = sorted(token_coutns.items(), key=lamba x: x[1], reverse=True)
+sorted_by_freq_tuples = sorted(token_coutns.items(), key=lambda x: x[1], reverse=True)
 ordered_dict = OrderedDict(sorted_by_freq_tuples)
 vocab = vocab(ordered_dict)
 vocab.insert_token('<pad>', 0)
 vocab.insert_token('<unk>', 1)
 vocab.set_default_index(1)
 
-print([vacab[token] for token in ['this', 'is', 'an', 'example]])
+print([vocab[token] for token in ['this', 'is', 'an', 'example']])
 
 # 3a. define the functions for transformation.
 
-text_pipeline = \ 
-        lambda_x: [vocab[token] for token in tokenizer(x)]
+text_pipeline =  lambda x: [vocab[token] for token in tokenizer(x)]
 label_pipeline = lambda x: 1. if x == 'pos' else 0.
 
 # 3b. wrap the encode and transformation function.
@@ -142,7 +148,7 @@ def train(dataloader):
         loss=loss_fn(pred, label_batch)
         loss.backward()
         optimizer.step()
-        total_acc += (pred >= 0.5).float() == label_batch).float().sum().item()
+        total_acc += ((pred >= 0.5).float() == label_batch).float().sum().item()
         total_loss += loss.item() * label_batch.size(0)
 
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
@@ -152,10 +158,10 @@ def evaluate(dataloader):
     total_acc, total_loss = 0,0
     with torch.no_grad():
         for text_batch, label_batch, lengths in dataloader:
-        pred=model(text_batch, lengths)[:,0]
-        loss=loss_fn(pred, label_batch)
-        total_acc+=((pred>=0.5).float() == label_batch).float().sum().item()
-        total_loss += loss.item()*label_batch.size(0)
+            pred=model(text_batch, lengths)[:,0]
+            loss=loss_fn(pred, label_batch)
+            total_acc+=((pred>=0.5).float() == label_batch).float().sum().item()
+            total_loss += loss.item()*label_batch.size(0)
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
 
 loss_fn = nn.BCELoss()
