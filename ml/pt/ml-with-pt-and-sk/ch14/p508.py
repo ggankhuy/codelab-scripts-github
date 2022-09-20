@@ -12,8 +12,7 @@ print("W_xh shape: ", w_xh.shape)
 print("W_hh shape: ", w_hh.shape)
 print("B_xh shape: ", b_xh.shape)
 print("B_hh shape: ", b_hh.shape)
-
-
+    
 x_seq = torch.tensor([[1.0]* 5, [2.0]*5, [3.0]*5]).float()
 
 ## output  of the simple RNN:
@@ -24,11 +23,20 @@ output, hn = rnn_layer(torch.reshape(x_seq, (1,3,5)))
 
 out_man = []
 
+## Run a time series run...
+
 for t in range(3):
+
+    # reshape x_seq[t] from [5] to [1,5]
+
     xt = torch.reshape(x_seq[t], (1,5))
     print(f'Time step {t} => ')
     print('     Input       :', xt.numpy())
-    ht = torch.matmul(xt, torch.transpose(w_xh, 0, 1)) + b_hh
+
+    # input * weight.input + bias.input_layer
+    # [1,5] * [5,2] + [2] => [2] 
+
+    ht = torch.matmul(xt, torch.transpose(w_xh, 0, 1)) + b_xh
     print('     Hidden      :', ht.detach().numpy())
 
     if t > 0:
@@ -36,9 +44,16 @@ for t in range(3):
     else:
         prev_h = torch.zeros((ht.shape))
 
+    # output = output.previous or zero init * weight.hidden + bias.hidden_layer
+    # [2] * [2,2] + [2] => [2] 
+
     ot = ht + torch.matmul(prev_h, torch.transpose(w_hh,0,1)) + b_hh
+
+    # update output, which will be assigned to prev_h in next iteration.
+
     ot = torch.tanh(ot)
     out_man.append(ot)
+
     print('     Output (manual)     :', ot.detach().numpy())
     print('     RNN output          :', output[:, t].detach().numpy())
     print()
