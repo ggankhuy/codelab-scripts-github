@@ -79,8 +79,8 @@ print(length_batch)
 
 batch_size=32
 train_dl=DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
-valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
-test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
+valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
+test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
    
 embedding=nn.Embedding(num_embeddings=10, embedding_dim=3, padding_idx=0)
 
@@ -127,10 +127,11 @@ class RNN(nn.Module):
         out = self.embedding(text)
         out = nn.utils.rnn.pack_padded_sequence(out, lengths.cpu().numpy(), enforce_sorted=False, batch_first=True)
         out, (hidden,cell) = self.rnn(out)
-        out=self.fc1(out)
-        out=self.relu(out)
-        out=self.fc2(out)
-        out=self.sigmoid(out)
+        out = hidden[-1,:,:]
+        out = self.fc1(out)
+        out = self.relu(out)
+        out = self.fc2(out)
+        out = self.sigmoid(out)
         return out
 
 vocab_size = len(vocab)
@@ -139,7 +140,6 @@ rnn_hidden_size=64
 fc_hidden_size=64
 torch.manual_seed(1)
 model=RNN(vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size)
-
 
 def train(dataloader):
     model.train()
