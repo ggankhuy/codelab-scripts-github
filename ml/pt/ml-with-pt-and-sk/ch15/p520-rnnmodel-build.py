@@ -164,11 +164,14 @@ def evaluate(dataloader):
             loss=loss_fn(pred, label_batch)
             total_acc+=((pred>=0.5).float() == label_batch).float().sum().item()
             total_loss += loss.item()*label_batch.size(0)
+
+    #code.interact(local=locals())
+    print("total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset): ", total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset))
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
 
 loss_fn = nn.BCELoss()
 optimizer=torch.optim.Adam(model.parameters(), lr=0.001)
-num_epochs=10
+num_epochs=2
 torch.manual_seed(1)
 for epoch in range(num_epochs):
         acc_train, loss_train = train(train_dl)
