@@ -6,6 +6,8 @@ from torchtext.datasets import IMDB
 train_dataset = IMDB(split='train')
 test_dataset =IMDB(split='test')
 
+CONFIG_USE_ROCM=1
+
 # 1. create dataset
 from torch.utils.data.dataset import random_split
 
