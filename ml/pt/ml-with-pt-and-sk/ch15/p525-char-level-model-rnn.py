@@ -13,7 +13,7 @@ with open('1268-0.txt', 'r', encoding="utf8") as fp:
     text=fp.read()
 
 start_indx = text.find('THE MYSTERIOUS ISLAND')
-end_ind  = text.find('End of the project Gutenbert')
+end_indx  = text.find('End of the project Gutenbert')
 text = text[start_indx:end_indx]
 char_set = set(text)
 
@@ -21,7 +21,7 @@ print("Total length: ", len(text))
 print("Unique characters: ", len(char_set))
 
 chars_sorted = sorted(char_set)
-char2int = {ch:i, ch in enumerate(chars_sorted)}
+char2int = {ch:i for i, ch in enumerate(chars_sorted)}
 char_array = np.array(chars_sorted)
 
 text_encoded = np.array([char2int[ch] for ch in text], dtype=np.int32)
@@ -30,7 +30,7 @@ print('Text encoded shape: ', text_encoded.shape)
 print(text[:15], '== Encoding ==> ', text_encoded[:15])
 print(text_encoded[15:21], '== Reverse ==>', ''.join(char_array[text_encoded[15:21]]))
 for ex in text_encoded[:5]:
-    print('{} -> {}'.format(ex, char_array[ex])))
+    print('{} -> {}'.format(ex, char_array[ex]))
 
 
 seq_length = 40
@@ -40,7 +40,7 @@ text_chunks = [text_encoded[i:i+chunk_size]
 
 class TextDataset(Dataset):
     def __init__(self, text_chunk):
-        self.text_chunks = text+chunks
+        self.text_chunks = text_chunks
 
     def __len__(self):
         return len(self.text_chunks)
@@ -48,6 +48,8 @@ class TextDataset(Dataset):
     def __get_item__(self, idx):
         text_chunk = self.text_chunk[idx]
         return text_chunk[:-1].long(), text_chunk[1:].long()
+
+seq_dataset = TextDataset(torch.tensor(text_chunks))
 
 for i, (seq, target) in enumerate(seq_dataset):
         print(' Input (x): ', 
@@ -106,7 +108,7 @@ for epoch in range(num_epochs):
         optimizer.ste()
         loss = loss.item()/seq_length
         
-        if epoch % 500 = 0
+        if epoch % 500 == 0:
             print(f'Epoch {epoch} loss: {loss:.4f}')
 
 torch.manual_seed(1)
@@ -126,7 +128,7 @@ print(samples.numpy())
 
 
 def sample(model, starting_str, len_generated_text=500, scale_factor=1.0):
-    encoded_input = torch.tensor([char2int[s] for s in starting_str]
+    encoded_input = torch.tensor([char2int[s] for s in starting_str])
     encoded_input = torch.reshape(encoded_inputs, (1, -1))
     generated_str = starting_str
 
