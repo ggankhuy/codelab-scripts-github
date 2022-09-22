@@ -110,11 +110,19 @@ class RNN(nn.Module):
         out=self.fc(out)
         return out
 
+'''
+'''
+print("init-ing model...")
 model=RNN(64,32)
 print(model)
-model(torch.randn(5,3,64))
 
-'''        
+if CONFIG_USE_ROCM:
+    model.to('cuda')
+
+print("train...")
+model(torch.randn(5,3,64))
+'''
+
 class RNN(nn.Module):
     def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size):
         super().__init__()
@@ -141,7 +149,12 @@ embed_dim = 20
 rnn_hidden_size=64
 fc_hidden_size=64
 torch.manual_seed(1)
+
+print("initializing model...")
+
 model=RNN(vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size)
+if CONFIG_USE_ROCM:
+    model.to('cuda')
 
 def train(dataloader):
     model.train()
@@ -171,16 +184,19 @@ def evaluate(dataloader):
     print("total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset): ", total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset))
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
 
+print("setting loss function + optimizer...")
 loss_fn = nn.BCELoss()
 optimizer=torch.optim.Adam(model.parameters(), lr=0.001)
 num_epochs=2
 torch.manual_seed(1)
+
+print("start training...")
 for epoch in range(num_epochs):
+        print("EPOCH: ", epoch)
         acc_train, loss_train = train(train_dl)
         acc_valid, loss_valid = evaluate(valid_dl)
         print(f'Epoch {epoch} accuracy: {acc_train:.4f}'
             f' val_accuracy: {acc_valid:.4f}')
+print("Evaluate...")
 acc_test, _ = evaluate(test_dl)
 print(f'test accuracy: {acc_test:.4f}')
-
-        
