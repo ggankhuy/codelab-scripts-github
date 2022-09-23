@@ -67,7 +67,7 @@ class MyModule(nn.Module):
 model=MyModule()
 model.to('cuda')
 print(model)
-code.interact(local=locals())
+#code.interact(local=locals())
 
 loss_fn=nn.BCELoss()
 optimizer=torch.optim.SGD(model.parameters(), lr=0.015)

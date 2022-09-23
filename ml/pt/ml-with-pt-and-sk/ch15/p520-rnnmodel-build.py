@@ -4,15 +4,16 @@ import code
 
 from torchtext.datasets import IMDB
 train_dataset = IMDB(split='train')
-test_dataset =IMDB(split='test')
+test_dataset = IMDB(split='test')
 
-CONFIG_USE_ROCM=1
+CONFIG_USE_ROCM=0
 
 # 1. create dataset
 from torch.utils.data.dataset import random_split
 
 torch.manual_seed(1)
 train_dataset, valid_dataset = random_split(list(train_dataset), [20000, 5000])
+test_dataset=list(test_dataset)
 
 # 2. find unique tokens
 
@@ -63,10 +64,16 @@ def collate_batch(batch):
         text_list.append(processed_text)
         lengths.append(processed_text.size(0))
 
-    label_list = torch.tensor(label_list)
-    lengths = torch.tensor(lengths)
-    padded_text_list = nn.utils.rnn.pad_sequence(text_list, batch_first=True)
+    if CONFIG_USE_ROCM:
+        label_list = torch.tensor(label_list, device='cuda')
+        lengths = torch.tensor(lengths, device='cuda')
+    else:
+        label_list = torch.tensor(label_list)
+        lengths = torch.tensor(lengths)
 
+    padded_text_list = nn.utils.rnn.pad_sequence(text_list, batch_first=True)
+    padded_text_list.to('cuda')
+    #code.interact(local=locals())   
     return padded_text_list, label_list, lengths
 
 # Take a small batch
@@ -83,6 +90,8 @@ batch_size=32
 train_dl=DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
 valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
 test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
+
+#code.interact(local=locals())
    
 embedding=nn.Embedding(num_embeddings=10, embedding_dim=3, padding_idx=0)
 
@@ -171,6 +180,8 @@ def train(dataloader):
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
 
 def evaluate(dataloader):
+    print("evaludate entered...")
+    print(dataloader, len(dataloader), type(dataloader))
     model.eval()
     total_acc, total_loss = 0,0
     with torch.no_grad():
@@ -187,7 +198,7 @@ def evaluate(dataloader):
 print("setting loss function + optimizer...")
 loss_fn = nn.BCELoss()
 optimizer=torch.optim.Adam(model.parameters(), lr=0.001)
-num_epochs=2
+num_epochs=5
 torch.manual_seed(1)
 
 print("start training...")
@@ -197,6 +208,7 @@ for epoch in range(num_epochs):
         acc_valid, loss_valid = evaluate(valid_dl)
         print(f'Epoch {epoch} accuracy: {acc_train:.4f}'
             f' val_accuracy: {acc_valid:.4f}')
+
 print("Evaluate...")
 acc_test, _ = evaluate(test_dl)
 print(f'test accuracy: {acc_test:.4f}')

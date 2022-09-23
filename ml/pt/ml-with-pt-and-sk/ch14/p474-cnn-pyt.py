@@ -14,12 +14,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 import code
 import numpy as np
-import PyQt5
+#import PyQt5
 
 print(matplotlib.get_backend())
 #matplotlib.use("tkagg")
 
-CONFIG_ENABLE_PLOT=1
+CONFIG_ENABLE_PLOT=0
 
 image_path = "./"
 
@@ -43,7 +43,7 @@ model.add_module('conv2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size
 model.add_module('ReLU2', nn.ReLU())
 model.add_module('pool2', nn.MaxPool2d(kernel_size=2))
 
-x=torch.ones((4,1,28,28), device='cuda')
+#x=torch.ones((4,1,28,28), device='cuda')
 #print(model(x).shape)
 
 model.add_module('flatten', nn.Flatten())
@@ -90,7 +90,7 @@ def train(model, num_epochs, train_dl, valid_dl):
         loss_hist_valid[epoch] /= len(valid_dl.dataset)
         accuracy_hist_valid[epoch] /= len(valid_dl.dataset)
         
-        print(f'Epoch {epoch+1} accuracy: '
+        print(f'\nEpoch {epoch+1} accuracy: '
             f'{accuracy_hist_train[epoch]:.4f} val_accuracy: '
             f'{accuracy_hist_valid[epoch]:.4f}')
 
@@ -99,7 +99,7 @@ def train(model, num_epochs, train_dl, valid_dl):
 #code.interact(local=locals())
 
 torch.manual_seed(1)
-num_epochs=2
+num_epochs=5
 hist=train(model, num_epochs, train_dl, valid_dl)
 
 if CONFIG_ENABLE_PLOT: 
@@ -120,6 +120,7 @@ if CONFIG_ENABLE_PLOT:
     plt.show()
     plt.plot
     plt.savefig("p474.plot1.jpg", dpi=300)
+
 pred=model(mnist_test_dataset.data.unsqueeze(1) / 255. )
 is_correct = (torch.argmax(pred, dim=1) == mnist_test_dataset.targets).float()
 print(f'Test accuracy: {is_correct.mean():.4f}')
