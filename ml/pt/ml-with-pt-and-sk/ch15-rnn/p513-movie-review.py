@@ -1,10 +1,12 @@
 import torch
 import torch.nn as nn
 import code
+from functools import wraps
 
 from torchtext.datasets import IMDB
 train_dataset = IMDB(split='train')
 test_dataset = IMDB(split='test')
+import re
 
 CONFIG_USE_ROCM=0
 
@@ -17,9 +19,18 @@ test_dataset=list(test_dataset)
 
 # 2. find unique tokens
 
-import re
 from collections import Counter, OrderedDict
 
+def print_fcn_name(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(func.__name__, " entered...")
+        result = func(*args, **kwargs)
+        return result
+
+    return wrapper
+
+#@print_fcn_name
 def tokenizer(text):
     text = re.sub('<[^>]*>', '', text)
     emoticons = re.findall(
@@ -56,6 +67,7 @@ label_pipeline = lambda x: 1. if x == 'pos' else 0.
 
 # 3b. wrap the encode and transformation function.
 
+#@print_fcn_name
 def collate_batch(batch):
     label_list, text_list, lengths = [], [], []
     for _label, _text in batch:
@@ -165,6 +177,7 @@ model=RNN(vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size)
 if CONFIG_USE_ROCM:
     model.to('cuda')
 
+@print_fcn_name
 def train(dataloader):
     model.train()
     total_acc, total_loss=0,0
@@ -203,10 +216,10 @@ torch.manual_seed(1)
 
 print("start training...")
 for epoch in range(num_epochs):
-        print("EPOCH: ", epoch)
-        acc_train, loss_train = train(train_dl)
-        acc_valid, loss_valid = evaluate(valid_dl)
-        print(f'Epoch {epoch} accuracy: {acc_train:.4f}'
+    print("EPOCH: ", epoch)
+    acc_train, loss_train = train(train_dl)
+    acc_valid, loss_valid = evaluate(valid_dl)
+    print(f'Epoch {epoch} accuracy: {acc_train:.4f}'
             f' val_accuracy: {acc_valid:.4f}')
 
 print("Evaluate...")
