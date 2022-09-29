@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import code
 from functools import wraps
+from datetime import datetime
 
 from torchtext.datasets import IMDB
 train_dataset = IMDB(split='train')
@@ -24,7 +25,9 @@ from collections import Counter, OrderedDict
 def print_fcn_name(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print(func.__name__, " entered...")
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(dt_string, ": ", func.__name__, " entered...")
         result = func(*args, **kwargs)
         return result
 
@@ -67,7 +70,7 @@ label_pipeline = lambda x: 1. if x == 'pos' else 0.
 
 # 3b. wrap the encode and transformation function.
 
-#@print_fcn_name
+@print_fcn_name
 def collate_batch(batch):
     label_list, text_list, lengths = [], [], []
     for _label, _text in batch:
@@ -85,7 +88,7 @@ def collate_batch(batch):
 
     padded_text_list = nn.utils.rnn.pad_sequence(text_list, batch_first=True)
     padded_text_list.to('cuda')
-    #code.interact(local=locals())   
+    print("- padded_text_list, label_list, lengths: ", padded_text_list.shape, label_list.shape, lengths.shape)
     return padded_text_list, label_list, lengths
 
 # Take a small batch
@@ -192,6 +195,7 @@ def train(dataloader):
 
     return total_acc/len(dataloader.dataset), total_loss/len(dataloader.dataset)
 
+@print_fcn_name
 def evaluate(dataloader):
     print("evaludate entered...")
     print(dataloader, len(dataloader), type(dataloader))

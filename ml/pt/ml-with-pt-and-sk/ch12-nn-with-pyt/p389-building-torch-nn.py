@@ -22,7 +22,7 @@ X_train_norm = (X_train - np.mean(X_train)) / np.std(X_train)
 X_train_norm = torch.from_numpy(X_train_norm)
 y_train = torch.from_numpy(y_train)
 train_ds = TensorDataset(X_train_norm, y_train)
-batch_size = 1
+batch_size = 2
 train_dl = DataLoader(train_ds, batch_size, shuffle=True)
 print(train_dl)
 
@@ -47,6 +47,8 @@ for epoch in range(num_epochs):
         loss = loss_fn(pred, y_batch)
         if DBG:
             print("loss: ", loss, "loss.shape: ", loss.shape)
+    
+        # apply derivates of function.
         loss.backward()
     with torch.no_grad():
         weight -= weight.grad * learning_rate

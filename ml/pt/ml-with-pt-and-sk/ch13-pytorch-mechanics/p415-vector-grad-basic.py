@@ -31,6 +31,13 @@ for i in range(0, 5):
     # verifying output of loss.backward...
 
     print("verifying output of loss.backward...(compare with DL/DW)")
+
+
+    # test1=DL/Dw = DL/DZ * DZ/DW 
+    # 1. DL/DZ=D/DZ (y-z)**2 = D/DZ y**2-2yz+z**2 = -2y + 2z = 2(z-y)
+    # 2. DZ/DW = D/DW w * x + b = x.
+    # 3. DL/DW = DL/DZ * DZ/DW = 2(z-y)x = 2x(z-y)  = 2x(w*x+B)-y
+
     test1=2 * x * ((w*x+b)-y)
     print("dL/dw    : ", w.grad)
     print("t        : ", test1[:5])

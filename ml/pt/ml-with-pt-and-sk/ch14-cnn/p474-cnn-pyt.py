@@ -15,6 +15,19 @@ import matplotlib.pyplot as plt
 import code
 import numpy as np
 #import PyQt5
+from functools import wraps 
+from datetime import datetime
+
+def print_fcn_name(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(dt_string, ": ", func.__name__, " entered...")
+        result = func(*args, **kwargs)
+        return result
+
+    return wrapper
 
 print(matplotlib.get_backend())
 #matplotlib.use("tkagg")
@@ -56,6 +69,7 @@ model.add_module('softmax', nn.Softmax(dim=1))
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+@print_fcn_name
 def train(model, num_epochs, train_dl, valid_dl):
     loss_hist_train = [0] * num_epochs
     accuracy_hist_train = [0] * num_epochs

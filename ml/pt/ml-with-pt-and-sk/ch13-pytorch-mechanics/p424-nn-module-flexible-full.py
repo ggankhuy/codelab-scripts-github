@@ -5,6 +5,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import code
+from functools import wraps 
+from datetime import datetime
 
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
@@ -12,6 +14,17 @@ from mlxtend.plotting import plot_decision_regions
 
 ENABLE_PLOT=0
 CONFIG_USE_ROCM=1
+
+def print_fcn_name(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(dt_string, ": ", func.__name__, " entered...")
+        result = func(*args, **kwargs)
+        return result
+
+    return wrapper
 
 torch.manual_seed(1)
 np.random.seed(1)
@@ -43,6 +56,7 @@ if ENABLE_PLOT:
     plt.show()
 
 class MyModule(nn.Module):
+    @print_fcn_name
     def __init__(self):
         super().__init__()
         l1=nn.Linear(2,4)
@@ -54,11 +68,13 @@ class MyModule(nn.Module):
         l=[l1, a1, l2, a2, l3, a3]
         self.module_list = nn.ModuleList(l)
 
+    @print_fcn_name
     def forward(self, x):
         for f in self.module_list:
             x=f(x)
         return x
 
+    @print_fcn_name
     def predict(self, x):
         x=torch.tensor(x, dtype=torch.float32)
         pred=self.forward(x)[:, 0]
@@ -80,6 +96,7 @@ train_dl = DataLoader(train_ds, batch_size, shuffle=True)
 torch.manual_seed(1)
 num_epochs=200
 
+@print_fcn_name
 def train(model, num_epochs, train_dl, x_valid, y_valid):
     loss_hist_train = [0] * num_epochs
     accuracy_hist_train = [0] * num_epochs
