@@ -38,9 +38,18 @@ for i in range(0, 5):
     # 2. DZ/DW = D/DW w * x + b = x.
     # 3. DL/DW = DL/DZ * DZ/DW = 2(z-y)x = 2x(z-y)  = 2x(w*x+B)-y
 
+    # test2=DL/db = DL/DZ * DZ/Db
+    # 1a. same as 1.
+    # 2a.DW/DB = d/db w * x  + b = 1
+    # 3a. DL/Db = DL/DZ * DZ/Db = 2(z-y) * 1 = 2(z-y) = 2 (w * x + b) -y
+    
     test1=2 * x * ((w*x+b)-y)
     print("dL/dw    : ", w.grad)
     print("t        : ", test1[:5])
+
+    test2=2 * ((w*x + b) - y)
+    print("dL/db    : ", b.grad)
+    print("t        : ", test2[:5])
 
     # update weights
 
