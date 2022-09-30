@@ -7,7 +7,7 @@ cuda = torch.device('cuda')
 CONFIG_ENABLE_TEST=1
 FEATURE_SIZE=5
 SAMPLE_SIZE=3
-w=torch.rand([SAMPLE_SIZE][FEATURE_SIZE], requires_grad=True, device='cuda')
+w=torch.rand(FEATURE_SIZE, requires_grad=True, device='cuda')
 b=torch.rand(FEATURE_SIZE, requires_grad=True, device='cuda')
 
 torch.manual_seed(1)
@@ -15,10 +15,12 @@ torch.manual_seed(1)
 # Create input(x), output (y, expected).
 # input(x) used for forward pass: z=w*x+b, z will be computed y rather than expected y. diff=(z-y)
 
-x=torch.rand(FEATURE_SIZE, device='cuda')
-y=torch.rand(FEATURE_SIZE, device='cuda')
+x_data=torch.rand([SAMPLE_SIZE, FEATURE_SIZE], device='cuda')
+y_data=torch.rand(FEATURE_SIZE, device='cuda')
+x=x_data[0:2]
+y=y_data
 
-for i in range(0, 5):
+for i in range(0, 2):
     print("-------- ", i, " ---------")
     z=torch.add(torch.mul(w, x), b)
     loss = (y-z).pow(2).sum()
@@ -47,11 +49,11 @@ for i in range(0, 5):
     
     test1=2 * x * ((w*x+b)-y)
     print("dL/dw    : ", w.grad)
-    print("t        : ", test1[:5])
+    print("t1       : ", test1)
 
     test2=2 * ((w*x + b) - y)
     print("dL/db    : ", b.grad)
-    print("t        : ", test2[:5])
+    print("t2       : ", test2)
 
     # update weights
 
