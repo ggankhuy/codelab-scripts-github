@@ -17,6 +17,9 @@ torch.manual_seed(1)
 
 x_data=torch.rand([SAMPLE_SIZE,FEATURE_SIZE], device='cuda')
 y_data=torch.rand(FEATURE_SIZE, device='cuda')
+x=x_data[0:1]
+
+#test1 and test2 no longer matches with loss.backward when two rows are taken as below.
 x=x_data[0:2]
 y=y_data
 
