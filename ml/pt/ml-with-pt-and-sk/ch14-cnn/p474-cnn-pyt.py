@@ -17,6 +17,7 @@ import numpy as np
 #import PyQt5
 from functools import wraps 
 from datetime import datetime
+m = nn.Softmax(dim=1)
 
 def print_fcn_name(func):
     @wraps(func)
