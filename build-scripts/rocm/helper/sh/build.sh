@@ -186,6 +186,46 @@ function MIOpen() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-4.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3." >> $LOG_SUMMARY ; fi
 }
+
+function hipAMD() {
+    CURR_BUILD=hipamd
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build ; cd build
+
+    pushd ../..
+    export HIPAMD_DIR="$(readlink -f hipamd)"
+    export HIP_DIR="$(readlink -f hip)"
+    export ROCclr_DIR="$(readlink -f ROCclr)"
+    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
+    echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
+    popd
+    sudo ln -s $ROCM_SRC_FOLDER/HIP $ROCM_SRC_FOLDER/hip
+    #cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" -DCMAKE_INSTALL_P$
+    cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" .. 2>&1 | tee $LOG$
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+
+}
+
+function hipBLAS() {
+    i=hipBLAS
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    pwd
+    ./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
 pushd $ROCM_SRC_FOLDER
 $COMP
+ret=$?
 popd
+exit $ret
