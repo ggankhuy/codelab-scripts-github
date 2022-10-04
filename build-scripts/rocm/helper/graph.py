@@ -68,6 +68,10 @@ for j in  dependencies:
             print("calling build script with " + str(j))
             out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j)])
             print("out: ", out)
+
+            if out != 0:
+                print("Failed to build " + str(out) + ". Unable to continue further.")  
+                quit(1)
         components_built.append(j)
 
 if TEST_MODE:

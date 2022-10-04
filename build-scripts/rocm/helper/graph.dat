@@ -5,3 +5,4 @@ ROCmValidationSuite: llvm hip
 COMGR: llvm ROCm-Device-Lib
 ROCT-Thunk-Interface: 
 AMDMIGraphX: protobuf rocBLAS MIOpen
+hipBLAS: rocBLAS
