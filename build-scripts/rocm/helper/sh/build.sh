@@ -161,7 +161,8 @@ function rocBLAS() {
     #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
     popd
     pushd $ROCM_SRC_FOLDER/$i
-    ./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+#   ./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 }
 
@@ -213,8 +214,9 @@ function hipAMD() {
 
 }
 
-function hipBLAS() {
-    i=hipBLAS
+
+function f1() {
+    i=$1
     CURR_BUILD=$i
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
@@ -222,6 +224,14 @@ function hipBLAS() {
     ./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+}
+
+function rocSOLVER() {
+    f1 rocSOLVER
+}
+
+function hipBLAS() {
+    f1 hipBLAS
 }
 
 pushd $ROCM_SRC_FOLDER
