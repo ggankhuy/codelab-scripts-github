@@ -64,7 +64,8 @@ def findDep(component):
             print("test mode: building " + component)
         else:
             print("calling build script with " + str(component))
-            out = subprocess.call(['sh','./sh/' + str(component) + '.sh'])
+#            out = subprocess.call(['sh','./build.sh comp=' + str(component)])
+            out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component)])
             print("out: ", out)
         components_built.append(component)
 
