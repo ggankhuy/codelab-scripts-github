@@ -51,6 +51,9 @@
 # RCP(obsolete)         | x         | TBD           |
 # 
 
+REPO_ONLY=0
+NON_REPO_ONLY=0
+    
 for var in "$@"
 do
     if [[ $var == "llvmno" ]]  ; then
@@ -77,6 +80,7 @@ do
 
     if [[ ! -z `echo "$var" | grep "ver="` ]]  ; then
         VERSION=`echo $var | cut -d '=' -f2`
+	echo "major version: $MINOR_VERSION" ; 
     fi
 
     if [[ ! -z `echo "$var" | grep "verminor="` ]]  ; then
@@ -90,9 +94,14 @@ do
     fi
 done
 
-REPO_ONLY=0
-NON_REPO_ONLY=0
 p1=$1
+p0=$0
+
+if [[ $p0 != "./build-rocm.sh" ]] ; then
+    echo "build-rocm.sh must run from current directory."
+    exit 1
+fi
+
 CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
@@ -105,8 +114,9 @@ f2=""
 
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
-ROCM_SRC_FOLDER=~/ROCm-$VERSION
-export ROCM_SRC_FOLDER=~/ROCm-$VERSION
+#ROCM_SRC_FOLDER=~/ROCm-$VERSION
+ROCM_SRC_FOLDER=`pwd`
+export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
@@ -242,7 +252,7 @@ if [[ -z $VERSION ]] ; then
 fi
 
 if [[ -z `cat ~/.bashrc | grep ROCM_SRC_FOLDER` ]] ; then
-    echo "export ROCM_SRC_FOLDER=~/ROCm-$VERSION" >> ~/.bashrc
+    echo "export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER" >> ~/.bashrc
 fi
 
 
@@ -627,6 +637,7 @@ if [[ $CONFIG_TEST == 0 ]] && [[ $REPO_ONLY == 1 ]] ; then
         cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-1.log
 		mkdir build; cd build
 		rm -rf ./*
+        echo "current dir: "  | tee $LOG_DIR/$CURR_BUILD-2.log
         pwd 2>&1 | tee $LOG_DIR/$CURR_BUILD-2.log
         CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
 		if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1." >> $LOG_SUMMARY ; fi
