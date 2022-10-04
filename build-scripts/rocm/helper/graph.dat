@@ -1,3 +1,6 @@
 rocblas: llvm hip 
+ROCm-Device-Lib: llvm
 rocfft: rocblas llvm
 rvs: llvm hip 
+COMGR: llvm ROCm-Device-Lib
+ROCT-Thunk-Interface: 
