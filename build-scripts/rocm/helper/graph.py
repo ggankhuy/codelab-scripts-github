@@ -19,8 +19,6 @@ except Exception as msg:
     print(msg)
     exit(1)
 
-#out = subprocess.call(['sh','./sh/prereq.sh'])
-
 def findDep(component):
     print("---------------------")
     print("findDep entered: p1: ", component)
@@ -30,7 +28,6 @@ def findDep(component):
         print("findDep: component is empty, exiting...")
         return 1
 
-#   time.sleep(1)
     for i in content:
         if i == "":
             print("empty line...")
@@ -57,18 +54,25 @@ def findDep(component):
                 break
     print("did not find " + component + " as build target, try building, (could be leaf)...")
 
-    if component in components_built:
-        print(component + " is already built, bypassing...")
+findDep(component)
+
+print("dependencies: ", dependencies)
+
+for j in  dependencies:
+    if j in components_built:
+        print(j + " is already built, bypassing...")
     else:
         if TEST_MODE == 1:
-            print("test mode: building " + component)
+            print("test mode: building " + j)
         else:
-            print("calling build script with " + str(component))
-#            out = subprocess.call(['sh','./build.sh comp=' + str(component)])
-            out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component)])
+            print("calling build script with " + str(j))
+            out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j)])
             print("out: ", out)
-        components_built.append(component)
+        components_built.append(j)
 
-findDep(component)
+if TEST_MODE:
+    print("test mode: building " + str(component))
+else:
+    out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component)])
 #print("Final dependency list:")
 #print(dependencies)
