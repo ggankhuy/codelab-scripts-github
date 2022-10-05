@@ -113,6 +113,10 @@ function rocr_debug_agent() {
     f3 rocprofiler
 }
 
+function clang_ocl() {
+    f3 clang_ocl
+}
+
 function COMGR() {
     CURR_BUILD=ROCm-CompilerSupport
     build_entry $CURR_BUILD
@@ -458,6 +462,18 @@ function roctracer() {
     popd
 
 }
+
+function ROCgdb() {
+    CURR_BUILD=ROCgdb
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    ./configure
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
 pushd $ROCM_SRC_FOLDER
 $COMP
 ret=$?
