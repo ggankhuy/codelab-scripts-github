@@ -109,6 +109,10 @@ function rocprofiler() {
     f3 rocprofiler
 }
 
+function rocr_debug_agent() {
+    f3 rocprofiler
+}
+
 function COMGR() {
     CURR_BUILD=ROCm-CompilerSupport
     build_entry $CURR_BUILD
@@ -271,6 +275,27 @@ function f2() {
     popd
 }
 
+function rocThrust() {
+    f2a rocThrust
+}
+
+function f2a() {
+    i=$1
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build; cd build
+    rm -rf ./*
+    CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
+
 function rocSOLVER() { 
     f1 rocSOLVER 
 }
@@ -408,6 +433,31 @@ function f4 () {
     popd
 }
 
+function ROCR_Runtime() {
+    i=ROCR-Runtime
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i/src
+    mkdir build; cd build
+    cmake -DIMAGE_SUPPORT=OFF .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
+function roctracer() {
+    i=roctracer
+    CURR_BUILD=$i
+    build_entry $i
+    $PKG_EXEC install rpm -y
+    pushd $ROCM_SRC_FOLDER/$i
+    ./build.sh
+    popd
+
+}
 pushd $ROCM_SRC_FOLDER
 $COMP
 ret=$?
