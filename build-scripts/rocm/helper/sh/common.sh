@@ -1,3 +1,11 @@
+CONFIG_TEST=0
+FAST_INSTALL=0
+ESSENTIAL_INSTALL=0
+CONFIG_BUILD_PACKAGE=0
+CONFIG_BYPASS_LLVM=0
+CONFIG_DISABLE_rocSOLVER=1
+CONFIG_DISABLE_hipBLAS=1
+
 function build_entry () {
     t2=$SECONDS
     if  [[ ! -z $t1 ]] ; then
@@ -39,3 +47,18 @@ VERSION="5.2"
 MINOR_VERSION="0"
 mkdir /log/rocmbuild/ -p
 ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/
+
+if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
+    echo "will build packages..."
+    CONFIG_BUILD_PKGS_LOC=/rocm-packages/
+    BUILD_TARGET=package
+    INSTALL_SH_PACKAGE="-p"
+    INSTALL_TARGET=package
+    mkdir -p $CONFIG_BUILD_PKGS_LOC
+else
+    echo "will not build packages..."
+    BUILD_TARGET=""
+    INSTALL_SH_PACKAGE=""
+    INSTALL_TARGET=install
+fi
+
