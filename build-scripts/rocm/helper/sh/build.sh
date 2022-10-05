@@ -221,7 +221,26 @@ function f1() {
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
     pwd
-    ./install.sh -icd | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $i == "rocSOLVER" ]] ; then
+        ./install.sh -i 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    else
+        ./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    fi
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
+function hipCUB() {
+    i=hipCUB
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build; cd build
+    CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
 }
@@ -232,6 +251,25 @@ function rocSOLVER() {
 
 function hipBLAS() {
     f1 hipBLAS
+}
+
+function hipSPARSE() {
+    f1 hipSPARSE
+}
+
+function rocSPARSE() {
+    f1 rocSPARSE
+}
+
+function HIP_Examples() {
+    CURR_BUILD=HIP-Examples
+    i=$CURR_BUILD
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+
 }
 
 pushd $ROCM_SRC_FOLDER
