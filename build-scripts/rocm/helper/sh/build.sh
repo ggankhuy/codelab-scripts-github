@@ -5,6 +5,7 @@ do
     if [[ $var == *"comp="* ]]  ; then
         comp=`echo $var | cut -d '=' -f2`
         COMP=$comp
+        COMP_OLD=$comp
         echo COMP old: $COMP
         COMP=$(echo $COMP | sed "s/-/_/g")
         echo COMP new: $COMP
@@ -17,7 +18,6 @@ function llvm() {
     pushd $CURR_BUILD
     mkdir build ; cd build
     echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release"
-    sleep 10
     cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
@@ -27,9 +27,12 @@ function llvm() {
 }
 
 function f3 () {
-    CURR_BUILD=$1
+    i=$1
     build_entry $i
-    pushd $CURR_BUILD
+    CURR_BUILD=$i
+    pwd 
+    #pushd $CURR_BUILD
+    pushd $COMP_OLD
     mkdir build; cd build
     cmake -DCMAKE_PREFIX_PATH=/opt/rocm -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -87,17 +90,23 @@ function ROCmValidationSuite() {
 }
 
 function ROCT_Thunk_Interface() {
-    i=ROCT-Thunk-Interface
-    CURR_BUILD=$i
-    build_entry $i
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build; cd build
-    cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    f3 ROCT-Thunk-Interface
+}
+
+function rocm_bandwidth_test() {
+    f3 rocm_bandwidth_test
+}
+
+function rocm_cmake () {
+    f3 rocm_cmake
+}
+
+function rocm_smi_lib () {
+    f3 rocm_smi_lib
+}
+
+function rocprofiler() {
+    f3 rocprofiler
 }
 
 function COMGR() {
@@ -262,20 +271,20 @@ function f2() {
     popd
 }
 
-function rocSOLVER() {
-    f1 rocSOLVER
+function rocSOLVER() { 
+    f1 rocSOLVER 
 }
-
-function hipBLAS() {
-    f1 hipBLAS
+function hipBLAS() { 
+    f1 hipBLAS 
 }
-
-function hipSPARSE() {
-    f1 hipSPARSE
+function hipSPARSE() { 
+    f1 hipSPARSE 
 }
-
-function rocSPARSE() {
-    f1 rocSPARSE
+function rocSPARSE() { 
+    f1 rocSPARSE 
+}
+function rocFFT() { 
+    f1 rocFFT 
 }
 
 function HIP_Examples() {
@@ -289,6 +298,115 @@ function HIP_Examples() {
 
 }
 
+function MIVisionX() {
+    CURR_BUILD=MIVisionX
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build; cd build
+    #python MIVisionX-setup.py
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    cmake .. | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+}
+
+function rocRAND() {
+    f5 rocRAND
+}
+
+function rccl() {
+    f5 rccl
+}
+function f5() {
+    CURR_BUILD=$1
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    # this no longer working.
+
+    if [[ $CURR_BUILD == "rocRAND" ]] ; then
+        ./install -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    else
+        ./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    fi
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
+    #mkdir build ; cd build 
+    #CXX=/opt/rocm/bin/hipcc cmake .. 2>&1 | tee -a $CURR_BUILD
+    #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
+    #popd
+}
+
+function rocALUTION () {
+    i=rocALUTION
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build ; cd build
+
+    cmake .. -DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD-1.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 2" >> $LOG_SUMMARY ; fi
+    make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-3.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3" >> $LOG_SUMMARY ; fi
+    popd
+
+}
+
+function ROCm_OpenCL_Runtime() {
+
+    pushd $ROCM_SRC_FOLDER/ROCclr
+    PWD=$ROCM_SRC_FOLDER/ROCclr/build
+    OPENCL_DIR=$ROCM_SRC_FOLDER/ROCm-OpenCL-Runtime/
+    ROCclr_DIR=$ROCM_SRC_FOLDER/ROCclr/
+    OLDPWD=$ROCM_SRC_FOLDER/ROCclr
+
+    #CURR_BUILD=ROCclr
+    #build_entry $CURR_BUILD
+    #mkdir build; cd build
+    #cmake -DOPENCL_DIR="$OPENCL_DIR" -DCMAKE_INSTALL_PREFIX=/opt/rocm/rocclr .. 2>&1 | tee $LOG_DIR/ROCclr-1.log
+    #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+
+    #make -j$NPROC 2>&1 | tee -$LOG_DIR/ROCclr-2.log
+    #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+
+    #make install 2>&1 | tee -a $LOG_DIR/ROCclr-3.log
+    #popd
+
+    CURR_BUILD=ROCm-OpenCL-Runtime
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir -p build; cd build
+    cmake -DUSE_COMGR_LIBRARY=ON -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER//ROCclr/build;/opt/rocm/" ..  | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+
+}
+
+function ROCmValidationSuite() {
+    f4 ROCmValidationSuite
+}
+
+function f4 () {
+    i=$1
+    CURR_BUILD=$i
+    pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
+    mkdir build ; cd build
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+    make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
+    popd
+}
 
 pushd $ROCM_SRC_FOLDER
 $COMP
