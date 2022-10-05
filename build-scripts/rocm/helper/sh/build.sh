@@ -26,8 +26,8 @@ function llvm() {
     popd
 }
 
-function rocminfo()  {
-    CURR_BUILD=rocminfo
+function f3 () {
+    CURR_BUILD=$1
     build_entry $i
     pushd $CURR_BUILD
     mkdir build; cd build
@@ -37,6 +37,14 @@ function rocminfo()  {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+}
+
+function rocminfo()  {
+    f3 rocminfo
+}
+
+function MIOpenGEMM() {
+    f3 MIOpenGEMM
 }
 
 function ROCm_Device_Lib() {
@@ -170,6 +178,7 @@ function MIOpen() {
     i=MIOpen
     CURR_BUILD=$i
     build_entry $i
+    pushd $i
     cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-1.log
     mkdir build; cd build
     rm -rf ./*
@@ -186,6 +195,7 @@ function MIOpen() {
 
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-4.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3." >> $LOG_SUMMARY ; fi
+    popd
 }
 
 function hipAMD() {
@@ -230,8 +240,15 @@ function f1() {
     popd
 }
 
+function rocPRIM() {
+    f2 rocPRIM
+}
 function hipCUB() {
-    i=hipCUB
+    f2 hipCUB
+}
+
+function f2() {
+    i=$1
     CURR_BUILD=$i
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
@@ -271,6 +288,7 @@ function HIP_Examples() {
     popd
 
 }
+
 
 pushd $ROCM_SRC_FOLDER
 $COMP
