@@ -62,3 +62,37 @@ else
     INSTALL_TARGET=install
 fi
 
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo "OS_NAME: $OS_NAME"
+case "$OS_NAME" in
+   "Ubuntu")
+        echo "Ubuntu is detected..."
+        PKG_EXEC=apt
+        apt-get update
+        for i in python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
+        do  
+            $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
+            if [[ $? -ne 0 ]] ; then 
+                echo "Failed to install $i" | tee -a $LOG_SUMMARY_L2 ; 
+            fi 
+        done
+      #gem install json
+        
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
+      $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
+      ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
+      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac 
+
