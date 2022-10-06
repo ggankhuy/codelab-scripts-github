@@ -7,6 +7,15 @@ function install_python() {
     PYTHON_FULL_NAME=Python-$PYTHON_VER
     PYTHON_TAR=$PYTHON_FULL_NAME.tgz
 
+    CURR_VER=`python3 --version  | cut -d ' ' -f2`
+
+    if [[ $CURR_VER == $PYTHON_VER ]] ; then
+        echo "Current installed version is same as the one being installed..., exiting"
+        return 0
+    else
+        echo "Installing..."
+    fi
+
     sudo yum -y install epel-release
     sudo yum update -y
     sudo yum groupinstall "Development Tools" -y
