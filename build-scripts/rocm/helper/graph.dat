@@ -10,3 +10,4 @@ hipBLAS: rocBLAS rocSOLVER
 hipSPARSE: rocSPARSE
 rocSPARSE: rocPRIM
 rocALUTION: hipAMD rocBLAS
+rocRAND: hipAMD
