@@ -97,8 +97,7 @@ export LANG=C.UTF-8
 VERSION="5.2"
 MINOR_VERSION="0"
 mkdir /log/rocmbuild/ -p
-<<<<<<< HEAD
-=======
+ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/
 ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/
 
 if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
@@ -150,4 +149,3 @@ case "$OS_NAME" in
 esac 
 
 install_python
->>>>>>> 6190ecb28ae2676e75b7ea71d393cf193a09ffa6
