@@ -1,8 +1,9 @@
-rocblas: llvm hip 
-ROCm-Device-Lib: llvm
-rocfft: rocblas llvm
-ROCmValidationSuite: llvm hip 
-COMGR: llvm ROCm-Device-Lib
+rocBLAS: hipAMD
+hipAMD: COMGR
+ROCm-Device-Lib:
+rocfft: rocblas
+ROCmValidationSuite: hipAMD
+COMGR: ROCm-Device-Lib
 ROCT-Thunk-Interface: 
 AMDMIGraphX: protobuf rocBLAS MIOpen
 hipBLAS: rocBLAS rocSOLVER
