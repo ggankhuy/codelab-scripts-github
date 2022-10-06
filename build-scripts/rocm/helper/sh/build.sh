@@ -186,8 +186,8 @@ function rocBLAS() {
     #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
     popd
     pushd $ROCM_SRC_FOLDER/$i
-#   ./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
-    ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh -icd --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
+#   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 }
 
