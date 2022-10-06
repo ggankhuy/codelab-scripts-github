@@ -66,18 +66,8 @@ function ROCm_Device_Lib() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
+    #cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
 }
-
-function ROCm_CompilerSupport() {
-    CURR_BUILD=ROCm-CompilerSupport
-    build_entry $CURR_BUILD
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    cd lib/comgr/
-    LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
-    COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
-}
-
 
 function ROCmValidationSuite() {
     CURR_BUILD=ROCmValidationSuite
@@ -121,26 +111,36 @@ function clang_ocl() {
 }
 
 function COMGR() {
+
     CURR_BUILD=ROCm-CompilerSupport
     build_entry $CURR_BUILD
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    cd lib/comgr/
-    LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
+        LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
+    DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs
     COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
-    CURR_BUILD=COMGR
-    build_entry $CURR_BUILD
-    mkdir -p "$COMGR/build"
-    cd "$COMGR/build"
+    mkdir -p "$DEVICE_LIBS/build"
+    pushd "$DEVICE_LIBS/build"
+    pwd
+    echo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
+    make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
 
+    mkdir -p $ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr/build
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    cd lib/comgr/build
+    pwd
+    echo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    make test 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    #make test 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
 }
 
 function protobuf() {
@@ -478,6 +478,7 @@ function ROCgdb() {
 }
 
 pushd $ROCM_SRC_FOLDER
+llvm
 $COMP
 ret=$?
 popd
