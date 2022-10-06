@@ -80,5 +80,6 @@ if TEST_MODE:
     print("test mode: building " + str(component))
 else:
     out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component)])
+
 #print("Final dependency list:")
 #print(dependencies)

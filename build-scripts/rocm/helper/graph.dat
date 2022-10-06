@@ -3,7 +3,6 @@ hipAMD: COMGR
 ROCm-Device-Lib:
 rocfft: rocblas
 ROCmValidationSuite: hipAMD
-COMGR: ROCm-Device-Lib
 ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
 AMDMIGraphX: protobuf rocBLAS MIOpen
