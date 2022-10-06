@@ -27,6 +27,7 @@ LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 #ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_SRC_FOLDER=`pwd`
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-5.2/
 export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
 LOG_SUMMARY=$LOG_DIR/build-summary.log
@@ -38,4 +39,3 @@ export LANG=C.UTF-8
 VERSION="5.2"
 MINOR_VERSION="0"
 mkdir /log/rocmbuild/ -p
-ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/

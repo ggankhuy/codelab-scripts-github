@@ -1,7 +1,10 @@
 source sh/common.sh
 
+echo "build.sh entered..."
+
 for var in "$@"
 do
+    echo var: $var
     if [[ $var == *"comp="* ]]  ; then
         comp=`echo $var | cut -d '=' -f2`
         COMP=$comp

@@ -50,12 +50,14 @@ def findDep(component):
                             dependencies.append(i)
                         else:
                             print("dependency is empty...")
-                    findDep(i)
+                        findDep(i)
                 break
-    print("did not find " + component + " as build target, try building, (could be leaf)...")
+    #print("did not find " + component + " as build target, try building, (could be leaf)...")
+    print("findDep.done..")
+    print("--------------")
 
 findDep(component)
-
+dependencies.reverse()
 print("dependencies: ", dependencies)
 
 for j in  dependencies:
