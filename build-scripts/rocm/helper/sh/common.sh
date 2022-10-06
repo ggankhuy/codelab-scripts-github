@@ -98,7 +98,7 @@ VERSION="5.2"
 MINOR_VERSION="0"
 mkdir /log/rocmbuild/ -p
 ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/
-ROCM_SRC_FOLDER=/gg/git/ROCm-5.2/
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-5.2/
 
 if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
     echo "will build packages..."
