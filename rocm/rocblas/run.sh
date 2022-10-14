@@ -1,1 +1,2 @@
 ROCBLAS_LAYER=6 ./build/a.out
+TENSILE_DB=0x08000 ROCBLAS_LAYER=6 ./build/a.out
