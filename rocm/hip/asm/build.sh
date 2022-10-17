@@ -1,6 +1,6 @@
 FILENAME=mm
-mkdir build
-cd build
-ln -s ../$FILENAME.cpp .
+mkdir -p build/$FILENAME
+cd build/$FILENAME
+ln -s ../../$FILENAME.cpp .
 hipcc --save-temps $FILENAME.cpp -o $FILENAME.out
-cd ..
+cd ../..
