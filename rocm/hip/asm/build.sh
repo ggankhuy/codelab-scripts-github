@@ -1,5 +1,6 @@
+FILENAME=mm
 mkdir build
 cd build
-ln -s ../p41.cpp .
-hipcc --save-temps p41.cpp -o p41.out
+ln -s ../$FILENAME.cpp .
+hipcc --save-temps $FILENAME.cpp -o $FILENAME.out
 cd ..
