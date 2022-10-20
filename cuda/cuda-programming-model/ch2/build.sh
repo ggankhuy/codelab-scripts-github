@@ -1,7 +1,7 @@
-FILENAME=p33
-mkdir build ; cd build
-ln -s ../$FILENAME.cu .
+FILENAME=p35
+mkdir build/$FILENAME -p  ; cd build/$FILENAME
+ln -s ../../$FILENAME.cu .
 nvcc $FILENAME.cu -o $FILENAME.out
 ./$FILENAME.out
-cd ..
+cd ../..
 
