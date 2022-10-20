@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     
     // define grid and block structure.
 
-    dim3 block(3);
+    dim3 block(3, 2, 5);
     dim3 grid ((nElem + block.x-1)/block.x);
 
     // check grid and block dimension from host side
