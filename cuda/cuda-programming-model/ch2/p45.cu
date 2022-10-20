@@ -14,7 +14,7 @@
 }
 */
 
-double cpuSeconds() {
+double cpusecond() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
     return ((double)tp.tv_sec * (double)tp.tv_usec*1.e-6);
@@ -73,19 +73,19 @@ int main(int argc, char **argv) {
 
     // initialize data at host side.
 
-    iStart = cpuSeconds();
+    iStart = cpusecond();
     initialData(h_A, nElem);
     initialData(h_B, nElem);
-    iElaps = cpuSeconds() - iStart;
+    iElaps = cpusecond() - iStart;
 
     memset(hostRef, 0, nBytes);
     memset(gpuRef, 0, nBytes);
 
     // add vector at host side for result checks.
 
-    iStart = cpuSeconds();
+    iStart = cpusecond();
     sumArraysOnHost(h_A, h_B, hostRef, nElem);
-    iElaps = cpuSeconds()  - iStart;
+    iElaps = cpusecond()  - iStart;
     
     // malloc device global memory.
 
@@ -105,11 +105,11 @@ int main(int argc, char **argv) {
     dim3 block(iLen);
     dim3 grid((nElem + block.x - 1)/block.x);
     
-    iStart = cpuSeconds();
+    iStart = cpusecond();
     sumArraysOnGPU <<<grid, block>>>(d_A, d_B, d_C, nElem);
     cudaDeviceSynchronize();
-    iElaps = cpuSeconds() - iStart;
-    printf("sumArraysOnGPU<<<%d, %d>>> Time elapsed %f, sec\n", grid.x, block.x, iElaps);
+    iElaps = cpusecond() - iStart;
+    printf("sumArraysOnGPU<<<%d, %d>>> Time elapsed %f sec\n", grid.x, block.x, iElaps);
 
     // copy kernel result back to host side
 
