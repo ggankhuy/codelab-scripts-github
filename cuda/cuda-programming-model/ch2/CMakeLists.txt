@@ -1,10 +1,13 @@
 cmake_minimum_required (VERSION 2.6)
-project (p35)
+project (p33 LANGUAGES CXX CUDA)
 
 # The version number.
 
 set (test_VERSION_MAJOR 1)
 set (test_VERSION_MINOR 0)
+#SET(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
+#SET(CMAKE_CXX_COMPILER CMAKE_CUDA_COMPILER)
+
 
 # should we use our own math functions?
 
@@ -18,16 +21,13 @@ set(
     -O3 -gencode arch=compute_22,code=sm_22
     )
 
-SET(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
-SET(CMAKE_CXX_COMPILER CMAKE_CUDA_COMPILER)
-
 #cuda_add_executable(
-#    P35
-#    P35.cu
+#    p33
+#    p33.cu
 #)
 
-add_executable(p35 p35.cu)
-set_target_properties(p35 PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(p33 p33.cu)
+set_target_properties(p33 PROPERTIES LINKER_LANGUAGE CXX)
 
 
 # configure a header file to pass some of the CMake settings
