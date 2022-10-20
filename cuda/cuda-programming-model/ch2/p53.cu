@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <cuda_runtime.h>
+
 void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) { 
         float *ia = A;
         float *ib = B;
@@ -11,14 +14,15 @@ void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) {
 __global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, int ny) {
     unsigned int ix = threadIdx.x + blockIdx.x + blockDim.x;
     unsigned int iy = threadIdx.y + blockIdx.y + blockDim.y;
+    unsigned int idx = iy * nx + ix;
 
     if (ix < nx && iy < ny) {
         MatC[idx] = MatA[idx] + MatB[idx];
     }
 }
 
-int main(int argc, argv**argv) {
-    printf("%s Starting...\n, argv[0]);
+int main(int argc, char ** argv) {
+    printf("%s Starting...\n", argv[0]);
 
     // set up device.
 
@@ -76,14 +80,14 @@ int main(int argc, argv**argv) {
     int dimx = 32;
     int dimy = 32;
     dim3 block(dimx, dimy);
-    dim4 grid((nx + block.x -1 )/block.x, (ny+block.y-1)/block.y);
+    dim3 grid((nx + block.x -1 )/block.x, (ny+block.y-1)/block.y);
 
     iStart = cpuSecond();
     sumMatrixOnGPU2D <<< grid, block >>> (d_MatA, d_MatB, d_MatC, nx, ny);
     cudaDeviceSynchronize();
     iElaps = cpuSecond();
     
-    printf("sumMatrixOnGPU2D <<<(%d, %d), (%d, %d) >>> elapsed %f sec\n", grid.x, grid.y, block.x, block.y, block.z, iElaps);
+    printf("sumMatrixOnGPU2D <<<(%d, %d), (%d, %d) >>> elapsed %f sec\n", grid.x, grid.y, block.x, block.y, iElaps);
 
     // copy kernel result back to host side.
 
