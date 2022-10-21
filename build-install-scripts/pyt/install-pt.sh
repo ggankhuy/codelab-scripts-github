@@ -1,7 +1,7 @@
 # tested on centos 8 stream ok, needs testing on ubuntu if needed, likely break.
 # may need to test as nonroot user.
 
-source lib.sh
+source ../lib.sh
 yum update -y
 yum install -y wget sudo nano tree git dstat
 install_python
