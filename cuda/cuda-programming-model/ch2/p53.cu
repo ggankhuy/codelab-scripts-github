@@ -75,8 +75,8 @@ int main(int argc, char ** argv) {
     printf("Using Device %d: %s\n", dev, deviceProp.name);
     cudaSetDevice(dev);
 
-    int nx = 1<14;
-    int ny = 1<14;
+    int nx = 1<<14;
+    int ny = 1<<14;
     
     int nxy = nx * ny;
     int nBytes = nxy * sizeof(float);
