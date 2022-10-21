@@ -1,6 +1,6 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
-#include "lib1/lib1.h"
+//#include "lib1/lib1.h"
 
 __global__ void checkIndex(void) {
     printf("threadIdx: (%d, %d, %d) blockIdx: (%d, %d, %d) blockDim (%d, %d, %d) gridDim: (%d, %d, %d)\n", \
