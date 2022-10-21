@@ -10,7 +10,7 @@
 double cpuSecond() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec * (double)tp.tv_usec*1.e-6);
+    return ((double)tp.tv_sec + (double)tp.tv_usec*1.e-6);
 }
 
 void initialData(float * ip, int size) {
@@ -31,7 +31,7 @@ void checkResult(float * hostRef, float * gpuRef, const int N) {
 
     for (int i = 0; i < N; i++) 
     {
-        if (abs(hostRef[i] - gpuRef[i] < epsilon)) 
+        if (abs(hostRef[i] - gpuRef[i] > epsilon)) 
         {
             match = 0;
             printf("Arrays do not match!\n");
@@ -128,7 +128,7 @@ int main(int argc, char ** argv) {
     iStart = cpuSecond();
     sumMatrixOnGPU2D <<< grid, block >>> (d_MatA, d_MatB, d_MatC, nx, ny);
     cudaDeviceSynchronize();
-    iElaps = cpuSecond();
+    iElaps = cpuSecond() - iStart;
     
     printf("sumMatrixOnGPU2D <<<(%d, %d), (%d, %d) >>> elapsed %f sec\n", grid.x, grid.y, block.x, block.y, iElaps);
 
