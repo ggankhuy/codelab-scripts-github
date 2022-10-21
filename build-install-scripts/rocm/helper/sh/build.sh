@@ -2,6 +2,8 @@ source sh/common.sh
 
 echo "build.sh entered..."
 
+CONFIG_BUILD_LLVM=1
+
 for var in "$@"
 do
     echo var: $var
@@ -12,6 +14,11 @@ do
         echo COMP old: $COMP
         COMP=$(echo $COMP | sed "s/-/_/g")
         echo COMP new: $COMP
+    fi
+
+    if [[ $var == "--llvmno" ]] ; then
+        echo "Will bypass llvm build."
+        CONFIG_BUILD_LLVM=0
     fi
 done
 
@@ -241,7 +248,6 @@ function hipAMD() {
     #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-
 }
 
 
@@ -347,7 +353,15 @@ function MIVisionX() {
 }
 
 function rocRAND() {
-    f5 rocRAND
+    CURR_BUILD=rocRAND
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build; cd build
+    hip_DIR="$ROCM_SRC_FOLDER/hipamd"
+    echo CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipamd" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/build" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    make -j`nproc` install | tee $LOG_DIR/$CURR_BUILD.log
+#   f5 rocRAND
 }
 
 function rccl() {
@@ -478,7 +492,9 @@ function ROCgdb() {
 }
 
 pushd $ROCM_SRC_FOLDER
-llvm
+if [[ $CONFIG_BUILD_LLVM -eq 1 ]] ; then
+    llvm
+fi
 $COMP
 ret=$?
 popd

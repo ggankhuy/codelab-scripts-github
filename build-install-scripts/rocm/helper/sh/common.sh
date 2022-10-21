@@ -94,7 +94,7 @@ export LANG=C.UTF-8
 VERSION="5.2"
 MINOR_VERSION="0"
 mkdir /log/rocmbuild/ -p
-ROCM_SRC_FOLDER=/root/gg/git/ROCm-5.3/
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-5.2/
 export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 
 if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
