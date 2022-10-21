@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <cuda_runtime.h>
-#include "../lib/lib.h"
+#include <lib1.h>
 
 void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) { 
         float *ia = A;
