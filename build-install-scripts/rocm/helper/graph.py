@@ -60,6 +60,7 @@ findDep(component)
 dependencies.reverse()
 print("dependencies: ", dependencies)
 
+counter = 0
 for j in  dependencies:
     if j in components_built:
         print(j + " is already built, bypassing...")
@@ -68,18 +69,22 @@ for j in  dependencies:
             print("test mode: building " + j)
         else:
             print("calling build script with " + str(j))
-            out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j)])
+            if counter == 0:
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j)])
+            else:
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno'])
             print("out: ", out)
 
             if out != 0:
                 print("Failed to build " + str(out) + ". Unable to continue further.")  
                 quit(1)
         components_built.append(j)
+        counter += 1
 
 if TEST_MODE:
     print("test mode: building " + str(component))
 else:
-    out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component)])
+    out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component), '--llvmno'])
 
 #print("Final dependency list:")
 #print(dependencies)
