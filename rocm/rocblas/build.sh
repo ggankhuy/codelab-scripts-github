@@ -2,7 +2,7 @@ ROCM_VERSION=5.2.0
 rm -rf build/*
 mkdir build
 cd build
-for FILENAME in sscal example_sgemm; do 
+for FILENAME in sscal example_sgemm example_sgemm_strided_batched; do 
     echo building $FILENAME...
     ln -s ../$FILENAME.cpp
     for i in helpers.hpp ArgParser.hpp ; do 
