@@ -1,4 +1,3 @@
-
 import re
 import time
 import sys
@@ -10,6 +9,7 @@ import networkx as nx
 DEBUG=1
 TEST_MODE=1
 components_built=[]
+DEBUG_L2=0
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 CONFIG_DAG_ENABLE=1 
@@ -24,8 +24,10 @@ except Exception as msg:
     print("Component not specified, will build everything.")
 
 def buildDag(content):
-    print("---------------------")
-    print("buildDag entered: p1: ")
+    # we havent implemented partial dag base on component specified.
+    if DEBUG:
+        print("---------------------")
+        print("buildDag entered: p1: ")
     found=0
 
     if not content:
@@ -35,31 +37,41 @@ def buildDag(content):
     graph = nx.DiGraph()
 
     for i in content:
-        print("................")
+        if DEBUG:
+            print("................")
         if i == "":
-            print("empty line...")
+            if DEBUG:
+                print("empty line...")
         else:
             #rocBLAS: hipAMD -> rocBLAS child, hipAMD parent. 
             child=i.split(':')[0].strip()
             parents=i.split(':')[1].strip().split(' ')
             for i in range(0, len(parents)):
                 parents[i].strip()
-                
-            print("child: ", child)
-            print("parent: ", parents)
+    
+            if DEBUG:            
+                print("child: ", child)
+                print("parent: ", parents)
 
             for i in parents:
                 if i:
-                    print("Adding parent: ", i, "child: ", child)
+                    if DEBUG:
+                        print("Adding parent: ", i, "child: ", child)
                     graph.add_edges_from([(i.strip(), child)])
                 else:
-                    print("empty parent, bypassing...")
+                    if DEBUG:
+                        print("empty parent, bypassing...")
 
-    #print("did not find " + component + " as build target, try building, (could be leaf)...")
-    print(graph.nodes())
-    print(list(nx.topological_sort(graph)))
-    print("buidlDag: done..")
-    print("--------------")
+    if DEBUGL2:
+        print(graph.nodes())
+    list_dag=list(nx.topological_sort(graph))
+
+    if DEBUG:
+        print("sorted list: " 
+        print("buidlDag: done..")
+        print("--------------")
+
+    return list_dag
 
 def findDep(component):
     print("---------------------")
@@ -99,9 +111,45 @@ def findDep(component):
     print("--------------")
 
 if CONFIG_DAG_ENABLE:
+    finalList=[]
 
-    buildDag(content)
+    file2=open("list.dat")
+    content2=file1.readlines()
+    list_dag=buildDag(content)
+    list_non_dag=[]
 
+    for i in content2:
+        i=i.strip()
+       
+        if i in list_dag:
+            if DEBUG:
+                print(i, " is in DAG list, bypassing...")
+        else:
+            if DEBUG:
+                print("adding ", i)
+                list_non_dag.append(i)
+
+    # At this stage, both lists are complete and separate.
+
+    # logic:
+    # if component:
+        # component in graph.dat
+            # build dag and build everything in dag
+        # else (component in list.dag
+            # only build component.
+    # else (not component):
+        # build dag and build everything in dag.
+
+    if component:
+        if component in list_dag:
+            finalList=list_dag + list_non_dag
+        elif component in content1: 
+            finalList.append(component)
+    else:
+        finalList=list_dag + list_non_dag
+
+    print("Final list: ", finalList)
+    
     '''
 
     from matplotlib import pyplot as plt
