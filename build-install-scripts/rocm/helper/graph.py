@@ -4,20 +4,58 @@ import time
 import sys
 import os
 import subprocess
+from matplotlib import pyplot as plt
+import networkx as nx
 
 DEBUG=1
-TEST_MODE=0
+TEST_MODE=1
 components_built=[]
 
+# Enable directed aclyctic graph implementation of depdendencies wip.
+CONFIG_DAG_ENABLE=1 
+ 
 file1=open("graph.dat")
 content=file1.readlines()
-dependencies=[]
 
 try:
     component=sys.argv[1]
 except Exception as msg:
     print(msg)
-    exit(1)
+    print("Component not specified, will build everything.")
+
+def buildDag(content):
+    print("---------------------")
+    print("buildDag entered: p1: ")
+    found=0
+
+    if not content:
+        print("File is not read.")
+        exit(1)
+
+    graph = nx.DiGraph()
+
+    for i in content:
+        if i == "":
+            print("empty line...")
+        else:
+            #rocBLAS: hipAMD -> rocBLAS child, hipAMD parent. 
+            child=i.split(':')[0].strip()
+            parents=i.split(':')[1].split(' ')
+                
+            print("child: ", child)
+            print("parent: ", parents)
+
+            for i in parents:
+                if i:
+                    print("Adding ", i, child)
+                    graph.add_edges_from([(i.strip(), child)])
+                else:
+                    print("empty parent...")
+
+    #print("did not find " + component + " as build target, try building, (could be leaf)...")
+    print(list(nx.topological_sort(graph)))
+    print("buidlDag: done..")
+    print("--------------")
 
 def findDep(component):
     print("---------------------")
@@ -56,6 +94,23 @@ def findDep(component):
     print("findDep.done..")
     print("--------------")
 
+if CONFIG_DAG_ENABLE:
+
+    buildDag(content)
+
+    '''
+
+    from matplotlib import pyplot as plt
+    import networkx as nx
+    graph = nx.DiGraph()
+    graph.add_edges_from([("root", "a"), ("a", "b"), ("a", "e"), ("b", "c"), ("b", "d"), ("d", "e")])
+    print(nx.shortest_path(graph, 'root', 'e'))
+    #print(nx.dag_longest_path(graph, 'root', 'e'))
+    print(list(nx.topological_sort(graph)))
+    '''
+
+    
+    exit(0)
 findDep(component)
 dependencies.reverse()
 print("dependencies: ", dependencies)
