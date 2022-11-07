@@ -1,6 +1,5 @@
 rocBLAS: hipAMD
 hipAMD: COMGR
-ROCm-Device-Lib:
 rocfft: rocblas
 ROCmValidationSuite: hipAMD
 ROCT-Thunk-Interface: 
