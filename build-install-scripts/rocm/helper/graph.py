@@ -8,14 +8,16 @@ import networkx as nx
 
 DEBUG=1
 TEST_MODE=1
-components_built=[]
 DEBUG_L2=0
+components_built=[]
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
+
 CONFIG_DAG_ENABLE=1 
  
 file1=open("graph.dat")
 content=file1.readlines()
+component=None
 
 try:
     component=sys.argv[1]
@@ -62,12 +64,12 @@ def buildDag(content):
                     if DEBUG:
                         print("empty parent, bypassing...")
 
-    if DEBUGL2:
+    if DEBUG_L2:
         print(graph.nodes())
     list_dag=list(nx.topological_sort(graph))
 
     if DEBUG:
-        print("sorted list: " 
+        print("sorted list: ", list_dag)
         print("buidlDag: done..")
         print("--------------")
 
@@ -113,20 +115,24 @@ def findDep(component):
 if CONFIG_DAG_ENABLE:
     finalList=[]
 
+    print("Reading list.dat")
     file2=open("list.dat")
-    content2=file1.readlines()
+    content2=file2.readlines()
     list_dag=buildDag(content)
     list_non_dag=[]
 
     for i in content2:
         i=i.strip()
-       
+        if re.search("\#", i):
+            if DEBUG:
+                print("- Bypassing commented line:", i)
+            continue   
         if i in list_dag:
             if DEBUG:
-                print(i, " is in DAG list, bypassing...")
+                print("-", i, " is in DAG list, bypassing...")
         else:
             if DEBUG:
-                print("adding ", i)
+                print("- adding ", i)
                 list_non_dag.append(i)
 
     # At this stage, both lists are complete and separate.
