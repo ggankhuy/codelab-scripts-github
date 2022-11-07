@@ -35,24 +35,28 @@ def buildDag(content):
     graph = nx.DiGraph()
 
     for i in content:
+        print("................")
         if i == "":
             print("empty line...")
         else:
             #rocBLAS: hipAMD -> rocBLAS child, hipAMD parent. 
             child=i.split(':')[0].strip()
-            parents=i.split(':')[1].split(' ')
+            parents=i.split(':')[1].strip().split(' ')
+            for i in range(0, len(parents)):
+                parents[i].strip()
                 
             print("child: ", child)
             print("parent: ", parents)
 
             for i in parents:
                 if i:
-                    print("Adding ", i, child)
+                    print("Adding parent: ", i, "child: ", child)
                     graph.add_edges_from([(i.strip(), child)])
                 else:
-                    print("empty parent...")
+                    print("empty parent, bypassing...")
 
     #print("did not find " + component + " as build target, try building, (could be leaf)...")
+    print(graph.nodes())
     print(list(nx.topological_sort(graph)))
     print("buidlDag: done..")
     print("--------------")
