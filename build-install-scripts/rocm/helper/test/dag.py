@@ -21,12 +21,13 @@ def recur_pred(lNode, indent):
     print(indent, "predecessors returned for ", lNode, ": ", preds)
     indent+="  "
     for i in preds:
+        recur_pred(i, indent)
+
         if not i in all_pred:
             print("adding ", i, " to all_pred")
             all_pred.append(i)
         else:
             print(i, " is already in all_pred list, bypassing.")
-        recur_pred(i, indent)
 
 print("pred: e:")
 print(list(graph.predecessors('e')))
