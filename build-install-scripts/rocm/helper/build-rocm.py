@@ -21,16 +21,42 @@ indent=""
 
 CONFIG_DAG_ENABLE=1 
  
-file1=open("graph.dat")
-content=file1.readlines()
+for i in sys.argv:
+    print("Processing ", i)
+    try:
+        if re.search("--dep=", i):
+           depFile=i.split('=')[1]
+
+        if re.search("--component", i):
+            component=i.split('=')[1]
+
+        if re.search("--help", i):
+            dispHelp()
+
+if not component:
+    print("Component not specified, will build everything...")
+   
+if not depFile:
+    depFile=dep.dat
+
+depFileHandle=open(depFile)
+content=depFileHandle.readlines()
 component=None
 
-try:
-    component=sys.argv[1]
-except Exception as msg:
-    print(msg)
-    print("Component not specified, will build everything.")
 
+def dispHelp:
+    print("----------build-rocm.py v1.0")
+    print("Usage:")
+    print("--help: display this help menu.")
+    print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
+    print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
+    print("Example:")
+    print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS".
+    print("Build everything:   python3 build-rocm.py"
+    print("Build hipfft specify gg.dat as dependency file: python3 build-rocm.py --component=hipfft --dep=gg.dat")
+    exit(0) 
+
+filename=
 #   recurring predecessor to find all ancentral predecessors from current node.
 #   buildDag must have been called b efore calling this function to populate graph.
 
@@ -146,8 +172,8 @@ if CONFIG_DAG_ENABLE:
     if DEBUG:
         print("Reading list.dat")
 
-    file2=open("list.dat")
-    content2=file2.readlines()
+    listDatHandle=open("list.dat")
+    content2=listDatHandle.readlines()
     list_dag=buildDag(content)
     list_non_dag=[]
 
