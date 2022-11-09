@@ -16,6 +16,8 @@ graph = nx.DiGraph()
 
 all_pred=[]
 indent=""
+depFile=None
+component=None
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -32,31 +34,32 @@ for i in sys.argv:
 
         if re.search("--help", i):
             dispHelp()
+    except Exception as msg:
+        print(msg)
+        exit(1)
 
 if not component:
     print("Component not specified, will build everything...")
    
 if not depFile:
-    depFile=dep.dat
+    depFile="dep.dat"
 
 depFileHandle=open(depFile)
 content=depFileHandle.readlines()
 component=None
 
-
-def dispHelp:
+def dispHelp():
     print("----------build-rocm.py v1.0")
     print("Usage:")
     print("--help: display this help menu.")
     print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
     print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
     print("Example:")
-    print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS".
-    print("Build everything:   python3 build-rocm.py"
+    print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
+    print("Build everything:   python3 build-rocm.py")
     print("Build hipfft specify gg.dat as dependency file: python3 build-rocm.py --component=hipfft --dep=gg.dat")
     exit(0) 
 
-filename=
 #   recurring predecessor to find all ancentral predecessors from current node.
 #   buildDag must have been called b efore calling this function to populate graph.
 
