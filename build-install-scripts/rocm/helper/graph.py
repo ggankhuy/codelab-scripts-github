@@ -6,7 +6,7 @@ import subprocess
 from matplotlib import pyplot as plt
 import networkx as nx
 
-DEBUG=1
+DEBUG=0
 TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
@@ -35,15 +35,22 @@ except Exception as msg:
 #   buildDag must have been called b efore calling this function to populate graph.
 
 def recur_pred(lNode, indent):
-    print(indent, "recur_pred: ", lNode)
+    if DEBUG:
+        print(indent, "recur_pred: ", lNode)
+
     preds=list(graph.predecessors(lNode))
-    print(indent, "predecessors returned for ", lNode, ": ", preds)
+
+    if DEBUG:
+        print(indent, "predecessors returned for ", lNode, ": ", preds)
+
     indent+="  "
     for i in preds:
         recur_pred(i, indent)
 
         if not i in all_pred:
-            print("adding ", i, " to all_pred")
+            if DEBUG:
+                print("adding ", i, " to all_pred")
+
             all_pred.append(i)
         else:
             print(i, " is already in all_pred list, bypassing.")
@@ -136,7 +143,9 @@ def findDep(component):
 if CONFIG_DAG_ENABLE:
     finalList=[]
 
-    print("Reading list.dat")
+    if DEBUG:
+        print("Reading list.dat")
+
     file2=open("list.dat")
     content2=file2.readlines()
     list_dag=buildDag(content)
