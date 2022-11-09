@@ -10,6 +10,12 @@ DEBUG=1
 TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
+graph = nx.DiGraph()
+
+# used by def recur_pred
+
+all_pred=[]
+indent=""
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -25,6 +31,23 @@ except Exception as msg:
     print(msg)
     print("Component not specified, will build everything.")
 
+#   recurring predecessor to find all ancentral predecessors from current node.
+#   buildDag must have been called b efore calling this function to populate graph.
+
+def recur_pred(lNode, indent):
+    print(indent, "recur_pred: ", lNode)
+    preds=list(graph.predecessors(lNode))
+    print(indent, "predecessors returned for ", lNode, ": ", preds)
+    indent+="  "
+    for i in preds:
+        recur_pred(i, indent)
+
+        if not i in all_pred:
+            print("adding ", i, " to all_pred")
+            all_pred.append(i)
+        else:
+            print(i, " is already in all_pred list, bypassing.")
+
 def buildDag(content):
     # we havent implemented partial dag base on component specified.
     if DEBUG:
@@ -35,8 +58,6 @@ def buildDag(content):
     if not content:
         print("File is not read.")
         exit(1)
-
-    graph = nx.DiGraph()
 
     for i in content:
         if DEBUG:
@@ -147,8 +168,11 @@ if CONFIG_DAG_ENABLE:
         # build dag and build everything in dag.
 
     if component:
+        if DEBUG:
+            print("component specified: ", component)
         if component in list_dag:
-            finalList=list_dag + list_non_dag
+            recur_pred(component, indent)
+            finalList=all_pred + [component]
         elif component in content1: 
             finalList.append(component)
     else:
