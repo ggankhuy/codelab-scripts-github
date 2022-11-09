@@ -6,7 +6,7 @@ import subprocess
 from matplotlib import pyplot as plt
 import networkx as nx
 
-DEBUG=0
+DEBUG=1
 TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
@@ -27,10 +27,10 @@ for i in sys.argv:
     print("Processing ", i)
     try:
         if re.search("--dep=", i):
-           depFile=i.split('=')[1]
+           depFile=i.split('=')[1].strip()
 
         if re.search("--component", i):
-            component=i.split('=')[1]
+            component=i.split('=')[1].strip()
 
         if re.search("--help", i):
             dispHelp()
@@ -40,13 +40,17 @@ for i in sys.argv:
 
 if not component:
     print("Component not specified, will build everything...")
+else:
+    print("Component: ", component)
    
 if not depFile:
     depFile="dep.dat"
+    print("dependency file not specified, using default: ", depFile)
+else:
+    print("dependency file: ", depFile)
 
 depFileHandle=open(depFile)
-content=depFileHandle.readlines()
-component=None
+depFileContent=depFileHandle.readlines()
 
 def dispHelp():
     print("----------build-rocm.py v1.0")
@@ -84,18 +88,18 @@ def recur_pred(lNode, indent):
         else:
             print(i, " is already in all_pred list, bypassing.")
 
-def buildDag(content):
+def buildDag(depFileContent):
     # we havent implemented partial dag base on component specified.
     if DEBUG:
         print("---------------------")
         print("buildDag entered: p1: ")
     found=0
 
-    if not content:
+    if not depFileContent:
         print("File is not read.")
         exit(1)
 
-    for i in content:
+    for i in depFileContent:
         if DEBUG:
             print("................")
         if i == "":
@@ -132,111 +136,64 @@ def buildDag(content):
 
     return list_dag
 
-def findDep(component):
-    print("---------------------")
-    print("findDep entered: p1: ", component)
-    found=0
+finalList=[]
 
-    if not component:
-        print("findDep: component is empty, exiting...")
-        return 1
+if DEBUG:
+    print("Reading list.dat")
 
-    for i in content:
-        if i == "":
-            print("empty line...")
-        else:
-            if re.findall('^' + component, i):
-                print("found the line...")
-                found=1
-                deps=i.split(":")[1]
-                depsToken=deps.strip().split(' ')
-                print("depsToken for ", component, ": ", depsToken)
+listDatHandle=open("list.dat")
+listDatContent=listDatHandle.readlines()
+list_dag=buildDag(depFileContent)
+list_non_dag=[]
 
-                for  i in depsToken:
-                    if i in dependencies:
-                        if DEBUG:
-                            print(i, ": already added...")
-                    else:
-                        if i:
-                            if DEBUG:
-                                print("adding dep: ", i)
-                            dependencies.append(i)
-                        else:
-                            print("dependency is empty...")
-                        findDep(i)
-                break
-    #print("did not find " + component + " as build target, try building, (could be leaf)...")
-    print("findDep.done..")
-    print("--------------")
-
-if CONFIG_DAG_ENABLE:
-    finalList=[]
-
-    if DEBUG:
-        print("Reading list.dat")
-
-    listDatHandle=open("list.dat")
-    content2=listDatHandle.readlines()
-    list_dag=buildDag(content)
-    list_non_dag=[]
-
-    for i in content2:
-        i=i.strip()
-        if re.search("\#", i):
-            if DEBUG:
-                print("- Bypassing commented line:", i)
-            continue   
+for i in listDatContent:
+    i=i.strip()
+    if re.search("\#", i):
+        if DEBUG:
+            print("- Bypassing commented line:", i)
+        continue   
         if i in list_dag:
             if DEBUG:
                 print("-", i, " is in DAG list, bypassing...")
-        else:
-            if DEBUG:
-                print("- adding ", i)
-                list_non_dag.append(i)
-
-    # At this stage, both lists are complete and separate.
-
-    # logic:
-    # if component:
-        # component in graph.dat
-            # build dag and build everything in dag
-        # else (component in list.dag
-            # only build component.
-    # else (not component):
-        # build dag and build everything in dag.
-
-    if component:
-        if DEBUG:
-            print("component specified: ", component)
-        if component in list_dag:
-            recur_pred(component, indent)
-            finalList=all_pred + [component]
-        elif component in content1: 
-            finalList.append(component)
     else:
-        finalList=list_dag + list_non_dag
+        if DEBUG:
+            print("- adding ", i)
+        list_non_dag.append(i)
 
-    print("Final list: ", finalList)
+# At this stage, both lists are complete and separate.
+
+# logic:
+# if component:
+    # component in graph.dat
+        # build dag and build everything in dag
+    # else (component in list.dag
+        # only build component.
+# else (not component):
+    # build dag and build everything in dag.
+
+if component:
+    if DEBUG:
+        print("component specified: ", component)
+    if component in list_dag:
+        if DEBUG:
+            print("building partial dag list (recur_pred())")
+        recur_pred(component, indent)
+        finalList=all_pred + [component]
+    elif component in listDatContent:
+        print(Component, " you specified is not in depFile. Will build only this component.")
+        finalList=[component]
+    else:
+        print("ERR: Fatal error, it looks like you specified unsupport component.")
+        print("Unable to find component: ", component, " in list of component currently supported: ", all_pred)
+        exit(1)
+else:
+    print("building list for everything to build...")
+    finalList=list_dag + list_non_dag
+
+print("Final list: ", finalList)
     
-    '''
-
-    from matplotlib import pyplot as plt
-    import networkx as nx
-    graph = nx.DiGraph()
-    graph.add_edges_from([("root", "a"), ("a", "b"), ("a", "e"), ("b", "c"), ("b", "d"), ("d", "e")])
-    print(nx.shortest_path(graph, 'root', 'e'))
-    #print(nx.dag_longest_path(graph, 'root', 'e'))
-    print(list(nx.topological_sort(graph)))
-    '''
-
-    
-    exit(0)
-findDep(component)
-dependencies.reverse()
-print("dependencies: ", dependencies)
-
 counter = 0
-for j in  dependencies:
+for j in finalList:
     if j in components_built:
         print(j + " is already built, bypassing...")
     else:
@@ -256,10 +213,3 @@ for j in  dependencies:
         components_built.append(j)
         counter += 1
 
-if TEST_MODE:
-    print("test mode: building " + str(component))
-else:
-    out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(component), '--llvmno'])
-
-#print("Final dependency list:")
-#print(dependencies)
