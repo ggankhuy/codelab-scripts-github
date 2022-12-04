@@ -7,10 +7,12 @@ import subprocess
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=1
+TEST_MODE=0
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
+rocmVersionMajor=5.2
+rocmVersionMinor=0
 
 # used by def recur_pred
 
@@ -22,7 +24,21 @@ component=None
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
 CONFIG_DAG_ENABLE=1 
- 
+
+def dispHelp():
+    print("----------build-rocm.py v1.0")
+    print("Usage:")
+    print("--help: display this help menu.")
+    print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
+    print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
+    print("--vermajor=<RocmVersion> specify rocm version. i.e. 5.2")
+    print("--verminor=<RocmMinorVersion> specify rocm minor version. If not specified, defaults to 0.")
+    print("Example:")
+    print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
+    print("Build everything:   python3 build-rocm.py")
+    print("Build hipfft specify gg.dat as dependency file: python3 build-rocm.py --component=hipfft --dep=gg.dat")
+    exit(0) 
+
 for i in sys.argv:
     print("Processing ", i)
     try:
@@ -34,6 +50,13 @@ for i in sys.argv:
 
         if re.search("--help", i):
             dispHelp()
+
+        if re.search("--vermajor", i):
+            rocmVersionMajor=i.split('=')[1].strip()
+
+        if re.search("--verminor", i):
+            rocmVersionMinor=i.split('=')[1].strip()
+
     except Exception as msg:
         print(msg)
         exit(1)
@@ -51,18 +74,6 @@ else:
 
 depFileHandle=open(depFile)
 depFileContent=depFileHandle.readlines()
-
-def dispHelp():
-    print("----------build-rocm.py v1.0")
-    print("Usage:")
-    print("--help: display this help menu.")
-    print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
-    print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
-    print("Example:")
-    print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
-    print("Build everything:   python3 build-rocm.py")
-    print("Build hipfft specify gg.dat as dependency file: python3 build-rocm.py --component=hipfft --dep=gg.dat")
-    exit(0) 
 
 #   recurring predecessor to find all ancentral predecessors from current node.
 #   buildDag must have been called b efore calling this function to populate graph.
@@ -202,9 +213,9 @@ for j in finalList:
         else:
             print("calling build script with " + str(j))
             if counter == 0:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j)])
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             else:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno'])
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno', 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             print("out: ", out)
 
             if out != 0:

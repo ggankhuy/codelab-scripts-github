@@ -1,5 +1,3 @@
-source sh/common.sh
-
 echo "build.sh entered..."
 
 CONFIG_BUILD_LLVM=1
@@ -16,11 +14,24 @@ do
         echo COMP new: $COMP
     fi
 
+    if [[ $var == *"verminor="* ]]  ; then
+        echo "processing var: $var"
+        verminor=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ $var == *"vermajor"* ]] ; then
+        echo "processing var: $var"
+        vermajor=`echo $var | cut -d '=' -f2`
+    fi
+
     if [[ $var == "--llvmno" ]] ; then
         echo "Will bypass llvm build."
         CONFIG_BUILD_LLVM=0
     fi
 done
+
+echo major/minor: $verminor, $vermajor
+source sh/common.sh
 
 function llvm() {
     CURR_BUILD=llvm-project
