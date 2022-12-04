@@ -3,7 +3,7 @@ import time
 import sys
 import os
 import subprocess
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import networkx as nx
 
 DEBUG=1
