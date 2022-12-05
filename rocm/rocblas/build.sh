@@ -7,7 +7,7 @@ for j in helpers.hpp ArgParser.hpp ; do
     ln -s ../$j .
 done
 
-for i in sscal example_sgemm ; do
+for i in sscal example_sgemm example_sgemm_strided_batched; do
     ln -s ../$i.cpp
     hipcc --offload-arch=gfx908 --save-temps -c $i.cpp
     hipcc $i.o  /opt/rocm-5.3.0/lib/librocblas.so -o $i.out
