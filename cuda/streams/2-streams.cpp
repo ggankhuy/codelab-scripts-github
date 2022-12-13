@@ -1,49 +1,62 @@
 /*
-Simple vector addition. Mem alloc-d using default cudaMalloc.
+Simple vector fastition. Mem alloc-d using default cudaMalloc.
 */
 #include <stdio.h>
 #include <cstlib.h>
 #include <cstdio.h>
 
-#define N 8192
+__global__ void fast(int d*a) {
+    size_t start = clock64();
+    size_t elapsed = 0;
 
-__global__ void add(int *a, int*b, int *c) {
-	int tid = blockIdx.x;
-//	if (tid < N) 
-	c[tid] = a[tid] + b[tid];
+    while (elapsed < 100000000) {
+        elapsed = clock64() - start;
+    }
+}
+__global__ void slow(int d*a) {
+    size_t start = clock64();
+    size_t elapsed = 0;
+
+    while (elapsed < 1000000000) {
+        elapsed = clock64() - start;
+    }
 }
 
 int main (void) {
-	//int a[N], b[N], c[N];
-	int *dev_a, *dev_b, *dev_c;
-    int *a, *b, *c;
+    const int num_iter = 2;
+    const int num_streams = 2;
+    int *h_a[num_streams];
+    int *d_a[num_streams];
 
-	cudaMalloc( (void**)&dev_a, N * sizeof(int) );
-	cudaMalloc( (void**)&dev_b, N * sizeof(int) );
-	cudaMalloc( (void**)&dev_c, N * sizeof(int) );
+    cudaStream_t streams[num_streams];
+    size_t numbytes_a = 1000000;
 
-    a = (int*)malloc( N * sizeof(float));
-    b = (int*)malloc( N * sizeof(float));
-    c = (int*)malloc( N * sizeof(float));
+    for (int i = 0 ; i < num_streams ; i++ ) {
+        cudaStreamCreate(&streams[i]);
+        cudaHostMalloc((void**)&h_a[i], numbytes_a);
+        cudaMalloc(&d_a[i], numbytes_a);
+    }
 
-	for (int i = 0; i < N ; i ++ ) {
-		a[i]  = i;
-		b[i] = i + 200;
-	}
-	cudaMemcpy(dev_a, a, N * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(dev_b, b, N * sizeof(int), cudaMemcpyHostToDevice);
+    // Expected bahavior if fast_first = 1
 
-	add<<<N,1>>> (dev_a, dev_b, dev_c);
+    bool fast_first = 0;
+    for (int iter = 0 ; iter < num_streams * num_iter ; ++iter) {
+        int i = iter % num_streams;
+        cudaMemcpyAsync(d_a[i], h_a[i], cudaMemcpyHostToDevice, streams[i]);
+        if (i==fast_first) 
+            slow<<<1, 256, 0, streams[i]>>>(d_a[i]);
+        else
+            fast<<<1, 256, 0, streams[i]>>>(d_a[i]);
 
-	cudaMemcpy(c, dev_c, N * sizeof(int), cudaMemcpyDeviceToHost);
+        cudamemcpyAsync(h_a[i], d_a[i], cudaMemcpyDeviceToHost, streams[i]);
+    }
 
-	for (int i = 0; i < N; i+=1000 ) {
-		printf("%d: %d + %d = %d\n", i, a[i], b[i], c[i]);
-	}
+    cudaDeviceSynchronize();
 
-	cudaFree(dev_a);
-	cudaFree(dev_b);
-	cudaFree(dev_c);
+    for (int i =0 ; i < num_streams ; i++ ) {
+        cudaStreamDestroy(streams[i]);
+        cudaFree(d_a[i]);
+    }   
 
 	return 0;
 }
