@@ -1,11 +1,8 @@
-/*
-Simple vector fastition. Mem alloc-d using default cudaMalloc.
-*/
+#include <cstdlib>
+#include <cstdio>
 #include <stdio.h>
-#include <cstlib.h>
-#include <cstdio.h>
 
-__global__ void fast(int d*a) {
+__global__ void fast(int * d_a) {
     size_t start = clock64();
     size_t elapsed = 0;
 
@@ -13,7 +10,8 @@ __global__ void fast(int d*a) {
         elapsed = clock64() - start;
     }
 }
-__global__ void slow(int d*a) {
+
+__global__ void slow(int *d_a) {
     size_t start = clock64();
     size_t elapsed = 0;
 
@@ -33,7 +31,7 @@ int main (void) {
 
     for (int i = 0 ; i < num_streams ; i++ ) {
         cudaStreamCreate(&streams[i]);
-        cudaHostMalloc((void**)&h_a[i], numbytes_a);
+        cudaHostAlloc((void**)&h_a[i], numbytes_a, cudaHostAllocDefault);
         cudaMalloc(&d_a[i], numbytes_a);
     }
 
@@ -42,13 +40,13 @@ int main (void) {
     bool fast_first = 0;
     for (int iter = 0 ; iter < num_streams * num_iter ; ++iter) {
         int i = iter % num_streams;
-        cudaMemcpyAsync(d_a[i], h_a[i], cudaMemcpyHostToDevice, streams[i]);
+        cudaMemcpyAsync(d_a[i], h_a[i], numbytes_a, cudaMemcpyHostToDevice, streams[i]);
         if (i==fast_first) 
             slow<<<1, 256, 0, streams[i]>>>(d_a[i]);
         else
             fast<<<1, 256, 0, streams[i]>>>(d_a[i]);
 
-        cudamemcpyAsync(h_a[i], d_a[i], cudaMemcpyDeviceToHost, streams[i]);
+        cudaMemcpyAsync(h_a[i], d_a[i], numbytes_a, cudaMemcpyDeviceToHost, streams[i]);
     }
 
     cudaDeviceSynchronize();
