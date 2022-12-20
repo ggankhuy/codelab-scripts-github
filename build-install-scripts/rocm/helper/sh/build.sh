@@ -1,6 +1,7 @@
 echo "build.sh entered..."
 
 CONFIG_BUILD_LLVM=1
+NPROC=`nproc`
 
 for var in "$@"
 do
@@ -51,6 +52,7 @@ function f3 () {
     i=$1
     build_entry $i
     CURR_BUILD=$i
+    BUILD_TARGET=package
     pwd 
     #pushd $CURR_BUILD
     pushd $COMP_OLD
