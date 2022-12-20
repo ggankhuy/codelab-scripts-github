@@ -17,24 +17,24 @@ int main (void) {
     int i ;
     
 
-    a = (int*)malloc(N * sizeof(int));
+    //a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
 
-	for (int i = 0; i < N ; i ++ ) {
+	/*for (int i = 0; i < N ; i ++ ) {
 		a[i]  = i;
-	}
+	}*/
 
-   	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+   	//hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
     
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
     //hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
 
-    hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
+    //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
 
     hipFree(dev_a);
-    free(a);
+    //free(a);
     
 	return 0;
 }
