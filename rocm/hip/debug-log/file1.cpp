@@ -1,10 +1,3 @@
-/**
- */
-
-/**
- */
-
-// System includes
 #include <stdio.h>
 #include <assert.h>
 #include "hip/hip_runtime.h"
