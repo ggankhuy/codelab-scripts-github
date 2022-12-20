@@ -2,8 +2,16 @@
 
 #include <stdio.h>
 #include "hip/hip_runtime.h"
+#include <chrono>
+#include <iostream>
+#include <iomanip>
 
-#define N 64
+using namespace std;
+
+// 512M
+
+#define N 536870912
+#define N 8
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 __global__ void add(int *a, int*b, int *c) {
@@ -18,13 +26,26 @@ int main (void) {
     
 
     a = (int*)malloc(N * sizeof(int));
+
  	hipMalloc(&dev_a, N * sizeof(int) );
 
 	for (int i = 0; i < N ; i ++ ) {
 		a[i]  = i;
 	}
 
+    #if timer == 1
+    auto start = std::chrono::high_resolution_clock::now();
    	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+    #endif
+
+    #if timer == 1
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = (end - start);
+    auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
+    int ns_fractional = static_cast<int>(ns.count());
+    cout << setw(30) << "hipMemcpy duration: " << ns_fractional << " ns or " << ns_fractional / 1000000 << " ms" << endl;
+    #endif
+
     hipFree(dev_a);
     free(a);
     
