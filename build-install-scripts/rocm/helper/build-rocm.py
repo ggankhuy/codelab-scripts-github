@@ -111,7 +111,7 @@ def buildDag(depFileContent):
         exit(1)
 
     for i in depFileContent:
-        if DEBUG:
+        if DEBUG_L2:
             print("................")
         if i == "":
             if DEBUG:
@@ -123,17 +123,17 @@ def buildDag(depFileContent):
             for i in range(0, len(parents)):
                 parents[i].strip()
     
-            if DEBUG:            
+            if DEBUG_L2:            
                 print("child: ", child)
                 print("parent: ", parents)
 
             for i in parents:
                 if i:
-                    if DEBUG:
+                    if DEBUG_L2:
                         print("Adding parent: ", i, "child: ", child)
                     graph.add_edges_from([(i.strip(), child)])
                 else:
-                    if DEBUG:
+                    if DEBUG_L2:
                         print("empty parent, bypassing...")
 
     if DEBUG_L2:
@@ -154,23 +154,28 @@ if DEBUG:
 
 listDatHandle=open("list.dat")
 listDatContent=listDatHandle.readlines()
+if DEBUG:
+    print("Building list_dag...")
 list_dag=buildDag(depFileContent)
 list_non_dag=[]
 
+if DEBUG:
+    print("Building list_non_dag...")
 for i in listDatContent:
     i=i.strip()
     if re.search("\#", i):
-        if DEBUG:
+        if DEBUG_L2:
             print("- Bypassing commented line:", i)
         continue   
         if i in list_dag:
             if DEBUG:
                 print("-", i, " is in DAG list, bypassing...")
     else:
-        if DEBUG:
+        if DEBUG_L2:
             print("- adding ", i)
         list_non_dag.append(i)
 
+print("list_non_dag: ", list_non_dag)
 # At this stage, both lists are complete and separate.
 
 # logic:
@@ -190,8 +195,8 @@ if component:
             print("building partial dag list (recur_pred())")
         recur_pred(component, indent)
         finalList=all_pred + [component]
-    elif component in listDatContent:
-        print(Component, " you specified is not in depFile. Will build only this component.")
+    elif component in list_non_dag:
+        print(component, " you specified is not in depFile. Will build only this component.")
         finalList=[component]
     else:
         print("ERR: Fatal error, it looks like you specified unsupport component.")
