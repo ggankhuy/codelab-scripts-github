@@ -6,7 +6,8 @@ __global__ void fast(int * d_a) {
     size_t start = clock64();
     size_t elapsed = 0;
 
-    while (elapsed < 100000000) {
+//  while (elapsed < 100000000) {
+    while (elapsed < 100000) {
         elapsed = clock64() - start;
     }
 }
@@ -15,14 +16,15 @@ __global__ void slow(int *d_a) {
     size_t start = clock64();
     size_t elapsed = 0;
 
-    while (elapsed < 1000000000) {
+//   while (elapsed < 1000000000) {
+    while (elapsed < 1000000) {
         elapsed = clock64() - start;
     }
 }
 
 int main (void) {
     const int num_iter = 2;
-    const int num_streams = 2;
+    const int num_streams = 4;
     int *h_a[num_streams];
     int *d_a[num_streams];
 
