@@ -35,13 +35,16 @@ class LogisticRegressionGD:
         self.losses_=[]
 
         for i in range(self.n_iter):
+
+            #net_input.shape: [70,]            
+
             net_input=self.net_input(X)
 
-            #output.shape: [100]
+            #output.shape: [70,]
 
             output=self.activation(net_input)
 
-            #errors.shape: [100]
+            #errors.shape: [70,]
 
             errors=(y-output)
 
@@ -55,7 +58,7 @@ class LogisticRegressionGD:
  
             loss=(-y.dot(np.log(output)) - ((1-y).dot(np.log(1-output)))/X.shape[0])
             
-            # self.losses_: 1-d array updated with loss. 
+            # self.losses_: 1-d array len same as n_iter: 1000.
             self.losses_.append(loss)
         return self            
 
