@@ -35,8 +35,12 @@ class AdalineGD:
                 X,y=self._shuffle(X,y)
             losses=[]
 
+            counter = 0 
             for xi, target in zip(X,y):
+    
+                print(f'{counter}:x xi: {xi.shape}, target: {target.shape}')
                 losses.append(self._update_weights(xi, target))
+                counter+=1
 
             avg_loss=np.mean(losses)
             self.losses_.append(avg_loss)
