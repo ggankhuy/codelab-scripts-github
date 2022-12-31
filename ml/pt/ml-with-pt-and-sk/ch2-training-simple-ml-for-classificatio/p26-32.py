@@ -3,9 +3,12 @@
 import numpy as np
 import os
 import pandas as pd
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import tkinter
 
-CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_PLOT=1
 
 class Perceptron:
     '''
@@ -73,7 +76,7 @@ X=df.iloc[0:100, [0, 2]].values
 
 if CONFIG_ENABLE_PLOT:
     plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', label='Setosa')
-    plt.scatter(X[50:100, 0], X[60:100, 1], color='blue', marker='s', label='Versicolor')
+    plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='s', label='Versicolor')
     plt.xlabel('Sepal length [cm]')
     plt.ylabel('Petal length [cm]')
 
@@ -86,7 +89,7 @@ ppn.fit(X,y)
 print(f'X,y shapes: {X.shape}, {y.shape}')
 print(f'ppn.errors_: {ppn.errors_}')
 if CONFIG_ENABLE_PLOT:
-    plt.plot(range(1, len(ppn.errors_)+1, ppn.errors_, marker='o'))
+    plt.plot(range(1, len(ppn.errors_)+1), ppn.errors_, marker='o')
     plt.xlabel('Epochs')
     plt.ylabel('Number of updates')
     plt.show()
