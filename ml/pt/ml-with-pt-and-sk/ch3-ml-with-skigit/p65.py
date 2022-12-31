@@ -18,7 +18,7 @@ print(f'z shape/min/max: {z.shape}/{min(z)}/{max(z)}')
 print(f'sigma z shape/min/max: {sigma_z.shape}/{min(sigma_z)}/{max(sigma_z)}')
 c1=[loss_1(x) for x in z]
 plt.plot(sigma_z, c1, label='L(w,b) if y=1')
-c0=[loss_1(x) for x in z]
+c0=[loss_0(x) for x in z]
 print(f'c1 len/min/max: {len(c1)}/{min(c1)}/{max(c1)}')
 print(f'c0 len/min/max: {len(c0)}/{min(c0)}/{max(c0)}')
 plt.plot(sigma_z, c0, linestyle='--', label='L(w,b) if y=0')
