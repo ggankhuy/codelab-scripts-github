@@ -1,5 +1,7 @@
 #implementing adaline.
 #note that plot code is omitted in p42, 44, 45.
+#plot_decision_regions must use clf rather than classifier keyword (in book) to work.
+#graph#2: loss graphs does not look same.
 
 import numpy as np
 import os
@@ -102,7 +104,6 @@ X_std[:,1]=X[:,1]-X[:,1].mean()/X[:,1].std()
 if CONFIG_ENABLE_PLOT:
     ada_gd=AdalineGD(n_iter=20, eta=0.5)
     ada_gd.fit(X_std, y)
-    #plot_decision_regions(X_std, y, classifier=ada_gd)
     plot_decision_regions(X_std, y, clf=ada_gd)
     plt.title('Adaline - Gradient descent')
     plt.xlabel('Sepal length [standardized]')
