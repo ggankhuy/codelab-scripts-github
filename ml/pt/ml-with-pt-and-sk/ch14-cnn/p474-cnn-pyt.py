@@ -19,6 +19,8 @@ from functools import wraps
 from datetime import datetime
 m = nn.Softmax(dim=1)
 
+CONFIG_ENABLE_PLOT=1
+
 def print_fcn_name(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -29,11 +31,6 @@ def print_fcn_name(func):
         return result
 
     return wrapper
-
-print(matplotlib.get_backend())
-#matplotlib.use("tkagg")
-
-CONFIG_ENABLE_PLOT=0
 
 image_path = "./"
 
@@ -114,7 +111,7 @@ def train(model, num_epochs, train_dl, valid_dl):
 #code.interact(local=locals())
 
 torch.manual_seed(1)
-num_epochs=5
+num_epochs=3
 hist=train(model, num_epochs, train_dl, valid_dl)
 
 if CONFIG_ENABLE_PLOT: 
@@ -140,9 +137,8 @@ pred=model(mnist_test_dataset.data.unsqueeze(1) / 255. )
 is_correct = (torch.argmax(pred, dim=1) == mnist_test_dataset.targets).float()
 print(f'Test accuracy: {is_correct.mean():.4f}')
 
-'''
 if CONFIG_ENABLE_PLOT:
-    fig=plt.figure(figure=(12, 4))
+    fig=plt.figure(figsize=(12, 4))
    
     for i in range(12):
         ax=fig.add_subplot(2,6,i+1)
@@ -158,4 +154,3 @@ if CONFIG_ENABLE_PLOT:
             verticalalignment='center',
             transform=ax.transAxes)
     plt.show()
-'''
