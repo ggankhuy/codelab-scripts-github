@@ -19,14 +19,15 @@ from functools import wraps
 from datetime import datetime
 m = nn.Softmax(dim=1)
 
-CONFIG_ENABLE_PLOT=1
-
+CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_GPU=1
+DEBUG=0
 def print_fcn_name(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-        print(dt_string, ": ", func.__name__, " entered...")
+        print(f'{dt_string}: {func.__name__} entered...')
         result = func(*args, **kwargs)
         return result
 
@@ -35,27 +36,32 @@ def print_fcn_name(func):
 image_path = "./"
 
 transform = transforms.Compose([transforms.ToTensor()])
+
+''' 
+mnist_dataset: ‘torchvision.datasets.mnist.MNIST'. 
+size of 60,000 sample, each sample is a tuple with two members. 1st member: torch.tensor=[1,28,28] (training data), second member: digit (expected)
+'''
+ 
 mnist_dataset = torchvision.datasets.MNIST(root=image_path, train=True, transform=transform, download=True)
 mnist_valid_dataset = Subset(mnist_dataset, torch.arange(10000))
 mnist_train_dataset = Subset(mnist_dataset, torch.arange(10000, len(mnist_dataset)))
 mnist_test_dataset = torchvision.datasets.MNIST(root=image_path, train=False, transform=transform, download=False)
 
-batch_size = 64
+batch_size = 256
 torch.manual_seed(1)
 train_dl = DataLoader(mnist_train_dataset, batch_size, shuffle=True)
 valid_dl = DataLoader(mnist_valid_dataset, batch_size, shuffle=False)
 
 model=nn.Sequential()
-model.to('cuda')
+if CONFIG_ENABLE_GPU:
+    model.to('cuda')
+
 model.add_module('conv1', nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2))
 model.add_module('ReLU1', nn.ReLU())
 model.add_module('pool1', nn.MaxPool2d(kernel_size=2))
 model.add_module('conv2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2))
 model.add_module('ReLU2', nn.ReLU())
 model.add_module('pool2', nn.MaxPool2d(kernel_size=2))
-
-#x=torch.ones((4,1,28,28), device='cuda')
-#print(model(x).shape)
 
 model.add_module('flatten', nn.Flatten())
 model.add_module('fc1', nn.Linear(3136, 1024))
@@ -75,9 +81,18 @@ def train(model, num_epochs, train_dl, valid_dl):
     accuracy_hist_valid = [0] * num_epochs
 
     for epoch in range(num_epochs):
-        print("\nEpoch: ", epoch, ": ", end=" ")
+        print(f'Epoch: {epoch}:')
+        counter=0
         for x_batch, y_batch in train_dl:
-            print(".", end="")
+            if DEBUG or 1:
+                if counter % 100 == 0:
+                    print(f'training {counter}th batch...')
+
+#           if not counter % 10:
+#               print(f'.', end='')
+            if CONFIG_ENABLE_GPU:
+                x_batch.cuda()
+                y_batch.cuda()
             pred=model(x_batch)
             loss=loss_fn(pred, y_batch)
             loss.backward()
@@ -86,19 +101,29 @@ def train(model, num_epochs, train_dl, valid_dl):
             loss_hist_train[epoch] += loss.item()*y_batch.size(0)
             is_correct = (torch.argmax(pred, dim=1) == y_batch).float()
             accuracy_hist_train[epoch] += is_correct.sum()
+            counter+=1
 
         loss_hist_train[epoch] /= len(train_dl.dataset)
         accuracy_hist_train[epoch] /= len(train_dl.dataset)
         model.eval()
 
         with torch.no_grad():
+            counter=0
             for x_batch, y_batch in valid_dl:
+#               print(f':', end="")
+                if DEBUG or 1:
+                    if counter % 20 == 0:
+                        print(f'validating {counter}th batch...')
+                if CONFIG_ENABLE_GPU:
+                    x_batch.cuda()
+                    y_batch.cuda()
                 pred=model(x_batch)
                 loss=loss_fn(pred, y_batch)
                 loss_hist_valid[epoch] += \
                     loss.item()*y_batch.size(0)
                 is_correct=(torch.argmax(pred, dim=1) == y_batch).float()
                 accuracy_hist_valid[epoch] += is_correct.sum()
+                counter+=1
         loss_hist_valid[epoch] /= len(valid_dl.dataset)
         accuracy_hist_valid[epoch] /= len(valid_dl.dataset)
         
