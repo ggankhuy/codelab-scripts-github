@@ -5,7 +5,6 @@ source ../lib.sh
 yum update -y
 yum install -y wget sudo nano tree git dstat
 install_python
-exit 0
 
 counter=0
 LOG_FOLDER=./log
