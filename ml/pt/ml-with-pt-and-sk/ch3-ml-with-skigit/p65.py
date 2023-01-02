@@ -1,3 +1,5 @@
+# sigmoid function example, different values for q (q and -q)
+
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt

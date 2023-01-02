@@ -1,5 +1,4 @@
 #implementing adaline.
-#note that plot code is omitted in p42, 44, 45.
 
 import numpy as np
 import os
