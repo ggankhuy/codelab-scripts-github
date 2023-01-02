@@ -1,5 +1,6 @@
 # logistic function 
 import numpy as np
+import torch 
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -9,6 +10,12 @@ X=np.array([1,1.4,2.5])
 w=np.array([0.4, 0.3, 0.5])
 
 CONFIG_ENABLE_PLOT=1
+CONFIG_USE_PYT=1
+CONFIG_USE_NUMPY=0
+
+if CONFIG_USE_PYT and CONFIG_USE_NUMPY:
+    print("Error can not set both of CONFIG_USE_PYT and CONFIG_USE_NUMPY...")
+    exit(0)
 
 def net_input(X,w):
     return np.dot(X,w)
@@ -29,8 +36,18 @@ def tanh(z):
     return (e_p-e_m)/(e_p+e_m)
 
 z=np.arange(-5,5,0.005)
+
+print("Computing logistic sigmoid and tanh...")
 log_act=logistic(z)
 tanh_act=tanh(z)
+
+if CONFIG_USE_PYT:
+    print("Using torch tanh/sigmoid function.")
+    tanh_act=torch.tanh(torch.from_numpy(z))
+    log_act=torch.sigmoid(torch.from_numpy(z))
+if CONFIG_USE_NUMPY:
+    print("Using numpy tanh function.")
+    tanh_act=np.tanh(z)
 
 if CONFIG_ENABLE_PLOT:
     plt.ylim([-1.5, 1.5])
