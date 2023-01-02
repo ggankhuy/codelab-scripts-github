@@ -1,4 +1,4 @@
-#implementing adaline.
+#implementing logistic regression.
 
 import numpy as np
 import os
