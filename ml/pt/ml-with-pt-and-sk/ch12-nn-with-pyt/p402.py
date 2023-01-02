@@ -1,4 +1,6 @@
 # logistic function 
+
+import torch
 import numpy as np
 X=np.array([1,1.4,2.5])
 w=np.array([0.4, 0.3, 0.5])
@@ -22,3 +24,7 @@ Z=np.dot(W, A[0])
 y_probas = softmax(Z)
 print('Probabilities:\n', y_probas)
 print('Sum of probabilities: ', np.sum(y_probas))
+
+print("Using pytorch's softmax...:")
+print(torch.softmax(torch.from_numpy(Z), dim=0))
+
