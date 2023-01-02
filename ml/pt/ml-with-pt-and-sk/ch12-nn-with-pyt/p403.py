@@ -39,5 +39,11 @@ if CONFIG_ENABLE_PLOT:
     plt.axhline(1, color='black', linestyle=':')
     plt.axhline(0.5, color='black', linestyle=':')
     plt.axhline(0, color='black', linestyle=':')
-
+    plt.axhline(-0.5, color='black', linestyle=':')
+    plt.axhline(-1, color='black', linestyle=':')
+    plt.plot(z, tanh_act, linewidth=3, linestyle='--', label='tanh')
+    plt.plot(z, log_act, linewidth=3, label='logistic')
+    plt.legend(loc='lower right')
+    plt.tight_layout()
+    plt.show()
     
