@@ -17,3 +17,14 @@ print("Reversing...")
 inv_class_mapping = {v: k for k, v in class_mapping.items()}
 df['classlabel']=df['classlabel'].map(inv_class_mapping)
 print(df)
+
+print("Using LabelEncoder from sklearn...")
+
+from sklearn.preprocessing import LabelEncoder
+class_le=LabelEncoder()
+y=class_le.fit_transform(df['classlabel'].values)
+print(y)
+
+print("Inverse transform...")
+print(class_le.inverse_transform(y))
+
