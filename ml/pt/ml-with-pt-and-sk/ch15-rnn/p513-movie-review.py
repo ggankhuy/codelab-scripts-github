@@ -70,11 +70,20 @@ label_pipeline = lambda x: 1. if x == 'pos' else 0.
 
 # 3b. wrap the encode and transformation function.
 
+'''
+arg: batch - list size of 4. Each list member is a tuple with (integer, text sentence) format assigned to label_ and text_
+text_list to padded_text_list: text_list each member may be variable, padding will make equal all lists to longest length
+in unpadded text_list.
+'''
+
 @print_fcn_name
 def collate_batch(batch):
     label_list, text_list, lengths = [], [], []
     for _label, _text in batch:
         label_list.append(label_pipeline(_label))
+
+        # produces encoded text after calling text_pipeline -> tokenizer.
+
         processed_text = torch.tensor(text_pipeline(_text), dtype=torch.int64)
         text_list.append(processed_text)
         lengths.append(processed_text.size(0))
@@ -94,58 +103,18 @@ def collate_batch(batch):
 # Take a small batch
 
 from torch.utils.data import DataLoader
-dataloader = DataLoader(train_dataset, batch_size=4, shuffle=False, collate_fn=collate_batch)
 
-text_batch, label_batch, length_batch = next(iter(dataloader))
-print(text_batch)
-print(label_batch)
-print(length_batch)
-
+'''
+collate_batch: produces 
+1. padded_text_list which goes through text_pipeline/tokenizer and encodes each
+word. 
+2. label_list (size=4)
+3. lengths (each member is a length of padded_text_list.
+'''
 batch_size=32
 train_dl=DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_batch)
 valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
 test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
-
-#code.interact(local=locals())
-   
-embedding=nn.Embedding(num_embeddings=10, embedding_dim=3, padding_idx=0)
-
-# a batch of 2 samples of 4 indices each
-
-text_encoded_input = torch.LongTensor([[1,2,4,5],[4,3,2,0]])
-print(embedding(text_encoded_input))
-
-'''
-class RNN(nn.Module):
-    def __init__(self, input_size, hidden_size):
-        super().__init__()
-        self.rnn = nn.RNN(input_size, hidden_size, num_layers=2, batch_first=True)
-        # self.rnn = nn.GPU(input_size, hidden_size, num_layers=2, batchfirst=True)
-        # self.rnn = nn.LSTM(input_size, hidden_size, num_layers=2, batchfirst=True)
-        self.fc=nn.Linear(hidden_size, 1)
-
-    def forward(self, x):
-        _, hidden  = self.rnn(x)
-
-        # we use the final hidden state from the last hidden layer as the input to the fully 
-        # connected layer 
-
-        out = hidden[-1, :, :] 
-        out=self.fc(out)
-        return out
-
-'''
-'''
-print("init-ing model...")
-model=RNN(64,32)
-print(model)
-
-if CONFIG_USE_ROCM:
-    model.to('cuda')
-
-print("train...")
-model(torch.randn(5,3,64))
-'''
 
 class RNN(nn.Module):
     def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size):
