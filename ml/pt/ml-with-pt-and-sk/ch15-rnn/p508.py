@@ -8,14 +8,29 @@ w_hh = rnn_layer.weight_hh_l0
 b_xh = rnn_layer.bias_ih_l0
 b_hh = rnn_layer.bias_hh_l0
 
+# w_xh: [2,5] - input layer weight.
+# x_hh: [2,2] - hidden layer weight.
+# b_xh: [2] - input layer bias
+# b_hh: [2] - hidden layer bias.
+
 print("W_xh shape: ", w_xh.shape)
 print("W_hh shape: ", w_hh.shape)
 print("B_xh shape: ", b_xh.shape)
 print("B_hh shape: ", b_hh.shape)
     
+# x_seq: 3,5
+# 
+# matmul input layer: ( x_seq, w_xh) = [3,5] x [5,2] = [3,2]
+# matmul hidden layer: (output of input layer, x_hh) = [3,2] x [2,2] = [3,2]
+
 x_seq = torch.tensor([[1.0]* 5, [2.0]*5, [3.0]*5]).float()
+print(f'x_seq: {x_seq}, shape: {x_seq.shape}')
 
 ## output  of the simple RNN:
+# after torch reshape of x_seq: [3,5] to [1,3,5]
+#1st dim: batch size/count?
+#2nd dim: sequence
+#3rd dim: features
 
 output, hn = rnn_layer(torch.reshape(x_seq, (1,3,5)))
 
@@ -28,16 +43,21 @@ out_man = []
 for t in range(3):
 
     # reshape x_seq[t] from [5] to [1,5]
+    # x_seq[t] extracts first batch as 1st dim is batch count.
 
+    # reshape output: [5] -> [1,5]
+    
     xt = torch.reshape(x_seq[t], (1,5))
     print(f'Time step {t} => ')
     print('     Input       :', xt.numpy())
 
     # input * weight.input + bias.input_layer
-    # [1,5] * [5,2] + [2] => [2] 
+    # [1,5] * [5,2] + [2] => [1,2] 
 
     ht = torch.matmul(xt, torch.transpose(w_xh, 0, 1)) + b_xh
     print('     Hidden      :', ht.detach().numpy())
+
+    # prev_h: [1,2]
 
     if t > 0:
         prev_h = out_man[t-1]
@@ -45,7 +65,7 @@ for t in range(3):
         prev_h = torch.zeros((ht.shape))
 
     # output = output.previous or zero init * weight.hidden + bias.hidden_layer
-    # [2] * [2,2] + [2] => [2] 
+    # [1,2] * [2,2] + [2] => [1,2] 
 
     ot = ht + torch.matmul(prev_h, torch.transpose(w_hh,0,1)) + b_hh
 
@@ -59,5 +79,4 @@ for t in range(3):
     print()
 
 
-    
-
+# at the end out_man is list with [3], with each of them [1,2] -> [3,2]

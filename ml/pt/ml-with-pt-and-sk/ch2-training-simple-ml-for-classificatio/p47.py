@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 CONFIG_ENABLE_PLOT=0
 
-class AdalineGD:
+class AdalineSGD:
     '''
     eta-learning rate
     n_iter=number of iteration
@@ -46,6 +46,18 @@ class AdalineGD:
             self.losses_.append(avg_loss)
         return self            
 
+
+    ''' fit training data without reinitializint the weights. '''
+
+    def partial_fit(self, X,y):
+        if not self.w_.initialized:
+            self._initialize_weights(X.shape[1])
+        if y.ravel().shape[0] > 1:
+            for xi, target in zip(X,y):
+            self._update_weights(xi,target)
+        else:
+            self._update_weights(X,y)
+        return self   
 
     ''' shuffle training data'''
 
@@ -107,7 +119,7 @@ y=np.where(y=='Iris-setosa', 0, 1)
 
 X=df.iloc[0:100, [0, 2]].values
 
-adaline=AdalineGD(eta=0.01, n_iter=10)
+adaline=AdalineSGD(eta=0.01, n_iter=10)
 adaline.fit(X,y)
 
 print(f'X,y shapes: {X.shape}, {y.shape}')
