@@ -116,6 +116,8 @@ train_dl=DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_
 valid_dl=DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
 test_dl=DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_batch)
 
+#       Embedding layer input: 69025, output(embedding size): 20
+
 class RNN(nn.Module):
     def __init__(self, vocab_size, embed_dim, rnn_hidden_size, fc_hidden_size):
         super().__init__()
@@ -125,6 +127,17 @@ class RNN(nn.Module):
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(fc_hidden_size, 1)
         self.sigmoid = nn.Sigmoid()
+
+    '''
+    [32,683]->embeddeding->[32,683,20], [batch_size, encoding]->[batch_size, encoding, embedding]
+    [hidden, cell]->[1,32,64], [1,32,64] = [1, batch_size,lstm output]
+    [1,32,64]->out=hidden[-1,:,:]->[32,64]
+    [32,64]->fc1->[32,64]
+    [32,64]->relu->[32,64]
+    [32,64]->fc2->[32,64]
+    [32,1]->sigmoid->[32,1]
+
+    '''
 
     def forward(self, text, lengths):
         out = self.embedding(text)
