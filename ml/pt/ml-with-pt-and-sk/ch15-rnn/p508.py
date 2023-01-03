@@ -8,10 +8,10 @@ w_hh = rnn_layer.weight_hh_l0
 b_xh = rnn_layer.bias_ih_l0
 b_hh = rnn_layer.bias_hh_l0
 
-# w_xh: [2,5] - input layer weight.
-# x_hh: [2,2] - hidden layer weight.
-# b_xh: [2] - input layer bias
-# b_hh: [2] - hidden layer bias.
+# w_xh: [2,5] - input hidden layer weight.
+# x_hh: [2,2] - recurrent hidden layer weight.
+# b_xh: [2] - input hidden layer bias
+# b_hh: [2] - recurrent hidden layer bias.
 
 print("W_xh shape: ", w_xh.shape)
 print("W_hh shape: ", w_hh.shape)
@@ -51,12 +51,15 @@ for t in range(3):
     print(f'Time step {t} => ')
     print('     Input       :', xt.numpy())
 
+
+    # 1A. INPUT HIDDEN LAYER OUTPUT COMPUTATION.
     # input * weight.input + bias.input_layer
     # [1,5] * [5,2] + [2] => [1,2] 
 
     ht = torch.matmul(xt, torch.transpose(w_xh, 0, 1)) + b_xh
     print('     Hidden      :', ht.detach().numpy())
 
+    # store previous output (time or sequence)
     # prev_h: [1,2]
 
     if t > 0:
@@ -64,6 +67,7 @@ for t in range(3):
     else:
         prev_h = torch.zeros((ht.shape))
 
+    # 1B. RECURRENT HIDDEN LAYER COMPUTATION. Note that ot=ht+w_hh*prev_h=w_xh * xt +  w_hh * prev_h.
     # output = output.previous or zero init * weight.hidden + bias.hidden_layer
     # [1,2] * [2,2] + [2] => [1,2] 
 
