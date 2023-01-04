@@ -17,6 +17,7 @@ embedded_sentence=embed(sentence).detach()
 print(embedded_sentence.shape)
 print(embedded_sentence)
 
+# Create queries size: [1,16]
 torch.manual_seed(123)
 d = embedded_sentence.shape[1]
 U_query = torch.rand(d,d)
