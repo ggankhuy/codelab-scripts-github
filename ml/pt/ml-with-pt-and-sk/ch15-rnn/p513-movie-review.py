@@ -10,6 +10,7 @@ test_dataset = IMDB(split='test')
 import re
 
 CONFIG_USE_ROCM=0
+DEBUG_L2=1
 
 # 1. create dataset
 from torch.utils.data.dataset import random_split
@@ -66,7 +67,7 @@ print([vocab[token] for token in ['this', 'is', 'an', 'example']])
 # 3a. define the functions for transformation.
 
 text_pipeline =  lambda x: [vocab[token] for token in tokenizer(x)]
-label_pipeline = lambda x: 1. if x == 'pos' else 0.
+label_pipeline = lambda x: 1. if x == 2 else 0.
 
 # 3b. wrap the encode and transformation function.
 
@@ -80,8 +81,10 @@ in unpadded text_list.
 def collate_batch(batch):
     label_list, text_list, lengths = [], [], []
     for _label, _text in batch:
+        if DEBUG_L2:
+            print(f'DBG2: _labeL: {_label}: _text: {_text}')
         label_list.append(label_pipeline(_label))
-
+        
         # produces encoded text after calling text_pipeline -> tokenizer.
 
         processed_text = torch.tensor(text_pipeline(_text), dtype=torch.int64)
@@ -98,6 +101,7 @@ def collate_batch(batch):
     padded_text_list = nn.utils.rnn.pad_sequence(text_list, batch_first=True)
     padded_text_list.to('cuda')
     print("- padded_text_list, label_list, lengths: ", padded_text_list.shape, label_list.shape, lengths.shape)
+    print(f'label_list: {label_list}')
     return padded_text_list, label_list, lengths
 
 # Take a small batch
