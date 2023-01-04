@@ -1,4 +1,21 @@
+
 import torch
+import torch.nn.functional as F
+
+DEBUG=1
+CONFIG_COMPARE=1
+sentence=torch.tensor([0, 7, 1, 2, 5, 6, 4, 3])
+torch.manual_seed(1)
+
+# number of embedding, vocab size: 10.
+# number of embedding dimension (vector)=16
+embed=torch.nn.Embedding(10, 16)
+
+# generates [8,16], 8 inputs, 16 features.
+
+embedded_sentence=embed(sentence).detach()
+print(embedded_sentence.shape)
+print(embedded_sentence)
 
 torch.manual_seed(123)
 d = embedded_sentence.shape[1]
@@ -12,7 +29,7 @@ query_2 = U_query.matmul(x_2)
 key_2 = U_key.matmul(x_2)
 value_2 = U_value.matmul(x_2)
 
-keys = U_key.matmul(embedded_sentence.T).Y
+keys = U_key.matmul(embedded_sentence.T).T
 values = U_value.matmul(embedded_sentence.T).T
 
 keys = U_key.matmul(embedded_sentence.T).T
