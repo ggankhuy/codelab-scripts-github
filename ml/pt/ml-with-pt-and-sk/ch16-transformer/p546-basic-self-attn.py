@@ -1,3 +1,4 @@
+# implements basic form of self-attention.
 # data dimensions in this example
 # embed, nn.Embedding           [10, 16], unique data, features
 # embedded_sentence, input      [8, 16]
