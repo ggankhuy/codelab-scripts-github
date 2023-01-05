@@ -1,3 +1,4 @@
+# implements basic form of self-attention.
 # data dimensions in this example
 # embed, nn.Embedding           [10, 16], unique data, features
 # embedded_sentence, input      [8, 16]
@@ -23,10 +24,13 @@
 import torch
 import torch.nn.functional as F
 
-CONFIG_DEBUG=0
-CONFIG_COMPARE=0
+DEBUG=1
+CONFIG_COMPARE=1
 sentence=torch.tensor([0, 7, 1, 2, 5, 6, 4, 3])
 torch.manual_seed(1)
+
+# number of embedding, vocab size: 10.
+# number of embedding dimension (vector)=16
 embed=torch.nn.Embedding(10, 16)
 
 # generates [8,16], 8 inputs, 16 features.
@@ -40,12 +44,15 @@ print(embedded_sentence)
 
 omega = torch.empty(8,8)
 for i, x_i in enumerate(embedded_sentence):
-    if CONFIG_DEBUG:
-        print("i, x_i: ", i, x_i)
     for j, x_j in enumerate(embedded_sentence):
-        if CONFIG_DEBUG:
-            print("- j, x_j: ", j, x_j)
+        if DEBUG:
+            print('-' * 50)
+            print(f'dot')
+            print(f'i:x_i: {i}:{x_i[:8]}')
+            print(f'j:x_j: {j}:{x_j[:8]}')
+            print(f'result: {torch.dot(x_i, x_j)}')
         omega[i, j] = torch.dot(x_i, x_j)
+            
 
 if CONFIG_COMPARE:
     omega_mat = embedded_sentence.matmul(embedded_sentence.T)
@@ -61,7 +68,7 @@ attention_weights = F.softmax(omega, dim=1)
 print("attention_weights (shape/type/sum): ", attention_weights.shape, type(attention_weights))
 print(attention_weights.sum(dim=1))
 print(attention_weights)
-attention_weights_int = attention_weights.to(torch.float16)
+attention_weights_int = torch.round(attention_weights)
 
 print("attention_weights_int (shape/type/sum): ", attention_weights_int.shape, type(attention_weights_int))
 
@@ -82,11 +89,25 @@ context_vec_2 = torch.zeros(x_2.shape)
 print("context_vec_2 (init): ", context_vec_2.shape, type(context_vec_2))
 print(context_vec_2)
 
+#   for each entry in embedded sentence 
+#       context vec #2 = context vec #2 + attention weight [0,1,0,0,0,0,0,0] * curr embedded sentence entry 1
+#       context vec #2 = context vec #2 + attention weight [0,1,0,0,0,0,0,0] * curr embedded sentence entry 2
+#       ...
+#       context vec #2 = context vec #2 + atetntion weight [0,0,0,0,0,0,0,1] * curr embedded sentence entry 3
+#       
 for j in range(8):
     x_j = embedded_sentence[j, :]
     context_vec_2 +=attention_weights[1, j] * x_j
+    if DEBUG:   
+        print('='*50) 
+        print(f'iter: {j}')
+        print("context_vect+=attention_weights[1,j]*x_j")
+        print(f'attention_weights[1,j]:     {attention_weights[1,j]} : {attention_weights[1,j].shape}')
+        print(f'x_j:                        {x_j}                    : {x_j.shape}')
+        print(f'context_vec_2:              {context_vec_2}          : {context_vec_2.shape}')
 
-print("context_vec_2:")
+print(context_vec_2)
+print("context_vec_2:") 
 print("context_vec_2: ", context_vec_2.shape, type(context_vec_2))
 
 if CONFIG_COMPARE:

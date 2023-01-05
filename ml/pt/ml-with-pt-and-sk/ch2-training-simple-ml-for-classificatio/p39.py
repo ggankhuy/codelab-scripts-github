@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
-CONFIG_ENABLE_PLOT=1
+CONFIG_ENABLE_PLOT=0
 
 class AdalineGD:
     '''
