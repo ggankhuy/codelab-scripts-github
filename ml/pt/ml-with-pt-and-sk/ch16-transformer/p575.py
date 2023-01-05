@@ -48,12 +48,12 @@ valid_labels=df.iloc[35000:40000]['sentiment'].values
 test_texts=df.iloc[40000:]['review'].values
 test_labels=df.iloc[40000:]['sentiment'].values
 
-tokenizer=DistilBertTokenierFast.from_pretrained('distilbert-base-uncased')
+tokenizer=DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 train_encodings=tokenizer(list(train_texts), truncation=True, padding=True)
 valid_encodings=tokenizer(list(train_texts), truncation=True, padding=True)
 test_encodings=tokenizer(list(train_texts), truncation=True, padding=True)
 
-class IMDBDataset(torch.util.data.Dataset):
+class IMDBDataset(torch.utils.data.Dataset):
     def __init__(self, encodings, labels):
         self.encodings=encodings
         self.labels=labels
@@ -66,15 +66,15 @@ class IMDBDataset(torch.util.data.Dataset):
     def __len__(self):
         return len(self.labels)
 
-train_dataset=IMDBdataset(train_encodings, train_labels)
-valid_dataset=IMDBdataset(train_encodings, valid_labels)
-test_dataset=IMDBdataset(train_encodings, test_labels)
+train_dataset=IMDBDataset(train_encodings, train_labels)
+valid_dataset=IMDBDataset(train_encodings, valid_labels)
+test_dataset=IMDBDataset(train_encodings, test_labels)
 
 train_loader=torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 valid_loader=torch.utils.data.DataLoader(valid_dataset, batch_size=16, shuffle=True)
 test_loader=torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
 
-model=DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncase')
+model=DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased')
 model.to(DEVICE)
 model.train()
 
