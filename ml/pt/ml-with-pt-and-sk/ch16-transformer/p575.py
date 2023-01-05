@@ -78,6 +78,8 @@ model=DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncas
 model.to(DEVICE)
 model.train()
 
+optim=torch.optim.Adam(model.parameters(), lr=5e-5)
+
 def compute_accuracy(model, data_laoder, device):
     with torch.no_grad():
         correct_pred, num_examples=0,0
@@ -110,8 +112,8 @@ for epoch in range(NUM_EPOCHS):
 
         ## fwd pass.
 
-        outputs=model(inputs_ids, attention_mask=attention_mask, labels=labels)
-        loss, logits=output['loss'], outputs['logits']
+        output=model(input_ids, attention_mask=attention_mask, labels=labels)
+        loss, logits=output['loss'], output['logits']
 
         # backward pass.
 
