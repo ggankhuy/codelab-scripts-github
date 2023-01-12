@@ -7,8 +7,10 @@
 #define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-#define STREAMS 4
+#define STREAMS 2
+
 __global__ void k1() {
+    printf("k1: entered...\n");
     size_t start = clock64();
     size_t elapsed = 0;
     while (elapsed < 100000000) {
@@ -17,6 +19,7 @@ __global__ void k1() {
 }
 
 __global__ void k2() {
+    printf("k2: entered...\n");
     size_t start = clock64();
     size_t elapsed = 0;
     while (elapsed < 100000000) {
@@ -39,12 +42,14 @@ __global__ void k4() {
 }
 
 int main (void) {
-    int *a, *b, *c;
-    int *dev_a, *dev_b, *dev_c;
-    int i ;
-
-    hipSetDevice(0);    
     hipStream_t streams[STREAMS];
+    hipStream_t s1;
+    hipStream_t s2;
+
+    hipStreamCreate(&s1);
+    hipStreamCreate(&s2);
+
+    /*
     for (int i = 0; i < STREAMS; i ++) {
         int ret = hipStreamCreate(&streams[i]);
         if (ret != 0) {
@@ -53,30 +58,17 @@ int main (void) {
         } else {
             printf("Stream %u create ok.\n", i);
         }
-
     }
+    */
 
-    a = (int*)malloc(N * sizeof(int));
- 	hipMalloc(&dev_a, N * sizeof(int) );
-
-	for (int i = 0; i < N ; i ++ ) {
-		a[i]  = i;
-	}
-
-   	//hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-    
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
+    /*
     k1<<<256,1,0,streams[0]>>>();
     k2<<<256,1,0,streams[1]>>>();
-    k3<<<256,1,0,streams[0]>>>();
-    k4<<<256,1,0,streams[1]>>>();
-
-    //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
-
-    hipFree(dev_a);
-    free(a);
-    
+    */
+    k1<<<256,1,0,s1>>>();
+    k2<<<256,1,0,s2>>>();
 	return 0;
 }
