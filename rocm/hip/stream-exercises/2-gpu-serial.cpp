@@ -45,7 +45,7 @@ int main (void) {
     
     hipStream_t streams[STREAMS];
     for (int i = 0; i < STREAMS; i ++) {
-        hipStreamCreate(&streams[STREAMS]);
+        hipStreamCreate(&streams[i]);
     }
 
     a = (int*)malloc(N * sizeof(int));
