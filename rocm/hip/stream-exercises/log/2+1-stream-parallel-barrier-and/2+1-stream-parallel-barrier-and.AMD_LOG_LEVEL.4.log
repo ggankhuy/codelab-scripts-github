@@ -1,0 +1,150 @@
+:3:rocdevice.cpp            :416 : 844268544558 us: 4627 : [tid:0x7fa98ed5c080] Initializing HSA stack.
+:3:comgrctx.cpp             :33  : 844268628412 us: 4627 : [tid:0x7fa98ed5c080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 844268628460 us: 4627 : [tid:0x7fa98ed5c080] Numa selects cpu agent[0]=0xc172a0(fine=0xc2e440,coarse=0xd070c0) for gpu agent=0xd0aae0
+:3:rocdevice.cpp            :1611: 844268628832 us: 4627 : [tid:0x7fa98ed5c080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 844268629247 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa983800000, size 0x101000
+:4:rocdevice.cpp            :1918: 844268629665 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa983600000, size 0x101000
+:4:rocdevice.cpp            :2054: 844268629747 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa device memory 0x7fa983200000, size 0x100000
+:3:rocdevice.cpp            :207 : 844268629772 us: 4627 : [tid:0x7fa98ed5c080] Numa selects cpu agent[0]=0xc172a0(fine=0xc2e440,coarse=0xd070c0) for gpu agent=0xd9a4a0
+:3:rocdevice.cpp            :1611: 844268629887 us: 4627 : [tid:0x7fa98ed5c080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 844268630252 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa983000000, size 0x101000
+:4:rocdevice.cpp            :1918: 844268630644 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 844268630720 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa device memory 0x7fa982a00000, size 0x100000
+:3:rocdevice.cpp            :207 : 844268630742 us: 4627 : [tid:0x7fa98ed5c080] Numa selects cpu agent[0]=0xc172a0(fine=0xc2e440,coarse=0xd070c0) for gpu agent=0xd9e830
+:3:rocdevice.cpp            :1611: 844268630848 us: 4627 : [tid:0x7fa98ed5c080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 844268631213 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982800000, size 0x101000
+:4:rocdevice.cpp            :1918: 844268631589 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982600000, size 0x101000
+:4:rocdevice.cpp            :2054: 844268631828 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa device memory 0x7fa982200000, size 0x100000
+:3:rocdevice.cpp            :207 : 844268631850 us: 4627 : [tid:0x7fa98ed5c080] Numa selects cpu agent[0]=0xc172a0(fine=0xc2e440,coarse=0xd070c0) for gpu agent=0xda2bf0
+:3:rocdevice.cpp            :1611: 844268631957 us: 4627 : [tid:0x7fa98ed5c080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 844268631989 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa98ebcc000, size 0xa0
+:4:rocdevice.cpp            :1918: 844268632350 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982000000, size 0x101000
+:4:rocdevice.cpp            :1918: 844268632724 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa981e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 844268632806 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa device memory 0x7fa981a00000, size 0x100000
+:4:runtime.cpp              :83  : 844268632812 us: 4627 : [tid:0x7fa98ed5c080] init
+:3:hip_context.cpp          :50  : 844268632815 us: 4627 : [tid:0x7fa98ed5c080] Direct Dispatch: 1
+:3:hip_device_runtime.cpp   :535 : 844268632840 us: 4627 : [tid:0x7fa98ed5c080] hipSetDevice: Returned hipSuccess : 
+:3:hip_stream.cpp           :369 : 844268632847 us: 4627 : [tid:0x7fa98ed5c080] [32mhipStreamCreate ( 0x7ffcf8b98280 )[0m
+:3:rocdevice.cpp            :2686: 844268632855 us: 4627 : [tid:0x7fa98ed5c080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2757: 844268655749 us: 4627 : [tid:0x7fa98ed5c080] created hardware queue 0x7fa98ebbc000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 844268655973 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa983500000, size 0x80000
+:3:devprogram.cpp           :2675: 844268863438 us: 4627 : [tid:0x7fa98ed5c080] Using Code Object V4.
+:3:devprogram.cpp           :2978: 844268864834 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_fillImage
+:3:devprogram.cpp           :2978: 844268864840 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:3:devprogram.cpp           :2978: 844268864842 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 844268864844 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyImage1DA
+:3:devprogram.cpp           :2978: 844268864845 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 844268864847 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 844268864849 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 844268864850 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 844268864852 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 844268864854 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 844268864855 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 844268864857 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyImageToBuffer
+:3:devprogram.cpp           :2978: 844268864858 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferToImage
+:3:devprogram.cpp           :2978: 844268864860 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: __amd_rocclr_copyImage
+:4:rocmemory.cpp            :941 : 844268864905 us: 4627 : [tid:0x7fa98ed5c080] Locking to pool 0xd070c0, size 0x1000, HostPtr = 0x133a000, DevPtr = 0x7fa98eb6e000
+:3:hip_stream.cpp           :375 : 844268864970 us: 4627 : [tid:0x7fa98ed5c080] hipStreamCreate: Returned hipSuccess : stream:0xdd6080
+:3:hip_stream.cpp           :369 : 844268864979 us: 4627 : [tid:0x7fa98ed5c080] [32mhipStreamCreate ( 0x7ffcf8b98288 )[0m
+:3:rocdevice.cpp            :2686: 844268864986 us: 4627 : [tid:0x7fa98ed5c080] number of allocated hardware queues with low priority: 0, with normal priority: 1, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2757: 844268876739 us: 4627 : [tid:0x7fa98ed5c080] created hardware queue 0x7fa983992000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 844268876956 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982d00000, size 0x80000
+:4:rocmemory.cpp            :941 : 844268877060 us: 4627 : [tid:0x7fa98ed5c080] Locking to pool 0xd070c0, size 0x1000, HostPtr = 0x108a000, DevPtr = 0x7fa98398a000
+:3:hip_stream.cpp           :375 : 844268877113 us: 4627 : [tid:0x7fa98ed5c080] hipStreamCreate: Returned hipSuccess : stream:0x12dfe10
+:3:hip_stream.cpp           :369 : 844268877119 us: 4627 : [tid:0x7fa98ed5c080] [32mhipStreamCreate ( 0x7ffcf8b98290 )[0m
+:3:rocdevice.cpp            :2686: 844268877125 us: 4627 : [tid:0x7fa98ed5c080] number of allocated hardware queues with low priority: 0, with normal priority: 2, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2757: 844268887807 us: 4627 : [tid:0x7fa98ed5c080] created hardware queue 0x7fa983988000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 844268888015 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa982500000, size 0x80000
+:4:rocmemory.cpp            :941 : 844268888117 us: 4627 : [tid:0x7fa98ed5c080] Locking to pool 0xd070c0, size 0x1000, HostPtr = 0xe48000, DevPtr = 0x7fa98393e000
+:3:hip_stream.cpp           :375 : 844268888163 us: 4627 : [tid:0x7fa98ed5c080] hipStreamCreate: Returned hipSuccess : stream:0x1088ad0
+:3:hip_stream.cpp           :369 : 844268888170 us: 4627 : [tid:0x7fa98ed5c080] [32mhipStreamCreate ( 0x7ffcf8b98298 )[0m
+:3:rocdevice.cpp            :2686: 844268888179 us: 4627 : [tid:0x7fa98ed5c080] number of allocated hardware queues with low priority: 0, with normal priority: 3, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2757: 844268898813 us: 4627 : [tid:0x7fa98ed5c080] created hardware queue 0x7fa983936000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 844268899024 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa981d00000, size 0x80000
+:4:rocmemory.cpp            :941 : 844268899129 us: 4627 : [tid:0x7fa98ed5c080] Locking to pool 0xd070c0, size 0x1000, HostPtr = 0xe4b000, DevPtr = 0x7fa98392e000
+:3:hip_stream.cpp           :375 : 844268899173 us: 4627 : [tid:0x7fa98ed5c080] hipStreamCreate: Returned hipSuccess : stream:0x12abe70
+:3:hip_memory.cpp           :493 : 844268899198 us: 4627 : [tid:0x7fa98ed5c080] [32mhipMalloc ( 0x7ffcf8b98278, 256 )[0m
+:4:rocdevice.cpp            :2054: 844268899216 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa device memory 0x7fa983300000, size 0x100
+:3:rocdevice.cpp            :2093: 844268899219 us: 4627 : [tid:0x7fa98ed5c080] device=0xda95d0, freeMem_ = 0xfeffff00
+:3:hip_memory.cpp           :495 : 844268899224 us: 4627 : [tid:0x7fa98ed5c080] hipMalloc: Returned hipSuccess : 0x7fa983300000: duration: 26 us
+:3:hip_platform.cpp         :209 : 844268899232 us: 4627 : [tid:0x7fa98ed5c080] [32m__hipPushCallConfiguration ( {256,1,1}, {1,1,1}, 0, stream:0xdd6080 )[0m
+:3:hip_platform.cpp         :213 : 844268899236 us: 4627 : [tid:0x7fa98ed5c080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 844268899242 us: 4627 : [tid:0x7fa98ed5c080] [32m__hipPopCallConfiguration ( {2,0,6315384}, {0,0,1}, 0x7ffcf8b98248, 0x7ffcf8b98240 )[0m
+:3:hip_platform.cpp         :229 : 844268899244 us: 4627 : [tid:0x7fa98ed5c080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :508 : 844268899251 us: 4627 : [tid:0x7fa98ed5c080] [32mhipLaunchKernel ( 0x400fe8, {256,1,1}, {1,1,1}, 0x7ffcf8b98270, 0, stream:0xdd6080 )[0m
+:3:devprogram.cpp           :2675: 844268899696 us: 4627 : [tid:0x7fa98ed5c080] Using Code Object V4.
+:3:devprogram.cpp           :2978: 844268900043 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k4v
+:3:devprogram.cpp           :2978: 844268900049 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k1v
+:3:devprogram.cpp           :2978: 844268900051 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k3v
+:3:devprogram.cpp           :2978: 844268900053 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k2v
+:3:hip_module.cpp           :365 : 844268900066 us: 4627 : [tid:0x7fa98ed5c080] [32mihipModuleLaunchKernel ( 0x0x122fd90, 256, 1, 1, 1, 1, 1, 0, stream:0xdd6080, 0x7ffcf8b98270, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 844268900074 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0xea5100
+:3:rocvirtual.cpp           :2723: 844268900078 us: 4627 : [tid:0x7fa98ed5c080] ShaderName : _Z2k1v
+:4:rocvirtual.cpp           :850 : 844268900092 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa98ebbc000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[1, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fa98392a8c0, kernarg_address=0x7fa983500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 844268900098 us: 4627 : [tid:0x7fa98ed5c080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :509 : 844268900100 us: 4627 : [tid:0x7fa98ed5c080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_device_runtime.cpp   :476 : 844268900103 us: 4627 : [tid:0x7fa98ed5c080] [32mhipDeviceSynchronize (  )[0m
+:3:rocdevice.cpp            :2686: 844268900110 us: 4627 : [tid:0x7fa98ed5c080] number of allocated hardware queues with low priority: 0, with normal priority: 4, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2667: 844268900112 us: 4627 : [tid:0x7fa98ed5c080] selected queue with least refCount: 0x7fa983936000 (1)
+:4:rocdevice.cpp            :1918: 844268900274 us: 4627 : [tid:0x7fa98ed5c080] Allocate hsa host memory 0x7fa981900000, size 0x80000
+:4:rocmemory.cpp            :941 : 844268900365 us: 4627 : [tid:0x7fa98ed5c080] Locking to pool 0xd070c0, size 0x1000, HostPtr = 0x14a0000, DevPtr = 0x7fa983924000
+:3:rocdevice.cpp            :2636: 844268900399 us: 4627 : [tid:0x7fa98ed5c080] No HW event
+:4:command.cpp              :280 : 844268900403 us: 4627 : [tid:0x7fa98ed5c080] queue marker to command queue: 0xdd61b0
+:4:command.cpp              :339 : 844268900405 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0xf80300
+:3:rocvirtual.cpp           :434 : 844268900413 us: 4627 : [tid:0x7fa98ed5c080] Set Handler: handle(0x7fa98ebd6480), timestamp(0x12f8310)
+:4:rocvirtual.cpp           :984 : 844268900419 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa98ebbc000, BarrierAND Header = 0x1503 (type=3, barrier=1, acquire=2, release=2), dep_signal=[0x0, 0x0, 0x0, 0x0, 0x0], completion_signal=0x7fa98ebd6480
+:4:command.cpp              :339 : 844268900423 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0xfc2960
+:3:rocvirtual.hpp           :62  : 844268900425 us: 4627 : [tid:0x7fa98ed5c080] Host active wait for Signal = (0x7fa98ebd6480) for 10000 ns
+:3:rocvirtual.cpp           :434 : 844268900443 us: 4627 : [tid:0x7fa98ed5c080] Set Handler: handle(0x7fa983939000), timestamp(0x122fb60)
+:4:rocvirtual.cpp           :984 : 844268900447 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa983936000, BarrierAND Header = 0x1503 (type=3, barrier=1, acquire=2, release=2), dep_signal=[0x7fa98ebd6480, 0x0, 0x0, 0x0, 0x0], completion_signal=0x7fa983939000
+:3:rocvirtual.hpp           :62  : 844268900449 us: 4627 : [tid:0x7fa98ed5c080] Host active wait for Signal = (0x7fa983939000) for -1 ns
+:4:commandqueue.cpp         :140 : 844268966743 us: 4627 : [tid:0x7fa98ed5c080] All commands finished
+:3:hip_device_runtime.cpp   :488 : 844268966749 us: 4627 : [tid:0x7fa98ed5c080] hipDeviceSynchronize: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 844268966755 us: 4627 : [tid:0x7fa98ed5c080] [32m__hipPushCallConfiguration ( {256,1,1}, {1,1,1}, 0, stream:0x12dfe10 )[0m
+:3:hip_platform.cpp         :213 : 844268966757 us: 4627 : [tid:0x7fa98ed5c080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 844268966762 us: 4627 : [tid:0x7fa98ed5c080] [32m__hipPopCallConfiguration ( {256,1,1}, {1,1,1}, 0x7ffcf8b98248, 0x7ffcf8b98240 )[0m
+:3:hip_platform.cpp         :229 : 844268966764 us: 4627 : [tid:0x7fa98ed5c080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :508 : 844268966769 us: 4627 : [tid:0x7fa98ed5c080] [32mhipLaunchKernel ( 0x400ff0, {256,1,1}, {1,1,1}, 0x7ffcf8b98270, 0, stream:0x12dfe10 )[0m
+:3:hip_module.cpp           :365 : 844268966781 us: 4627 : [tid:0x7fa98ed5c080] [32mihipModuleLaunchKernel ( 0x0x13131c0, 256, 1, 1, 1, 1, 1, 0, stream:0x12dfe10, 0x7ffcf8b98270, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 844268966784 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0x18d3f20
+:3:rocvirtual.cpp           :2723: 844268966786 us: 4627 : [tid:0x7fa98ed5c080] ShaderName : _Z2k2v
+:4:rocvirtual.cpp           :850 : 844268966790 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa983992000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[1, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fa98392a900, kernarg_address=0x7fa982d00000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 844268966793 us: 4627 : [tid:0x7fa98ed5c080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :509 : 844268966795 us: 4627 : [tid:0x7fa98ed5c080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_memory.cpp           :536 : 844268966804 us: 4627 : [tid:0x7fa98ed5c080] [32mhipFree ( 0x7fa983300000 )[0m
+:3:rocdevice.cpp            :2636: 844268966807 us: 4627 : [tid:0x7fa98ed5c080] No HW event
+:4:command.cpp              :280 : 844268966810 us: 4627 : [tid:0x7fa98ed5c080] queue marker to command queue: 0xee9360
+:4:command.cpp              :339 : 844268966811 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0x1019fe0
+:3:rocvirtual.cpp           :434 : 844268966816 us: 4627 : [tid:0x7fa98ed5c080] Set Handler: handle(0x7fa983994f00), timestamp(0xeb49e0)
+:4:rocvirtual.cpp           :984 : 844268966819 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa983992000, BarrierAND Header = 0x1503 (type=3, barrier=1, acquire=2, release=2), dep_signal=[0x0, 0x0, 0x0, 0x0, 0x0], completion_signal=0x7fa983994f00
+:4:command.cpp              :339 : 844268966822 us: 4627 : [tid:0x7fa98ed5c080] command is enqueued: 0xf9b980
+:3:rocvirtual.hpp           :62  : 844268966824 us: 4627 : [tid:0x7fa98ed5c080] Host active wait for Signal = (0x7fa983994f00) for 10000 ns
+:3:rocvirtual.cpp           :434 : 844268966836 us: 4627 : [tid:0x7fa98ed5c080] Set Handler: handle(0x7fa983938f80), timestamp(0x1221950)
+:4:rocvirtual.cpp           :984 : 844268966839 us: 4627 : [tid:0x7fa98ed5c080] HWq=0x7fa983936000, BarrierAND Header = 0x1503 (type=3, barrier=1, acquire=2, release=2), dep_signal=[0x7fa983994f00, 0x0, 0x0, 0x0, 0x0], completion_signal=0x7fa983938f80
+:3:rocvirtual.hpp           :62  : 844268966841 us: 4627 : [tid:0x7fa98ed5c080] Host active wait for Signal = (0x7fa983938f80) for -1 ns
+:3:rocvirtual.cpp           :194 : 844268966877 us: 4627 : [tid:0x7fa9841a2700] Handler: value(0), timestamp(0x1312f40), handle(0x7fa98ebd6480)
+:4:command.cpp              :170 : 844268966901 us: 4627 : [tid:0x7fa9841a2700] Command 0xea5100 complete
+:4:command.cpp              :168 : 844268966908 us: 4627 : [tid:0x7fa9841a2700] Command 0xf80300 complete (Wall: 844268966906, CPU: 0, GPU: 66499 us)
+:3:rocvirtual.cpp           :194 : 844268966913 us: 4627 : [tid:0x7fa9841a2700] Handler: value(0), timestamp(0x1313010), handle(0x7fa983939000)
+:4:command.cpp              :168 : 844268966918 us: 4627 : [tid:0x7fa9841a2700] Command 0xfc2960 complete (Wall: 844268966917, CPU: 0, GPU: 66492 us)
+:3:rocvirtual.cpp           :194 : 844269166693 us: 4627 : [tid:0x7fa9841a2700] Handler: value(0), timestamp(0x1313380), handle(0x7fa983994f00)
+:4:command.cpp              :170 : 844269166703 us: 4627 : [tid:0x7fa9841a2700] Command 0x18d3f20 complete
+:4:commandqueue.cpp         :140 : 844269166696 us: 4627 : [tid:0x7fa98ed5c080] All commands finished
+:4:command.cpp              :168 : 844269166706 us: 4627 : [tid:0x7fa9841a2700] Command 0x1019fe0 complete (Wall: 844269166705, CPU: 0, GPU: 199892 us)
+:3:rocvirtual.cpp           :194 : 844269166713 us: 4627 : [tid:0x7fa9841a2700] Handler: value(0), timestamp(0x1313470), handle(0x7fa983938f80)
+:4:command.cpp              :168 : 844269166717 us: 4627 : [tid:0x7fa9841a2700] Command 0xf9b980 complete (Wall: 844269166716, CPU: 0, GPU: 199893 us)
+:4:rocdevice.cpp            :2070: 844269166722 us: 4627 : [tid:0x7fa98ed5c080] Free hsa memory 0x7fa983300000
+:3:rocdevice.cpp            :2093: 844269166725 us: 4627 : [tid:0x7fa98ed5c080] device=0xda95d0, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :538 : 844269166728 us: 4627 : [tid:0x7fa98ed5c080] hipFree: Returned hipSuccess : 
+:3:devprogram.cpp           :2978: 844269166756 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k4v
+:3:devprogram.cpp           :2978: 844269166758 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k1v
+:3:devprogram.cpp           :2978: 844269166760 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k3v
+:3:devprogram.cpp           :2978: 844269166761 us: 4627 : [tid:0x7fa98ed5c080] For Init/Fini: Kernel Name: _Z2k2v
+Stream 0 create ok.
+Stream 1 create ok.
+Stream 2 create ok.
+Stream 3 create ok.
