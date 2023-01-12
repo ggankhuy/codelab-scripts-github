@@ -1,7 +1,8 @@
-FILENAME=file2.cpp
-FILENAME=file2a.cpp
-FILENAME=file2b.cpp
-
-FILENAME=file2.cpp
-mkdir log
-hipcc $FILENAME && AMD_LOG_LEVEL=4  ./a.out 2>&1 | tee log/$FILENAME.AMD_LOG_LEVEL.4.log
+for FILENAME in 2-gpu-serial; do
+    
+    LOG_FOLDER=log/$FILENAME/
+    mkdir $LOG_FOLDER -p
+    hipcc $FILENAME.cpp -o $FILENAME.out && AMD_LOG_LEVEL=4 ./$FILENAME.out 2>&1 | tee $LOG_FOLDER/$FILENAME.AMD_LOG_LEVEL.4.log
+    rocprof --sys-trace $FILENAME.out
+    mv results.* *.csv $LOG_FOLDER
+done

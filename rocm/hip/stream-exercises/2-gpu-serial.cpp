@@ -1,14 +1,26 @@
 /*Basic vector sum using hipMalloc */ 
 
 #include <stdio.h>
+#include <cstdlib>
 #include "hip/hip_runtime.h"
 
 #define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-__global__ void add(int *a, int*b, int *c) {
-	int tid = hipBlockIdx_x;
-	c[tid] = a[tid] + b[tid];
+__global__ void k1(int *a) {
+    size_t start = clock64();
+    size_t elapsed = 0;
+    while (elapsed < 100000000) {
+        elapsed = clock64() - start;
+    }
+}
+
+__global__ void k2(int *a) {
+    size_t start = clock64();
+    size_t elapsed = 0;
+    while (elapsed < 100000000) {
+        elapsed = clock64() - start;
+    }
 }
 
 int main (void) {
@@ -16,6 +28,10 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
     
+    hipStream_t s1;
+    hipStream_t s2;
+    hipStreamCreate(&s1);
+    hipStreamCreate(&s2);
 
     a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
@@ -29,7 +45,8 @@ int main (void) {
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
-    //hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
+    k1<<<256,1,0,s1>>>(dev_a);
+    k2<<<256,1,0,s2>>>(dev_a);
 
     hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
 
