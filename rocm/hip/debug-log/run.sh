@@ -1,5 +1,5 @@
 FILENAME=1-hipMalloc
-FILENAME=2-hipMemcpy
+#FILENAME=2-hipMemcpy
 LOG_DIR=log/$FILENAME
 echo Making directory $LOG_DIR
 mkdir $LOG_DIR -p 
