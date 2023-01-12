@@ -121,7 +121,7 @@ Agent 3
 *******                  
   Name:                    gfx908                             
   Uuid:                    GPU-b4326f655275a0a7               
-  Marketing Name:          AMD Instinct MI100                 
+  Marketing Name:                                             
   Vendor Name:             AMD                                
   Feature:                 KERNEL_DISPATCH                    
   Profile:                 BASE_PROFILE                       
@@ -200,7 +200,7 @@ Agent 4
 *******                  
   Name:                    gfx908                             
   Uuid:                    GPU-e1040b9d68e3c0fe               
-  Marketing Name:          AMD Instinct MI100                 
+  Marketing Name:                                             
   Vendor Name:             AMD                                
   Feature:                 KERNEL_DISPATCH                    
   Profile:                 BASE_PROFILE                       

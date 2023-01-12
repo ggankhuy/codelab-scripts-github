@@ -7,7 +7,7 @@
 #define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-__global__ void k1(int *a) {
+__global__ void k1() {
     size_t start = clock64();
     size_t elapsed = 0;
     while (elapsed < 100000000) {
@@ -15,7 +15,7 @@ __global__ void k1(int *a) {
     }
 }
 
-__global__ void k2(int *a) {
+__global__ void k2() {
     size_t start = clock64();
     size_t elapsed = 0;
     while (elapsed < 100000000) {
@@ -40,15 +40,15 @@ int main (void) {
 		a[i]  = i;
 	}
 
-   	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+   	//hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
     
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
-    k1<<<256,1,0,s1>>>(dev_a);
-    k2<<<256,1,0,s2>>>(dev_a);
+    k1<<<256,1,0,s1>>>();
+    k2<<<256,1,0,s2>>>();
 
-    hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
+    //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
 
     hipFree(dev_a);
     free(a);
