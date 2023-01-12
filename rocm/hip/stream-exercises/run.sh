@@ -1,5 +1,5 @@
-for FILENAME in 2-gpu-serial 2-stream-parallel; do
-#for FILENAME in 2-stream-parallel; do
+#for FILENAME in 2-gpu-serial 2-stream-parallel 2-stream-parallel-barrier-and 2+1-stream-parallel-barrier-and; do
+for FILENAME in 2+1-stream-parallel-barrier-and; do
     
     LOG_FOLDER=log/$FILENAME/
     mkdir $LOG_FOLDER -p

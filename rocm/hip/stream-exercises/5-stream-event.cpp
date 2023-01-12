@@ -19,7 +19,7 @@ __global__ void k1() {
 __global__ void k2() {
     size_t start = clock64();
     size_t elapsed = 0;
-    while (elapsed < 100000000) {
+    while (elapsed < 300000000) {
         elapsed = clock64() - start;
     }
 }
@@ -43,8 +43,9 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
-    hipSetDevice(0);    
+    // create streams. 
     hipStream_t streams[STREAMS];
+
     for (int i = 0; i < STREAMS; i ++) {
         int ret = hipStreamCreate(&streams[i]);
         if (ret != 0) {
@@ -56,28 +57,18 @@ int main (void) {
 
     }
 
-    a = (int*)malloc(N * sizeof(int));
- 	hipMalloc(&dev_a, N * sizeof(int) );
+    // create event. s1 records event. 
 
-	for (int i = 0; i < N ; i ++ ) {
-		a[i]  = i;
-	}
+    hipEvent_t e1;
+    hipEventCreate(&e1); 
+    hipEventRecord(e1, streams[0]);
 
-   	//hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-    
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
     k1<<<256,1,0,streams[0]>>>();
+    hipEventSynchronize(e1);
     k2<<<256,1,0,streams[1]>>>();
-    /*k3<<<256,1,0,streams[0]>>>();
-    k4<<<256,1,0,streams[1]>>>();
-    */
 
-    //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
-
-    hipFree(dev_a);
-    free(a);
-    
 	return 0;
 }

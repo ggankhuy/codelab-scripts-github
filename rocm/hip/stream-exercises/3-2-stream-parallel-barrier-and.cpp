@@ -7,7 +7,7 @@
 #define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-#define STREAMS 2
+#define STREAMS 4
 __global__ void k1() {
     size_t start = clock64();
     size_t elapsed = 0;
@@ -19,7 +19,7 @@ __global__ void k1() {
 __global__ void k2() {
     size_t start = clock64();
     size_t elapsed = 0;
-    while (elapsed < 100000000) {
+    while (elapsed < 300000000) {
         elapsed = clock64() - start;
     }
 }
@@ -69,10 +69,9 @@ int main (void) {
     const unsigned threadsPerBlock = 1;
 
     k1<<<256,1,0,streams[0]>>>();
+    hipDeviceSynchronize();
     k2<<<256,1,0,streams[1]>>>();
-    /*k3<<<256,1,0,streams[0]>>>();
-    k4<<<256,1,0,streams[1]>>>();
-    */
+//  k3<<<256,1,0,streams[2]>>>();
 
     //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
 
