@@ -7,7 +7,7 @@
 #define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-#define STREAMS 4
+#define STREAMS 2
 __global__ void k1() {
     size_t start = clock64();
     size_t elapsed = 0;
@@ -70,8 +70,9 @@ int main (void) {
 
     k1<<<256,1,0,streams[0]>>>();
     k2<<<256,1,0,streams[1]>>>();
-    k3<<<256,1,0,streams[0]>>>();
+    /*k3<<<256,1,0,streams[0]>>>();
     k4<<<256,1,0,streams[1]>>>();
+    */
 
     //hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
 
