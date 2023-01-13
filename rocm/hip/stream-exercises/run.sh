@@ -20,4 +20,5 @@ for FILENAME in 6-2-gpu-2-stream-synchronize ; do
         echo "trace failed." 
         exit 1 
     fi
+    ./$FILENAME.out
 done

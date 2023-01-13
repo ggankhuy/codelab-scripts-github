@@ -9,9 +9,15 @@
 #define SYNC_TYPE_NO_SYNC 0
 #define SYNC_TYPE_PER_DEVICE_SYNC 1
 #define SYNC_TYPE_PER_HOST_SYNC 2
-//#define SYNC_OPTION SYNC_TYPE_NO_SYNC
-//#define SYNC_OPTION SYNC_TYPE_PER_DEVICE_SYNC
-#define SYNC_OPTION SYNC_TYPE_PER_HOST_SYNC
+//#define CONFIG_SYNC_OPTION SYNC_TYPE_NO_SYNC
+//#define CONFIG_SYNC_OPTION SYNC_TYPE_PER_DEVICE_SYNC
+#define CONFIG_SYNC_OPTION SYNC_TYPE_PER_HOST_SYNC
+
+#define STREAM_PLACE_UNDEFINED 0 
+#define STREAM_PLACE_OPT_DEVICE_1 1
+#define STREAM_PLACE_OPT_PER_DEVICE 2
+//#define CONFIG_STREAM_PLACEMENT STREAM_PLACE_OPT_DEVICE_1
+#define CONFIG_STREAM_PLACEMENT STREAM_PLACE_OPT_PER_DEVICE
 
 __global__ void k1(int *a) {
     size_t start = clock64();
@@ -41,15 +47,26 @@ int main (void) {
     int *a, *b, *c;
     int *dev_a, *dev_b, *dev_c;
     int i, ret;
-    //unsigned int SYNC_OPTION = SYNC_TYPE_NO_SYNC;
+    //unsigned int CONFIG_SYNC_OPTION = SYNC_TYPE_NO_SYNC;
 
     hipStream_t streams[STREAMS];
 
-    for (i = 0 ; i < STREAMS; i ++) {
-        ret = hipSetDevice(i);
+    for (i = 0 ; i < STREAMS; i++) {
+        switch(CONFIG_STREAM_PLACEMENT) {
+            case STREAM_PLACE_OPT_DEVICE_1:
+                printf("Placing all streams on 1st device only explicitly.\n");
+                ret = hipSetDevice(0);
+                break;
+            case STREAM_PLACE_OPT_PER_DEVICE:
+                printf("Placing all streams on each device .\n");
+                ret = hipSetDevice(i);
+                break;
+            default:
+                printf("No explicit stream placement, likely on first device by default.\n");
+        }
 
         if (ret!= 0) {
-            printf("setdevice for device %u failed.\n", i);
+            printf("hipSetDevice() for device %u failed.\n", i);
             return 1;
         } 
         
@@ -76,8 +93,8 @@ int main (void) {
     k1<<<256,1,0,streams[0]>>>(dev_a);
     k2<<<256,1,0,streams[1]>>>(dev_a);
 
-    printf("Curr sync option: %u.\n", SYNC_OPTION);
-    switch(SYNC_OPTION) {
+    printf("Curr sync option: %u.\n", CONFIG_SYNC_OPTION);
+    switch(CONFIG_SYNC_OPTION) {
         case SYNC_TYPE_NO_SYNC:
             printf("No synchronization enabled.\n");
             break;
@@ -93,7 +110,7 @@ int main (void) {
             }
             break;
         default:
-            printf("Unsupport sync type %u.\n", SYNC_OPTION);
+            printf("Unsupport sync type %u.\n", CONFIG_SYNC_OPTION);
     }
     hipSetDevice(0);
     k3<<<256,1,0,streams[2]>>>(dev_a);
