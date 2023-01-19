@@ -19,11 +19,19 @@ __global__ void add(int *a, int*b, int *c) {
 	c[tid] = a[tid] + b[tid];
 }
 
+#define timer 0
+
 int main (void) {
     int *a, *b, *c;
     int *dev_a, *dev_b, *dev_c;
     int i ;
-    
+
+    #if timer == 1
+    auto end = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::high_resolution_clock::now();
+    auto ns = std::chrono::high_resolution_clock::now();
+    #endif 
 
     a = (int*)malloc(N * sizeof(int));
 
@@ -37,7 +45,9 @@ int main (void) {
     auto start = std::chrono::high_resolution_clock::now();
     #endif
 
+    printf("hipMemcpy.start.\n");
    	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+    printf("hipMemcpy.end\n");
 
     #if timer == 1
     auto end = std::chrono::high_resolution_clock::now();
