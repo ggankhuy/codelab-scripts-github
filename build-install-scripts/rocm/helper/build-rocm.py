@@ -20,6 +20,7 @@ all_pred=[]
 indent=""
 depFile=None
 component=None
+build_llvm=""
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -33,6 +34,7 @@ def dispHelp():
     print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
     print("--vermajor=<RocmVersion> specify rocm version. i.e. 5.2")
     print("--verminor=<RocmMinorVersion> specify rocm minor version. If not specified, defaults to 0.")
+    print("--llvmno: Do not build LLVM.")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
@@ -56,6 +58,9 @@ for i in sys.argv:
 
         if re.search("--verminor", i):
             rocmVersionMinor=i.split('=')[1].strip()
+    
+        if re.search("--llvmno",i):
+            build_llvm="--llvmno"
 
     except Exception as msg:
         print(msg)
@@ -218,7 +223,7 @@ for j in finalList:
         else:
             print("calling build script with " + str(j))
             if counter == 0:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), build_llvm, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             else:
                 out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno', 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             print("out: ", out)
