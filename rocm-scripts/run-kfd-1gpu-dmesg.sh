@@ -30,8 +30,8 @@ for i in {2..3} ; do
             echo "test command:"
             echo $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
             $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
+            dmesg | tee $LOG_FILE_DMESG
         fi
-        dmesg > tee $LOG_FILE_DMESG
     done < "$input"
     #t2a=$SECONDS
     #perGpuTime=$((t2a-t1a))
