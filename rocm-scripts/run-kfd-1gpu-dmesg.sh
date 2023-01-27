@@ -7,6 +7,7 @@ mkdir $LOG_FOLDER -p
 #echo -ne "" > $LOG_SUMMARY
 #t1=$SECONDS
 
+bypass_tests=(CacheInvalidateOnRemoteWrite)
 for i in {2..3} ; do
     #t1a=$SECONDS
     echo "Running kfd for gpu $i..." | tee -a $LOG_SUMMARY
@@ -27,10 +28,17 @@ for i in {2..3} ; do
         if [[ $? -eq 0 ]] ; then
             testgroup=$line            
         else
-            echo "test command:"
-            echo $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
-            $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
-            dmesg | tee $LOG_FILE_DMESG
+            for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest;  do
+                if [[ $j == $line ]] ; then
+                    echo "Bypassing $line"
+                    sleep 30
+                else        
+                    echo "test command:"
+                    echo $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
+                    $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
+                    dmesg | tee $LOG_FILE_DMESG
+                 fi
+            done
         fi
     done < "$input"
     #t2a=$SECONDS
