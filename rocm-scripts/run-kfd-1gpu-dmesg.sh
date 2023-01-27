@@ -3,7 +3,7 @@ KFD=/usr/local/bin/kfdtest
 DATE=`date +%Y%m%d-%H-%M-%S`
 LOG_FOLDER=log/kfd/log-kfd-$DATE
 mkdir $LOG_FOLDER -p
-TEST_MODE=1
+TEST_MODE=0
 #LOG_SUMMARY=$LOG_FOLDER/summary.log
 #echo -ne "" > $LOG_SUMMARY
 #t1=$SECONDS
