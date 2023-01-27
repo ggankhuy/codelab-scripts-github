@@ -42,11 +42,12 @@ for i in {2..3} ; do
                     echo "test command:"
                     echo "$KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE"
                     sleep 1
-                    break
                     if [[ $TEST_MODE == 0 ]] ; then
+                        echo "Launching test..."
                         $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
                     fi
                     dmesg | tee $LOG_FILE_DMESG
+                    break
                  fi
                 if [[ $bypass_flag == 1 ]] ; then
                     echo "Breaking out of bypass test loop as bypass_flag is set"
