@@ -3,6 +3,7 @@ KFD=/usr/local/bin/kfdtest
 DATE=`date +%Y%m%d-%H-%M-%S`
 LOG_FOLDER=log/kfd/log-kfd-$DATE
 mkdir $LOG_FOLDER -p
+TEST_MODE=1
 #LOG_SUMMARY=$LOG_FOLDER/summary.log
 #echo -ne "" > $LOG_SUMMARY
 #t1=$SECONDS
@@ -20,24 +21,37 @@ for i in {2..3} ; do
         dmesg --clear
         LOG_FOLDER_CURR=$LOG_FOLDER/gpu$i
         mkdir -p $LOG_FOLDER_CURR
-        LOG_FILE=$LOG_FOLDER_CURR/$line.test.log
-        LOG_FILE_DMESG=$LOG_FOLDER_CURR/$line.dmesg.log
-        echo LOG_FILE: $LOG_FILE
-        echo LOG_FILE_DMESG: $LOG_FILE_DMESG
+        LOG_FILE=$LOG_FOLDER_CURR/$testgroup$line.test.log
+        LOG_FILE_DMESG=$LOG_FOLDER_CURR/$testgroup$line.dmesg.log
         echo $LOG_FILE | grep '\.\.'
         if [[ $? -eq 0 ]] ; then
+            echo "setting testgroup to : $line"
             testgroup=$line            
         else
+            echo LOG_FILE: $LOG_FILE
+            echo LOG_FILE_DMESG: $LOG_FILE_DMESG
+            bypass_flag=0
             for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest;  do
                 if [[ $j == $line ]] ; then
                     echo "Bypassing $line"
-                    sleep 30
+                    if [[ $TEST_MODE == 1 ]] ; then
+                        sleep 1
+                    fi
+                    bypass_flag=1
                 else        
                     echo "test command:"
-                    echo $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
-                    $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
+                    echo "$KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE"
+                    sleep 1
+                    break
+                    if [[ $TEST_MODE == 0 ]] ; then
+                        $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
+                    fi
                     dmesg | tee $LOG_FILE_DMESG
                  fi
+                if [[ $bypass_flag == 1 ]] ; then
+                    echo "Breaking out of bypass test loop as bypass_flag is set"
+                    break
+                fi
             done
         fi
     done < "$input"
