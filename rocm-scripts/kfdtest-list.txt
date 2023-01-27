@@ -1,0 +1,159 @@
+KFDCloseKFDTest.
+  CloseAClosedKfd
+KFDOpenCloseKFDTest.
+  OpenAlreadyOpenedKFD
+  OpenCloseKFD
+  InvalidKFDHandleTest
+KFDTopologyTest.
+  BasicTest
+  GetNodePropertiesInvalidParams
+  GetNodePropertiesInvalidNodeNum
+  GetNodeMemoryProperties
+  GpuvmApertureValidate
+  GetNodeCacheProperties
+  GetNodeIoLinkProperties
+KFDMemoryTest.
+  MMapLarge
+  MapUnmapToNodes
+  MapMemoryToGPU
+  InvalidMemoryPointerAlloc
+  ZeroMemorySizeAlloc
+  MemoryAlloc
+  AccessPPRMem
+  MemoryRegister
+  MemoryRegisterSamePtr
+  FlatScratchAccess
+  GetTileConfigTest
+  LargestSysBufferTest
+  LargestVramBufferTest
+  BigSysBufferStressTest
+  MMBench
+  QueryPointerInfo
+  PtraceAccess
+  PtraceAccessInvisibleVram
+  SignalHandling
+  CheckZeroInitializationSysMem
+  MMBandWidth
+  HostHdpFlush
+  DeviceHdpFlush
+  CacheInvalidateOnSdmaWrite
+  CacheInvalidateOnCPUWrite
+  CacheInvalidateOnRemoteWrite
+  VramCacheCoherenceWithRemoteGPU
+  VramCacheCoherenceWithCPU
+  SramCacheCoherenceWithGPU
+  MultiThreadRegisterUserptrTest
+KFDLocalMemoryTest.
+  AccessLocalMem
+  BasicTest
+  VerifyContentsAfterUnmapAndMap
+  Fragmentation
+  CheckZeroInitializationVram
+  MapVramToGPUNodesTest
+KFDEventTest.
+  CreateDestroyEvent
+  CreateMaxEvents
+  SignalEvent
+  MeasureInterruptConsumption
+  SignalMaxEvents
+  SignalMultipleEventsWaitForAll
+  SignalInvalidEvent
+KFDQMTest.
+  CreateDestroyCpQueue
+  SubmitNopCpQueue
+  SubmitPacketCpQueue
+  AllCpQueues
+  CreateDestroySdmaQueue
+  SubmitNopSdmaQueue
+  SubmitPacketSdmaQueue
+  AllSdmaQueues
+  AllXgmiSdmaQueues
+  AllQueues
+  SdmaConcurrentCopies
+  DisableCpQueueByUpdateWithNullAddress
+  DisableSdmaQueueByUpdateWithNullAddress
+  DisableCpQueueByUpdateWithZeroPercentage
+  CreateQueueStressSingleThreaded
+  OverSubscribeCpQueues
+  BasicCuMaskingLinear
+  BasicCuMaskingEven
+  QueuePriorityOnDifferentPipe
+  QueuePriorityOnSamePipe
+  EmptyDispatch
+  SimpleWriteDispatch
+  MultipleCpQueuesStressDispatch
+  CpuWriteCoherence
+  CreateAqlCpQueue
+  QueueLatency
+  CpQueueWraparound
+  SdmaQueueWraparound
+  Atomics
+  mGPUShareBO
+  P2PTest
+  PM4EventInterrupt
+  SdmaEventInterrupt
+  GPUDoorbellWrite
+KFDCWSRTest.
+  BasicTest
+  InterruptRestore
+KFDExceptionTest.
+  AddressFault
+  PermissionFault
+  FaultStorm
+  SdmaQueueException
+KFDGraphicsInterop.
+  RegisterGraphicsHandle
+KFDPerfCountersTest.
+  GetCounterProperties
+  RegisterTrace
+  StartStopQueryTrace
+  ClockCountersBasicTest
+KFDGWSTest.
+  Allocate
+  Semaphore
+KFDIPCTest.
+  BasicTest
+  CrossMemoryAttachTest
+  CMABasicTest
+KFDEvictTest.
+  BasicTest
+  QueueTest
+  BurstyTest
+KFDHWSTest.
+  MultiProcessOversubscribed
+KFDPerformanceTest.
+  P2PBandWidthTest
+  P2POverheadTest
+KFDPMTest.
+  SuspendWithActiveProcess
+  SuspendWithIdleQueue
+  SuspendWithIdleQueueAfterWork
+KFDSVMRangeTest.
+  BasicSystemMemTest
+  SetGetAttributesTest
+  XNACKModeTest
+  InvalidRangeTest
+  SplitSystemRangeTest
+  EvictSystemRangeTest
+  PartialUnmapSysMemTest
+  BasicVramTest
+  SplitVramRangeTest
+  PrefetchTest
+  MigrateTest
+  MigrateAccessInPlaceTest
+  MigrateGranularityTest
+  MigrateLargeBufTest
+  MigratePolicyTest
+  MultiGPUMigrationTest
+  MultiGPUAccessInPlaceTest
+  MultiThreadMigrationTest
+  MigrateFileBackedRangeTest
+  ReadOnlyRangeTest
+KFDSVMEvictTest.
+  BasicTest
+  QueueTest
+KFDRASTest.
+  BasicTest
+  MixEventsTest
+RDMATest.
+  GPUDirect
