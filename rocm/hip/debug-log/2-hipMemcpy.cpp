@@ -11,7 +11,7 @@ using namespace std;
 // 512M
 
 #define N 536870912
-#define N 8
+//#define N 8
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 __global__ void add(int *a, int*b, int *c) {
