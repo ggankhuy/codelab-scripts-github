@@ -1,6 +1,7 @@
 FILENAME=1-hipMalloc
 FILENAME=2-hipMemcpy
 FILENAME=4-hipKernel
+FILENAME=4a-2xhipKernel
 LOG_DIR=log/$FILENAME
 echo Making directory $LOG_DIR
 mkdir $LOG_DIR -p 
