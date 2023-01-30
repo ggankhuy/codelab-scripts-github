@@ -1,0 +1,166 @@
+:3:rocdevice.cpp            :416 : 108273456009 us: 4324 : [tid:0x7fd281cec080] Initializing HSA stack.
+GG: GetEnvVar(HSA_ENABLED_SDMA): 
+GG: enable_sdma_: 2
+GG: GetEnvVar(HSA_ENABLED_SDMA): 
+GG: enable_sdma_: 2
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+:3:comgrctx.cpp             :33  : 108273545256 us: 4324 : [tid:0x7fd281cec080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 108273545314 us: 4324 : [tid:0x7fd281cec080] Numa selects cpu agent[0]=0x22832a0(fine=0x229a440,coarse=0x2374050) for gpu agent=0x2377a20
+:3:rocdevice.cpp            :1611: 108273545581 us: 4324 : [tid:0x7fd281cec080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 108273545966 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd276800000, size 0x101000
+:4:rocdevice.cpp            :1918: 108273546334 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd276600000, size 0x101000
+:4:rocdevice.cpp            :2054: 108273546452 us: 4324 : [tid:0x7fd281cec080] Allocate hsa device memory 0x7fd276200000, size 0x100000
+:3:rocdevice.cpp            :207 : 108273546484 us: 4324 : [tid:0x7fd281cec080] Numa selects cpu agent[0]=0x22832a0(fine=0x229a440,coarse=0x2374050) for gpu agent=0x24073e0
+:3:rocdevice.cpp            :1611: 108273546610 us: 4324 : [tid:0x7fd281cec080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 108273546866 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd276000000, size 0x101000
+:4:rocdevice.cpp            :1918: 108273547188 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd275e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 108273547298 us: 4324 : [tid:0x7fd281cec080] Allocate hsa device memory 0x7fd275a00000, size 0x100000
+:3:rocdevice.cpp            :207 : 108273547326 us: 4324 : [tid:0x7fd281cec080] Numa selects cpu agent[0]=0x22832a0(fine=0x229a440,coarse=0x2374050) for gpu agent=0x240b770
+:3:rocdevice.cpp            :1611: 108273547440 us: 4324 : [tid:0x7fd281cec080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 108273547673 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd275800000, size 0x101000
+:4:rocdevice.cpp            :1918: 108273547984 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd275600000, size 0x101000
+:4:rocdevice.cpp            :2054: 108273548091 us: 4324 : [tid:0x7fd281cec080] Allocate hsa device memory 0x7fd275200000, size 0x100000
+:3:rocdevice.cpp            :207 : 108273548123 us: 4324 : [tid:0x7fd281cec080] Numa selects cpu agent[0]=0x22832a0(fine=0x229a440,coarse=0x2374050) for gpu agent=0x240fb30
+:3:rocdevice.cpp            :1611: 108273548248 us: 4324 : [tid:0x7fd281cec080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 108273548285 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd281b4c000, size 0xa0
+:4:rocdevice.cpp            :1918: 108273548538 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd275000000, size 0x101000
+:4:rocdevice.cpp            :1918: 108273548847 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd274e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 108273548955 us: 4324 : [tid:0x7fd281cec080] Allocate hsa device memory 0x7fd274a00000, size 0x100000
+:4:runtime.cpp              :83  : 108273548963 us: 4324 : [tid:0x7fd281cec080] init
+:3:hip_context.cpp          :50  : 108273548966 us: 4324 : [tid:0x7fd281cec080] Direct Dispatch: 1
+:3:hip_platform.cpp         :213 : 108273548998 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273549013 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {4197856,0,4196640}, {2175630032,32722,0}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273549016 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273549037 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400e98, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:devprogram.cpp           :2675: 108273549797 us: 4324 : [tid:0x7fd281cec080] Using Code Object V4.
+GG: DmaCopy(dst, src, size)..entered.
+GG: queue_lambda entered: 
+GG: CpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::CreateBlitKernel() entered...
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
+  GG: total_num_packet: 1
+GG: BlitKernel::PopulateQueue: entered.
+:3:devprogram.cpp           :2978: 108273558841 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: _Z2k2v
+:3:devprogram.cpp           :2978: 108273558850 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: _Z2k1v
+:3:hip_module.cpp           :358 : 108273558876 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x2424b50, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:3:rocdevice.cpp            :2686: 108273558899 us: 4324 : [tid:0x7fd281cec080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+:3:rocdevice.cpp            :2757: 108273566703 us: 4324 : [tid:0x7fd281cec080] created hardware queue 0x7fd281b2a000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 108273566890 us: 4324 : [tid:0x7fd281cec080] Allocate hsa host memory 0x7fd276500000, size 0x80000
+:3:devprogram.cpp           :2675: 108273710662 us: 4324 : [tid:0x7fd281cec080] Using Code Object V4.
+GG: DmaCopy(dst, src, size)..entered.
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
+  GG: total_num_packet: 1
+GG: BlitKernel::PopulateQueue: entered.
+:3:devprogram.cpp           :2978: 108273711533 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 108273711537 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 108273711539 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 108273711541 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 108273711542 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 108273711544 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 108273711545 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 108273711547 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 108273711548 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 108273711606 us: 4324 : [tid:0x7fd281cec080] Locking to pool 0x2374050, size 0x1000, HostPtr = 0x28d8000, DevPtr = 0x7fd281b12000
+:4:command.cpp              :339 : 108273711702 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x25257f0
+:3:rocvirtual.cpp           :2723: 108273711711 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k1v
+:4:rocvirtual.cpp           :850 : 108273711727 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b485c0, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711735 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711739 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 108273711748 us: 4324 : [tid:0x7fd281cec080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 108273711752 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273711758 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {1,1,1}, {256,1,1}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273711761 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273711768 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400ea0, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:hip_module.cpp           :358 : 108273711785 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x25b6b80, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 108273711790 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x28837b0
+:3:rocvirtual.cpp           :2723: 108273711793 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k2v
+:4:rocvirtual.cpp           :850 : 108273711796 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b48600, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711798 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711800 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 108273711804 us: 4324 : [tid:0x7fd281cec080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 108273711806 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273711810 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {1,1,1}, {256,1,1}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273711811 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273711816 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400e98, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:hip_module.cpp           :358 : 108273711825 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x2424b50, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 108273711827 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x24f64b0
+:3:rocvirtual.cpp           :2723: 108273711829 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k1v
+:4:rocvirtual.cpp           :850 : 108273711832 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b485c0, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711834 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711836 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 108273711840 us: 4324 : [tid:0x7fd281cec080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 108273711842 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273711846 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {1,1,1}, {256,1,1}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273711848 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273711852 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400ea0, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:hip_module.cpp           :358 : 108273711860 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x25b6b80, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 108273711863 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x24428f0
+:3:rocvirtual.cpp           :2723: 108273711865 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k2v
+:4:rocvirtual.cpp           :850 : 108273711868 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b48600, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711870 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711872 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 108273711875 us: 4324 : [tid:0x7fd281cec080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 108273711877 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273711881 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {1,1,1}, {256,1,1}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273711883 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273711887 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400e98, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:hip_module.cpp           :358 : 108273711896 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x2424b50, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 108273711898 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x24f5ce0
+:3:rocvirtual.cpp           :2723: 108273711900 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k1v
+:4:rocvirtual.cpp           :850 : 108273711903 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b485c0, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711905 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711907 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 108273711910 us: 4324 : [tid:0x7fd281cec080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 108273711912 us: 4324 : [tid:0x7fd281cec080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 108273711916 us: 4324 : [tid:0x7fd281cec080] [32m__hipPopCallConfiguration ( {1,1,1}, {256,1,1}, 0x7ffef9695e78, 0x7ffef9695e70 )[0m
+:3:hip_platform.cpp         :229 : 108273711918 us: 4324 : [tid:0x7fd281cec080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 108273711922 us: 4324 : [tid:0x7fd281cec080] [32mhipLaunchKernel ( 0x400ea0, {1,1,1}, {256,1,1}, 0x7ffef9695ea0, 0, stream:<null> )[0m
+:3:hip_module.cpp           :358 : 108273711931 us: 4324 : [tid:0x7fd281cec080] [32mihipModuleLaunchKernel ( 0x0x25b6b80, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffef9695ea0, char array:<null>, event:0, event:0, 0, 0 )[0m
+:4:command.cpp              :339 : 108273711933 us: 4324 : [tid:0x7fd281cec080] command is enqueued: 0x24fb4e0
+:3:rocvirtual.cpp           :2723: 108273711935 us: 4324 : [tid:0x7fd281cec080] ShaderName : _Z2k2v
+:4:rocvirtual.cpp           :850 : 108273711938 us: 4324 : [tid:0x7fd281cec080] HWq=0x7fd281b2a000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fd281b48600, kernarg_address=0x7fd276500000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 108273711940 us: 4324 : [tid:0x7fd281cec080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 108273711942 us: 4324 : [tid:0x7fd281cec080] hipLaunchKernel: Returned hipSuccess : 
+:3:devprogram.cpp           :2978: 108273711969 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: _Z2k2v
+:3:devprogram.cpp           :2978: 108273711974 us: 4324 : [tid:0x7fd281cec080] For Init/Fini: Kernel Name: _Z2k1v
