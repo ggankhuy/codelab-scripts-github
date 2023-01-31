@@ -49,14 +49,11 @@ int main (void) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    /*
-    if (strcmp(env_nocopy, \
-        '0')==0) {
+    if (env_nocopy_str != "1")
         printf("hipMemcpy.start.\n");
         hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
         printf("hipMemcpy.end\n");
     }
-    */
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
