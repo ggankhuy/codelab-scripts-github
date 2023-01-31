@@ -41,15 +41,18 @@ int main (void) {
     env_timer ? env_timer_str=string(env_timer): "" ;
     env_nocopy ? env_nocopy_str=string(env_nocopy) : "";
 
-    a = (int*)malloc(N * sizeof(int));
- 	hipMalloc(&dev_a, N * sizeof(int) );
+    cout << "env_nocopy_str: " << env_nocopy_str << endl;
+
+    if (env_nocopy_str != "1") {
+        a = (int*)malloc(N * sizeof(int));
+ 	    hipMalloc(&dev_a, N * sizeof(int) );
+    } 
 
 	for (int i = 0; i < N ; i ++ )
 		a[i]  = i;
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    cout << "env_nocopy_str: " << env_nocopy_str << endl;
     if (env_nocopy_str != "1") {
         printf("hipMemcpy.start.\n");
         hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
@@ -62,8 +65,10 @@ int main (void) {
     duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
     std::cout << "It took me " << time_span.count() << " seconds." << std::endl;
 
-    hipFree(dev_a);
-    free(a);
+    if (env_nocopy_str != "1") {
+        hipFree(dev_a);
+        free(a);
+    }
     
 	return 0;
 }
