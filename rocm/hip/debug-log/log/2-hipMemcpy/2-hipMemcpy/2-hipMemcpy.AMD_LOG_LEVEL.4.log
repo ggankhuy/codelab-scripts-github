@@ -1,4 +1,4 @@
-:3:rocdevice.cpp            :416 : 143995615861 us: 12457: [tid:0x7f22350ab080] Initializing HSA stack.
+:3:rocdevice.cpp            :416 : 181633611788 us: 13500: [tid:0x7f0ae5da2080] Initializing HSA stack.
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
 GG: enable_sdma_: 2
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
@@ -39,61 +39,61 @@ GG: InitDma: entered...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
   GG: calling blit_lambda...
   GG: InitGWS...
-:3:comgrctx.cpp             :33  : 143995699860 us: 12457: [tid:0x7f22350ab080] Loading COMGR library.
-:3:rocdevice.cpp            :207 : 143995699923 us: 12457: [tid:0x7f22350ab080] Numa selects cpu agent[0]=0x25c62a0(fine=0x25dd440,coarse=0x26b6fa0) for gpu agent=0x26ba970
-:3:rocdevice.cpp            :1611: 143995700217 us: 12457: [tid:0x7f22350ab080] HMM support: 1, xnack: 0, direct host access: 0
+:3:comgrctx.cpp             :33  : 181633696954 us: 13500: [tid:0x7f0ae5da2080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 181633697009 us: 13500: [tid:0x7f0ae5da2080] Numa selects cpu agent[0]=0x1ea82a0(fine=0x1ebf440,coarse=0x1f98fa0) for gpu agent=0x1f9c970
+:3:rocdevice.cpp            :1611: 181633697296 us: 13500: [tid:0x7f0ae5da2080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 143995700481 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2129a00000, size 0x101000
-:4:rocdevice.cpp            :1918: 143995700807 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2129800000, size 0x101000
-:4:rocdevice.cpp            :2054: 143995700876 us: 12457: [tid:0x7f22350ab080] Allocate hsa device memory 0x7f2129400000, size 0x100000
-:3:rocdevice.cpp            :207 : 143995700904 us: 12457: [tid:0x7f22350ab080] Numa selects cpu agent[0]=0x25c62a0(fine=0x25dd440,coarse=0x26b6fa0) for gpu agent=0x274a330
-:3:rocdevice.cpp            :1611: 143995701024 us: 12457: [tid:0x7f22350ab080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 181633697618 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09da800000, size 0x101000
+:4:rocdevice.cpp            :1918: 181633698048 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09da600000, size 0x101000
+:4:rocdevice.cpp            :2054: 181633698312 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa device memory 0x7f09da200000, size 0x100000
+:3:rocdevice.cpp            :207 : 181633698342 us: 13500: [tid:0x7f0ae5da2080] Numa selects cpu agent[0]=0x1ea82a0(fine=0x1ebf440,coarse=0x1f98fa0) for gpu agent=0x202c330
+:3:rocdevice.cpp            :1611: 181633698462 us: 13500: [tid:0x7f0ae5da2080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 143995701284 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2129200000, size 0x101000
-:4:rocdevice.cpp            :1918: 143995701648 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2129000000, size 0x101000
-:4:rocdevice.cpp            :2054: 143995701714 us: 12457: [tid:0x7f22350ab080] Allocate hsa device memory 0x7f2128c00000, size 0x100000
-:3:rocdevice.cpp            :207 : 143995701743 us: 12457: [tid:0x7f22350ab080] Numa selects cpu agent[0]=0x25c62a0(fine=0x25dd440,coarse=0x26b6fa0) for gpu agent=0x274e6c0
-:3:rocdevice.cpp            :1611: 143995702052 us: 12457: [tid:0x7f22350ab080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 181633698839 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09da000000, size 0x101000
+:4:rocdevice.cpp            :1918: 181633699239 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09d9e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 181633699305 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa device memory 0x7f09d9a00000, size 0x100000
+:3:rocdevice.cpp            :207 : 181633699332 us: 13500: [tid:0x7f0ae5da2080] Numa selects cpu agent[0]=0x1ea82a0(fine=0x1ebf440,coarse=0x1f98fa0) for gpu agent=0x20306c0
+:3:rocdevice.cpp            :1611: 181633699443 us: 13500: [tid:0x7f0ae5da2080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 143995702439 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2128a00000, size 0x101000
-:4:rocdevice.cpp            :1918: 143995702840 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2128800000, size 0x101000
-:4:rocdevice.cpp            :2054: 143995702906 us: 12457: [tid:0x7f22350ab080] Allocate hsa device memory 0x7f2128400000, size 0x100000
-:3:rocdevice.cpp            :207 : 143995702934 us: 12457: [tid:0x7f22350ab080] Numa selects cpu agent[0]=0x25c62a0(fine=0x25dd440,coarse=0x26b6fa0) for gpu agent=0x2752a80
-:3:rocdevice.cpp            :1611: 143995703047 us: 12457: [tid:0x7f22350ab080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 181633699793 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09d9800000, size 0x101000
+:4:rocdevice.cpp            :1918: 181633700185 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09d9600000, size 0x101000
+:4:rocdevice.cpp            :2054: 181633700248 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa device memory 0x7f09d9200000, size 0x100000
+:3:rocdevice.cpp            :207 : 181633700278 us: 13500: [tid:0x7f0ae5da2080] Numa selects cpu agent[0]=0x1ea82a0(fine=0x1ebf440,coarse=0x1f98fa0) for gpu agent=0x2034a80
+:3:rocdevice.cpp            :1611: 181633700387 us: 13500: [tid:0x7f0ae5da2080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 143995703082 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2234f0a000, size 0xa0
-:4:rocdevice.cpp            :1918: 143995703440 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2128200000, size 0x101000
-:4:rocdevice.cpp            :1918: 143995703841 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f1e23800000, size 0x101000
-:4:rocdevice.cpp            :2054: 143995703949 us: 12457: [tid:0x7f22350ab080] Allocate hsa device memory 0x7f1e23400000, size 0x100000
-:4:runtime.cpp              :83  : 143995703956 us: 12457: [tid:0x7f22350ab080] init
-:3:hip_context.cpp          :50  : 143995703959 us: 12457: [tid:0x7f22350ab080] Direct Dispatch: 1
-:4:rocdevice.cpp            :2054: 143995704182 us: 12457: [tid:0x7f22350ab080] Allocate hsa device memory 0x7f1da3200000, size 0x80000000
-:3:rocdevice.cpp            :2093: 143995704188 us: 12457: [tid:0x7f22350ab080] device=0x2759a20, freeMem_ = 0x7f000000
-:3:hip_memory.cpp           :496 : 143995704196 us: 12457: [tid:0x7f22350ab080] hipMalloc: Returned hipSuccess : 0x7f1da3200000
-It took me 5e-08 seconds.
-:3:hip_memory.cpp           :537 : 143995704222 us: 12457: [tid:0x7f22350ab080] [32mhipFree ( 0x7f1da3200000 )[0m
-:3:rocdevice.cpp            :2686: 143995704237 us: 12457: [tid:0x7f22350ab080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+:4:rocdevice.cpp            :1918: 181633700418 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f0ae5c02000, size 0xa0
+:4:rocdevice.cpp            :1918: 181633700705 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09d9000000, size 0x101000
+:4:rocdevice.cpp            :1918: 181633701045 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09d8e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 181633701111 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa device memory 0x7f09d8a00000, size 0x100000
+:4:runtime.cpp              :83  : 181633701119 us: 13500: [tid:0x7f0ae5da2080] init
+:3:hip_context.cpp          :50  : 181633701122 us: 13500: [tid:0x7f0ae5da2080] Direct Dispatch: 1
+:4:rocdevice.cpp            :2054: 181633701388 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa device memory 0x7f0653800000, size 0x80000000
+:3:rocdevice.cpp            :2093: 181633701395 us: 13500: [tid:0x7f0ae5da2080] device=0x203ba20, freeMem_ = 0x7f000000
+:3:hip_memory.cpp           :496 : 181633701403 us: 13500: [tid:0x7f0ae5da2080] hipMalloc: Returned hipSuccess : 0x7f0653800000
+It took me 4e-08 seconds.
+:3:hip_memory.cpp           :537 : 181633701430 us: 13500: [tid:0x7f0ae5da2080] [32mhipFree ( 0x7f0653800000 )[0m
+:3:rocdevice.cpp            :2686: 181633701447 us: 13500: [tid:0x7f0ae5da2080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
 GG: queue_lambda entered: 
 GG: CpuAgent::CreateInterceptibleQueue entered...
-:3:rocdevice.cpp            :2757: 143995721153 us: 12457: [tid:0x7f22350ab080] created hardware queue 0x7f2234efa000 with size 4096 with priority 1, cooperative: 0
-:4:rocdevice.cpp            :1918: 143995721335 us: 12457: [tid:0x7f22350ab080] Allocate hsa host memory 0x7f2129700000, size 0x80000
-:3:devprogram.cpp           :2675: 143995867173 us: 12457: [tid:0x7f22350ab080] Using Code Object V4.
+:3:rocdevice.cpp            :2757: 181633717590 us: 13500: [tid:0x7f0ae5da2080] created hardware queue 0x7f0ae5bf2000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 181633717818 us: 13500: [tid:0x7f0ae5da2080] Allocate hsa host memory 0x7f09da500000, size 0x80000
+:3:devprogram.cpp           :2675: 181633864006 us: 13500: [tid:0x7f0ae5da2080] Using Code Object V4.
 GG: DmaCopy(dst, src, size)..entered.
 GG: GpuAgent::CreateBlitKernel() entered...
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:3:devprogram.cpp           :2978: 143995868259 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
-:3:devprogram.cpp           :2978: 143995868266 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
-:3:devprogram.cpp           :2978: 143995868268 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
-:3:devprogram.cpp           :2978: 143995868269 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
-:3:devprogram.cpp           :2978: 143995868271 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
-:3:devprogram.cpp           :2978: 143995868272 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
-:3:devprogram.cpp           :2978: 143995868274 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
-:3:devprogram.cpp           :2978: 143995868275 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
-:3:devprogram.cpp           :2978: 143995868277 us: 12457: [tid:0x7f22350ab080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
-:4:rocmemory.cpp            :941 : 143995868333 us: 12457: [tid:0x7f22350ab080] Locking to pool 0x26b6fa0, size 0x1000, HostPtr = 0x2836000, DevPtr = 0x7f2229d50000
-:4:rocdevice.cpp            :2070: 143995868543 us: 12457: [tid:0x7f22350ab080] Free hsa memory 0x7f1da3200000
-:3:rocdevice.cpp            :2093: 143995868550 us: 12457: [tid:0x7f22350ab080] device=0x2759a20, freeMem_ = 0xff000000
-:3:hip_memory.cpp           :539 : 143995868555 us: 12457: [tid:0x7f22350ab080] hipFree: Returned hipSuccess : 
+:3:devprogram.cpp           :2978: 181633865178 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 181633865185 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 181633865186 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 181633865188 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 181633865189 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 181633865191 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 181633865192 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 181633865194 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 181633865195 us: 13500: [tid:0x7f0ae5da2080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 181633865255 us: 13500: [tid:0x7f0ae5da2080] Locking to pool 0x1f98fa0, size 0x1000, HostPtr = 0x2b3a000, DevPtr = 0x7f0adaa4a000
+:4:rocdevice.cpp            :2070: 181633865473 us: 13500: [tid:0x7f0ae5da2080] Free hsa memory 0x7f0653800000
+:3:rocdevice.cpp            :2093: 181633865479 us: 13500: [tid:0x7f0ae5da2080] device=0x203ba20, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :539 : 181633865486 us: 13500: [tid:0x7f0ae5da2080] hipFree: Returned hipSuccess : 
