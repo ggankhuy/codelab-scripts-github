@@ -29,11 +29,11 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
-    string env_timer = getenv("timer");
-    cout << "env_timer: " << env_timer << endl;
+    //string env_timer = getenv("timer");
+    //cout << "env_timer: " << env_timer << endl;
 
-    string env_no_copy = getenv("no_copy");
-    cout << "env_no_copy: " << env_no_copy << endl;
+    //string env_no_copy = getenv("no_copy");
+    //cout << "env_no_copy: " << env_no_copy << endl;
 
     a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
@@ -43,13 +43,14 @@ int main (void) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    if (env_no_copy == "1") {
-        printf("hipMemcpy.start.\n");
-   	    hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-        printf("hipMemcpy.end\n");
-    }
+    printf("hipMemcpy.start.\n");
+    hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+    printf("hipMemcpy.end\n");
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+    std::cout << "It took me " << time_span.count() << " seconds.";
+
     hipFree(dev_a);
     free(a);
     
