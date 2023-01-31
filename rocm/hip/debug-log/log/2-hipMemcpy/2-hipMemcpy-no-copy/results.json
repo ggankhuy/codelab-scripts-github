@@ -1,1 +1,3968 @@
-,{"args":{"name":"COPY"},"ph":"M","pid":1,"name":"process_name","sort_index":0}
+{ "traceEvents":[{}
+,{"args":{"name":"CPU HIP API"},"ph":"M","pid":2,"name":"process_name","sort_index":0}
+,{"args":{"name":"CPU HSA API"},"ph":"M","pid":3,"name":"process_name","sort_index":1}
+,{"args":{"name":"COPY"},"ph":"M","pid":1,"name":"process_name","sort_index":2}
+,{"ph":"X","name":"hsa_system_get_major_extension_table","pid":"3","tid":"61222","ts":"143836356599","dur":"1",
+  "args":{
+    "BeginNs":"143836356599815",
+    "EndNs":"143836356600115",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_major_extension_table",
+    "args":"(513, 1, 24, 0x7f6960331ea0) = 0",
+    "Data":"",
+    "DurationNs":"300"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356609","dur":"1",
+  "args":{
+    "BeginNs":"143836356609274",
+    "EndNs":"143836356609584",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=21799584}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"310"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356615","dur":"1",
+  "args":{
+    "BeginNs":"143836356615404",
+    "EndNs":"143836356617134",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=21894208}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"1730"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356617","dur":"1",
+  "args":{
+    "BeginNs":"143836356617284",
+    "EndNs":"143836356617354",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=21894208}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356617","dur":"1",
+  "args":{
+    "BeginNs":"143836356617524",
+    "EndNs":"143836356617904",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=23052512}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"380"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356618","dur":"1",
+  "args":{
+    "BeginNs":"143836356618144",
+    "EndNs":"143836356618234",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=23052512}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356618","dur":"1",
+  "args":{
+    "BeginNs":"143836356618484",
+    "EndNs":"143836356618654",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22804960}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356618","dur":"1",
+  "args":{
+    "BeginNs":"143836356618784",
+    "EndNs":"143836356618854",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22804960}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836356612","dur":"6",
+  "args":{
+    "BeginNs":"143836356612364",
+    "EndNs":"143836356618994",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=21799584}, 1, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"6630"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356619","dur":"1",
+  "args":{
+    "BeginNs":"143836356619424",
+    "EndNs":"143836356619494",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=22779680}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356619","dur":"1",
+  "args":{
+    "BeginNs":"143836356619934",
+    "EndNs":"143836356620094",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22808976}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356620","dur":"1",
+  "args":{
+    "BeginNs":"143836356620194",
+    "EndNs":"143836356620254",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22808976}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356620","dur":"1",
+  "args":{
+    "BeginNs":"143836356620424",
+    "EndNs":"143836356620484",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22809920}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356620","dur":"1",
+  "args":{
+    "BeginNs":"143836356620614",
+    "EndNs":"143836356620684",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22809920}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356620","dur":"1",
+  "args":{
+    "BeginNs":"143836356620804",
+    "EndNs":"143836356620974",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22810912}, 0, 0x7ffcdc86b898) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356621","dur":"1",
+  "args":{
+    "BeginNs":"143836356621084",
+    "EndNs":"143836356621144",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=22810912}, 1, 0x7ffcdc86b89c) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836356619","dur":"1",
+  "args":{
+    "BeginNs":"143836356619614",
+    "EndNs":"143836356621244",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=22779680}, 1, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"1630"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356622","dur":"1",
+  "args":{
+    "BeginNs":"143836356622384",
+    "EndNs":"143836356622504",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356622","dur":"1",
+  "args":{
+    "BeginNs":"143836356622714",
+    "EndNs":"143836356622774",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356623","dur":"1",
+  "args":{
+    "BeginNs":"143836356623004",
+    "EndNs":"143836356623064",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356623","dur":"1",
+  "args":{
+    "BeginNs":"143836356623214",
+    "EndNs":"143836356623274",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 17, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_iterate_agents","pid":"3","tid":"61222","ts":"143836356606","dur":"16",
+  "args":{
+    "BeginNs":"143836356606524",
+    "EndNs":"143836356623384",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_iterate_agents",
+    "args":"(1, 0) = 0",
+    "Data":"",
+    "DurationNs":"16860"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356630","dur":"1",
+  "args":{
+    "BeginNs":"143836356630574",
+    "EndNs":"143836356632024",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 0, 0x7ffcdc86ba80) = 0",
+    "Data":"",
+    "DurationNs":"1450"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356632","dur":"1",
+  "args":{
+    "BeginNs":"143836356632154",
+    "EndNs":"143836356632234",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40960, 0x17de388) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_iterate_isas","pid":"3","tid":"61222","ts":"143836356634","dur":"1",
+  "args":{
+    "BeginNs":"143836356634024",
+    "EndNs":"143836356634524",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_iterate_isas",
+    "args":"({handle=24040944}, 1, 0x7ffcdc86ba20) = 0",
+    "Data":"",
+    "DurationNs":"500"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836356636","dur":"36",
+  "args":{
+    "BeginNs":"143836356636104",
+    "EndNs":"143836356672913",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 0, 0x7ffcdc86ba08) = 0",
+    "Data":"",
+    "DurationNs":"36809"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836356673","dur":"2",
+  "args":{
+    "BeginNs":"143836356673273",
+    "EndNs":"143836356675753",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 1, 0x17d9bf0) = 0",
+    "Data":"",
+    "DurationNs":"2480"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356679","dur":"1",
+  "args":{
+    "BeginNs":"143836356679623",
+    "EndNs":"143836356679703",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 4, 0x17de398) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356679","dur":"1",
+  "args":{
+    "BeginNs":"143836356679823",
+    "EndNs":"143836356679903",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40976, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356719","dur":"1",
+  "args":{
+    "BeginNs":"143836356719923",
+    "EndNs":"143836356720033",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40966, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356720","dur":"1",
+  "args":{
+    "BeginNs":"143836356720193",
+    "EndNs":"143836356720263",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40975, 0x7ffcdc86ba14) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356720","dur":"1",
+  "args":{
+    "BeginNs":"143836356720383",
+    "EndNs":"143836356720453",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40974, 0x7ffcdc86ba30) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356720","dur":"1",
+  "args":{
+    "BeginNs":"143836356720923",
+    "EndNs":"143836356721013",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40969, 0x7ffcdc86b760) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356721","dur":"3",
+  "args":{
+    "BeginNs":"143836356721293",
+    "EndNs":"143836356724593",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40977, 0x7ffcdc86b700) = 0",
+    "Data":"",
+    "DurationNs":"3300"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356724","dur":"1",
+  "args":{
+    "BeginNs":"143836356724763",
+    "EndNs":"143836356724883",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40980, 0x17ddd94) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356724","dur":"1",
+  "args":{
+    "BeginNs":"143836356724993",
+    "EndNs":"143836356725053",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40962, 0x17ddd98) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356725","dur":"2",
+  "args":{
+    "BeginNs":"143836356725163",
+    "EndNs":"143836356727193",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40961, 0x17ddea4) = 0",
+    "Data":"",
+    "DurationNs":"2030"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356727","dur":"1",
+  "args":{
+    "BeginNs":"143836356727293",
+    "EndNs":"143836356727573",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 18, 0x7ffcdc86b6f0) = 0",
+    "Data":"",
+    "DurationNs":"280"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356731","dur":"1",
+  "args":{
+    "BeginNs":"143836356731353",
+    "EndNs":"143836356731443",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40963, 0x17dde08) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356731","dur":"1",
+  "args":{
+    "BeginNs":"143836356731553",
+    "EndNs":"143836356731623",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40968, 0x17dde0c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356731","dur":"1",
+  "args":{
+    "BeginNs":"143836356731743",
+    "EndNs":"143836356731813",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40982, 0x7ffcdc86b6d8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356731","dur":"1",
+  "args":{
+    "BeginNs":"143836356731933",
+    "EndNs":"143836356732003",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40967, 0x17de0e0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356732","dur":"1",
+  "args":{
+    "BeginNs":"143836356732113",
+    "EndNs":"143836356732183",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40964, 0x17de280) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356737","dur":"1",
+  "args":{
+    "BeginNs":"143836356737092",
+    "EndNs":"143836356737382",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=21894208}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"290"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356737","dur":"1",
+  "args":{
+    "BeginNs":"143836356737542",
+    "EndNs":"143836356737612",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=21894208}, 2, 0x17db720) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356737","dur":"1",
+  "args":{
+    "BeginNs":"143836356737822",
+    "EndNs":"143836356737882",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=22808976}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356737","dur":"1",
+  "args":{
+    "BeginNs":"143836356737992",
+    "EndNs":"143836356738062",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=22808976}, 2, 0x17db720) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356742","dur":"1",
+  "args":{
+    "BeginNs":"143836356742562",
+    "EndNs":"143836356742652",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=21894208}, 1, 0x7ffcdc86b61c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356742","dur":"1",
+  "args":{
+    "BeginNs":"143836356742772",
+    "EndNs":"143836356742842",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=21894208}, 2, 0x17db720) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356743","dur":"1",
+  "args":{
+    "BeginNs":"143836356743682",
+    "EndNs":"143836356743772",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24044832}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356743","dur":"1",
+  "args":{
+    "BeginNs":"143836356743892",
+    "EndNs":"143836356743952",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24044832}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356744","dur":"1",
+  "args":{
+    "BeginNs":"143836356744072",
+    "EndNs":"143836356744232",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=21799584}, {handle=24044832}, 0, 0x7ffcdc86b55c) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356744","dur":"1",
+  "args":{
+    "BeginNs":"143836356744392",
+    "EndNs":"143836356744452",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24045664}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356744","dur":"1",
+  "args":{
+    "BeginNs":"143836356744552",
+    "EndNs":"143836356744612",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24045664}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356744","dur":"1",
+  "args":{
+    "BeginNs":"143836356744852",
+    "EndNs":"143836356744922",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24046624}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836356743","dur":"2",
+  "args":{
+    "BeginNs":"143836356743042",
+    "EndNs":"143836356745052",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=24040944}, 1, 0x17ddd40) = 0",
+    "Data":"",
+    "DurationNs":"2010"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356745","dur":"1",
+  "args":{
+    "BeginNs":"143836356745182",
+    "EndNs":"143836356745362",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=24044832}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"180"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356745","dur":"1",
+  "args":{
+    "BeginNs":"143836356745662",
+    "EndNs":"143836356745832",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=24044832}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356746","dur":"1",
+  "args":{
+    "BeginNs":"143836356746002",
+    "EndNs":"143836356746202",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=24044832}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"200"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356746","dur":"1",
+  "args":{
+    "BeginNs":"143836356746412",
+    "EndNs":"143836356746472",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24046624}, 2, 0x7ffcdc86b6e0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356746","dur":"1",
+  "args":{
+    "BeginNs":"143836356746592",
+    "EndNs":"143836356746652",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24044832}, 2, 0x7ffcdc86b820) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836356746","dur":"1",
+  "args":{
+    "BeginNs":"143836356746772",
+    "EndNs":"143836356746842",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24044832}, 6, 0x17de3e8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356752","dur":"1",
+  "args":{
+    "BeginNs":"143836356752302",
+    "EndNs":"143836356752412",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 8, 0x7ffcdc86b6cc) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356752","dur":"1",
+  "args":{
+    "BeginNs":"143836356752522",
+    "EndNs":"143836356752712",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 7, 0x7ffcdc86b6d2) = 0",
+    "Data":"",
+    "DurationNs":"190"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356910","dur":"1",
+  "args":{
+    "BeginNs":"143836356910930",
+    "EndNs":"143836356911090",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 21, 0x7ffcdc86b6c8) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356911","dur":"1",
+  "args":{
+    "BeginNs":"143836356911250",
+    "EndNs":"143836356911320",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 22, 0x7ffcdc86b6ca) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836356921","dur":"162",
+  "args":{
+    "BeginNs":"143836356921450",
+    "EndNs":"143836357084207",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 20, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"162757"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357084","dur":"1",
+  "args":{
+    "BeginNs":"143836357084677",
+    "EndNs":"143836357084787",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12299, 0x17dde78) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357084","dur":"1",
+  "args":{
+    "BeginNs":"143836357084897",
+    "EndNs":"143836357084997",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12297, 0x17dde24) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357085","dur":"1",
+  "args":{
+    "BeginNs":"143836357085107",
+    "EndNs":"143836357085177",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12298, 0x17dde2c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836357088","dur":"1",
+  "args":{
+    "BeginNs":"143836357088797",
+    "EndNs":"143836357089247",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=21799584}, 1, 0x17dd000) = 1",
+    "Data":"",
+    "DurationNs":"450"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357085","dur":"145",
+  "args":{
+    "BeginNs":"143836357085287",
+    "EndNs":"143836357230485",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12291, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"145198"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357230","dur":"1",
+  "args":{
+    "BeginNs":"143836357230735",
+    "EndNs":"143836357230895",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12295, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357231","dur":"1",
+  "args":{
+    "BeginNs":"143836357231015",
+    "EndNs":"143836357231135",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12296, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357231","dur":"1",
+  "args":{
+    "BeginNs":"143836357231245",
+    "EndNs":"143836357231355",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12288, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357231","dur":"1",
+  "args":{
+    "BeginNs":"143836357231465",
+    "EndNs":"143836357231575",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 12290, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357231","dur":"1",
+  "args":{
+    "BeginNs":"143836357231805",
+    "EndNs":"143836357231895",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 6, 0x17de0d0) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357231","dur":"1",
+  "args":{
+    "BeginNs":"143836357231995",
+    "EndNs":"143836357232075",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40967, 0x17dde14) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357232","dur":"1",
+  "args":{
+    "BeginNs":"143836357232185",
+    "EndNs":"143836357232285",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40971, 0x17de0c0) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357232","dur":"1",
+  "args":{
+    "BeginNs":"143836357232385",
+    "EndNs":"143836357232465",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40970, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357232","dur":"1",
+  "args":{
+    "BeginNs":"143836357232575",
+    "EndNs":"143836357233105",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 18, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"530"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357233","dur":"1",
+  "args":{
+    "BeginNs":"143836357233215",
+    "EndNs":"143836357233305",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40978, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836357286","dur":"1",
+  "args":{
+    "BeginNs":"143836357286704",
+    "EndNs":"143836357286854",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(513, 0x17de24c) = 0",
+    "Data":"",
+    "DurationNs":"150"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836357287","dur":"1",
+  "args":{
+    "BeginNs":"143836357287014",
+    "EndNs":"143836357287174",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(514, 0x17de250) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836357287","dur":"1",
+  "args":{
+    "BeginNs":"143836357287294",
+    "EndNs":"143836357287364",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24040944}, 40979, 0x17de254) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836357299","dur":"420",
+  "args":{
+    "BeginNs":"143836357299344",
+    "EndNs":"143836357719477",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"420133"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836357726","dur":"128",
+  "args":{
+    "BeginNs":"143836357726857",
+    "EndNs":"143836357855655",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f6424800000) = 0",
+    "Data":"",
+    "DurationNs":"128798"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836357857","dur":"331",
+  "args":{
+    "BeginNs":"143836357857515",
+    "EndNs":"143836358189170",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"331655"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836358194","dur":"73",
+  "args":{
+    "BeginNs":"143836358194820",
+    "EndNs":"143836358267899",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f6424600000) = 0",
+    "Data":"",
+    "DurationNs":"73079"
+  }
+}
+,{"ph":"X","name":"hsa_signal_create","pid":"3","tid":"61222","ts":"143836358269","dur":"5",
+  "args":{
+    "BeginNs":"143836358269619",
+    "EndNs":"143836358275459",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_signal_create",
+    "args":"(1, 0, 0, 0x17de3d0) = 0",
+    "Data":"",
+    "DurationNs":"5840"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358279","dur":"1",
+  "args":{
+    "BeginNs":"143836358279479",
+    "EndNs":"143836358280029",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 0, 0x7ffcdc86ba80) = 0",
+    "Data":"",
+    "DurationNs":"550"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358280","dur":"1",
+  "args":{
+    "BeginNs":"143836358280149",
+    "EndNs":"143836358280229",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40960, 0x17f9e08) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_iterate_isas","pid":"3","tid":"61222","ts":"143836358280","dur":"1",
+  "args":{
+    "BeginNs":"143836358280419",
+    "EndNs":"143836358280499",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_iterate_isas",
+    "args":"({handle=24289952}, 1, 0x7ffcdc86ba20) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836358280","dur":"6",
+  "args":{
+    "BeginNs":"143836358280659",
+    "EndNs":"143836358287358",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 0, 0x7ffcdc86ba08) = 0",
+    "Data":"",
+    "DurationNs":"6699"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836358287","dur":"2",
+  "args":{
+    "BeginNs":"143836358287588",
+    "EndNs":"143836358290268",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 1, 0x17d9bf0) = 0",
+    "Data":"",
+    "DurationNs":"2680"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358290","dur":"1",
+  "args":{
+    "BeginNs":"143836358290748",
+    "EndNs":"143836358290848",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 4, 0x17f9e18) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358290","dur":"1",
+  "args":{
+    "BeginNs":"143836358290968",
+    "EndNs":"143836358291058",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40976, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358291","dur":"1",
+  "args":{
+    "BeginNs":"143836358291978",
+    "EndNs":"143836358292058",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40966, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358292","dur":"1",
+  "args":{
+    "BeginNs":"143836358292168",
+    "EndNs":"143836358292238",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40975, 0x7ffcdc86ba14) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358292","dur":"1",
+  "args":{
+    "BeginNs":"143836358292348",
+    "EndNs":"143836358292418",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40974, 0x7ffcdc86ba30) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358292","dur":"1",
+  "args":{
+    "BeginNs":"143836358292608",
+    "EndNs":"143836358292688",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40969, 0x7ffcdc86b760) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358292","dur":"2",
+  "args":{
+    "BeginNs":"143836358292858",
+    "EndNs":"143836358295218",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40977, 0x7ffcdc86b700) = 0",
+    "Data":"",
+    "DurationNs":"2360"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358295","dur":"1",
+  "args":{
+    "BeginNs":"143836358295388",
+    "EndNs":"143836358295498",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40980, 0x17f9814) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358295","dur":"1",
+  "args":{
+    "BeginNs":"143836358295618",
+    "EndNs":"143836358295678",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40962, 0x17f9818) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358295","dur":"1",
+  "args":{
+    "BeginNs":"143836358295788",
+    "EndNs":"143836358297618",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40961, 0x17f9924) = 0",
+    "Data":"",
+    "DurationNs":"1830"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358297","dur":"1",
+  "args":{
+    "BeginNs":"143836358297758",
+    "EndNs":"143836358298008",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 18, 0x7ffcdc86b6f0) = 0",
+    "Data":"",
+    "DurationNs":"250"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358300","dur":"1",
+  "args":{
+    "BeginNs":"143836358300038",
+    "EndNs":"143836358300108",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40963, 0x17f9888) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358300","dur":"1",
+  "args":{
+    "BeginNs":"143836358300218",
+    "EndNs":"143836358300308",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40968, 0x17f988c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358300","dur":"1",
+  "args":{
+    "BeginNs":"143836358300418",
+    "EndNs":"143836358300498",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40982, 0x7ffcdc86b6d8) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358300","dur":"1",
+  "args":{
+    "BeginNs":"143836358300618",
+    "EndNs":"143836358300678",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40967, 0x17f9b60) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358300","dur":"1",
+  "args":{
+    "BeginNs":"143836358300798",
+    "EndNs":"143836358300858",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40964, 0x17f9d00) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358301","dur":"1",
+  "args":{
+    "BeginNs":"143836358301228",
+    "EndNs":"143836358301408",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=21894208}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"180"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358301","dur":"1",
+  "args":{
+    "BeginNs":"143836358301548",
+    "EndNs":"143836358301618",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=21894208}, 2, 0x17f9340) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358301","dur":"1",
+  "args":{
+    "BeginNs":"143836358301808",
+    "EndNs":"143836358301888",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=22808976}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358301","dur":"1",
+  "args":{
+    "BeginNs":"143836358301998",
+    "EndNs":"143836358302068",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=22808976}, 2, 0x17f9340) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358306","dur":"1",
+  "args":{
+    "BeginNs":"143836358306408",
+    "EndNs":"143836358306508",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=21894208}, 1, 0x7ffcdc86b61c) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358306","dur":"1",
+  "args":{
+    "BeginNs":"143836358306658",
+    "EndNs":"143836358306718",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=21894208}, 2, 0x17f9340) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358307","dur":"1",
+  "args":{
+    "BeginNs":"143836358307218",
+    "EndNs":"143836358307358",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24292416}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"140"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358307","dur":"1",
+  "args":{
+    "BeginNs":"143836358307508",
+    "EndNs":"143836358307598",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24292416}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358307","dur":"1",
+  "args":{
+    "BeginNs":"143836358307738",
+    "EndNs":"143836358307828",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=21799584}, {handle=24292416}, 0, 0x7ffcdc86b55c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358308","dur":"1",
+  "args":{
+    "BeginNs":"143836358308128",
+    "EndNs":"143836358308198",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24293248}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358308","dur":"1",
+  "args":{
+    "BeginNs":"143836358308298",
+    "EndNs":"143836358308358",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24293248}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358308","dur":"1",
+  "args":{
+    "BeginNs":"143836358308658",
+    "EndNs":"143836358308718",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24294080}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836358306","dur":"2",
+  "args":{
+    "BeginNs":"143836358306948",
+    "EndNs":"143836358309208",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=24289952}, 1, 0x17f97c0) = 0",
+    "Data":"",
+    "DurationNs":"2260"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358309","dur":"1",
+  "args":{
+    "BeginNs":"143836358309338",
+    "EndNs":"143836358309508",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=24292416}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358309","dur":"1",
+  "args":{
+    "BeginNs":"143836358309748",
+    "EndNs":"143836358309808",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=24292416}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358310","dur":"1",
+  "args":{
+    "BeginNs":"143836358310078",
+    "EndNs":"143836358310168",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=24292416}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358310","dur":"1",
+  "args":{
+    "BeginNs":"143836358310368",
+    "EndNs":"143836358310428",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24294080}, 2, 0x7ffcdc86b6e0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358310","dur":"1",
+  "args":{
+    "BeginNs":"143836358310548",
+    "EndNs":"143836358310608",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24292416}, 2, 0x7ffcdc86b820) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836358310","dur":"1",
+  "args":{
+    "BeginNs":"143836358310728",
+    "EndNs":"143836358310798",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24292416}, 6, 0x17f9e68) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358311","dur":"1",
+  "args":{
+    "BeginNs":"143836358311798",
+    "EndNs":"143836358311888",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 8, 0x7ffcdc86b6cc) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358311","dur":"1",
+  "args":{
+    "BeginNs":"143836358311998",
+    "EndNs":"143836358312088",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 7, 0x7ffcdc86b6d2) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358312","dur":"1",
+  "args":{
+    "BeginNs":"143836358312298",
+    "EndNs":"143836358312368",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 21, 0x7ffcdc86b6c8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358312","dur":"1",
+  "args":{
+    "BeginNs":"143836358312478",
+    "EndNs":"143836358312548",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 22, 0x7ffcdc86b6ca) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358314","dur":"100",
+  "args":{
+    "BeginNs":"143836358314068",
+    "EndNs":"143836358414287",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 20, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"100219"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358414","dur":"1",
+  "args":{
+    "BeginNs":"143836358414777",
+    "EndNs":"143836358414967",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12299, 0x17f98f8) = 0",
+    "Data":"",
+    "DurationNs":"190"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358415","dur":"1",
+  "args":{
+    "BeginNs":"143836358415097",
+    "EndNs":"143836358415197",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12297, 0x17f98a4) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358415","dur":"1",
+  "args":{
+    "BeginNs":"143836358415307",
+    "EndNs":"143836358415377",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12298, 0x17f98ac) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358415","dur":"1",
+  "args":{
+    "BeginNs":"143836358415477",
+    "EndNs":"143836358415977",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12291, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"500"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358416","dur":"1",
+  "args":{
+    "BeginNs":"143836358416107",
+    "EndNs":"143836358416247",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12295, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"140"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358416","dur":"1",
+  "args":{
+    "BeginNs":"143836358416357",
+    "EndNs":"143836358416527",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12296, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358416","dur":"1",
+  "args":{
+    "BeginNs":"143836358416627",
+    "EndNs":"143836358416737",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12288, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358416","dur":"1",
+  "args":{
+    "BeginNs":"143836358416857",
+    "EndNs":"143836358416967",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 12290, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358417","dur":"1",
+  "args":{
+    "BeginNs":"143836358417127",
+    "EndNs":"143836358417217",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 6, 0x17f9b50) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358417","dur":"1",
+  "args":{
+    "BeginNs":"143836358417357",
+    "EndNs":"143836358417437",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40967, 0x17f9894) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358417","dur":"1",
+  "args":{
+    "BeginNs":"143836358417567",
+    "EndNs":"143836358417656",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40971, 0x17f9b40) = 0",
+    "Data":"",
+    "DurationNs":"89"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358417","dur":"1",
+  "args":{
+    "BeginNs":"143836358417766",
+    "EndNs":"143836358417846",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40970, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358417","dur":"1",
+  "args":{
+    "BeginNs":"143836358417966",
+    "EndNs":"143836358418396",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 18, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"430"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358418","dur":"1",
+  "args":{
+    "BeginNs":"143836358418536",
+    "EndNs":"143836358418616",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40978, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836358432","dur":"1",
+  "args":{
+    "BeginNs":"143836358432256",
+    "EndNs":"143836358432376",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(513, 0x17f9ccc) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836358432","dur":"1",
+  "args":{
+    "BeginNs":"143836358432526",
+    "EndNs":"143836358432656",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(514, 0x17f9cd0) = 0",
+    "Data":"",
+    "DurationNs":"130"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836358432","dur":"1",
+  "args":{
+    "BeginNs":"143836358432776",
+    "EndNs":"143836358432856",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24289952}, 40979, 0x17f9cd4) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836358439","dur":"323",
+  "args":{
+    "BeginNs":"143836358439736",
+    "EndNs":"143836358763321",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"323585"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836358768","dur":"58",
+  "args":{
+    "BeginNs":"143836358768581",
+    "EndNs":"143836358826590",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f6424400000) = 0",
+    "Data":"",
+    "DurationNs":"58009"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836358827","dur":"292",
+  "args":{
+    "BeginNs":"143836358827180",
+    "EndNs":"143836359120116",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"292936"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836359125","dur":"75",
+  "args":{
+    "BeginNs":"143836359125286",
+    "EndNs":"143836359200764",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f6424200000) = 0",
+    "Data":"",
+    "DurationNs":"75478"
+  }
+}
+,{"ph":"X","name":"hsa_signal_create","pid":"3","tid":"61222","ts":"143836359201","dur":"1",
+  "args":{
+    "BeginNs":"143836359201144",
+    "EndNs":"143836359202694",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_signal_create",
+    "args":"(1, 0, 0, 0x17f9e50) = 0",
+    "Data":"",
+    "DurationNs":"1550"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359205","dur":"1",
+  "args":{
+    "BeginNs":"143836359205074",
+    "EndNs":"143836359205704",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 0, 0x7ffcdc86ba80) = 0",
+    "Data":"",
+    "DurationNs":"630"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359205","dur":"1",
+  "args":{
+    "BeginNs":"143836359205824",
+    "EndNs":"143836359205894",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40960, 0x17fc458) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_iterate_isas","pid":"3","tid":"61222","ts":"143836359206","dur":"1",
+  "args":{
+    "BeginNs":"143836359206084",
+    "EndNs":"143836359206234",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_iterate_isas",
+    "args":"({handle=24519728}, 1, 0x7ffcdc86ba20) = 0",
+    "Data":"",
+    "DurationNs":"150"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836359206","dur":"6",
+  "args":{
+    "BeginNs":"143836359206384",
+    "EndNs":"143836359212974",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 0, 0x7ffcdc86ba08) = 0",
+    "Data":"",
+    "DurationNs":"6590"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836359213","dur":"2",
+  "args":{
+    "BeginNs":"143836359213164",
+    "EndNs":"143836359215644",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 1, 0x17d9bf0) = 0",
+    "Data":"",
+    "DurationNs":"2480"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359216","dur":"1",
+  "args":{
+    "BeginNs":"143836359216374",
+    "EndNs":"143836359216454",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 4, 0x17fc468) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359216","dur":"1",
+  "args":{
+    "BeginNs":"143836359216604",
+    "EndNs":"143836359216714",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40976, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359218","dur":"1",
+  "args":{
+    "BeginNs":"143836359218234",
+    "EndNs":"143836359218314",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40966, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359218","dur":"1",
+  "args":{
+    "BeginNs":"143836359218434",
+    "EndNs":"143836359218504",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40975, 0x7ffcdc86ba14) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359218","dur":"1",
+  "args":{
+    "BeginNs":"143836359218614",
+    "EndNs":"143836359218684",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40974, 0x7ffcdc86ba30) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359218","dur":"1",
+  "args":{
+    "BeginNs":"143836359218854",
+    "EndNs":"143836359218984",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40969, 0x7ffcdc86b760) = 0",
+    "Data":"",
+    "DurationNs":"130"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359219","dur":"2",
+  "args":{
+    "BeginNs":"143836359219184",
+    "EndNs":"143836359221774",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40977, 0x7ffcdc86b700) = 0",
+    "Data":"",
+    "DurationNs":"2590"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359221","dur":"1",
+  "args":{
+    "BeginNs":"143836359221924",
+    "EndNs":"143836359222044",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40980, 0x17fbe64) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359222","dur":"1",
+  "args":{
+    "BeginNs":"143836359222184",
+    "EndNs":"143836359222244",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40962, 0x17fbe68) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359222","dur":"1",
+  "args":{
+    "BeginNs":"143836359222384",
+    "EndNs":"143836359224094",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40961, 0x17fbf74) = 0",
+    "Data":"",
+    "DurationNs":"1710"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359224","dur":"1",
+  "args":{
+    "BeginNs":"143836359224234",
+    "EndNs":"143836359224484",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 18, 0x7ffcdc86b6f0) = 0",
+    "Data":"",
+    "DurationNs":"250"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359226","dur":"1",
+  "args":{
+    "BeginNs":"143836359226284",
+    "EndNs":"143836359226354",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40963, 0x17fbed8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359226","dur":"1",
+  "args":{
+    "BeginNs":"143836359226464",
+    "EndNs":"143836359226544",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40968, 0x17fbedc) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359226","dur":"1",
+  "args":{
+    "BeginNs":"143836359226654",
+    "EndNs":"143836359226734",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40982, 0x7ffcdc86b6d8) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359226","dur":"1",
+  "args":{
+    "BeginNs":"143836359226854",
+    "EndNs":"143836359226914",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40967, 0x17fc1b0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359227","dur":"1",
+  "args":{
+    "BeginNs":"143836359227024",
+    "EndNs":"143836359227094",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40964, 0x17fc350) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359227","dur":"1",
+  "args":{
+    "BeginNs":"143836359227414",
+    "EndNs":"143836359227554",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=21894208}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"140"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359227","dur":"1",
+  "args":{
+    "BeginNs":"143836359227694",
+    "EndNs":"143836359227764",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=21894208}, 2, 0x17fb990) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359227","dur":"1",
+  "args":{
+    "BeginNs":"143836359227984",
+    "EndNs":"143836359228064",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=22808976}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359228","dur":"1",
+  "args":{
+    "BeginNs":"143836359228174",
+    "EndNs":"143836359228244",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=22808976}, 2, 0x17fb990) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359232","dur":"1",
+  "args":{
+    "BeginNs":"143836359232534",
+    "EndNs":"143836359232604",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=21894208}, 1, 0x7ffcdc86b61c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359232","dur":"1",
+  "args":{
+    "BeginNs":"143836359232734",
+    "EndNs":"143836359232824",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=21894208}, 2, 0x17fb990) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359233","dur":"1",
+  "args":{
+    "BeginNs":"143836359233394",
+    "EndNs":"143836359233574",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24522192}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"180"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359233","dur":"1",
+  "args":{
+    "BeginNs":"143836359233694",
+    "EndNs":"143836359233784",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24522192}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359233","dur":"1",
+  "args":{
+    "BeginNs":"143836359233904",
+    "EndNs":"143836359234014",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=21799584}, {handle=24522192}, 0, 0x7ffcdc86b55c) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359234","dur":"1",
+  "args":{
+    "BeginNs":"143836359234274",
+    "EndNs":"143836359234354",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24523024}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359234","dur":"1",
+  "args":{
+    "BeginNs":"143836359234464",
+    "EndNs":"143836359234524",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24523024}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359234","dur":"1",
+  "args":{
+    "BeginNs":"143836359234784",
+    "EndNs":"143836359234874",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24523856}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836359233","dur":"2",
+  "args":{
+    "BeginNs":"143836359233054",
+    "EndNs":"143836359235124",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=24519728}, 1, 0x17fbe10) = 0",
+    "Data":"",
+    "DurationNs":"2070"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359235","dur":"1",
+  "args":{
+    "BeginNs":"143836359235234",
+    "EndNs":"143836359235324",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=24522192}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359235","dur":"1",
+  "args":{
+    "BeginNs":"143836359235554",
+    "EndNs":"143836359235624",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=24522192}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359235","dur":"1",
+  "args":{
+    "BeginNs":"143836359235834",
+    "EndNs":"143836359235904",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=24522192}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359236","dur":"1",
+  "args":{
+    "BeginNs":"143836359236104",
+    "EndNs":"143836359236174",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24523856}, 2, 0x7ffcdc86b6e0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359236","dur":"1",
+  "args":{
+    "BeginNs":"143836359236294",
+    "EndNs":"143836359236354",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24522192}, 2, 0x7ffcdc86b820) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836359236","dur":"1",
+  "args":{
+    "BeginNs":"143836359236464",
+    "EndNs":"143836359236534",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24522192}, 6, 0x17fc4b8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359237","dur":"1",
+  "args":{
+    "BeginNs":"143836359237434",
+    "EndNs":"143836359237504",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 8, 0x7ffcdc86b6cc) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359237","dur":"1",
+  "args":{
+    "BeginNs":"143836359237624",
+    "EndNs":"143836359237704",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 7, 0x7ffcdc86b6d2) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359237","dur":"1",
+  "args":{
+    "BeginNs":"143836359237894",
+    "EndNs":"143836359237964",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 21, 0x7ffcdc86b6c8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359238","dur":"1",
+  "args":{
+    "BeginNs":"143836359238074",
+    "EndNs":"143836359238144",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 22, 0x7ffcdc86b6ca) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359239","dur":"87",
+  "args":{
+    "BeginNs":"143836359239564",
+    "EndNs":"143836359326733",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 20, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"87169"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359327","dur":"1",
+  "args":{
+    "BeginNs":"143836359327173",
+    "EndNs":"143836359327373",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12299, 0x17fbf48) = 0",
+    "Data":"",
+    "DurationNs":"200"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359327","dur":"1",
+  "args":{
+    "BeginNs":"143836359327483",
+    "EndNs":"143836359327573",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12297, 0x17fbef4) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359327","dur":"1",
+  "args":{
+    "BeginNs":"143836359327683",
+    "EndNs":"143836359327753",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12298, 0x17fbefc) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359327","dur":"1",
+  "args":{
+    "BeginNs":"143836359327853",
+    "EndNs":"143836359328373",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12291, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"520"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359328","dur":"1",
+  "args":{
+    "BeginNs":"143836359328473",
+    "EndNs":"143836359328633",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12295, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359328","dur":"1",
+  "args":{
+    "BeginNs":"143836359328743",
+    "EndNs":"143836359328893",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12296, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"150"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359328","dur":"1",
+  "args":{
+    "BeginNs":"143836359328993",
+    "EndNs":"143836359329113",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12288, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359329","dur":"1",
+  "args":{
+    "BeginNs":"143836359329223",
+    "EndNs":"143836359329333",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 12290, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359329","dur":"1",
+  "args":{
+    "BeginNs":"143836359329493",
+    "EndNs":"143836359329563",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 6, 0x17fc1a0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359329","dur":"1",
+  "args":{
+    "BeginNs":"143836359329673",
+    "EndNs":"143836359329733",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40967, 0x17fbee4) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359329","dur":"1",
+  "args":{
+    "BeginNs":"143836359329843",
+    "EndNs":"143836359329933",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40971, 0x17fc190) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359330","dur":"1",
+  "args":{
+    "BeginNs":"143836359330033",
+    "EndNs":"143836359330103",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40970, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359330","dur":"1",
+  "args":{
+    "BeginNs":"143836359330203",
+    "EndNs":"143836359330633",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 18, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"430"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359330","dur":"1",
+  "args":{
+    "BeginNs":"143836359330743",
+    "EndNs":"143836359330842",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40978, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"99"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836359342","dur":"1",
+  "args":{
+    "BeginNs":"143836359342522",
+    "EndNs":"143836359342642",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(513, 0x17fc31c) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836359342","dur":"1",
+  "args":{
+    "BeginNs":"143836359342772",
+    "EndNs":"143836359342892",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(514, 0x17fc320) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836359343","dur":"1",
+  "args":{
+    "BeginNs":"143836359343022",
+    "EndNs":"143836359343092",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24519728}, 40979, 0x17fc324) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836359350","dur":"280",
+  "args":{
+    "BeginNs":"143836359350502",
+    "EndNs":"143836359630598",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"280096"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836359636","dur":"67",
+  "args":{
+    "BeginNs":"143836359636138",
+    "EndNs":"143836359703987",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f641fe00000) = 0",
+    "Data":"",
+    "DurationNs":"67849"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836359704","dur":"274",
+  "args":{
+    "BeginNs":"143836359704567",
+    "EndNs":"143836359979173",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"274606"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836359984","dur":"69",
+  "args":{
+    "BeginNs":"143836359984342",
+    "EndNs":"143836360053711",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f641fc00000) = 0",
+    "Data":"",
+    "DurationNs":"69369"
+  }
+}
+,{"ph":"X","name":"hsa_signal_create","pid":"3","tid":"61222","ts":"143836360054","dur":"1",
+  "args":{
+    "BeginNs":"143836360054071",
+    "EndNs":"143836360055551",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_signal_create",
+    "args":"(1, 0, 0, 0x17fc4a0) = 0",
+    "Data":"",
+    "DurationNs":"1480"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360056","dur":"1",
+  "args":{
+    "BeginNs":"143836360056511",
+    "EndNs":"143836360057121",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 0, 0x7ffcdc86ba80) = 0",
+    "Data":"",
+    "DurationNs":"610"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360057","dur":"1",
+  "args":{
+    "BeginNs":"143836360057241",
+    "EndNs":"143836360057331",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40960, 0x17fea68) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_iterate_isas","pid":"3","tid":"61222","ts":"143836360057","dur":"1",
+  "args":{
+    "BeginNs":"143836360057521",
+    "EndNs":"143836360057681",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_iterate_isas",
+    "args":"({handle=24749504}, 1, 0x7ffcdc86ba20) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836360057","dur":"8",
+  "args":{
+    "BeginNs":"143836360057861",
+    "EndNs":"143836360066641",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 0, 0x7ffcdc86ba08) = 0",
+    "Data":"",
+    "DurationNs":"8780"
+  }
+}
+,{"ph":"X","name":"hsa_isa_get_info_alt","pid":"3","tid":"61222","ts":"143836360066","dur":"2",
+  "args":{
+    "BeginNs":"143836360066841",
+    "EndNs":"143836360069181",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_isa_get_info_alt",
+    "args":"({handle=21898488}, 1, 0x17d9bf0) = 0",
+    "Data":"",
+    "DurationNs":"2340"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360069","dur":"1",
+  "args":{
+    "BeginNs":"143836360069601",
+    "EndNs":"143836360069681",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 4, 0x17fea78) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360069","dur":"1",
+  "args":{
+    "BeginNs":"143836360069801",
+    "EndNs":"143836360069891",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40976, 0x7ffcdc86ba0c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360070","dur":"1",
+  "args":{
+    "BeginNs":"143836360070821",
+    "EndNs":"143836360070891",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40966, 0x7ffcdc86ba10) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360071","dur":"1",
+  "args":{
+    "BeginNs":"143836360071011",
+    "EndNs":"143836360071071",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40975, 0x7ffcdc86ba14) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360071","dur":"1",
+  "args":{
+    "BeginNs":"143836360071191",
+    "EndNs":"143836360071271",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40974, 0x7ffcdc86ba30) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360071","dur":"1",
+  "args":{
+    "BeginNs":"143836360071441",
+    "EndNs":"143836360071541",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40969, 0x7ffcdc86b760) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360071","dur":"1",
+  "args":{
+    "BeginNs":"143836360071701",
+    "EndNs":"143836360073551",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40977, 0x7ffcdc86b700) = 0",
+    "Data":"",
+    "DurationNs":"1850"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360073","dur":"1",
+  "args":{
+    "BeginNs":"143836360073731",
+    "EndNs":"143836360073841",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40980, 0x17fe474) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360073","dur":"1",
+  "args":{
+    "BeginNs":"143836360073951",
+    "EndNs":"143836360074021",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40962, 0x17fe478) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360074","dur":"1",
+  "args":{
+    "BeginNs":"143836360074131",
+    "EndNs":"143836360075571",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40961, 0x17fe584) = 0",
+    "Data":"",
+    "DurationNs":"1440"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360075","dur":"1",
+  "args":{
+    "BeginNs":"143836360075681",
+    "EndNs":"143836360075921",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 18, 0x7ffcdc86b6f0) = 0",
+    "Data":"",
+    "DurationNs":"240"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360077","dur":"1",
+  "args":{
+    "BeginNs":"143836360077661",
+    "EndNs":"143836360077731",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40963, 0x17fe4e8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360077","dur":"1",
+  "args":{
+    "BeginNs":"143836360077841",
+    "EndNs":"143836360077911",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40968, 0x17fe4ec) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360078","dur":"1",
+  "args":{
+    "BeginNs":"143836360078021",
+    "EndNs":"143836360078091",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40982, 0x7ffcdc86b6d8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360078","dur":"1",
+  "args":{
+    "BeginNs":"143836360078211",
+    "EndNs":"143836360078281",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40967, 0x17fe7c0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360078","dur":"1",
+  "args":{
+    "BeginNs":"143836360078391",
+    "EndNs":"143836360078461",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40964, 0x17fe960) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360078","dur":"1",
+  "args":{
+    "BeginNs":"143836360078791",
+    "EndNs":"143836360078951",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=21894208}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360079","dur":"1",
+  "args":{
+    "BeginNs":"143836360079081",
+    "EndNs":"143836360079161",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=21894208}, 2, 0x17fdff0) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360079","dur":"1",
+  "args":{
+    "BeginNs":"143836360079351",
+    "EndNs":"143836360079421",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=22808976}, 1, 0x7ffcdc86b5ec) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360079","dur":"1",
+  "args":{
+    "BeginNs":"143836360079541",
+    "EndNs":"143836360079601",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=22808976}, 2, 0x17fdff0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360083","dur":"1",
+  "args":{
+    "BeginNs":"143836360083631",
+    "EndNs":"143836360083701",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=21894208}, 1, 0x7ffcdc86b61c) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360083","dur":"1",
+  "args":{
+    "BeginNs":"143836360083831",
+    "EndNs":"143836360083891",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24749504}, {handle=21894208}, 2, 0x17fdff0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360084","dur":"1",
+  "args":{
+    "BeginNs":"143836360084451",
+    "EndNs":"143836360084621",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24521856}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"170"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360084","dur":"1",
+  "args":{
+    "BeginNs":"143836360084741",
+    "EndNs":"143836360084811",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24521856}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360084","dur":"1",
+  "args":{
+    "BeginNs":"143836360084931",
+    "EndNs":"143836360085011",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=21799584}, {handle=24521856}, 0, 0x7ffcdc86b55c) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360085","dur":"1",
+  "args":{
+    "BeginNs":"143836360085261",
+    "EndNs":"143836360085451",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24752496}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"190"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360085","dur":"1",
+  "args":{
+    "BeginNs":"143836360085551",
+    "EndNs":"143836360085621",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24752496}, 1, 0x7ffcdc86b558) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360086","dur":"1",
+  "args":{
+    "BeginNs":"143836360086061",
+    "EndNs":"143836360086251",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24753456}, 0, 0x7ffcdc86b554) = 0",
+    "Data":"",
+    "DurationNs":"190"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_iterate_memory_pools","pid":"3","tid":"61222","ts":"143836360084","dur":"2",
+  "args":{
+    "BeginNs":"143836360084091",
+    "EndNs":"143836360086381",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_iterate_memory_pools",
+    "args":"({handle=24749504}, 1, 0x17fe420) = 0",
+    "Data":"",
+    "DurationNs":"2290"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360086","dur":"1",
+  "args":{
+    "BeginNs":"143836360086501",
+    "EndNs":"143836360086561",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24040944}, {handle=24521856}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360086","dur":"1",
+  "args":{
+    "BeginNs":"143836360086771",
+    "EndNs":"143836360086841",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24289952}, {handle=24521856}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agent_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360087","dur":"1",
+  "args":{
+    "BeginNs":"143836360087041",
+    "EndNs":"143836360087101",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agent_memory_pool_get_info",
+    "args":"({handle=24519728}, {handle=24521856}, 0, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360087","dur":"1",
+  "args":{
+    "BeginNs":"143836360087311",
+    "EndNs":"143836360087381",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24753456}, 2, 0x7ffcdc86b6e0) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360087","dur":"1",
+  "args":{
+    "BeginNs":"143836360087501",
+    "EndNs":"143836360087561",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24521856}, 2, 0x7ffcdc86b820) = 0",
+    "Data":"",
+    "DurationNs":"60"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_get_info","pid":"3","tid":"61222","ts":"143836360087","dur":"1",
+  "args":{
+    "BeginNs":"143836360087681",
+    "EndNs":"143836360087751",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_get_info",
+    "args":"({handle=24521856}, 6, 0x17feac8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360088","dur":"1",
+  "args":{
+    "BeginNs":"143836360088711",
+    "EndNs":"143836360088791",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 8, 0x7ffcdc86b6cc) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360088","dur":"1",
+  "args":{
+    "BeginNs":"143836360088911",
+    "EndNs":"143836360088981",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 7, 0x7ffcdc86b6d2) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360089","dur":"1",
+  "args":{
+    "BeginNs":"143836360089171",
+    "EndNs":"143836360089241",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 21, 0x7ffcdc86b6c8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360089","dur":"1",
+  "args":{
+    "BeginNs":"143836360089361",
+    "EndNs":"143836360089431",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 22, 0x7ffcdc86b6ca) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360090","dur":"281",
+  "args":{
+    "BeginNs":"143836360090671",
+    "EndNs":"143836360372557",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 20, 0x7ffcdc86b7a0) = 0",
+    "Data":"",
+    "DurationNs":"281886"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360373","dur":"1",
+  "args":{
+    "BeginNs":"143836360373067",
+    "EndNs":"143836360373187",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12299, 0x17fe558) = 0",
+    "Data":"",
+    "DurationNs":"120"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360373","dur":"1",
+  "args":{
+    "BeginNs":"143836360373297",
+    "EndNs":"143836360373397",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12297, 0x17fe504) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360373","dur":"1",
+  "args":{
+    "BeginNs":"143836360373507",
+    "EndNs":"143836360373597",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12298, 0x17fe50c) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360373","dur":"1",
+  "args":{
+    "BeginNs":"143836360373707",
+    "EndNs":"143836360374236",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12291, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"529"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360374","dur":"1",
+  "args":{
+    "BeginNs":"143836360374346",
+    "EndNs":"143836360374496",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12295, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"150"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360374","dur":"1",
+  "args":{
+    "BeginNs":"143836360374596",
+    "EndNs":"143836360374756",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12296, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"160"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360374","dur":"1",
+  "args":{
+    "BeginNs":"143836360374856",
+    "EndNs":"143836360374966",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12288, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360375","dur":"1",
+  "args":{
+    "BeginNs":"143836360375076",
+    "EndNs":"143836360375186",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 12290, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"110"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360375","dur":"1",
+  "args":{
+    "BeginNs":"143836360375336",
+    "EndNs":"143836360375416",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 6, 0x17fe7b0) = 0",
+    "Data":"",
+    "DurationNs":"80"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360375","dur":"1",
+  "args":{
+    "BeginNs":"143836360375526",
+    "EndNs":"143836360375616",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40967, 0x17fe4f4) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360375","dur":"1",
+  "args":{
+    "BeginNs":"143836360375726",
+    "EndNs":"143836360375826",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40971, 0x17fe7a0) = 0",
+    "Data":"",
+    "DurationNs":"100"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360375","dur":"1",
+  "args":{
+    "BeginNs":"143836360375926",
+    "EndNs":"143836360375996",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40970, 0x7ffcdc86b6e8) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360376","dur":"1",
+  "args":{
+    "BeginNs":"143836360376126",
+    "EndNs":"143836360376546",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 18, 0x7ffcdc86b740) = 0",
+    "Data":"",
+    "DurationNs":"420"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360376","dur":"1",
+  "args":{
+    "BeginNs":"143836360376656",
+    "EndNs":"143836360376746",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40978, 0x7ffcdc86b720) = 0",
+    "Data":"",
+    "DurationNs":"90"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836360390","dur":"1",
+  "args":{
+    "BeginNs":"143836360390466",
+    "EndNs":"143836360390616",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(513, 0x17fe92c) = 0",
+    "Data":"",
+    "DurationNs":"150"
+  }
+}
+,{"ph":"X","name":"hsa_system_get_info","pid":"3","tid":"61222","ts":"143836360390","dur":"1",
+  "args":{
+    "BeginNs":"143836360390736",
+    "EndNs":"143836360390866",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_system_get_info",
+    "args":"(514, 0x17fe930) = 0",
+    "Data":"",
+    "DurationNs":"130"
+  }
+}
+,{"ph":"X","name":"hsa_agent_get_info","pid":"3","tid":"61222","ts":"143836360390","dur":"1",
+  "args":{
+    "BeginNs":"143836360390996",
+    "EndNs":"143836360391066",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_agent_get_info",
+    "args":"({handle=24749504}, 40979, 0x17fe934) = 0",
+    "Data":"",
+    "DurationNs":"70"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836360403","dur":"17",
+  "args":{
+    "BeginNs":"143836360403146",
+    "EndNs":"143836360420626",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=21894208}, 160, 0, 0x7ffcdc86b798) = 0",
+    "Data":"",
+    "DurationNs":"17480"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836360423","dur":"34",
+  "args":{
+    "BeginNs":"143836360423356",
+    "EndNs":"143836360458265",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f6960df7000) = 0",
+    "Data":"",
+    "DurationNs":"34909"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836360461","dur":"281",
+  "args":{
+    "BeginNs":"143836360461965",
+    "EndNs":"143836360743171",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"281206"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836360749","dur":"69",
+  "args":{
+    "BeginNs":"143836360749181",
+    "EndNs":"143836360818720",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f641fa00000) = 0",
+    "Data":"",
+    "DurationNs":"69539"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836360819","dur":"281",
+  "args":{
+    "BeginNs":"143836360819280",
+    "EndNs":"143836361101125",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=22804960}, 1052672, 0, 0x7ffcdc86b918) = 0",
+    "Data":"",
+    "DurationNs":"281845"
+  }
+}
+,{"ph":"X","name":"hsa_amd_agents_allow_access","pid":"3","tid":"61222","ts":"143836361106","dur":"67",
+  "args":{
+    "BeginNs":"143836361106885",
+    "EndNs":"143836361174734",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_agents_allow_access",
+    "args":"(4, 0x17d7f90, 0, 0x7f641f800000) = 0",
+    "Data":"",
+    "DurationNs":"67849"
+  }
+}
+,{"ph":"X","name":"hsa_signal_create","pid":"3","tid":"61222","ts":"143836361175","dur":"1",
+  "args":{
+    "BeginNs":"143836361175114",
+    "EndNs":"143836361176664",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_signal_create",
+    "args":"(1, 0, 0, 0x17feab0) = 0",
+    "Data":"",
+    "DurationNs":"1550"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_allocate","pid":"3","tid":"61222","ts":"143836361218","dur":"214",
+  "args":{
+    "BeginNs":"143836361218053",
+    "EndNs":"143836361432210",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_allocate",
+    "args":"({handle=24044832}, 2147483648, 0, 0x7ffcdc86bb18) = 0",
+    "Data":"",
+    "DurationNs":"214157"
+  }
+}
+,{"ph":"X","name":"hsa_amd_memory_pool_free","pid":"3","tid":"61222","ts":"143836361478","dur":"86",
+  "args":{
+    "BeginNs":"143836361478489",
+    "EndNs":"143836361565258",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hsa_amd_memory_pool_free",
+    "args":"(0x7f639f600000) = 0",
+    "Data":"",
+    "DurationNs":"86769"
+  }
+}
+,{"ph":"X","name":"hipMalloc","pid":"2","tid":"61222","ts":"143836361210","dur":"237",
+  "args":{
+    "BeginNs":"143836361210224",
+    "EndNs":"143836361447240",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hipMalloc",
+    "args":"( ptr(0x7f639f600000) size(2147483648))",
+    "Data":"",
+    "DurationNs":"237016"
+  }
+}
+,{"ph":"X","name":"hipFree","pid":"2","tid":"61222","ts":"143836361471","dur":"104",
+  "args":{
+    "BeginNs":"143836361471860",
+    "EndNs":"143836361575938",
+    "pid":"61222",
+    "tid":"61222",
+    "Name":"hipFree",
+    "args":"( ptr(0x7f639f600000))",
+    "Data":"",
+    "DurationNs":"104078"
+  }
+}
+],
+"otherData": {
+    "CMD": "rocminfo",
+    "HSASystemAttributes.RuntimeVersion": "1.1",
+    "HSASystemAttributes.SystemTimestampFreq.": "1000.000000MHz",
+    "HSASystemAttributes.Sig.MaxWaitDuration": "18446744073709551615(0xFFFFFFFFFFFFFFFF)(timestampcount)",
+    "HSASystemAttributes.MachineModel": "LARGE",
+    "HSASystemAttributes.SystemEndianness": "LITTLE",
+    "Agent1.Name": "AMDEPYC740224-CoreProcessor",
+    "Agent1.Uuid": "CPU-XX",
+    "Agent1.MarketingName": "AMDEPYC740224-CoreProcessor",
+    "Agent1.VendorName": "CPU",
+    "Agent1.Feature": "Nonespecified",
+    "Agent1.Profile": "FULL_PROFILE",
+    "Agent1.FloatRoundMode": "NEAR",
+    "Agent1.MaxQueueNumber": "0(0x0)",
+    "Agent1.QueueMinSize": "0(0x0)",
+    "Agent1.QueueMaxSize": "0(0x0)",
+    "Agent1.QueueType": "MULTI",
+    "Agent1.Node": "0",
+    "Agent1.DeviceType": "CPU",
+    "Agent1.CacheInfo.L1": "32768(0x8000)KB",
+    "Agent1.ChipID": "0(0x0)",
+    "Agent1.ASICRevision": "0(0x0)",
+    "Agent1.CachelineSize": "64(0x40)",
+    "Agent1.MaxClockFreq.(MHz)": "2800",
+    "Agent1.BDFID": "0",
+    "Agent1.InternalNodeID": "0",
+    "Agent1.ComputeUnit": "48",
+    "Agent1.SIMDsperCU": "0",
+    "Agent1.ShaderEngines": "0",
+    "Agent1.ShaderArrs.perEng.": "0",
+    "Agent1.WatchPtsonAddr.Ranges": "1",
+    "Agent1.Features": "None",
+    "Agent1.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent1.PoolInfo.Pool1.FLAGS": "FINEGRAINED",
+    "Agent1.PoolInfo.Pool1.Size": "264022344(0xfbca948)KB",
+    "Agent1.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent1.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent1.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent1.PoolInfo.Pool1.Accessiblebyall": "TRUE",
+    "Agent1.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent1.PoolInfo.Pool2.FLAGS": "KERNARG,FINEGRAINED",
+    "Agent1.PoolInfo.Pool2.Size": "264022344(0xfbca948)KB",
+    "Agent1.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent1.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent1.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent1.PoolInfo.Pool2.Accessiblebyall": "TRUE",
+    "Agent1.PoolInfo.Pool3.Segment": "GLOBAL",
+    "Agent1.PoolInfo.Pool3.FLAGS": "COARSEGRAINED",
+    "Agent1.PoolInfo.Pool3.Size": "264022344(0xfbca948)KB",
+    "Agent1.PoolInfo.Pool3.Allocatable": "TRUE",
+    "Agent1.PoolInfo.Pool3.AllocGranule": "4KB",
+    "Agent1.PoolInfo.Pool3.AllocAlignment": "4KB",
+    "Agent1.PoolInfo.Pool3.Accessiblebyall": "TRUE",
+    "Agent2.Name": "AMDEPYC740224-CoreProcessor",
+    "Agent2.Uuid": "CPU-XX",
+    "Agent2.MarketingName": "AMDEPYC740224-CoreProcessor",
+    "Agent2.VendorName": "CPU",
+    "Agent2.Feature": "Nonespecified",
+    "Agent2.Profile": "FULL_PROFILE",
+    "Agent2.FloatRoundMode": "NEAR",
+    "Agent2.MaxQueueNumber": "0(0x0)",
+    "Agent2.QueueMinSize": "0(0x0)",
+    "Agent2.QueueMaxSize": "0(0x0)",
+    "Agent2.QueueType": "MULTI",
+    "Agent2.Node": "1",
+    "Agent2.DeviceType": "CPU",
+    "Agent2.CacheInfo.L1": "32768(0x8000)KB",
+    "Agent2.ChipID": "0(0x0)",
+    "Agent2.ASICRevision": "0(0x0)",
+    "Agent2.CachelineSize": "64(0x40)",
+    "Agent2.MaxClockFreq.(MHz)": "2800",
+    "Agent2.BDFID": "0",
+    "Agent2.InternalNodeID": "1",
+    "Agent2.ComputeUnit": "48",
+    "Agent2.SIMDsperCU": "0",
+    "Agent2.ShaderEngines": "0",
+    "Agent2.ShaderArrs.perEng.": "0",
+    "Agent2.WatchPtsonAddr.Ranges": "1",
+    "Agent2.Features": "None",
+    "Agent2.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent2.PoolInfo.Pool1.FLAGS": "FINEGRAINED",
+    "Agent2.PoolInfo.Pool1.Size": "264180828(0xfbf145c)KB",
+    "Agent2.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent2.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent2.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent2.PoolInfo.Pool1.Accessiblebyall": "TRUE",
+    "Agent2.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent2.PoolInfo.Pool2.FLAGS": "KERNARG,FINEGRAINED",
+    "Agent2.PoolInfo.Pool2.Size": "264180828(0xfbf145c)KB",
+    "Agent2.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent2.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent2.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent2.PoolInfo.Pool2.Accessiblebyall": "TRUE",
+    "Agent2.PoolInfo.Pool3.Segment": "GLOBAL",
+    "Agent2.PoolInfo.Pool3.FLAGS": "COARSEGRAINED",
+    "Agent2.PoolInfo.Pool3.Size": "264180828(0xfbf145c)KB",
+    "Agent2.PoolInfo.Pool3.Allocatable": "TRUE",
+    "Agent2.PoolInfo.Pool3.AllocGranule": "4KB",
+    "Agent2.PoolInfo.Pool3.AllocAlignment": "4KB",
+    "Agent2.PoolInfo.Pool3.Accessiblebyall": "TRUE",
+    "Agent3.Name": "gfx908",
+    "Agent3.Uuid": "GPU-1def0b20ebd7d074",
+    "Agent3.MarketingName.VendorName": "AMD",
+    "Agent3.MarketingName.Feature": "KERNEL_DISPATCH",
+    "Agent3.MarketingName.Profile": "BASE_PROFILE",
+    "Agent3.MarketingName.FloatRoundMode": "NEAR",
+    "Agent3.MarketingName.MaxQueueNumber": "128(0x80)",
+    "Agent3.MarketingName.QueueMinSize": "64(0x40)",
+    "Agent3.MarketingName.QueueMaxSize": "131072(0x20000)",
+    "Agent3.MarketingName.QueueType": "MULTI",
+    "Agent3.MarketingName.Node": "2",
+    "Agent3.MarketingName.DeviceType": "GPU",
+    "Agent3.MarketingName.CacheInfo.L1": "16(0x10)KB",
+    "Agent3.MarketingName.CacheInfo.L2": "8192(0x2000)KB",
+    "Agent3.MarketingName.ChipID": "29580(0x738c)",
+    "Agent3.MarketingName.ASICRevision": "2(0x2)",
+    "Agent3.MarketingName.CachelineSize": "64(0x40)",
+    "Agent3.MarketingName.MaxClockFreq.(MHz)": "1502",
+    "Agent3.MarketingName.BDFID": "25344",
+    "Agent3.MarketingName.InternalNodeID": "2",
+    "Agent3.MarketingName.ComputeUnit": "120",
+    "Agent3.MarketingName.SIMDsperCU": "4",
+    "Agent3.MarketingName.ShaderEngines": "8",
+    "Agent3.MarketingName.ShaderArrs.perEng.": "1",
+    "Agent3.MarketingName.WatchPtsonAddr.Ranges": "4",
+    "Agent3.MarketingName.Features": "KERNEL_DISPATCH",
+    "Agent3.MarketingName.FastF16Operation": "TRUE",
+    "Agent3.MarketingName.WavefrontSize": "64(0x40)",
+    "Agent3.MarketingName.WorkgroupMaxSize": "1024(0x400)",
+    "Agent3.MarketingName.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent3.MarketingName.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent3.MarketingName.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent3.MarketingName.MaxWavesPerCU": "40(0x28)",
+    "Agent3.MarketingName.MaxWork-itemPerCU": "2560(0xa00)",
+    "Agent3.MarketingName.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.Maxfbarriers/Workgrp": "32",
+    "Agent3.MarketingName.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent3.MarketingName.PoolInfo.Pool1.FLAGS": "COARSEGRAINED",
+    "Agent3.MarketingName.PoolInfo.Pool1.Size": "33538048(0x1ffc000)KB",
+    "Agent3.MarketingName.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent3.MarketingName.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent3.MarketingName.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent3.MarketingName.PoolInfo.Pool1.Accessiblebyall": "FALSE",
+    "Agent3.MarketingName.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent3.MarketingName.PoolInfo.Pool2.FLAGS": "FINEGRAINED",
+    "Agent3.MarketingName.PoolInfo.Pool2.Size": "33538048(0x1ffc000)KB",
+    "Agent3.MarketingName.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent3.MarketingName.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent3.MarketingName.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent3.MarketingName.PoolInfo.Pool2.Accessiblebyall": "FALSE",
+    "Agent3.MarketingName.PoolInfo.Pool3.Segment": "GROUP",
+    "Agent3.MarketingName.PoolInfo.Pool3.Size": "64(0x40)KB",
+    "Agent3.MarketingName.PoolInfo.Pool3.Allocatable": "FALSE",
+    "Agent3.MarketingName.PoolInfo.Pool3.AllocGranule": "0KB",
+    "Agent3.MarketingName.PoolInfo.Pool3.AllocAlignment": "0KB",
+    "Agent3.MarketingName.PoolInfo.Pool3.Accessiblebyall": "FALSE",
+    "Agent3.MarketingName.ISAInfo.ISA1.Name:amdgcn-amd-amdhsa--gfx908:sramecc+": "xnack-",
+    "Agent3.MarketingName.ISAInfo.ISA1.MachineModels": "HSA_MACHINE_MODEL_LARGE",
+    "Agent3.MarketingName.ISAInfo.ISA1.Profiles": "HSA_PROFILE_BASE",
+    "Agent3.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent3.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent3.MarketingName.ISAInfo.ISA1.Fastf16": "TRUE",
+    "Agent3.MarketingName.ISAInfo.ISA1.WorkgroupMaxSize": "1024(0x400)",
+    "Agent3.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent3.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent3.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent3.MarketingName.ISAInfo.ISA1.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent3.MarketingName.ISAInfo.ISA1.FBarrierMaxSize": "32",
+    "Agent4.Name": "gfx908",
+    "Agent4.Uuid": "GPU-0c873440a4562dca",
+    "Agent4.MarketingName.VendorName": "AMD",
+    "Agent4.MarketingName.Feature": "KERNEL_DISPATCH",
+    "Agent4.MarketingName.Profile": "BASE_PROFILE",
+    "Agent4.MarketingName.FloatRoundMode": "NEAR",
+    "Agent4.MarketingName.MaxQueueNumber": "128(0x80)",
+    "Agent4.MarketingName.QueueMinSize": "64(0x40)",
+    "Agent4.MarketingName.QueueMaxSize": "131072(0x20000)",
+    "Agent4.MarketingName.QueueType": "MULTI",
+    "Agent4.MarketingName.Node": "3",
+    "Agent4.MarketingName.DeviceType": "GPU",
+    "Agent4.MarketingName.CacheInfo.L1": "16(0x10)KB",
+    "Agent4.MarketingName.CacheInfo.L2": "8192(0x2000)KB",
+    "Agent4.MarketingName.ChipID": "29580(0x738c)",
+    "Agent4.MarketingName.ASICRevision": "2(0x2)",
+    "Agent4.MarketingName.CachelineSize": "64(0x40)",
+    "Agent4.MarketingName.MaxClockFreq.(MHz)": "1502",
+    "Agent4.MarketingName.BDFID": "17152",
+    "Agent4.MarketingName.InternalNodeID": "3",
+    "Agent4.MarketingName.ComputeUnit": "120",
+    "Agent4.MarketingName.SIMDsperCU": "4",
+    "Agent4.MarketingName.ShaderEngines": "8",
+    "Agent4.MarketingName.ShaderArrs.perEng.": "1",
+    "Agent4.MarketingName.WatchPtsonAddr.Ranges": "4",
+    "Agent4.MarketingName.Features": "KERNEL_DISPATCH",
+    "Agent4.MarketingName.FastF16Operation": "TRUE",
+    "Agent4.MarketingName.WavefrontSize": "64(0x40)",
+    "Agent4.MarketingName.WorkgroupMaxSize": "1024(0x400)",
+    "Agent4.MarketingName.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent4.MarketingName.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent4.MarketingName.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent4.MarketingName.MaxWavesPerCU": "40(0x28)",
+    "Agent4.MarketingName.MaxWork-itemPerCU": "2560(0xa00)",
+    "Agent4.MarketingName.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.Maxfbarriers/Workgrp": "32",
+    "Agent4.MarketingName.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent4.MarketingName.PoolInfo.Pool1.FLAGS": "COARSEGRAINED",
+    "Agent4.MarketingName.PoolInfo.Pool1.Size": "33538048(0x1ffc000)KB",
+    "Agent4.MarketingName.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent4.MarketingName.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent4.MarketingName.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent4.MarketingName.PoolInfo.Pool1.Accessiblebyall": "FALSE",
+    "Agent4.MarketingName.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent4.MarketingName.PoolInfo.Pool2.FLAGS": "FINEGRAINED",
+    "Agent4.MarketingName.PoolInfo.Pool2.Size": "33538048(0x1ffc000)KB",
+    "Agent4.MarketingName.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent4.MarketingName.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent4.MarketingName.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent4.MarketingName.PoolInfo.Pool2.Accessiblebyall": "FALSE",
+    "Agent4.MarketingName.PoolInfo.Pool3.Segment": "GROUP",
+    "Agent4.MarketingName.PoolInfo.Pool3.Size": "64(0x40)KB",
+    "Agent4.MarketingName.PoolInfo.Pool3.Allocatable": "FALSE",
+    "Agent4.MarketingName.PoolInfo.Pool3.AllocGranule": "0KB",
+    "Agent4.MarketingName.PoolInfo.Pool3.AllocAlignment": "0KB",
+    "Agent4.MarketingName.PoolInfo.Pool3.Accessiblebyall": "FALSE",
+    "Agent4.MarketingName.ISAInfo.ISA1.Name:amdgcn-amd-amdhsa--gfx908:sramecc+": "xnack-",
+    "Agent4.MarketingName.ISAInfo.ISA1.MachineModels": "HSA_MACHINE_MODEL_LARGE",
+    "Agent4.MarketingName.ISAInfo.ISA1.Profiles": "HSA_PROFILE_BASE",
+    "Agent4.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent4.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent4.MarketingName.ISAInfo.ISA1.Fastf16": "TRUE",
+    "Agent4.MarketingName.ISAInfo.ISA1.WorkgroupMaxSize": "1024(0x400)",
+    "Agent4.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent4.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent4.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent4.MarketingName.ISAInfo.ISA1.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent4.MarketingName.ISAInfo.ISA1.FBarrierMaxSize": "32",
+    "Agent5.Name": "gfx908",
+    "Agent5.Uuid": "GPU-e096ea934441b825",
+    "Agent5.MarketingName.VendorName": "AMD",
+    "Agent5.MarketingName.Feature": "KERNEL_DISPATCH",
+    "Agent5.MarketingName.Profile": "BASE_PROFILE",
+    "Agent5.MarketingName.FloatRoundMode": "NEAR",
+    "Agent5.MarketingName.MaxQueueNumber": "128(0x80)",
+    "Agent5.MarketingName.QueueMinSize": "64(0x40)",
+    "Agent5.MarketingName.QueueMaxSize": "131072(0x20000)",
+    "Agent5.MarketingName.QueueType": "MULTI",
+    "Agent5.MarketingName.Node": "4",
+    "Agent5.MarketingName.DeviceType": "GPU",
+    "Agent5.MarketingName.CacheInfo.L1": "16(0x10)KB",
+    "Agent5.MarketingName.CacheInfo.L2": "8192(0x2000)KB",
+    "Agent5.MarketingName.ChipID": "29580(0x738c)",
+    "Agent5.MarketingName.ASICRevision": "2(0x2)",
+    "Agent5.MarketingName.CachelineSize": "64(0x40)",
+    "Agent5.MarketingName.MaxClockFreq.(MHz)": "1502",
+    "Agent5.MarketingName.BDFID": "768",
+    "Agent5.MarketingName.InternalNodeID": "4",
+    "Agent5.MarketingName.ComputeUnit": "120",
+    "Agent5.MarketingName.SIMDsperCU": "4",
+    "Agent5.MarketingName.ShaderEngines": "8",
+    "Agent5.MarketingName.ShaderArrs.perEng.": "1",
+    "Agent5.MarketingName.WatchPtsonAddr.Ranges": "4",
+    "Agent5.MarketingName.Features": "KERNEL_DISPATCH",
+    "Agent5.MarketingName.FastF16Operation": "TRUE",
+    "Agent5.MarketingName.WavefrontSize": "64(0x40)",
+    "Agent5.MarketingName.WorkgroupMaxSize": "1024(0x400)",
+    "Agent5.MarketingName.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent5.MarketingName.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent5.MarketingName.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent5.MarketingName.MaxWavesPerCU": "40(0x28)",
+    "Agent5.MarketingName.MaxWork-itemPerCU": "2560(0xa00)",
+    "Agent5.MarketingName.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.Maxfbarriers/Workgrp": "32",
+    "Agent5.MarketingName.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent5.MarketingName.PoolInfo.Pool1.FLAGS": "COARSEGRAINED",
+    "Agent5.MarketingName.PoolInfo.Pool1.Size": "33538048(0x1ffc000)KB",
+    "Agent5.MarketingName.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent5.MarketingName.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent5.MarketingName.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent5.MarketingName.PoolInfo.Pool1.Accessiblebyall": "FALSE",
+    "Agent5.MarketingName.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent5.MarketingName.PoolInfo.Pool2.FLAGS": "FINEGRAINED",
+    "Agent5.MarketingName.PoolInfo.Pool2.Size": "33538048(0x1ffc000)KB",
+    "Agent5.MarketingName.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent5.MarketingName.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent5.MarketingName.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent5.MarketingName.PoolInfo.Pool2.Accessiblebyall": "FALSE",
+    "Agent5.MarketingName.PoolInfo.Pool3.Segment": "GROUP",
+    "Agent5.MarketingName.PoolInfo.Pool3.Size": "64(0x40)KB",
+    "Agent5.MarketingName.PoolInfo.Pool3.Allocatable": "FALSE",
+    "Agent5.MarketingName.PoolInfo.Pool3.AllocGranule": "0KB",
+    "Agent5.MarketingName.PoolInfo.Pool3.AllocAlignment": "0KB",
+    "Agent5.MarketingName.PoolInfo.Pool3.Accessiblebyall": "FALSE",
+    "Agent5.MarketingName.ISAInfo.ISA1.Name:amdgcn-amd-amdhsa--gfx908:sramecc+": "xnack-",
+    "Agent5.MarketingName.ISAInfo.ISA1.MachineModels": "HSA_MACHINE_MODEL_LARGE",
+    "Agent5.MarketingName.ISAInfo.ISA1.Profiles": "HSA_PROFILE_BASE",
+    "Agent5.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent5.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent5.MarketingName.ISAInfo.ISA1.Fastf16": "TRUE",
+    "Agent5.MarketingName.ISAInfo.ISA1.WorkgroupMaxSize": "1024(0x400)",
+    "Agent5.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent5.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent5.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent5.MarketingName.ISAInfo.ISA1.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent5.MarketingName.ISAInfo.ISA1.FBarrierMaxSize": "32",
+    "Agent6.Name": "gfx908",
+    "Agent6.Uuid": "GPU-0ee850ff8f8d8c88",
+    "Agent6.MarketingName.VendorName": "AMD",
+    "Agent6.MarketingName.Feature": "KERNEL_DISPATCH",
+    "Agent6.MarketingName.Profile": "BASE_PROFILE",
+    "Agent6.MarketingName.FloatRoundMode": "NEAR",
+    "Agent6.MarketingName.MaxQueueNumber": "128(0x80)",
+    "Agent6.MarketingName.QueueMinSize": "64(0x40)",
+    "Agent6.MarketingName.QueueMaxSize": "131072(0x20000)",
+    "Agent6.MarketingName.QueueType": "MULTI",
+    "Agent6.MarketingName.Node": "5",
+    "Agent6.MarketingName.DeviceType": "GPU",
+    "Agent6.MarketingName.CacheInfo.L1": "16(0x10)KB",
+    "Agent6.MarketingName.CacheInfo.L2": "8192(0x2000)KB",
+    "Agent6.MarketingName.ChipID": "29580(0x738c)",
+    "Agent6.MarketingName.ASICRevision": "2(0x2)",
+    "Agent6.MarketingName.CachelineSize": "64(0x40)",
+    "Agent6.MarketingName.MaxClockFreq.(MHz)": "1502",
+    "Agent6.MarketingName.BDFID": "9984",
+    "Agent6.MarketingName.InternalNodeID": "5",
+    "Agent6.MarketingName.ComputeUnit": "120",
+    "Agent6.MarketingName.SIMDsperCU": "4",
+    "Agent6.MarketingName.ShaderEngines": "8",
+    "Agent6.MarketingName.ShaderArrs.perEng.": "1",
+    "Agent6.MarketingName.WatchPtsonAddr.Ranges": "4",
+    "Agent6.MarketingName.Features": "KERNEL_DISPATCH",
+    "Agent6.MarketingName.FastF16Operation": "TRUE",
+    "Agent6.MarketingName.WavefrontSize": "64(0x40)",
+    "Agent6.MarketingName.WorkgroupMaxSize": "1024(0x400)",
+    "Agent6.MarketingName.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent6.MarketingName.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent6.MarketingName.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent6.MarketingName.MaxWavesPerCU": "40(0x28)",
+    "Agent6.MarketingName.MaxWork-itemPerCU": "2560(0xa00)",
+    "Agent6.MarketingName.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.Maxfbarriers/Workgrp": "32",
+    "Agent6.MarketingName.PoolInfo.Pool1.Segment": "GLOBAL",
+    "Agent6.MarketingName.PoolInfo.Pool1.FLAGS": "COARSEGRAINED",
+    "Agent6.MarketingName.PoolInfo.Pool1.Size": "33538048(0x1ffc000)KB",
+    "Agent6.MarketingName.PoolInfo.Pool1.Allocatable": "TRUE",
+    "Agent6.MarketingName.PoolInfo.Pool1.AllocGranule": "4KB",
+    "Agent6.MarketingName.PoolInfo.Pool1.AllocAlignment": "4KB",
+    "Agent6.MarketingName.PoolInfo.Pool1.Accessiblebyall": "FALSE",
+    "Agent6.MarketingName.PoolInfo.Pool2.Segment": "GLOBAL",
+    "Agent6.MarketingName.PoolInfo.Pool2.FLAGS": "FINEGRAINED",
+    "Agent6.MarketingName.PoolInfo.Pool2.Size": "33538048(0x1ffc000)KB",
+    "Agent6.MarketingName.PoolInfo.Pool2.Allocatable": "TRUE",
+    "Agent6.MarketingName.PoolInfo.Pool2.AllocGranule": "4KB",
+    "Agent6.MarketingName.PoolInfo.Pool2.AllocAlignment": "4KB",
+    "Agent6.MarketingName.PoolInfo.Pool2.Accessiblebyall": "FALSE",
+    "Agent6.MarketingName.PoolInfo.Pool3.Segment": "GROUP",
+    "Agent6.MarketingName.PoolInfo.Pool3.Size": "64(0x40)KB",
+    "Agent6.MarketingName.PoolInfo.Pool3.Allocatable": "FALSE",
+    "Agent6.MarketingName.PoolInfo.Pool3.AllocGranule": "0KB",
+    "Agent6.MarketingName.PoolInfo.Pool3.AllocAlignment": "0KB",
+    "Agent6.MarketingName.PoolInfo.Pool3.Accessiblebyall": "FALSE",
+    "Agent6.MarketingName.ISAInfo.ISA1.Name:amdgcn-amd-amdhsa--gfx908:sramecc+": "xnack-",
+    "Agent6.MarketingName.ISAInfo.ISA1.MachineModels": "HSA_MACHINE_MODEL_LARGE",
+    "Agent6.MarketingName.ISAInfo.ISA1.Profiles": "HSA_PROFILE_BASE",
+    "Agent6.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent6.MarketingName.ISAInfo.ISA1.DefaultRoundingMode": "NEAR",
+    "Agent6.MarketingName.ISAInfo.ISA1.Fastf16": "TRUE",
+    "Agent6.MarketingName.ISAInfo.ISA1.WorkgroupMaxSize": "1024(0x400)",
+    "Agent6.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.x": "1024(0x400)",
+    "Agent6.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.y": "1024(0x400)",
+    "Agent6.MarketingName.ISAInfo.ISA1.WorkgroupMaxSizeperDimension.z": "1024(0x400)",
+    "Agent6.MarketingName.ISAInfo.ISA1.GridMaxSize": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.x": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.y": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.ISAInfo.ISA1.GridMaxSizeperDimension.z": "4294967295(0xffffffff)",
+    "Agent6.MarketingName.ISAInfo.ISA1.FBarrierMaxSize": "32"
+  }
+}

@@ -5,8 +5,8 @@
 #include <chrono>
 #include <iostream>
 #include <iomanip>
-#include <string>
-
+#include <string.h>
+#include <stdlib.h> 
 #include <ctime>
 #include <ratio>
 
@@ -32,18 +32,14 @@ int main (void) {
     char* env_timer;
     char* env_nocopy;
 
-    try {
-        env_timer = std::getenv("timer");
-   } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-   }
+    string env_timer_str = "";
+    string env_nocopy_str = "";
 
-    try {
-        env_nocopy = std::getenv("nocopy");
-   } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-   }
+    env_timer=std::getenv("timer");
+    env_nocopy=std::getenv("nocopy");
 
+    env_timer ? env_timer_str=string(env_timer): "" ;
+    env_nocopy ? env_nocopy_str=string(env_nocopy) : "";
 
     a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
@@ -53,11 +49,14 @@ int main (void) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    if (string(env_nocopy) == "0") {
+    /*
+    if (strcmp(env_nocopy, \
+        '0')==0) {
         printf("hipMemcpy.start.\n");
         hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
         printf("hipMemcpy.end\n");
     }
+    */
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
