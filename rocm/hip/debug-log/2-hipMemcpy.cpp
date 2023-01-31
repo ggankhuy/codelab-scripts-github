@@ -7,6 +7,9 @@
 #include <iomanip>
 #include <string>
 
+#include <ctime>
+#include <ratio>
+
 using namespace std;
 
 // 512M
@@ -21,6 +24,7 @@ __global__ void add(int *a, int*b, int *c) {
 }
 
 int main (void) {
+    using namespace std::chrono;
     int *a, *b, *c;
     int *dev_a, *dev_b, *dev_c;
     int i ;
@@ -31,34 +35,21 @@ int main (void) {
     string env_no_copy = getenv("no_copy");
     cout << "env_no_copy: " << env_no_copy << endl;
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto start = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::high_resolution_clock::now();
-    auto ns = std::chrono::high_resolution_clock::now();
-    int ns_fractional;
     a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
 
 	for (int i = 0; i < N ; i ++ )
 		a[i]  = i;
 
-    //if (env_timer == "1")
-    start = std::chrono::high_resolution_clock::now();
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    //if (env_no_copy == "1") {
+    if (env_no_copy == "1") {
         printf("hipMemcpy.start.\n");
    	    hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
         printf("hipMemcpy.end\n");
     }
 
-    //if (env_timer == "1") {
-    end = std::chrono::high_resolution_clock::now();
-    duration = (end - start);
-    ns = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-    ns_fractional = static_cast<int>(ns.count());
-    cout << setw(30) << "hipMemcpy duration: " << ns_fractional << " ns or " << ns_fractional / 1000000 << " ms" << endl;
-    
-
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
     hipFree(dev_a);
     free(a);
     

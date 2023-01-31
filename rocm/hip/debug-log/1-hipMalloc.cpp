@@ -48,13 +48,11 @@ int main (void) {
 
         hipFree(dev_a);
 
-        #if timer == 1
         end = std::chrono::high_resolution_clock::now();
         duration = (end - start);
         ns = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
         ns_fractional = static_cast<int>(ns.count());
         cout << setw(30) << "hipFree duration: " << ns_fractional << " ns or " << ns_fractional / 1000000 << " ms " << endl;
-        #endif
     }
 	return 0;
 }
