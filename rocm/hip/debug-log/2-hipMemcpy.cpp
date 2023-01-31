@@ -29,11 +29,21 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
-    //string env_timer = getenv("timer");
-    //cout << "env_timer: " << env_timer << endl;
+    char* env_timer;
+    char* env_nocopy;
 
-    //string env_no_copy = getenv("no_copy");
-    //cout << "env_no_copy: " << env_no_copy << endl;
+    try {
+        env_timer = std::getenv("timer");
+   } catch (const char* msg) {
+        std::cerr << msg << std::endl;
+   }
+
+    try {
+        env_nocopy = std::getenv("nocopy");
+   } catch (const char* msg) {
+        std::cerr << msg << std::endl;
+   }
+
 
     a = (int*)malloc(N * sizeof(int));
  	hipMalloc(&dev_a, N * sizeof(int) );
@@ -43,13 +53,15 @@ int main (void) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    printf("hipMemcpy.start.\n");
-    hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-    printf("hipMemcpy.end\n");
+    /*if (env_nocopy == "1") {
+        printf("hipMemcpy.start.\n");
+        hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+        printf("hipMemcpy.end\n");
+    }*/
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-    std::cout << "It took me " << time_span.count() << " seconds.";
+    std::cout << "It took me " << time_span.count() << " seconds." << std::endl;
 
     hipFree(dev_a);
     free(a);
