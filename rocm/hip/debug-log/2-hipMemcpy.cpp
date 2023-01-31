@@ -49,10 +49,13 @@ int main (void) {
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
+    cout << "env_nocopy_str: " << env_nocopy_str << endl;
     if (env_nocopy_str != "1")
         printf("hipMemcpy.start.\n");
         hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
         printf("hipMemcpy.end\n");
+    } else {
+        cout << "Bypassing hipMemcpy..." << endl;
     }
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
