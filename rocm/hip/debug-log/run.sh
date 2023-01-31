@@ -8,13 +8,13 @@ LOG_DIR=log/$FILENAME
 echo Making directory $LOG_DIR
 mkdir $LOG_DIR -p 
 
-declare -a SUB_DIR_SUFFIXES=(""  "no-sdma" "no-copy" "timer")  
+declare -a SUB_DIR_SUFFIXES=(""  "-no-sdma" "-no-copy" "-timer")  
 
 index=0
 for envvar in "" "HSA_ENABLE_SDMA=0" "nocopy=1" "timer=1" ; do
     echo "==============================================="
 
-    SUB_LOG_DIR=$LOG_DIR/$FILENAME-${SUB_DIR_SUFFIXES[$index]}
+    SUB_LOG_DIR=$LOG_DIR/$FILENAME${SUB_DIR_SUFFIXES[$index]}
     echo "SUB_LOG_DIR: $SUB_LOG_DIR"
     mkdir -p $SUB_LOG_DIR
     hipcc  $FILENAME.cpp  -o $FILENAME.out

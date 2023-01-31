@@ -1,0 +1,99 @@
+:3:rocdevice.cpp            :416 : 143997864676 us: 12557: [tid:0x7f9864711080] Initializing HSA stack.
+GG: GetEnvVar(HSA_ENABLED_SDMA): 0
+GG: enable_sdma_: 0
+GG: GetEnvVar(HSA_ENABLED_SDMA): 0
+GG: enable_sdma_: 0
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: GpuAgent.constructor, entered...
+ GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
+  GG: max_queues_ : 128
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+GG: InitDma: entered...
+  GG: calling queue_lambda...
+  GG: determine/instantiat No. of blit objs to engage...
+  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+  GG: calling blit_lambda...
+  GG: InitGWS...
+:3:comgrctx.cpp             :33  : 143997949899 us: 12557: [tid:0x7f9864711080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 143997949958 us: 12557: [tid:0x7f9864711080] Numa selects cpu agent[0]=0x15092a0(fine=0x1520440,coarse=0x15f9fe0) for gpu agent=0x15fd8f0
+:3:rocdevice.cpp            :1611: 143997950245 us: 12557: [tid:0x7f9864711080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 143997950627 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9759000000, size 0x101000
+:4:rocdevice.cpp            :1918: 143997951279 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9758e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 143997951358 us: 12557: [tid:0x7f9864711080] Allocate hsa device memory 0x7f9758a00000, size 0x100000
+:3:rocdevice.cpp            :207 : 143997951390 us: 12557: [tid:0x7f9864711080] Numa selects cpu agent[0]=0x15092a0(fine=0x1520440,coarse=0x15f9fe0) for gpu agent=0x168d290
+:3:rocdevice.cpp            :1611: 143997951523 us: 12557: [tid:0x7f9864711080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 143997951899 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9758800000, size 0x101000
+:4:rocdevice.cpp            :1918: 143997952277 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9758600000, size 0x101000
+:4:rocdevice.cpp            :2054: 143997952346 us: 12557: [tid:0x7f9864711080] Allocate hsa device memory 0x7f9758200000, size 0x100000
+:3:rocdevice.cpp            :207 : 143997952375 us: 12557: [tid:0x7f9864711080] Numa selects cpu agent[0]=0x15092a0(fine=0x1520440,coarse=0x15f9fe0) for gpu agent=0x1691640
+:3:rocdevice.cpp            :1611: 143997952497 us: 12557: [tid:0x7f9864711080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 143997952813 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9453800000, size 0x101000
+:4:rocdevice.cpp            :1918: 143997953188 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9453600000, size 0x101000
+:4:rocdevice.cpp            :2054: 143997953258 us: 12557: [tid:0x7f9864711080] Allocate hsa device memory 0x7f9453200000, size 0x100000
+:3:rocdevice.cpp            :207 : 143997953291 us: 12557: [tid:0x7f9864711080] Numa selects cpu agent[0]=0x15092a0(fine=0x1520440,coarse=0x15f9fe0) for gpu agent=0x1695a20
+:3:rocdevice.cpp            :1611: 143997953410 us: 12557: [tid:0x7f9864711080] HMM support: 1, xnack: 0, direct host access: 0
+
+:4:rocdevice.cpp            :1918: 143997953445 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9864570000, size 0xa0
+:4:rocdevice.cpp            :1918: 143997953800 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9453000000, size 0x101000
+:4:rocdevice.cpp            :1918: 143997954124 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9452e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 143997954211 us: 12557: [tid:0x7f9864711080] Allocate hsa device memory 0x7f9452a00000, size 0x100000
+:4:runtime.cpp              :83  : 143997954221 us: 12557: [tid:0x7f9864711080] init
+:3:hip_context.cpp          :50  : 143997954224 us: 12557: [tid:0x7f9864711080] Direct Dispatch: 1
+:4:rocdevice.cpp            :2054: 143997954477 us: 12557: [tid:0x7f9864711080] Allocate hsa device memory 0x7f93d2800000, size 0x80000000
+:3:rocdevice.cpp            :2093: 143997954483 us: 12557: [tid:0x7f9864711080] device=0x169c9c0, freeMem_ = 0x7f000000
+:3:hip_memory.cpp           :496 : 143997954490 us: 12557: [tid:0x7f9864711080] hipMalloc: Returned hipSuccess : 0x7f93d2800000
+It took me 3e-08 seconds.
+:3:hip_memory.cpp           :537 : 143997954514 us: 12557: [tid:0x7f9864711080] [32mhipFree ( 0x7f93d2800000 )[0m
+:3:rocdevice.cpp            :2686: 143997954530 us: 12557: [tid:0x7f9864711080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+GG: queue_lambda entered: 
+GG: CpuAgent::CreateInterceptibleQueue entered...
+:3:rocdevice.cpp            :2757: 143997970917 us: 12557: [tid:0x7f9864711080] created hardware queue 0x7f9864560000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 143997971092 us: 12557: [tid:0x7f9864711080] Allocate hsa host memory 0x7f9859280000, size 0x80000
+:3:devprogram.cpp           :2675: 143998117744 us: 12557: [tid:0x7f9864711080] Using Code Object V4.
+GG: DmaCopy(dst, src, size)..entered.
+GG: GpuAgent::CreateBlitKernel() entered...
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
+GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
+  GG: total_num_packet: 1
+GG: BlitKernel::PopulateQueue: entered.
+:3:devprogram.cpp           :2978: 143998118856 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 143998118861 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 143998118863 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 143998118865 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 143998118866 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 143998118868 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 143998118869 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 143998118871 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 143998118872 us: 12557: [tid:0x7f9864711080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 143998118926 us: 12557: [tid:0x7f9864711080] Locking to pool 0x15f9fe0, size 0x1000, HostPtr = 0x1b06000, DevPtr = 0x7f9859374000
+:4:rocdevice.cpp            :2070: 143998119136 us: 12557: [tid:0x7f9864711080] Free hsa memory 0x7f93d2800000
+:3:rocdevice.cpp            :2093: 143998119154 us: 12557: [tid:0x7f9864711080] device=0x169c9c0, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :539 : 143998119160 us: 12557: [tid:0x7f9864711080] hipFree: Returned hipSuccess : 
