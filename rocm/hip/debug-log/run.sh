@@ -13,14 +13,18 @@ declare -a SUB_DIR_SUFFIXES=(""  "-no-sdma" "-no-copy" "-timer")
 index=0
 for envvar in "" "HSA_ENABLE_SDMA=0" "nocopy=1" "timer=1" ; do
     echo "==============================================="
-
     SUB_LOG_DIR=$LOG_DIR/$FILENAME${SUB_DIR_SUFFIXES[$index]}
     echo "SUB_LOG_DIR: $SUB_LOG_DIR"
     mkdir -p $SUB_LOG_DIR
     hipcc  $FILENAME.cpp  -o $FILENAME.out
-    AMD_LOG_LEVEL=4 $envvar  ./$FILENAME.out 2>&1 | tee $SUB_LOG_DIR/$FILENAME.AMD_LOG_LEVEL.4.log
+    if [[ $envvar_prev ]] ; then unset $envvar_prev ; fi
+    export AMD_LOG_LEVEL=4 
+    export $envvar 
+    ./$FILENAME.out 2>&1 | tee $SUB_LOG_DIR/$FILENAME.AMD_LOG_LEVEL.4.log
     rocprof --sys-trace -d ./$SUB_LOG_DIR/ ./$FILENAME.out
     mv results* ./$SUB_LOG_DIR/
+    envvar_prev=`echo $envvar | cut -d '=' -f1`
+    echo "envvar_prev: $envvar_prev"
     index=$((index+1))
 done
 exit 0
