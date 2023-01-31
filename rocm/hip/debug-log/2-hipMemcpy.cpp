@@ -46,6 +46,8 @@ int main (void) {
     if (env_nocopy_str != "1") {
         a = (int*)malloc(N * sizeof(int));
  	    hipMalloc(&dev_a, N * sizeof(int) );
+    } else {
+        cout << "Bypassing hipMalloc/malloc..." << endl;
     } 
 
 	for (int i = 0; i < N ; i ++ )
@@ -68,6 +70,8 @@ int main (void) {
     if (env_nocopy_str != "1") {
         hipFree(dev_a);
         free(a);
+    } else {
+        cout << "Bypassing hipFree/free..." << endl;
     }
     
 	return 0;
