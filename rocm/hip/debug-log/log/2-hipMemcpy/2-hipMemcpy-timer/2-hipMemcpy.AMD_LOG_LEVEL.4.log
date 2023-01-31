@@ -1,4 +1,4 @@
-:3:rocdevice.cpp            :416 : 182319211952 us: 15077: [tid:0x7f37222cd080] Initializing HSA stack.
+:3:rocdevice.cpp            :416 : 182478594772 us: 15595: [tid:0x7f795100a080] Initializing HSA stack.
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
 GG: enable_sdma_: 2
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
@@ -39,61 +39,2320 @@ GG: InitDma: entered...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
   GG: calling blit_lambda...
   GG: InitGWS...
-:3:comgrctx.cpp             :33  : 182319298882 us: 15077: [tid:0x7f37222cd080] Loading COMGR library.
-:3:rocdevice.cpp            :207 : 182319298939 us: 15077: [tid:0x7f37222cd080] Numa selects cpu agent[0]=0x23b52a0(fine=0x23cc440,coarse=0x24a5fe0) for gpu agent=0x24a98f0
-:3:rocdevice.cpp            :1611: 182319299219 us: 15077: [tid:0x7f37222cd080] HMM support: 1, xnack: 0, direct host access: 0
+:3:comgrctx.cpp             :33  : 182478680819 us: 15595: [tid:0x7f795100a080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 182478680885 us: 15595: [tid:0x7f795100a080] Numa selects cpu agent[0]=0xb322a0(fine=0xb49440,coarse=0xc22fe0) for gpu agent=0xc268f0
+:3:rocdevice.cpp            :1611: 182478681201 us: 15595: [tid:0x7f795100a080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 182319299508 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3616c00000, size 0x101000
-:4:rocdevice.cpp            :1918: 182319299892 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3616a00000, size 0x101000
-:4:rocdevice.cpp            :2054: 182319299961 us: 15077: [tid:0x7f37222cd080] Allocate hsa device memory 0x7f3616600000, size 0x100000
-:3:rocdevice.cpp            :207 : 182319299993 us: 15077: [tid:0x7f37222cd080] Numa selects cpu agent[0]=0x23b52a0(fine=0x23cc440,coarse=0x24a5fe0) for gpu agent=0x2539290
-:3:rocdevice.cpp            :1611: 182319300113 us: 15077: [tid:0x7f37222cd080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 182478681468 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c5a00000, size 0x101000
+:4:rocdevice.cpp            :1918: 182478681850 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c5800000, size 0x101000
+:4:rocdevice.cpp            :2054: 182478681917 us: 15595: [tid:0x7f795100a080] Allocate hsa device memory 0x7f77c5400000, size 0x100000
+:3:rocdevice.cpp            :207 : 182478681945 us: 15595: [tid:0x7f795100a080] Numa selects cpu agent[0]=0xb322a0(fine=0xb49440,coarse=0xc22fe0) for gpu agent=0xcb6290
+:3:rocdevice.cpp            :1611: 182478682060 us: 15595: [tid:0x7f795100a080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 182319300416 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3616400000, size 0x101000
-:4:rocdevice.cpp            :1918: 182319300750 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3616200000, size 0x101000
-:4:rocdevice.cpp            :2054: 182319300812 us: 15077: [tid:0x7f37222cd080] Allocate hsa device memory 0x7f3615e00000, size 0x100000
-:3:rocdevice.cpp            :207 : 182319300839 us: 15077: [tid:0x7f37222cd080] Numa selects cpu agent[0]=0x23b52a0(fine=0x23cc440,coarse=0x24a5fe0) for gpu agent=0x253d640
-:3:rocdevice.cpp            :1611: 182319300955 us: 15077: [tid:0x7f37222cd080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 182478682394 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c5200000, size 0x101000
+:4:rocdevice.cpp            :1918: 182478682767 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c5000000, size 0x101000
+:4:rocdevice.cpp            :2054: 182478682831 us: 15595: [tid:0x7f795100a080] Allocate hsa device memory 0x7f77c4c00000, size 0x100000
+:3:rocdevice.cpp            :207 : 182478682856 us: 15595: [tid:0x7f795100a080] Numa selects cpu agent[0]=0xb322a0(fine=0xb49440,coarse=0xc22fe0) for gpu agent=0xcba640
+:3:rocdevice.cpp            :1611: 182478682968 us: 15595: [tid:0x7f795100a080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 182319301303 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3615c00000, size 0x101000
-:4:rocdevice.cpp            :1918: 182319301623 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3615a00000, size 0x101000
-:4:rocdevice.cpp            :2054: 182319301690 us: 15077: [tid:0x7f37222cd080] Allocate hsa device memory 0x7f3615600000, size 0x100000
-:3:rocdevice.cpp            :207 : 182319301719 us: 15077: [tid:0x7f37222cd080] Numa selects cpu agent[0]=0x23b52a0(fine=0x23cc440,coarse=0x24a5fe0) for gpu agent=0x2541a20
-:3:rocdevice.cpp            :1611: 182319301835 us: 15077: [tid:0x7f37222cd080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 182478683312 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c4a00000, size 0x101000
+:4:rocdevice.cpp            :1918: 182478683631 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c4800000, size 0x101000
+:4:rocdevice.cpp            :2054: 182478683695 us: 15595: [tid:0x7f795100a080] Allocate hsa device memory 0x7f77c4400000, size 0x100000
+:3:rocdevice.cpp            :207 : 182478683724 us: 15595: [tid:0x7f795100a080] Numa selects cpu agent[0]=0xb322a0(fine=0xb49440,coarse=0xc22fe0) for gpu agent=0xcbea20
+:3:rocdevice.cpp            :1611: 182478683843 us: 15595: [tid:0x7f795100a080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 182319301868 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f372212c000, size 0xa0
-:4:rocdevice.cpp            :1918: 182319302169 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3615400000, size 0x101000
-:4:rocdevice.cpp            :1918: 182319302508 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3615200000, size 0x101000
-:4:rocdevice.cpp            :2054: 182319302616 us: 15077: [tid:0x7f37222cd080] Allocate hsa device memory 0x7f3614e00000, size 0x100000
-:4:runtime.cpp              :83  : 182319302623 us: 15077: [tid:0x7f37222cd080] init
-:3:hip_context.cpp          :50  : 182319302626 us: 15077: [tid:0x7f37222cd080] Direct Dispatch: 1
-:4:rocdevice.cpp            :2054: 182319302866 us: 15077: [tid:0x7f37222cd080] Allocate hsa device memory 0x7f328f800000, size 0x80000000
-:3:rocdevice.cpp            :2093: 182319302871 us: 15077: [tid:0x7f37222cd080] device=0x25489c0, freeMem_ = 0x7f000000
-:3:hip_memory.cpp           :496 : 182319302879 us: 15077: [tid:0x7f37222cd080] hipMalloc: Returned hipSuccess : 0x7f328f800000
-It took me 4e-08 seconds.
-:3:hip_memory.cpp           :537 : 182319302902 us: 15077: [tid:0x7f37222cd080] [32mhipFree ( 0x7f328f800000 )[0m
-:3:rocdevice.cpp            :2686: 182319302917 us: 15077: [tid:0x7f37222cd080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+:4:rocdevice.cpp            :1918: 182478683877 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f7950e6a000, size 0xa0
+:4:rocdevice.cpp            :1918: 182478684209 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c4200000, size 0x101000
+:4:rocdevice.cpp            :1918: 182478684535 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f74bf800000, size 0x101000
+:4:rocdevice.cpp            :2054: 182478684625 us: 15595: [tid:0x7f795100a080] Allocate hsa device memory 0x7f74bf400000, size 0x100000
+:4:runtime.cpp              :83  : 182478684633 us: 15595: [tid:0x7f795100a080] init
+:3:hip_context.cpp          :50  : 182478684636 us: 15595: [tid:0x7f795100a080] Direct Dispatch: 1
+:4:rocdevice.cpp            :2054: 182478684882 us: 15595: [tid:0x7f795100a080] Allocate hsa device memory 0x7f743f200000, size 0x80000000
+:3:rocdevice.cpp            :2093: 182478684888 us: 15595: [tid:0x7f795100a080] device=0xcc59c0, freeMem_ = 0x7f000000
+:3:hip_memory.cpp           :496 : 182478684896 us: 15595: [tid:0x7f795100a080] hipMalloc: Returned hipSuccess : 0x7f743f200000
+env_nocopy_str: 
+:3:hip_memory.cpp           :556 : 182478890690 us: 15595: [tid:0x7f795100a080] [32mhipMemcpy ( 0x7f743f200000, 0x7f78c64c5010, 2147483648, hipMemcpyHostToDevice )[0m
+:3:rocdevice.cpp            :2686: 182478890719 us: 15595: [tid:0x7f795100a080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+hipMemcpy.start.
 GG: queue_lambda entered: 
 GG: CpuAgent::CreateInterceptibleQueue entered...
-:3:rocdevice.cpp            :2757: 182319319578 us: 15077: [tid:0x7f37222cd080] created hardware queue 0x7f372211c000 with size 4096 with priority 1, cooperative: 0
-:4:rocdevice.cpp            :1918: 182319319755 us: 15077: [tid:0x7f37222cd080] Allocate hsa host memory 0x7f3716e80000, size 0x80000
-:3:devprogram.cpp           :2675: 182319469051 us: 15077: [tid:0x7f37222cd080] Using Code Object V4.
+:3:rocdevice.cpp            :2757: 182478907048 us: 15595: [tid:0x7f795100a080] created hardware queue 0x7f7950e5a000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 182478907268 us: 15595: [tid:0x7f795100a080] Allocate hsa host memory 0x7f77c5700000, size 0x80000
+:3:devprogram.cpp           :2675: 182479052086 us: 15595: [tid:0x7f795100a080] Using Code Object V4.
 GG: DmaCopy(dst, src, size)..entered.
 GG: GpuAgent::CreateBlitKernel() entered...
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:3:devprogram.cpp           :2978: 182319470196 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
-:3:devprogram.cpp           :2978: 182319470203 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
-:3:devprogram.cpp           :2978: 182319470204 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
-:3:devprogram.cpp           :2978: 182319470206 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
-:3:devprogram.cpp           :2978: 182319470208 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
-:3:devprogram.cpp           :2978: 182319470209 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
-:3:devprogram.cpp           :2978: 182319470211 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
-:3:devprogram.cpp           :2978: 182319470212 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
-:3:devprogram.cpp           :2978: 182319470214 us: 15077: [tid:0x7f37222cd080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
-:4:rocmemory.cpp            :941 : 182319470272 us: 15077: [tid:0x7f37222cd080] Locking to pool 0x24a5fe0, size 0x1000, HostPtr = 0x2632000, DevPtr = 0x7f3716f82000
-:4:rocdevice.cpp            :2070: 182319470494 us: 15077: [tid:0x7f37222cd080] Free hsa memory 0x7f328f800000
-:3:rocdevice.cpp            :2093: 182319470500 us: 15077: [tid:0x7f37222cd080] device=0x25489c0, freeMem_ = 0xff000000
-:3:hip_memory.cpp           :539 : 182319470506 us: 15077: [tid:0x7f37222cd080] hipFree: Returned hipSuccess : 
+:3:devprogram.cpp           :2978: 182479053174 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 182479053181 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 182479053183 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 182479053184 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 182479053186 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 182479053187 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 182479053189 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 182479053190 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 182479053192 us: 15595: [tid:0x7f795100a080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 182479053250 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x1000, HostPtr = 0xd0b000, DevPtr = 0x7f78c5c6e000
+:3:hip_memory.cpp           :327 : 182479053359 us: 15595: [tid:0x7f795100a080] GG: ihipMemcpyCommand entered.
+:4:command.cpp              :339 : 182479053367 us: 15595: [tid:0x7f795100a080] command is enqueued: 0xcf7430
+:4:rocmemory.cpp            :941 : 182479053969 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2001000, HostPtr = 0x7f78c64c5000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479053980 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d480
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: blit_lambda entered: use_xgmi: 0, isHostToDev: 1
+  GG: use_sdma after checking gfx8/1013: 1
+ GG: use_sdma after checking sdma_override: 1
+  GG: gfx90a specific: 
+GG: CreateBlitSdma entered... use_xgmi: 0
+GG: BlistSdma::Initialize() entered...
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000010, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 3f200000, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343ffff0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 3f5fffe0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffd0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 3f9fffc0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffb0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 3fdfffa0, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff90, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 401fff80, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff70, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 405fff60, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff50, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 409fff40, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff30, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 40dfff20, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff10, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 411fff00, 7f74
+:4:rocvirtual.cpp           :524 : 182479054450 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d480
+:3:rocvirtual.hpp           :62  : 182479054455 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d480) for -1 ns
+:4:rocmemory.cpp            :941 : 182479057512 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78c84c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479057520 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d400
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 41200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 41600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 41a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 41e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 42200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 42600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 42a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 42e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 43200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479057541 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d400
+:3:rocvirtual.hpp           :62  : 182479057543 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d400) for -1 ns
+:4:rocmemory.cpp            :941 : 182479059889 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78ca4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479059897 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d380
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 43200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 43600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 43a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 43e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 44200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 44600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 44a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 44e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 45200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479059918 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d380
+:3:rocvirtual.hpp           :62  : 182479059920 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d380) for -1 ns
+:4:rocmemory.cpp            :941 : 182479062286 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78cc4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479062295 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d300
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 45200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 45600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 45a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 45e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 46200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 46600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 46a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 46e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 47200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479062322 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d300
+:3:rocvirtual.hpp           :62  : 182479062324 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d300) for -1 ns
+:4:rocmemory.cpp            :941 : 182479064721 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78ce4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479064729 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d280
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 47200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 47600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 47a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 47e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 48200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 48600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 48a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 48e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 49200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479064749 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d280
+:3:rocvirtual.hpp           :62  : 182479064752 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d280) for -1 ns
+:4:rocmemory.cpp            :941 : 182479067246 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78d04c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479067255 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d200
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 49200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 49600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 49a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 49e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479067283 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d200
+:3:rocvirtual.hpp           :62  : 182479067285 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d200) for -1 ns
+:4:rocmemory.cpp            :941 : 182479069865 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78d24c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479069873 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d180
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479069894 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d180
+:3:rocvirtual.hpp           :62  : 182479069896 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d180) for -1 ns
+:4:rocmemory.cpp            :941 : 182479072098 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78d44c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479072107 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d100
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479072129 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d100
+:3:rocvirtual.hpp           :62  : 182479072130 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d100) for -1 ns
+:4:rocmemory.cpp            :941 : 182479074375 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78d64c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479074384 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d080
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 4fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 50200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 50600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 50a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 50e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 51200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479074412 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d080
+:3:rocvirtual.hpp           :62  : 182479074414 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d080) for -1 ns
+:4:rocmemory.cpp            :941 : 182479076646 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78d84c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479076654 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d000
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 51200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 51600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 51a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 51e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 52200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 52600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 52a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 52e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 53200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479076675 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d000
+:3:rocvirtual.hpp           :62  : 182479076677 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d000) for -1 ns
+:4:rocmemory.cpp            :941 : 182479078899 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78da4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479078907 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bf80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 53200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 53600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 53a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 53e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 54200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 54600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 54a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 54e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 55200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479078929 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bf80
+:3:rocvirtual.hpp           :62  : 182479078931 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bf80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479081476 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78dc4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479081485 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bf00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 55200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 55600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 55a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 55e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 56200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 56600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 56a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 56e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 57200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479081506 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bf00
+:3:rocvirtual.hpp           :62  : 182479081508 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bf00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479083726 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78de4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479083734 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6be80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 57200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 57600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 57a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 57e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 58200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 58600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 58a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 58e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 59200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479083755 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6be80
+:3:rocvirtual.hpp           :62  : 182479083758 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6be80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479085948 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78e04c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479085956 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6be00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 59200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 59600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 59a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 59e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479085977 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6be00
+:3:rocvirtual.hpp           :62  : 182479085979 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6be00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479088244 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78e24c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479088252 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bd80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479088276 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bd80
+:3:rocvirtual.hpp           :62  : 182479088278 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bd80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479090454 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78e44c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479090462 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bd00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479090483 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bd00
+:3:rocvirtual.hpp           :62  : 182479090485 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bd00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479092970 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78e64c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479092978 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bc80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 5fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 60200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 60600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 60a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 60e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 61200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479093000 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bc80
+:3:rocvirtual.hpp           :62  : 182479093002 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bc80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479095221 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78e84c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479095230 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bc00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 61200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 61600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 61a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 61e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 62200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 62600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 62a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 62e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 63200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479095257 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bc00
+:3:rocvirtual.hpp           :62  : 182479095260 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bc00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479097426 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78ea4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479097435 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bb80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 63200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 63600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 63a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 63e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 64200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 64600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 64a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 64e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 65200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479097456 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bb80
+:3:rocvirtual.hpp           :62  : 182479097458 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bb80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479099672 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78ec4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479099681 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bb00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 65200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 65600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 65a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 65e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 66200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 66600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 66a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 66e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 67200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479099702 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bb00
+:3:rocvirtual.hpp           :62  : 182479099704 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bb00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479101874 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78ee4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479101882 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6ba80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 67200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 67600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 67a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 67e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 68200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 68600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 68a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 68e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 69200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479101903 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6ba80
+:3:rocvirtual.hpp           :62  : 182479101905 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6ba80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479104397 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78f04c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479104405 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6ba00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 69200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 69600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 69a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 69e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479104426 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6ba00
+:3:rocvirtual.hpp           :62  : 182479104429 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6ba00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479106595 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78f24c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479106604 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b980
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479106625 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b980
+:3:rocvirtual.hpp           :62  : 182479106627 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b980) for -1 ns
+:4:rocmemory.cpp            :941 : 182479108886 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78f44c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479108894 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b900
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479108916 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b900
+:3:rocvirtual.hpp           :62  : 182479108918 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b900) for -1 ns
+:4:rocmemory.cpp            :941 : 182479111101 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78f64c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479111108 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b880
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 6fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 70200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 70600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 70a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 70e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 71200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479111130 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b880
+:3:rocvirtual.hpp           :62  : 182479111132 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b880) for -1 ns
+:4:rocmemory.cpp            :941 : 182479113320 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78f84c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479113329 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b800
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 71200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 71600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 71a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 71e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 72200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 72600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 72a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 72e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 73200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479113350 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b800
+:3:rocvirtual.hpp           :62  : 182479113352 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b800) for -1 ns
+:4:rocmemory.cpp            :941 : 182479115795 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78fa4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479115803 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b780
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 73200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 73600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 73a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 73e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 74200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 74600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 74a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 74e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 75200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479115824 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b780
+:3:rocvirtual.hpp           :62  : 182479115826 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b780) for -1 ns
+:4:rocmemory.cpp            :941 : 182479117960 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78fc4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479117968 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b700
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 75200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 75600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 75a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 75e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 76200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 76600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 76a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 76e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 77200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479117989 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b700
+:3:rocvirtual.hpp           :62  : 182479117991 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b700) for -1 ns
+:4:rocmemory.cpp            :941 : 182479120232 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f78fe4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479120240 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b680
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 77200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 77600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 77a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 77e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 78200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 78600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 78a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 78e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 79200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479120262 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b680
+:3:rocvirtual.hpp           :62  : 182479120264 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b680) for -1 ns
+:4:rocmemory.cpp            :941 : 182479122450 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79004c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479122459 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b600
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 79200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 79600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 79a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 79e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479122483 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b600
+:3:rocvirtual.hpp           :62  : 182479122485 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b600) for -1 ns
+:4:rocmemory.cpp            :941 : 182479124651 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79024c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479124659 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b580
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479124680 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b580
+:3:rocvirtual.hpp           :62  : 182479124683 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b580) for -1 ns
+:4:rocmemory.cpp            :941 : 182479127246 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79044c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479127254 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d500
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479127275 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d500
+:3:rocvirtual.hpp           :62  : 182479127277 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d500) for -1 ns
+:4:rocmemory.cpp            :941 : 182479129461 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79064c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479129470 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d480
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 7fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 80200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 80600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 80a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 80e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 81200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479129497 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d480
+:3:rocvirtual.hpp           :62  : 182479129499 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d480) for -1 ns
+:4:rocmemory.cpp            :941 : 182479131693 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79084c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479131701 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d400
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 81200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 81600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 81a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 81e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 82200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 82600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 82a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 82e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 83200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479131722 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d400
+:3:rocvirtual.hpp           :62  : 182479131724 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d400) for -1 ns
+:4:rocmemory.cpp            :941 : 182479133929 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f790a4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479133937 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d380
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 83200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 83600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 83a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 83e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 84200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 84600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 84a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 84e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 85200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479133958 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d380
+:3:rocvirtual.hpp           :62  : 182479133960 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d380) for -1 ns
+:4:rocmemory.cpp            :941 : 182479148534 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f790c4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479148545 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d300
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 85200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 85600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 85a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 85e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 86200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 86600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 86a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 86e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 87200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479148571 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d300
+:3:rocvirtual.hpp           :62  : 182479148572 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d300) for -1 ns
+:4:rocmemory.cpp            :941 : 182479150823 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f790e4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479150831 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d280
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 87200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 87600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 87a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 87e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 88200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 88600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 88a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 88e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 89200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479150853 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d280
+:3:rocvirtual.hpp           :62  : 182479150856 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d280) for -1 ns
+:4:rocmemory.cpp            :941 : 182479153225 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79104c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479153236 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d200
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 89200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 89600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 89a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 89e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479153264 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d200
+:3:rocvirtual.hpp           :62  : 182479153267 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d200) for -1 ns
+:4:rocmemory.cpp            :941 : 182479155484 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79124c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479155492 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d180
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479155514 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d180
+:3:rocvirtual.hpp           :62  : 182479155516 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d180) for -1 ns
+:4:rocmemory.cpp            :941 : 182479160119 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79144c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479160130 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d100
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479160171 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d100
+:3:rocvirtual.hpp           :62  : 182479160174 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d100) for -1 ns
+:4:rocmemory.cpp            :941 : 182479162427 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79164c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479162436 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d080
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 8fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 90200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 90600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 90a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 90e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 91200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479162458 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d080
+:3:rocvirtual.hpp           :62  : 182479162460 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d080) for -1 ns
+:4:rocmemory.cpp            :941 : 182479164890 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79184c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479164899 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d000
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 91200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 91600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 91a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 91e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 92200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 92600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 92a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 92e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 93200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479164921 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d000
+:3:rocvirtual.hpp           :62  : 182479164923 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d000) for -1 ns
+:4:rocmemory.cpp            :941 : 182479167310 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f791a4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479167320 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bf80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 93200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 93600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 93a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 93e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 94200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 94600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 94a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 94e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 95200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479167348 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bf80
+:3:rocvirtual.hpp           :62  : 182479167350 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bf80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479169699 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f791c4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479169708 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bf00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 95200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 95600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 95a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 95e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 96200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 96600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 96a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 96e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 97200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479169729 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bf00
+:3:rocvirtual.hpp           :62  : 182479169731 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bf00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479171931 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f791e4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479171939 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6be80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 97200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 97600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 97a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 97e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 98200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 98600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 98a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 98e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 99200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479171961 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6be80
+:3:rocvirtual.hpp           :62  : 182479171963 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6be80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479174312 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79204c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479174322 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6be00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 99200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 99600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 99a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 99e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9a200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9a600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9aa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9b200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479174350 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6be00
+:3:rocvirtual.hpp           :62  : 182479174352 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6be00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479176853 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79224c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479176862 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bd80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9b200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9b600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9be00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9c200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9c600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9d200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479176883 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bd80
+:3:rocvirtual.hpp           :62  : 182479176885 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bd80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479179167 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79244c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479179176 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bd00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9d200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9d600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9da00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9de00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9e200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9e600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9ee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9f200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479179198 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bd00
+:3:rocvirtual.hpp           :62  : 182479179200 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bd00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479181508 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79264c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479181517 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bc80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9f200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9f600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9fa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): 9fe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a0200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a0600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a0a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a0e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a1200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479181538 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bc80
+:3:rocvirtual.hpp           :62  : 182479181540 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bc80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479183879 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79284c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479183887 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bc00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a1200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a1600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a1a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a1e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a2200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a2600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a2a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a2e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a3200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479183908 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bc00
+:3:rocvirtual.hpp           :62  : 182479183910 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bc00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479186128 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f792a4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479186137 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bb80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a3200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a3600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a3a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a3e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a4200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a4600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a4a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a4e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a5200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479186164 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bb80
+:3:rocvirtual.hpp           :62  : 182479186166 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bb80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479188260 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f792c4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479188270 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6bb00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a5200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a5600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a5a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a5e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a6200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a6600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a6a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a6e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a7200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479188293 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6bb00
+:3:rocvirtual.hpp           :62  : 182479188295 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6bb00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479190315 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f792e4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479190324 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6ba80
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a7200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a7600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a7a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a7e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a8200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a8600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a8a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a8e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a9200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479190351 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6ba80
+:3:rocvirtual.hpp           :62  : 182479190353 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6ba80) for -1 ns
+:4:rocmemory.cpp            :941 : 182479192329 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79304c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479192336 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6ba00
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a9200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a9600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a9a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): a9e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aa200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aa600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aaa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ab200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479192358 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6ba00
+:3:rocvirtual.hpp           :62  : 182479192360 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6ba00) for -1 ns
+:4:rocmemory.cpp            :941 : 182479194367 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79324c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479194376 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b980
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ab200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ab600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): abe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ac200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ac600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ace00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ad200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479194403 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b980
+:3:rocvirtual.hpp           :62  : 182479194405 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b980) for -1 ns
+:4:rocmemory.cpp            :941 : 182479196407 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79344c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479196416 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b900
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ad200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ad600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ada00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ade00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ae200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ae600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): aee00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): af200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479196443 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b900
+:3:rocvirtual.hpp           :62  : 182479196445 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b900) for -1 ns
+:4:rocmemory.cpp            :941 : 182479198565 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79364c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479198573 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b880
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): af200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): af600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): afa00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): afe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b0200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b0600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b0a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b0e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b1200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479198594 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b880
+:3:rocvirtual.hpp           :62  : 182479198596 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b880) for -1 ns
+:4:rocmemory.cpp            :941 : 182479200562 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79384c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479200570 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b800
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b1200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b1600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b1a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b1e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b2200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b2600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b2a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b2e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b3200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479200591 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b800
+:3:rocvirtual.hpp           :62  : 182479200593 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b800) for -1 ns
+:4:rocmemory.cpp            :941 : 182479202604 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f793a4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479202612 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b780
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b3200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b3600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b3a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b3e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b4200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b4600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b4a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b4e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b5200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479202633 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b780
+:3:rocvirtual.hpp           :62  : 182479202636 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b780) for -1 ns
+:4:rocmemory.cpp            :941 : 182479204664 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f793c4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479204671 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b700
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b5200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b5600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b5a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b5e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b6200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b6600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b6a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b6e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b7200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479204693 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b700
+:3:rocvirtual.hpp           :62  : 182479204695 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b700) for -1 ns
+:4:rocmemory.cpp            :941 : 182479206699 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f793e4c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479206707 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b680
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b7200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b7600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b7a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b7e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b8200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b8600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b8a00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b8e00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b9200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479206728 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b680
+:3:rocvirtual.hpp           :62  : 182479206730 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b680) for -1 ns
+:4:rocmemory.cpp            :941 : 182479208751 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79404c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479208759 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b600
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b9200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b9600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b9a00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): b9e00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ba200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): ba600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): baa00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bae00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bb200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479208779 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b600
+:3:rocvirtual.hpp           :62  : 182479208782 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b600) for -1 ns
+:4:rocmemory.cpp            :941 : 182479210783 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79424c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479210791 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f78c5c6b580
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bb200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bb600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bba00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bbe00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bc200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bc600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bca00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bce00f10, 7f74
+  GG: copy command No: 8...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35ffff00, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bd200ef0, 7f74
+:4:rocvirtual.cpp           :524 : 182479210812 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f78c5c6b580
+:3:rocvirtual.hpp           :62  : 182479210814 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f78c5c6b580) for -1 ns
+:4:rocmemory.cpp            :941 : 182479212856 us: 15595: [tid:0x7f795100a080] Locking to pool 0xc22fe0, size 0x2000000, HostPtr = 0x7f79444c6000, DevPtr = 0x7f7434000000
+:4:rocblit.cpp              :668 : 182479212864 us: 15595: [tid:0x7f795100a080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f7950e8d500
+GG; hsa_amd_memory_async_copy: entered...
+GG: Runtime::CopyMemory.(2)
+GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: BlistSdma::BuildCopyCommand() entered...
+  GG: copy command No: 0...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34000000, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bd200ff0, 7f74
+  GG: copy command No: 1...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 343fffe0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bd600fd0, 7f74
+  GG: copy command No: 2...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 347fffc0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bda00fb0, 7f74
+  GG: copy command No: 3...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34bfffa0, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bde00f90, 7f74
+  GG: copy command No: 4...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 34ffff80, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): be200f70, 7f74
+  GG: copy command No: 5...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 353fff60, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): be600f50, 7f74
+  GG: copy command No: 6...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 357fff40, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bea00f30, 7f74
+  GG: copy command No: 7...
+  GG: packet_addr->SRC_ADDR_LO,HI(31:0,63:32): 35bfff20, 7f74
+  GG: packet_addr0>DST_ADDR_LO,HI(31:0,63:32): bee00f10, 7f74
+:4:rocvirtual.cpp           :524 : 182479212883 us: 15595: [tid:0x7f795100a080] Host wait on completion_signal=0x7f7950e8d500
+:3:rocvirtual.hpp           :62  : 182479212885 us: 15595: [tid:0x7f795100a080] Host active wait for Signal = (0x7f7950e8d500) for -1 ns
+:4:command.cpp              :280 : 182479214256 us: 15595: [tid:0x7f795100a080] queue marker to command queue: 0xcd2d50
+:4:command.cpp              :339 : 182479214261 us: 15595: [tid:0x7f795100a080] command is enqueued: 0x11c81c0
+:4:command.cpp              :170 : 182479214264 us: 15595: [tid:0x7f795100a080] Command 0xcf7430 complete
+:4:command.cpp              :168 : 182479214266 us: 15595: [tid:0x7f795100a080] Command 0x11c81c0 complete (Wall: 182479214265, CPU: 0, GPU: 0 us)
+:4:command.cpp              :245 : 182479214268 us: 15595: [tid:0x7f795100a080] waiting for event 0xcf7430 to complete, current status 0
+:4:command.cpp              :259 : 182479214270 us: 15595: [tid:0x7f795100a080] event 0xcf7430 wait completed
+:3:hip_memory.cpp           :557 : 182479214275 us: 15595: [tid:0x7f795100a080] hipMemcpy: Returned hipSuccess : : duration: 323585 us
+hipMemcpy.end
+It took me 0.323685 seconds.
+:3:hip_memory.cpp           :537 : 182479214309 us: 15595: [tid:0x7f795100a080] [32mhipFree ( 0x7f743f200000 )[0m
+:3:rocdevice.cpp            :2636: 182479214317 us: 15595: [tid:0x7f795100a080] No HW event
+:4:commandqueue.cpp         :128 : 182479214319 us: 15595: [tid:0x7f795100a080] HW Event not ready, awaiting completion instead
+:4:commandqueue.cpp         :140 : 182479214322 us: 15595: [tid:0x7f795100a080] All commands finished
+:4:rocdevice.cpp            :2070: 182479214429 us: 15595: [tid:0x7f795100a080] Free hsa memory 0x7f743f200000
+:3:rocdevice.cpp            :2093: 182479214434 us: 15595: [tid:0x7f795100a080] device=0xcc59c0, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :539 : 182479214437 us: 15595: [tid:0x7f795100a080] hipFree: Returned hipSuccess : 
