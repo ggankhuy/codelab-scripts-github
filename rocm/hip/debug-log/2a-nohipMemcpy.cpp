@@ -45,9 +45,9 @@ int main (void) {
     auto start = std::chrono::high_resolution_clock::now();
     #endif
 
-    printf("hipMemcpy.start.\n");
+    /*printf("hipMemcpy.start.\n");
    	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-    printf("hipMemcpy.end\n");
+    printf("hipMemcpy.end\n");*/
 
     #if timer == 1
     auto end = std::chrono::high_resolution_clock::now();

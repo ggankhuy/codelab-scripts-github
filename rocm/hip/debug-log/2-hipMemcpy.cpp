@@ -26,6 +26,12 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
+    const char* env_timer = std::getenv("timer");
+    cout << "env_timer: " << env_timer << endl;
+
+    const char* env_no_copy = std::getenv("env_no_copy");
+    cout << "env_no_copy: " << env_no_copy << endl;
+
     #if timer == 1
     auto end = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
@@ -34,7 +40,6 @@ int main (void) {
     #endif 
 
     a = (int*)malloc(N * sizeof(int));
-
  	hipMalloc(&dev_a, N * sizeof(int) );
 
 	for (int i = 0; i < N ; i ++ ) {
@@ -45,9 +50,11 @@ int main (void) {
     auto start = std::chrono::high_resolution_clock::now();
     #endif
 
+    #if no_copy == 1
     printf("hipMemcpy.start.\n");
    	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
     printf("hipMemcpy.end\n");
+    #endif
 
     #if timer == 1
     auto end = std::chrono::high_resolution_clock::now();
