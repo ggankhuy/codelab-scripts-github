@@ -18,10 +18,6 @@ using namespace std;
 //#define N 8
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
-__global__ void add(int *a, int*b, int *c) {
-	int tid = hipBlockIdx_x;
-	c[tid] = a[tid] + b[tid];
-}
 
 int main (void) {
     using namespace std::chrono;
@@ -52,8 +48,11 @@ int main (void) {
         cout << "Bypassing hipMalloc/malloc..." << endl;
     } 
 
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    high_resolution_clock::time_point t1, t2;
 
+    if (env_timer_str != "1") {
+        t1 = high_resolution_clock::now();
+    }
     if (env_nocopy_str != "1") {
         printf("hipMemcpy.start.\n");
         hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
@@ -62,9 +61,12 @@ int main (void) {
         cout << "Bypassing hipMemcpy..." << endl;
     }
 
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-    std::cout << "It took me " << time_span.count() << " seconds." << std::endl;
+    if (env_timer_str != "1") {
+
+        t2 = high_resolution_clock::now();
+	    duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+    	std::cout << "It took me " << time_span.count() << " seconds." << std::endl;
+    }
 
     if (env_nocopy_str != "1") {
         hipFree(dev_a);
