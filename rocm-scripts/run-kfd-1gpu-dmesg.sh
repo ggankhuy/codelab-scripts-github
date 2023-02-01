@@ -17,7 +17,7 @@ for i in {2..3} ; do
     while IFS= read -r line
     do
         echo "------------------"
-        echo line: $line
+        echo test No: $counter. line: $line
         line=`echo $line | xargs`
         dmesg --clear
         LOG_FOLDER_CURR=$LOG_FOLDER/gpu$i
@@ -32,7 +32,10 @@ for i in {2..3} ; do
             echo LOG_FILE: $LOG_FILE
             echo LOG_FILE_DMESG: $LOG_FILE_DMESG
             bypass_flag=0
-            for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest CheckZeroInitializationVram;  do
+
+            # These are tests has to be passed by in order to continue in abyss server 10.217.77.119. For other platforms, it may vary.
+
+            for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest CheckZeroInitializationVram MeasureInterruptConsumption;  do
 
                 if [[ $DEBUG == 1 ]] ; then
                     echo "Checking if bypass: j: $j, line: $line:"
