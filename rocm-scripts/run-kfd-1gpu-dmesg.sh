@@ -35,7 +35,7 @@ for i in {2..3} ; do
 
             # These are tests has to be passed by in order to continue in abyss server 10.217.77.119. For other platforms, it may vary.
 
-            for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest CheckZeroInitializationVram MeasureInterruptConsumption;  do
+            for j in CacheInvalidateOnRemoteWrite LargestSysBufferTest LargestSysBufferTest CheckZeroInitializationVram MeasureInterruptConsumption mGPUShareBO;  do
 
                 if [[ $DEBUG == 1 ]] ; then
                     echo "Checking if bypass: j: $j, line: $line:"
