@@ -5,54 +5,44 @@
 #include <chrono>
 #include <iostream>
 #include <iomanip>
+#include <string.h>
+#include <stdlib.h> 
+#include <ctime>
+#include <ratio>
 
 using namespace std;
 
-#define N 64
-#define N 1048576
-#define ARRSIZE 3
-#define LOOPSTRIDE 8
-#define timer 0
+// 512M
+
+#define N 536870912
+//#define N 8
+
 int main (void) {
-    int *a, *b, *c;
+    using namespace std::chrono;
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
-    #if timer == 1
-    auto end = std::chrono::high_resolution_clock::now();
-    auto start = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::high_resolution_clock::now();
-    auto ns = std::chrono::high_resolution_clock::now();
-    #endif 
+    char* env_timer;
 
-    int ns_fractional;    
+    string env_timer_str = "";
+    env_timer=std::getenv("timer");
+    env_timer ? env_timer_str=string(env_timer): "" ;
 
-    for (int i = 0; i < 3; i++ ) {
-        #if timer == 1
-        start = std::chrono::high_resolution_clock::now();
-        #endif
+    high_resolution_clock::time_point t1, t2;
 
-     	hipMalloc(&dev_a, N * sizeof(int) );
-    
-        #if timer == 1
-        end = std::chrono::high_resolution_clock::now();
-        duration = (end - start);
-        ns = std::chrono::duration_cast<std::chrono::nanoseconds(duration);
-        ns_fractional = static_cast<int>(ns.count());
-        cout << setw(30) << "hipMalloc duration: " << ns_fractional << " ns or " << ns_fractional / 1000000 << " ms" << endl;
-        #endif
-
-        #if timer == 1
-        start = std::chrono::high_resolution_clock::now();
-        #endif
-
-        hipFree(dev_a);
-
-        end = std::chrono::high_resolution_clock::now();
-        duration = (end - start);
-        ns = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-        ns_fractional = static_cast<int>(ns.count());
-        cout << setw(30) << "hipFree duration: " << ns_fractional << " ns or " << ns_fractional / 1000000 << " ms " << endl;
+    if (env_timer_str != "1") {
+        t1 = high_resolution_clock::now();
     }
+
+    hipMalloc(&dev_a, N * sizeof(int) );
+
+    if (env_timer_str != "1") {
+        t2 = high_resolution_clock::now();
+        duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+        std::cout << "It took me " << time_span.count() << " seconds." << std::endl;
+    }
+
+    hipFree(dev_a);
+
 	return 0;
 }

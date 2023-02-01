@@ -1,6 +1,6 @@
 set -x
 FILENAME=1-hipMalloc
-FILENAME=2-hipMemcpy
+#FILENAME=2-hipMemcpy
 #FILENAME=2a-nohipMemcpy
 #FILENAME=4-hipKernel
 #FILENAME=4a-2xhipKernel 
