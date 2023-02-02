@@ -1,6 +1,6 @@
 env_nocopy_str: 
 Error: env_datasize_str is not integer:  Leaving the default size of 512 MB.
-:3:rocdevice.cpp            :416 : 304484064187 us: 21528: [tid:0x7fe7f50cc080] Initializing HSA stack.
+:3:rocdevice.cpp            :416 : 304677743446 us: 22213: [tid:0x7f33f3dfd080] Initializing HSA stack.
 GG: GetEnvVar(HSA_ENABLED_SDMA): 0
 GG: enable_sdma_: 0
 GG: GetEnvVar(HSA_ENABLED_SDMA): 0
@@ -41,65 +41,65 @@ GG: InitDma: entered...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
   GG: calling blit_lambda...
   GG: InitGWS...
-:3:comgrctx.cpp             :33  : 304484149306 us: 21528: [tid:0x7fe7f50cc080] Loading COMGR library.
-:3:rocdevice.cpp            :207 : 304484149368 us: 21528: [tid:0x7fe7f50cc080] Numa selects cpu agent[0]=0xa6c2a0(fine=0xa83440,coarse=0xb5ccd0) for gpu agent=0xb605e0
-:3:rocdevice.cpp            :1611: 304484149649 us: 21528: [tid:0x7fe7f50cc080] HMM support: 1, xnack: 0, direct host access: 0
+:3:comgrctx.cpp             :33  : 304677827876 us: 22213: [tid:0x7f33f3dfd080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 304677827947 us: 22213: [tid:0x7f33f3dfd080] Numa selects cpu agent[0]=0x83a2a0(fine=0x851440,coarse=0x92acd0) for gpu agent=0x92e5e0
+:3:rocdevice.cpp            :1611: 304677828250 us: 22213: [tid:0x7f33f3dfd080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 304484149897 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe669a00000, size 0x101000
-:4:rocdevice.cpp            :1918: 304484150214 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe669800000, size 0x101000
-:4:rocdevice.cpp            :2054: 304484150283 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa device memory 0x7fe669400000, size 0x100000
-:3:rocdevice.cpp            :207 : 304484150312 us: 21528: [tid:0x7fe7f50cc080] Numa selects cpu agent[0]=0xa6c2a0(fine=0xa83440,coarse=0xb5ccd0) for gpu agent=0xbeff80
-:3:rocdevice.cpp            :1611: 304484150437 us: 21528: [tid:0x7fe7f50cc080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 304677828598 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f3268800000, size 0x101000
+:4:rocdevice.cpp            :1918: 304677829017 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f3268600000, size 0x101000
+:4:rocdevice.cpp            :2054: 304677829089 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa device memory 0x7f3268200000, size 0x100000
+:3:rocdevice.cpp            :207 : 304677829118 us: 22213: [tid:0x7f33f3dfd080] Numa selects cpu agent[0]=0x83a2a0(fine=0x851440,coarse=0x92acd0) for gpu agent=0x9bdf80
+:3:rocdevice.cpp            :1611: 304677829266 us: 22213: [tid:0x7f33f3dfd080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 304484150850 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe669200000, size 0x101000
-:4:rocdevice.cpp            :1918: 304484151177 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe669000000, size 0x101000
-:4:rocdevice.cpp            :2054: 304484151242 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa device memory 0x7fe668c00000, size 0x100000
-:3:rocdevice.cpp            :207 : 304484151271 us: 21528: [tid:0x7fe7f50cc080] Numa selects cpu agent[0]=0xa6c2a0(fine=0xa83440,coarse=0xb5ccd0) for gpu agent=0xbf4330
-:3:rocdevice.cpp            :1611: 304484151383 us: 21528: [tid:0x7fe7f50cc080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 304677829840 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f63800000, size 0x101000
+:4:rocdevice.cpp            :1918: 304677830266 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f63600000, size 0x101000
+:4:rocdevice.cpp            :2054: 304677830366 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa device memory 0x7f2f63200000, size 0x100000
+:3:rocdevice.cpp            :207 : 304677830393 us: 22213: [tid:0x7f33f3dfd080] Numa selects cpu agent[0]=0x83a2a0(fine=0x851440,coarse=0x92acd0) for gpu agent=0x9c2330
+:3:rocdevice.cpp            :1611: 304677830509 us: 22213: [tid:0x7f33f3dfd080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 304484151751 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe668a00000, size 0x101000
-:4:rocdevice.cpp            :1918: 304484152172 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe668800000, size 0x101000
-:4:rocdevice.cpp            :2054: 304484152236 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa device memory 0x7fe668400000, size 0x100000
-:3:rocdevice.cpp            :207 : 304484152267 us: 21528: [tid:0x7fe7f50cc080] Numa selects cpu agent[0]=0xa6c2a0(fine=0xa83440,coarse=0xb5ccd0) for gpu agent=0xbf8710
-:3:rocdevice.cpp            :1611: 304484152381 us: 21528: [tid:0x7fe7f50cc080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 304677830834 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f63000000, size 0x101000
+:4:rocdevice.cpp            :1918: 304677831218 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f62e00000, size 0x101000
+:4:rocdevice.cpp            :2054: 304677831329 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa device memory 0x7f2f62a00000, size 0x100000
+:3:rocdevice.cpp            :207 : 304677831360 us: 22213: [tid:0x7f33f3dfd080] Numa selects cpu agent[0]=0x83a2a0(fine=0x851440,coarse=0x92acd0) for gpu agent=0x9c6710
+:3:rocdevice.cpp            :1611: 304677831486 us: 22213: [tid:0x7f33f3dfd080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 304484152414 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe7f4f2c000, size 0xa0
-:4:rocdevice.cpp            :1918: 304484152780 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe668200000, size 0x101000
-:4:rocdevice.cpp            :1918: 304484153129 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe363800000, size 0x101000
-:4:rocdevice.cpp            :2054: 304484153228 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa device memory 0x7fe363400000, size 0x100000
-:4:runtime.cpp              :83  : 304484153236 us: 21528: [tid:0x7fe7f50cc080] init
-:3:hip_context.cpp          :50  : 304484153239 us: 21528: [tid:0x7fe7f50cc080] Direct Dispatch: 1
-:4:rocdevice.cpp            :2054: 304484153460 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa device memory 0x7fe2e3200000, size 0x80000000
-:3:rocdevice.cpp            :2093: 304484153465 us: 21528: [tid:0x7fe7f50cc080] device=0xbff6b0, freeMem_ = 0x7f000000
-:3:hip_memory.cpp           :496 : 304484153474 us: 21528: [tid:0x7fe7f50cc080] hipMalloc: Returned hipSuccess : 0x7fe2e3200000
-:3:hip_memory.cpp           :556 : 304484358339 us: 21528: [tid:0x7fe7f50cc080] [32mhipMemcpy ( 0x7fe2e3200000, 0x7fe76a587010, 2147483648, hipMemcpyHostToDevice )[0m
-:3:rocdevice.cpp            :2686: 304484358401 us: 21528: [tid:0x7fe7f50cc080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+:4:rocdevice.cpp            :1918: 304677831521 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f33f3c5c000, size 0xa0
+:4:rocdevice.cpp            :1918: 304677831814 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f62800000, size 0x101000
+:4:rocdevice.cpp            :1918: 304677832136 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f2f62600000, size 0x101000
+:4:rocdevice.cpp            :2054: 304677832271 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa device memory 0x7f2f62200000, size 0x100000
+:4:runtime.cpp              :83  : 304677832280 us: 22213: [tid:0x7f33f3dfd080] init
+:3:hip_context.cpp          :50  : 304677832284 us: 22213: [tid:0x7f33f3dfd080] Direct Dispatch: 1
+:4:rocdevice.cpp            :2054: 304677832509 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa device memory 0x7f2ee2000000, size 0x80000000
+:3:rocdevice.cpp            :2093: 304677832514 us: 22213: [tid:0x7f33f3dfd080] device=0x9cd6b0, freeMem_ = 0x7f000000
+:3:hip_memory.cpp           :496 : 304677832523 us: 22213: [tid:0x7f33f3dfd080] hipMalloc: Returned hipSuccess : 0x7f2ee2000000
+:3:hip_memory.cpp           :556 : 304678037323 us: 22213: [tid:0x7f33f3dfd080] [32mhipMemcpy ( 0x7f2ee2000000, 0x7f33692b8010, 2147483648, hipMemcpyHostToDevice )[0m
+:3:rocdevice.cpp            :2686: 304678037375 us: 22213: [tid:0x7f33f3dfd080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
 hipMemcpy.start.
 GG: queue_lambda entered: 
 GG: CpuAgent::CreateInterceptibleQueue entered...
-:3:rocdevice.cpp            :2757: 304484374652 us: 21528: [tid:0x7fe7f50cc080] created hardware queue 0x7fe7f4f1c000 with size 4096 with priority 1, cooperative: 0
-:4:rocdevice.cpp            :1918: 304484374832 us: 21528: [tid:0x7fe7f50cc080] Allocate hsa host memory 0x7fe769c80000, size 0x80000
-:3:devprogram.cpp           :2675: 304484527232 us: 21528: [tid:0x7fe7f50cc080] Using Code Object V4.
+:3:rocdevice.cpp            :2757: 304678053302 us: 22213: [tid:0x7f33f3dfd080] created hardware queue 0x7f33f3c4c000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 304678053460 us: 22213: [tid:0x7f33f3dfd080] Allocate hsa host memory 0x7f3268500000, size 0x80000
+:3:devprogram.cpp           :2675: 304678199294 us: 22213: [tid:0x7f33f3dfd080] Using Code Object V4.
 GG: DmaCopy(dst, src, size)..entered.
 GG: GpuAgent::CreateBlitKernel() entered...
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:3:devprogram.cpp           :2978: 304484528340 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
-:3:devprogram.cpp           :2978: 304484528348 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
-:3:devprogram.cpp           :2978: 304484528350 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
-:3:devprogram.cpp           :2978: 304484528351 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
-:3:devprogram.cpp           :2978: 304484528353 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
-:3:devprogram.cpp           :2978: 304484528355 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
-:3:devprogram.cpp           :2978: 304484528357 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
-:3:devprogram.cpp           :2978: 304484528359 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
-:3:devprogram.cpp           :2978: 304484528361 us: 21528: [tid:0x7fe7f50cc080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
-:4:rocmemory.cpp            :941 : 304484528419 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x1000, HostPtr = 0xdaf000, DevPtr = 0x7fe769d82000
-:3:hip_memory.cpp           :327 : 304484528512 us: 21528: [tid:0x7fe7f50cc080] GG: ihipMemcpyCommand entered.
-:4:command.cpp              :339 : 304484528519 us: 21528: [tid:0x7fe7f50cc080] command is enqueued: 0xd0d8a0
-:4:rocmemory.cpp            :941 : 304484529065 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2001000, HostPtr = 0x7fe76a587000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484529078 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46480
+:3:devprogram.cpp           :2978: 304678200388 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 304678200394 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 304678200395 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 304678200397 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 304678200398 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 304678200400 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 304678200401 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 304678200403 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 304678200404 us: 22213: [tid:0x7f33f3dfd080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 304678200463 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x1000, HostPtr = 0x1088000, DevPtr = 0x7f3368aa2000
+:3:hip_memory.cpp           :327 : 304678200550 us: 22213: [tid:0x7f33f3dfd080] GG: ihipMemcpyCommand entered.
+:4:command.cpp              :339 : 304678200556 us: 22213: [tid:0x7f33f3dfd080] command is enqueued: 0xe3a920
+:4:rocmemory.cpp            :941 : 304678201149 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2001000, HostPtr = 0x7f33692b8000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678201159 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76480
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
@@ -112,651 +112,651 @@ GG: GpuAgent::CreateBlitKernel() entered...
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484536428 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46480
-:3:rocvirtual.hpp           :62  : 304484536442 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46480) for -1 ns
-:4:rocmemory.cpp            :941 : 304484539093 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe76c588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484539103 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46400
+:4:rocvirtual.cpp           :524 : 304678208585 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76480
+:3:rocvirtual.hpp           :62  : 304678208597 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76480) for -1 ns
+:4:rocmemory.cpp            :941 : 304678211446 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f336b2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678211458 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76400
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484539113 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46400
-:3:rocvirtual.hpp           :62  : 304484539115 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46400) for -1 ns
-:4:rocmemory.cpp            :941 : 304484541307 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe76e588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484541315 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46380
+:4:rocvirtual.cpp           :524 : 304678211467 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76400
+:3:rocvirtual.hpp           :62  : 304678211469 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76400) for -1 ns
+:4:rocmemory.cpp            :941 : 304678213721 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f336d2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678213728 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76380
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484541324 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46380
-:3:rocvirtual.hpp           :62  : 304484541326 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46380) for -1 ns
-:4:rocmemory.cpp            :941 : 304484543584 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe770588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484543591 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46300
+:4:rocvirtual.cpp           :524 : 304678213735 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76380
+:3:rocvirtual.hpp           :62  : 304678213737 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76380) for -1 ns
+:4:rocmemory.cpp            :941 : 304678215899 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f336f2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678215906 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76300
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484543598 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46300
-:3:rocvirtual.hpp           :62  : 304484543600 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46300) for -1 ns
-:4:rocmemory.cpp            :941 : 304484545781 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe772588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484545789 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46280
+:4:rocvirtual.cpp           :524 : 304678215913 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76300
+:3:rocvirtual.hpp           :62  : 304678215915 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76300) for -1 ns
+:4:rocmemory.cpp            :941 : 304678218101 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33712b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678218107 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76280
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484545796 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46280
-:3:rocvirtual.hpp           :62  : 304484545797 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46280) for -1 ns
-:4:rocmemory.cpp            :941 : 304484547959 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe774588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484547967 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46200
+:4:rocvirtual.cpp           :524 : 304678218114 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76280
+:3:rocvirtual.hpp           :62  : 304678218116 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76280) for -1 ns
+:4:rocmemory.cpp            :941 : 304678220315 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33732b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678220322 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76200
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484547974 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46200
-:3:rocvirtual.hpp           :62  : 304484547976 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46200) for -1 ns
-:4:rocmemory.cpp            :941 : 304484550458 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe776588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484550469 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46180
+:4:rocvirtual.cpp           :524 : 304678220330 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76200
+:3:rocvirtual.hpp           :62  : 304678220331 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76200) for -1 ns
+:4:rocmemory.cpp            :941 : 304678222874 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33752b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678222886 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76180
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484550477 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46180
-:3:rocvirtual.hpp           :62  : 304484550479 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46180) for -1 ns
-:4:rocmemory.cpp            :941 : 304484552623 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe778588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484552632 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46100
+:4:rocvirtual.cpp           :524 : 304678222895 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76180
+:3:rocvirtual.hpp           :62  : 304678222897 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76180) for -1 ns
+:4:rocmemory.cpp            :941 : 304678224994 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33772b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678225001 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76100
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484552640 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46100
-:3:rocvirtual.hpp           :62  : 304484552642 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46100) for -1 ns
-:4:rocmemory.cpp            :941 : 304484554859 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe77a588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484554867 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46080
+:4:rocvirtual.cpp           :524 : 304678225009 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76100
+:3:rocvirtual.hpp           :62  : 304678225010 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76100) for -1 ns
+:4:rocmemory.cpp            :941 : 304678227205 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33792b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678227214 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76080
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484554875 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46080
-:3:rocvirtual.hpp           :62  : 304484554876 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46080) for -1 ns
-:4:rocmemory.cpp            :941 : 304484557050 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe77c588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484557057 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46000
+:4:rocvirtual.cpp           :524 : 304678227223 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76080
+:3:rocvirtual.hpp           :62  : 304678227225 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76080) for -1 ns
+:4:rocmemory.cpp            :941 : 304678229363 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f337b2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678229371 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76000
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484557064 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46000
-:3:rocvirtual.hpp           :62  : 304484557066 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46000) for -1 ns
-:4:rocmemory.cpp            :941 : 304484559297 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe77e588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484559306 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2df80
+:4:rocvirtual.cpp           :524 : 304678229380 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76000
+:3:rocvirtual.hpp           :62  : 304678229383 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76000) for -1 ns
+:4:rocmemory.cpp            :941 : 304678231594 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f337d2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678231603 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9ff80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484559313 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2df80
-:3:rocvirtual.hpp           :62  : 304484559315 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2df80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484561557 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe780588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484561565 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2df00
+:4:rocvirtual.cpp           :524 : 304678231610 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9ff80
+:3:rocvirtual.hpp           :62  : 304678231612 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9ff80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678233774 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f337f2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678233781 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9ff00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484561573 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2df00
-:3:rocvirtual.hpp           :62  : 304484561575 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2df00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484563754 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe782588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484563762 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2de80
+:4:rocvirtual.cpp           :524 : 304678233788 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9ff00
+:3:rocvirtual.hpp           :62  : 304678233789 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9ff00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678235892 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33812b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678235900 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fe80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484563769 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2de80
-:3:rocvirtual.hpp           :62  : 304484563771 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2de80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484565934 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe784588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484565943 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2de00
+:4:rocvirtual.cpp           :524 : 304678235907 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fe80
+:3:rocvirtual.hpp           :62  : 304678235909 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fe80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678238044 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33832b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678238053 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fe00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484565950 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2de00
-:3:rocvirtual.hpp           :62  : 304484565952 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2de00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484568266 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe786588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484568273 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dd80
+:4:rocvirtual.cpp           :524 : 304678238060 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fe00
+:3:rocvirtual.hpp           :62  : 304678238062 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fe00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678240171 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33852b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678240181 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fd80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484568280 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dd80
-:3:rocvirtual.hpp           :62  : 304484568282 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dd80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484570443 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe788588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484570450 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dd00
+:4:rocvirtual.cpp           :524 : 304678240189 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fd80
+:3:rocvirtual.hpp           :62  : 304678240191 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fd80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678242317 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33872b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678242325 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fd00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484570458 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dd00
-:3:rocvirtual.hpp           :62  : 304484570460 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dd00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484572572 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe78a588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484572580 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dc80
+:4:rocvirtual.cpp           :524 : 304678242332 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fd00
+:3:rocvirtual.hpp           :62  : 304678242334 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fd00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678244599 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33892b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678244607 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fc80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484572588 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dc80
-:3:rocvirtual.hpp           :62  : 304484572589 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dc80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484574720 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe78c588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484574727 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dc00
+:4:rocvirtual.cpp           :524 : 304678244614 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fc80
+:3:rocvirtual.hpp           :62  : 304678244616 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fc80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678246754 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f338b2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678246762 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fc00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484574735 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dc00
-:3:rocvirtual.hpp           :62  : 304484574737 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dc00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484576882 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe78e588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484576890 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2db80
+:4:rocvirtual.cpp           :524 : 304678246770 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fc00
+:3:rocvirtual.hpp           :62  : 304678246771 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fc00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678248898 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f338d2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678248905 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fb80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484576897 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2db80
-:3:rocvirtual.hpp           :62  : 304484576898 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2db80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484579042 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe790588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484579050 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2db00
+:4:rocvirtual.cpp           :524 : 304678248912 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fb80
+:3:rocvirtual.hpp           :62  : 304678248914 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fb80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678251241 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f338f2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678251249 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fb00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484579056 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2db00
-:3:rocvirtual.hpp           :62  : 304484579058 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2db00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484581262 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe792588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484581269 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2da80
+:4:rocvirtual.cpp           :524 : 304678251256 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fb00
+:3:rocvirtual.hpp           :62  : 304678251258 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fb00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678253387 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33912b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678253395 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fa80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484581277 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2da80
-:3:rocvirtual.hpp           :62  : 304484581278 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2da80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484583543 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe794588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484583552 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2da00
+:4:rocvirtual.cpp           :524 : 304678253402 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fa80
+:3:rocvirtual.hpp           :62  : 304678253404 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fa80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678255541 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33932b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678255548 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fa00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484583561 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2da00
-:3:rocvirtual.hpp           :62  : 304484583563 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2da00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484585712 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe796588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484585722 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d980
+:4:rocvirtual.cpp           :524 : 304678255555 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fa00
+:3:rocvirtual.hpp           :62  : 304678255557 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fa00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678257908 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33952b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678257917 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f980
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484585729 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d980
-:3:rocvirtual.hpp           :62  : 304484585731 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d980) for -1 ns
-:4:rocmemory.cpp            :941 : 304484587858 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe798588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484587866 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d900
+:4:rocvirtual.cpp           :524 : 304678257926 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f980
+:3:rocvirtual.hpp           :62  : 304678257928 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f980) for -1 ns
+:4:rocmemory.cpp            :941 : 304678260219 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33972b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678260227 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f900
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484587873 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d900
-:3:rocvirtual.hpp           :62  : 304484587875 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d900) for -1 ns
-:4:rocmemory.cpp            :941 : 304484589990 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe79a588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484589998 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d880
+:4:rocvirtual.cpp           :524 : 304678260235 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f900
+:3:rocvirtual.hpp           :62  : 304678260237 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f900) for -1 ns
+:4:rocmemory.cpp            :941 : 304678262405 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33992b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678262413 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f880
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484590005 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d880
-:3:rocvirtual.hpp           :62  : 304484590007 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d880) for -1 ns
-:4:rocmemory.cpp            :941 : 304484592101 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe79c588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484592109 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d800
+:4:rocvirtual.cpp           :524 : 304678262420 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f880
+:3:rocvirtual.hpp           :62  : 304678262421 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f880) for -1 ns
+:4:rocmemory.cpp            :941 : 304678264584 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f339b2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678264591 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f800
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484592116 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d800
-:3:rocvirtual.hpp           :62  : 304484592118 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d800) for -1 ns
-:4:rocmemory.cpp            :941 : 304484594255 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe79e588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484594264 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d780
+:4:rocvirtual.cpp           :524 : 304678264598 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f800
+:3:rocvirtual.hpp           :62  : 304678264600 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f800) for -1 ns
+:4:rocmemory.cpp            :941 : 304678266702 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f339d2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678266709 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f780
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484594272 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d780
-:3:rocvirtual.hpp           :62  : 304484594274 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d780) for -1 ns
-:4:rocmemory.cpp            :941 : 304484596417 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7a0588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484596425 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d700
+:4:rocvirtual.cpp           :524 : 304678266716 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f780
+:3:rocvirtual.hpp           :62  : 304678266718 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f780) for -1 ns
+:4:rocmemory.cpp            :941 : 304678268859 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f339f2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678268866 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f700
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484596433 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d700
-:3:rocvirtual.hpp           :62  : 304484596434 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d700) for -1 ns
-:4:rocmemory.cpp            :941 : 304484598574 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7a2588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484598582 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d680
+:4:rocvirtual.cpp           :524 : 304678268873 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f700
+:3:rocvirtual.hpp           :62  : 304678268875 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f700) for -1 ns
+:4:rocmemory.cpp            :941 : 304678271106 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33a12b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678271116 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f680
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484598589 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d680
-:3:rocvirtual.hpp           :62  : 304484598591 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d680) for -1 ns
-:4:rocmemory.cpp            :941 : 304484600782 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7a4588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484600789 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d600
+:4:rocvirtual.cpp           :524 : 304678271123 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f680
+:3:rocvirtual.hpp           :62  : 304678271125 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f680) for -1 ns
+:4:rocmemory.cpp            :941 : 304678273257 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33a32b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678273267 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f600
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484600796 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d600
-:3:rocvirtual.hpp           :62  : 304484600798 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d600) for -1 ns
-:4:rocmemory.cpp            :941 : 304484602961 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7a6588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484602969 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d580
+:4:rocvirtual.cpp           :524 : 304678273276 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f600
+:3:rocvirtual.hpp           :62  : 304678273278 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f600) for -1 ns
+:4:rocmemory.cpp            :941 : 304678275424 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33a52b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678275433 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f580
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484602976 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d580
-:3:rocvirtual.hpp           :62  : 304484602977 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d580) for -1 ns
-:4:rocmemory.cpp            :941 : 304484605161 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7a8588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484605168 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46500
+:4:rocvirtual.cpp           :524 : 304678275440 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f580
+:3:rocvirtual.hpp           :62  : 304678275442 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f580) for -1 ns
+:4:rocmemory.cpp            :941 : 304678277586 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33a72b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678277593 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76500
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484605175 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46500
-:3:rocvirtual.hpp           :62  : 304484605177 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46500) for -1 ns
-:4:rocmemory.cpp            :941 : 304484607641 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7aa588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484607652 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46480
+:4:rocvirtual.cpp           :524 : 304678277601 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76500
+:3:rocvirtual.hpp           :62  : 304678277603 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76500) for -1 ns
+:4:rocmemory.cpp            :941 : 304678279742 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33a92b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678279751 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76480
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484607661 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46480
-:3:rocvirtual.hpp           :62  : 304484607664 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46480) for -1 ns
-:4:rocmemory.cpp            :941 : 304484609768 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7ac588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484609776 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46400
+:4:rocvirtual.cpp           :524 : 304678279758 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76480
+:3:rocvirtual.hpp           :62  : 304678279760 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76480) for -1 ns
+:4:rocmemory.cpp            :941 : 304678281912 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33ab2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678281919 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76400
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484609783 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46400
-:3:rocvirtual.hpp           :62  : 304484609785 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46400) for -1 ns
-:4:rocmemory.cpp            :941 : 304484611926 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7ae588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484611934 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46380
+:4:rocvirtual.cpp           :524 : 304678281926 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76400
+:3:rocvirtual.hpp           :62  : 304678281928 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76400) for -1 ns
+:4:rocmemory.cpp            :941 : 304678284332 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33ad2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678284341 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76380
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484611940 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46380
-:3:rocvirtual.hpp           :62  : 304484611942 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46380) for -1 ns
-:4:rocmemory.cpp            :941 : 304484614277 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7b0588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484614285 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46300
+:4:rocvirtual.cpp           :524 : 304678284348 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76380
+:3:rocvirtual.hpp           :62  : 304678284350 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76380) for -1 ns
+:4:rocmemory.cpp            :941 : 304678286615 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33af2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678286623 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76300
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484614292 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46300
-:3:rocvirtual.hpp           :62  : 304484614294 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46300) for -1 ns
-:4:rocmemory.cpp            :941 : 304484616555 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7b2588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484616561 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46280
+:4:rocvirtual.cpp           :524 : 304678286630 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76300
+:3:rocvirtual.hpp           :62  : 304678286631 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76300) for -1 ns
+:4:rocmemory.cpp            :941 : 304678288790 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33b12b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678288797 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76280
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484616568 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46280
-:3:rocvirtual.hpp           :62  : 304484616570 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46280) for -1 ns
-:4:rocmemory.cpp            :941 : 304484618722 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7b4588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484618729 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46200
+:4:rocvirtual.cpp           :524 : 304678288805 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76280
+:3:rocvirtual.hpp           :62  : 304678288807 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76280) for -1 ns
+:4:rocmemory.cpp            :941 : 304678290952 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33b32b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678290959 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76200
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484618736 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46200
-:3:rocvirtual.hpp           :62  : 304484618737 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46200) for -1 ns
-:4:rocmemory.cpp            :941 : 304484620873 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7b6588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484620882 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46180
+:4:rocvirtual.cpp           :524 : 304678290966 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76200
+:3:rocvirtual.hpp           :62  : 304678290968 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76200) for -1 ns
+:4:rocmemory.cpp            :941 : 304678293270 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33b52b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678293279 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76180
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484620890 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46180
-:3:rocvirtual.hpp           :62  : 304484620892 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46180) for -1 ns
-:4:rocmemory.cpp            :941 : 304484623032 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7b8588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484623038 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46100
+:4:rocvirtual.cpp           :524 : 304678293288 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76180
+:3:rocvirtual.hpp           :62  : 304678293291 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76180) for -1 ns
+:4:rocmemory.cpp            :941 : 304678295492 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33b72b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678295503 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76100
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484623045 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46100
-:3:rocvirtual.hpp           :62  : 304484623047 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46100) for -1 ns
-:4:rocmemory.cpp            :941 : 304484625271 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7ba588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484625277 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46080
+:4:rocvirtual.cpp           :524 : 304678295512 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76100
+:3:rocvirtual.hpp           :62  : 304678295514 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76100) for -1 ns
+:4:rocmemory.cpp            :941 : 304678297649 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33b92b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678297657 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76080
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484625284 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46080
-:3:rocvirtual.hpp           :62  : 304484625286 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46080) for -1 ns
-:4:rocmemory.cpp            :941 : 304484627571 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7bc588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484627578 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46000
+:4:rocvirtual.cpp           :524 : 304678297664 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76080
+:3:rocvirtual.hpp           :62  : 304678297666 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76080) for -1 ns
+:4:rocmemory.cpp            :941 : 304678299801 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33bb2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678299809 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76000
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484627585 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46000
-:3:rocvirtual.hpp           :62  : 304484627587 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46000) for -1 ns
-:4:rocmemory.cpp            :941 : 304484629781 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7be588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484629787 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2df80
+:4:rocvirtual.cpp           :524 : 304678299816 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76000
+:3:rocvirtual.hpp           :62  : 304678299818 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76000) for -1 ns
+:4:rocmemory.cpp            :941 : 304678301927 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33bd2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678301935 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9ff80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484629794 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2df80
-:3:rocvirtual.hpp           :62  : 304484629796 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2df80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484632789 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7c0588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484632818 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2df00
+:4:rocvirtual.cpp           :524 : 304678301942 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9ff80
+:3:rocvirtual.hpp           :62  : 304678301944 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9ff80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678304203 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33bf2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678304212 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9ff00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484632843 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2df00
-:3:rocvirtual.hpp           :62  : 304484632846 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2df00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484635055 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7c2588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484635063 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2de80
+:4:rocvirtual.cpp           :524 : 304678304221 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9ff00
+:3:rocvirtual.hpp           :62  : 304678304223 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9ff00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678306302 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33c12b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678306310 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fe80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484635070 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2de80
-:3:rocvirtual.hpp           :62  : 304484635072 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2de80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484637335 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7c4588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484637343 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2de00
+:4:rocvirtual.cpp           :524 : 304678306317 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fe80
+:3:rocvirtual.hpp           :62  : 304678306319 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fe80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678308562 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33c32b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678308570 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fe00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484637350 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2de00
-:3:rocvirtual.hpp           :62  : 304484637352 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2de00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484639570 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7c6588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484639576 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dd80
+:4:rocvirtual.cpp           :524 : 304678308577 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fe00
+:3:rocvirtual.hpp           :62  : 304678308579 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fe00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678310697 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33c52b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678310705 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fd80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484639583 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dd80
-:3:rocvirtual.hpp           :62  : 304484639585 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dd80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484641735 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7c8588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484641742 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dd00
+:4:rocvirtual.cpp           :524 : 304678310712 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fd80
+:3:rocvirtual.hpp           :62  : 304678310714 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fd80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678312839 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33c72b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678312846 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fd00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484641749 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dd00
-:3:rocvirtual.hpp           :62  : 304484641751 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dd00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484644152 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7ca588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484644160 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dc80
+:4:rocvirtual.cpp           :524 : 304678312853 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fd00
+:3:rocvirtual.hpp           :62  : 304678312855 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fd00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678314936 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33c92b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678314943 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fc80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484644168 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dc80
-:3:rocvirtual.hpp           :62  : 304484644170 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dc80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484646365 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7cc588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484646372 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2dc00
+:4:rocvirtual.cpp           :524 : 304678314950 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fc80
+:3:rocvirtual.hpp           :62  : 304678314952 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fc80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678317199 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33cb2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678317208 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fc00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484646379 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2dc00
-:3:rocvirtual.hpp           :62  : 304484646381 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2dc00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484648557 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7ce588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484648563 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2db80
+:4:rocvirtual.cpp           :524 : 304678317216 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fc00
+:3:rocvirtual.hpp           :62  : 304678317219 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fc00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678319379 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33cd2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678319389 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fb80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484648570 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2db80
-:3:rocvirtual.hpp           :62  : 304484648572 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2db80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484650709 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7d0588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484650716 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2db00
+:4:rocvirtual.cpp           :524 : 304678319398 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fb80
+:3:rocvirtual.hpp           :62  : 304678319400 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fb80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678321513 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33cf2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678321521 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fb00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484650723 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2db00
-:3:rocvirtual.hpp           :62  : 304484650725 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2db00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484652892 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7d2588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484652899 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2da80
+:4:rocvirtual.cpp           :524 : 304678321528 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fb00
+:3:rocvirtual.hpp           :62  : 304678321530 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fb00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678323625 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33d12b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678323632 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fa80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484652907 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2da80
-:3:rocvirtual.hpp           :62  : 304484652909 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2da80) for -1 ns
-:4:rocmemory.cpp            :941 : 304484655282 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7d4588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484655289 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2da00
+:4:rocvirtual.cpp           :524 : 304678323639 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fa80
+:3:rocvirtual.hpp           :62  : 304678323641 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fa80) for -1 ns
+:4:rocmemory.cpp            :941 : 304678325766 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33d32b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678325773 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9fa00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484655298 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2da00
-:3:rocvirtual.hpp           :62  : 304484655300 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2da00) for -1 ns
-:4:rocmemory.cpp            :941 : 304484657575 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7d6588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484657582 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d980
+:4:rocvirtual.cpp           :524 : 304678325780 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9fa00
+:3:rocvirtual.hpp           :62  : 304678325782 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9fa00) for -1 ns
+:4:rocmemory.cpp            :941 : 304678327868 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33d52b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678327875 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f980
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484657589 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d980
-:3:rocvirtual.hpp           :62  : 304484657591 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d980) for -1 ns
-:4:rocmemory.cpp            :941 : 304484659770 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7d8588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484659777 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d900
+:4:rocvirtual.cpp           :524 : 304678327883 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f980
+:3:rocvirtual.hpp           :62  : 304678327884 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f980) for -1 ns
+:4:rocmemory.cpp            :941 : 304678329967 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33d72b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678329973 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f900
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484659784 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d900
-:3:rocvirtual.hpp           :62  : 304484659786 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d900) for -1 ns
-:4:rocmemory.cpp            :941 : 304484661959 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7da588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484661966 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d880
+:4:rocvirtual.cpp           :524 : 304678329981 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f900
+:3:rocvirtual.hpp           :62  : 304678329983 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f900) for -1 ns
+:4:rocmemory.cpp            :941 : 304678332208 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33d92b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678332218 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f880
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484661973 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d880
-:3:rocvirtual.hpp           :62  : 304484661975 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d880) for -1 ns
-:4:rocmemory.cpp            :941 : 304484664274 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7dc588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484664282 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d800
+:4:rocvirtual.cpp           :524 : 304678332229 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f880
+:3:rocvirtual.hpp           :62  : 304678332231 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f880) for -1 ns
+:4:rocmemory.cpp            :941 : 304678334328 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33db2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678334337 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f800
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484664290 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d800
-:3:rocvirtual.hpp           :62  : 304484664292 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d800) for -1 ns
-:4:rocmemory.cpp            :941 : 304484666584 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7de588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484666591 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d780
+:4:rocvirtual.cpp           :524 : 304678334345 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f800
+:3:rocvirtual.hpp           :62  : 304678334347 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f800) for -1 ns
+:4:rocmemory.cpp            :941 : 304678336584 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33dd2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678336592 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f780
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484666598 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d780
-:3:rocvirtual.hpp           :62  : 304484666600 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d780) for -1 ns
-:4:rocmemory.cpp            :941 : 304484668761 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7e0588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484668768 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d700
+:4:rocvirtual.cpp           :524 : 304678336600 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f780
+:3:rocvirtual.hpp           :62  : 304678336602 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f780) for -1 ns
+:4:rocmemory.cpp            :941 : 304678338708 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33df2b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678338715 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f700
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484668775 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d700
-:3:rocvirtual.hpp           :62  : 304484668777 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d700) for -1 ns
-:4:rocmemory.cpp            :941 : 304484670935 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7e2588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484670942 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d680
+:4:rocvirtual.cpp           :524 : 304678338722 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f700
+:3:rocvirtual.hpp           :62  : 304678338724 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f700) for -1 ns
+:4:rocmemory.cpp            :941 : 304678340834 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33e12b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678340842 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f680
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484670950 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d680
-:3:rocvirtual.hpp           :62  : 304484670951 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d680) for -1 ns
-:4:rocmemory.cpp            :941 : 304484673320 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7e4588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484673328 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d600
+:4:rocvirtual.cpp           :524 : 304678340850 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f680
+:3:rocvirtual.hpp           :62  : 304678340851 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f680) for -1 ns
+:4:rocmemory.cpp            :941 : 304678343278 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33e32b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678343286 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f600
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484673335 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d600
-:3:rocvirtual.hpp           :62  : 304484673337 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d600) for -1 ns
-:4:rocmemory.cpp            :941 : 304484675632 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7e6588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484675640 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe769d2d580
+:4:rocvirtual.cpp           :524 : 304678343294 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f600
+:3:rocvirtual.hpp           :62  : 304678343296 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f600) for -1 ns
+:4:rocmemory.cpp            :941 : 304678345400 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33e52b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678345408 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f3368a9f580
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484675648 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe769d2d580
-:3:rocvirtual.hpp           :62  : 304484675649 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe769d2d580) for -1 ns
-:4:rocmemory.cpp            :941 : 304484677831 us: 21528: [tid:0x7fe7f50cc080] Locking to pool 0xb5ccd0, size 0x2000000, HostPtr = 0x7fe7e8588000, DevPtr = 0x7fe2d8000000
-:4:rocblit.cpp              :668 : 304484677839 us: 21528: [tid:0x7fe7f50cc080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fe7f4f46500
+:4:rocvirtual.cpp           :524 : 304678345416 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f3368a9f580
+:3:rocvirtual.hpp           :62  : 304678345418 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f3368a9f580) for -1 ns
+:4:rocmemory.cpp            :941 : 304678347566 us: 22213: [tid:0x7f33f3dfd080] Locking to pool 0x92acd0, size 0x2000000, HostPtr = 0x7f33e72b9000, DevPtr = 0x7f2ed6e00000
+:4:rocblit.cpp              :668 : 304678347574 us: 22213: [tid:0x7f33f3dfd080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7f33f3c76500
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
 GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
   GG: total_num_packet: 1
 GG: BlitKernel::PopulateQueue: entered.
-:4:rocvirtual.cpp           :524 : 304484677847 us: 21528: [tid:0x7fe7f50cc080] Host wait on completion_signal=0x7fe7f4f46500
-:3:rocvirtual.hpp           :62  : 304484677849 us: 21528: [tid:0x7fe7f50cc080] Host active wait for Signal = (0x7fe7f4f46500) for -1 ns
-:4:command.cpp              :280 : 304484679404 us: 21528: [tid:0x7fe7f50cc080] queue marker to command queue: 0xc0c400
-:4:command.cpp              :339 : 304484679410 us: 21528: [tid:0x7fe7f50cc080] command is enqueued: 0xccd500
-:4:command.cpp              :170 : 304484679414 us: 21528: [tid:0x7fe7f50cc080] Command 0xd0d8a0 complete
-:4:command.cpp              :168 : 304484679416 us: 21528: [tid:0x7fe7f50cc080] Command 0xccd500 complete (Wall: 304484679415, CPU: 0, GPU: 0 us)
-:4:command.cpp              :245 : 304484679419 us: 21528: [tid:0x7fe7f50cc080] waiting for event 0xd0d8a0 to complete, current status 0
-:4:command.cpp              :259 : 304484679421 us: 21528: [tid:0x7fe7f50cc080] event 0xd0d8a0 wait completed
-:3:hip_memory.cpp           :557 : 304484679427 us: 21528: [tid:0x7fe7f50cc080] hipMemcpy: Returned hipSuccess : : duration: 321088 us
+:4:rocvirtual.cpp           :524 : 304678347581 us: 22213: [tid:0x7f33f3dfd080] Host wait on completion_signal=0x7f33f3c76500
+:3:rocvirtual.hpp           :62  : 304678347583 us: 22213: [tid:0x7f33f3dfd080] Host active wait for Signal = (0x7f33f3c76500) for -1 ns
+:4:command.cpp              :280 : 304678349103 us: 22213: [tid:0x7f33f3dfd080] queue marker to command queue: 0x9da400
+:4:command.cpp              :339 : 304678349109 us: 22213: [tid:0x7f33f3dfd080] command is enqueued: 0xa49fb0
+:4:command.cpp              :170 : 304678349113 us: 22213: [tid:0x7f33f3dfd080] Command 0xe3a920 complete
+:4:command.cpp              :168 : 304678349115 us: 22213: [tid:0x7f33f3dfd080] Command 0xa49fb0 complete (Wall: 304678349114, CPU: 0, GPU: 0 us)
+:4:command.cpp              :245 : 304678349118 us: 22213: [tid:0x7f33f3dfd080] waiting for event 0xe3a920 to complete, current status 0
+:4:command.cpp              :259 : 304678349119 us: 22213: [tid:0x7f33f3dfd080] event 0xe3a920 wait completed
+:3:hip_memory.cpp           :557 : 304678349125 us: 22213: [tid:0x7f33f3dfd080] hipMemcpy: Returned hipSuccess : : duration: 311802 us
 hipMemcpy.end
-It took me 0.321164 seconds.
-:3:hip_memory.cpp           :537 : 304484679451 us: 21528: [tid:0x7fe7f50cc080] [32mhipFree ( 0x7fe2e3200000 )[0m
-:3:rocdevice.cpp            :2636: 304484679460 us: 21528: [tid:0x7fe7f50cc080] No HW event
-:4:commandqueue.cpp         :128 : 304484679463 us: 21528: [tid:0x7fe7f50cc080] HW Event not ready, awaiting completion instead
-:4:commandqueue.cpp         :140 : 304484679466 us: 21528: [tid:0x7fe7f50cc080] All commands finished
-:4:rocdevice.cpp            :2070: 304484679580 us: 21528: [tid:0x7fe7f50cc080] Free hsa memory 0x7fe2e3200000
-:3:rocdevice.cpp            :2093: 304484679585 us: 21528: [tid:0x7fe7f50cc080] device=0xbff6b0, freeMem_ = 0xff000000
-:3:hip_memory.cpp           :539 : 304484679587 us: 21528: [tid:0x7fe7f50cc080] hipFree: Returned hipSuccess : 
+It took me 0.311865 seconds.
+:3:hip_memory.cpp           :537 : 304678349154 us: 22213: [tid:0x7f33f3dfd080] [32mhipFree ( 0x7f2ee2000000 )[0m
+:3:rocdevice.cpp            :2636: 304678349163 us: 22213: [tid:0x7f33f3dfd080] No HW event
+:4:commandqueue.cpp         :128 : 304678349166 us: 22213: [tid:0x7f33f3dfd080] HW Event not ready, awaiting completion instead
+:4:commandqueue.cpp         :140 : 304678349169 us: 22213: [tid:0x7f33f3dfd080] All commands finished
+:4:rocdevice.cpp            :2070: 304678349292 us: 22213: [tid:0x7f33f3dfd080] Free hsa memory 0x7f2ee2000000
+:3:rocdevice.cpp            :2093: 304678349297 us: 22213: [tid:0x7f33f3dfd080] device=0x9cd6b0, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :539 : 304678349301 us: 22213: [tid:0x7f33f3dfd080] hipFree: Returned hipSuccess : 

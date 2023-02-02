@@ -9,7 +9,7 @@ BIN_DIR=bin
 echo Making directory $LOG_DIR
 mkdir $LOG_DIR -p 
 mkdir $BIN_DIR -p
-datasize_MB=256
+datasize_MB=1024
 declare -a SUB_DIR_SUFFIXES=(""  "-no-sdma" "-no-copy" "-timer" "-datasize_$datasize_MB" "-datasize_$datasize_MB-no-sdma")  
 
 index=0
