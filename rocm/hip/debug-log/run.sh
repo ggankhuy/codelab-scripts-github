@@ -9,10 +9,11 @@ BIN_DIR=bin
 echo Making directory $LOG_DIR
 mkdir $LOG_DIR -p 
 mkdir $BIN_DIR -p
-declare -a SUB_DIR_SUFFIXES=(""  "-no-sdma" "-no-copy" "-timer")  
+datasize_MB=256
+declare -a SUB_DIR_SUFFIXES=(""  "-no-sdma" "-no-copy" "-timer" "-datasize_$datasize_MB")  
 
 index=0
-for envvar in "" "HSA_ENABLE_SDMA=0" "nocopy=1" "timer=1" ; do
+for envvar in "" "HSA_ENABLE_SDMA=0" "nocopy=1" "timer=1" "datasize=$datasize_MB"; do
     echo "==============================================="
     SUB_LOG_DIR=$LOG_DIR/$FILENAME${SUB_DIR_SUFFIXES[$index]}
     echo "SUB_LOG_DIR: $SUB_LOG_DIR"
