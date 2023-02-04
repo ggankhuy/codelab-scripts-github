@@ -3,7 +3,9 @@ FILENAME=1-hipMalloc
 FILENAME=2-hipMemcpy
 #FILENAME=2a-nohipMemcpy
 #FILENAME=4-hipKernel
+FILENAME=4a-hipKernel-3d
 #FILENAME=4a-2xhipKernel 
+#FILENAME=10-stream-2p
 LOG_DIR=log/$FILENAME
 BIN_DIR=bin
 echo Making directory $LOG_DIR
