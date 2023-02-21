@@ -21,6 +21,7 @@ __global__ void k1() {
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 #define timer 0
+#define HIPSETDEVICE 0
 int main (void) {
     using namespace std::chrono;
     int *a, *b, *c;
@@ -63,8 +64,16 @@ int main (void) {
     } else {
         cout << "Bypassing hipMemcpy..." << endl;
     }
-	
+
+    hipSetDevice(0);
 	k1<<<1, 256, 0, 0>>>();
+
+    #if HIPSETDEVICE == 1
+    hipSetDevice(1);
+	k1<<<1, 256, 0, 0>>>();
+    hipSetDevice(2);
+	k1<<<1, 256, 0, 0>>>();
+    #endif
 
     if (env_timer_str != "1") {
 

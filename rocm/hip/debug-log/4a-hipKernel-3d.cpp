@@ -64,7 +64,9 @@ int main (void) {
         cout << "Bypassing hipMemcpy..." << endl;
     }
 	
-	k1<<<(16, 4), (8, 32), 0, 0>>>();
+	//k1<<<dim3(16, 4), dim3(8, 32), 0, 0>>>();
+    hipLaunchKernelGGL(k1, dim3(16,4), dim3(8,32),0,0));
+	//k1<<<(16, 4), (8, 32), 0, 0>>>();
 
     if (env_timer_str != "1") {
 

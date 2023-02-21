@@ -1,7 +1,7 @@
 env_nocopy_str: 1
 Bypassing hipMalloc/malloc...
 Bypassing hipMemcpy...
-:3:rocdevice.cpp            :416 : 362335987918 us: 35537: [tid:0x7fc876dda080] Initializing HSA stack.
+:3:rocdevice.cpp            :416 : 913339380469 us: 128906: [tid:0x7fe26f443080] Initializing HSA stack.
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
 GG: enable_sdma_: 2
 GG: GetEnvVar(HSA_ENABLED_SDMA): 
@@ -18,111 +18,293 @@ GG: GpuAgent.constructor, entered...
 GG: GpuAgent.constructor, entered...
  GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
   GG: max_queues_ : 128
-GG: InitDma: entered...
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x96e7d0
+GG: GpuAgent::InitDma: entered...
   GG: calling queue_lambda...
+  GG:InitDma(): queues_[QueueBlitOnly].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1300
+  GG:InitDma(): queues_[QueueUtility].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1320
   GG: determine/instantiat No. of blit objs to engage...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1340
   GG: calling blit_lambda...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1360
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1380
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
   GG: InitGWS...
-GG: InitDma: entered...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1290
+GG: GpuAgent::InitDma: entered...
   GG: calling queue_lambda...
+  GG:InitDma(): queues_[QueueBlitOnly].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1300
+  GG:InitDma(): queues_[QueueUtility].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1320
   GG: determine/instantiat No. of blit objs to engage...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1340
   GG: calling blit_lambda...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1360
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1380
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
   GG: InitGWS...
-GG: InitDma: entered...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1290
+GG: GpuAgent::InitDma: entered...
   GG: calling queue_lambda...
+  GG:InitDma(): queues_[QueueBlitOnly].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1300
+  GG:InitDma(): queues_[QueueUtility].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1320
   GG: determine/instantiat No. of blit objs to engage...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1340
   GG: calling blit_lambda...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1360
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1380
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
   GG: InitGWS...
-GG: InitDma: entered...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1290
+GG: GpuAgent::InitDma: entered...
   GG: calling queue_lambda...
+  GG:InitDma(): queues_[QueueBlitOnly].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1300
+  GG:InitDma(): queues_[QueueUtility].reset(queue_lambda);
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1320
   GG: determine/instantiat No. of blit objs to engage...
   GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1340
   GG: calling blit_lambda...
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1360
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1380
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc13a0
   GG: InitGWS...
-:3:comgrctx.cpp             :33  : 362336075688 us: 35537: [tid:0x7fc876dda080] Loading COMGR library.
-:3:rocdevice.cpp            :207 : 362336075747 us: 35537: [tid:0x7fc876dda080] Numa selects cpu agent[0]=0x189e2a0(fine=0x18b5440,coarse=0x198eff0) for gpu agent=0x1992900
-:3:rocdevice.cpp            :1611: 362336076030 us: 35537: [tid:0x7fc876dda080] HMM support: 1, xnack: 0, direct host access: 0
+GG:lazy_ptr reset(std::function<T*()> Constructor = nullptr) (replacing function with new func) 0x7ffefffc1290
+:3:comgrctx.cpp             :33  : 913339465746 us: 128906: [tid:0x7fe26f443080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 913339465797 us: 128906: [tid:0x7fe26f443080] Numa selects cpu agent[0]=0x8802a0(fine=0x897440,coarse=0x971050) for gpu agent=0x974960
+:3:rocdevice.cpp            :1611: 913339466054 us: 128906: [tid:0x7fe26f443080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 362336076386 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76b800000, size 0x101000
-:4:rocdevice.cpp            :1918: 362336076840 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76b600000, size 0x101000
-:4:rocdevice.cpp            :2054: 362336076911 us: 35537: [tid:0x7fc876dda080] Allocate hsa device memory 0x7fc76b200000, size 0x100000
-:3:rocdevice.cpp            :207 : 362336076944 us: 35537: [tid:0x7fc876dda080] Numa selects cpu agent[0]=0x189e2a0(fine=0x18b5440,coarse=0x198eff0) for gpu agent=0x1a222a0
-:3:rocdevice.cpp            :1611: 362336077072 us: 35537: [tid:0x7fc876dda080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 913339466429 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe163e00000, size 0x101000
+:4:rocdevice.cpp            :1918: 913339466878 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe163c00000, size 0x101000
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa140a0
+:4:rocdevice.cpp            :2054: 913339466958 us: 128906: [tid:0x7fe26f443080] Allocate hsa device memory 0x7fe163800000, size 0x100000
+:3:rocdevice.cpp            :207 : 913339466987 us: 128906: [tid:0x7fe26f443080] Numa selects cpu agent[0]=0x8802a0(fine=0x897440,coarse=0x971050) for gpu agent=0xa04300
+:3:rocdevice.cpp            :1611: 913339467104 us: 128906: [tid:0x7fe26f443080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 362336077416 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76b000000, size 0x101000
-:4:rocdevice.cpp            :1918: 362336077799 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76ae00000, size 0x101000
-:4:rocdevice.cpp            :2054: 362336077866 us: 35537: [tid:0x7fc876dda080] Allocate hsa device memory 0x7fc76aa00000, size 0x100000
-:3:rocdevice.cpp            :207 : 362336077894 us: 35537: [tid:0x7fc876dda080] Numa selects cpu agent[0]=0x189e2a0(fine=0x18b5440,coarse=0x198eff0) for gpu agent=0x1a26650
-:3:rocdevice.cpp            :1611: 362336078012 us: 35537: [tid:0x7fc876dda080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 913339467475 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe163600000, size 0x101000
+:4:rocdevice.cpp            :1918: 913339467873 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe163400000, size 0x101000
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa16c20
+:4:rocdevice.cpp            :2054: 913339467946 us: 128906: [tid:0x7fe26f443080] Allocate hsa device memory 0x7fe163000000, size 0x100000
+:3:rocdevice.cpp            :207 : 913339467972 us: 128906: [tid:0x7fe26f443080] Numa selects cpu agent[0]=0x8802a0(fine=0x897440,coarse=0x971050) for gpu agent=0xa086b0
+:3:rocdevice.cpp            :1611: 913339468085 us: 128906: [tid:0x7fe26f443080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 362336078315 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76a800000, size 0x101000
-:4:rocdevice.cpp            :1918: 362336078624 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76a600000, size 0x101000
-:4:rocdevice.cpp            :2054: 362336078689 us: 35537: [tid:0x7fc876dda080] Allocate hsa device memory 0x7fc76a200000, size 0x100000
-:3:rocdevice.cpp            :207 : 362336078721 us: 35537: [tid:0x7fc876dda080] Numa selects cpu agent[0]=0x189e2a0(fine=0x18b5440,coarse=0x198eff0) for gpu agent=0x1a2aa30
-:3:rocdevice.cpp            :1611: 362336078835 us: 35537: [tid:0x7fc876dda080] HMM support: 1, xnack: 0, direct host access: 0
+:4:rocdevice.cpp            :1918: 913339468457 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe162e00000, size 0x101000
+:4:rocdevice.cpp            :1918: 913339468847 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe162c00000, size 0x101000
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa19590
+:4:rocdevice.cpp            :2054: 913339468920 us: 128906: [tid:0x7fe26f443080] Allocate hsa device memory 0x7fe162800000, size 0x100000
+:3:rocdevice.cpp            :207 : 913339468948 us: 128906: [tid:0x7fe26f443080] Numa selects cpu agent[0]=0x8802a0(fine=0x897440,coarse=0x971050) for gpu agent=0xa0ca90
+:3:rocdevice.cpp            :1611: 913339469058 us: 128906: [tid:0x7fe26f443080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 362336078868 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc876c3a000, size 0xa0
-:4:rocdevice.cpp            :1918: 362336079136 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76a000000, size 0x101000
-:4:rocdevice.cpp            :1918: 362336079487 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc769e00000, size 0x101000
-:4:rocdevice.cpp            :2054: 362336079554 us: 35537: [tid:0x7fc876dda080] Allocate hsa device memory 0x7fc769a00000, size 0x100000
-:4:runtime.cpp              :83  : 362336079562 us: 35537: [tid:0x7fc876dda080] init
-:3:hip_context.cpp          :50  : 362336079564 us: 35537: [tid:0x7fc876dda080] Direct Dispatch: 1
-:3:hip_platform.cpp         :213 : 362336079600 us: 35537: [tid:0x7fc876dda080] __hipPushCallConfiguration: Returned hipSuccess : 
-:3:hip_platform.cpp         :220 : 362336079613 us: 35537: [tid:0x7fc876dda080] [32m__hipPopCallConfiguration ( {2498863640,32765,0}, {1,0,26768976}, 0x7ffd94f1a2b8, 0x7ffd94f1a2b0 )[0m
-:3:hip_platform.cpp         :229 : 362336079617 us: 35537: [tid:0x7fc876dda080] __hipPopCallConfiguration: Returned hipSuccess : 
-:3:hip_module.cpp           :501 : 362336079634 us: 35537: [tid:0x7fc876dda080] [32mhipLaunchKernel ( 0x401ef8, {1,1,1}, {256,1,1}, 0x7ffd94f1a2c0, 0, stream:<null> )[0m
-:3:devprogram.cpp           :2675: 362336080462 us: 35537: [tid:0x7fc876dda080] Using Code Object V4.
-GG: DmaCopy(dst, src, size)..entered.
+:4:rocdevice.cpp            :1918: 913339469089 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe26f2a2000, size 0xa0
+:4:rocdevice.cpp            :1918: 913339469474 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe162600000, size 0x101000
+:4:rocdevice.cpp            :1918: 913339469863 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe162400000, size 0x101000
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa1bec0
+:4:rocdevice.cpp            :2054: 913339469936 us: 128906: [tid:0x7fe26f443080] Allocate hsa device memory 0x7fe162000000, size 0x100000
+:4:runtime.cpp              :83  : 913339469942 us: 128906: [tid:0x7fe26f443080] init
+:3:hip_context.cpp          :50  : 913339469945 us: 128906: [tid:0x7fe26f443080] Direct Dispatch: 1
+:3:hip_device_runtime.cpp   :535 : 913339469969 us: 128906: [tid:0x7fe26f443080] hipSetDevice: Returned hipSuccess : 
+:3:hip_platform.cpp         :209 : 913339469983 us: 128906: [tid:0x7fe26f443080] [32m__hipPushCallConfiguration ( {1,1,1}, {256,1,1}, 0, stream:<null> )[0m
+:3:hip_platform.cpp         :213 : 913339469989 us: 128906: [tid:0x7fe26f443080] __hipPushCallConfiguration: Returned hipSuccess : 
+:3:hip_platform.cpp         :220 : 913339469996 us: 128906: [tid:0x7fe26f443080] [32m__hipPopCallConfiguration ( {4294711448,32766,0}, {1,0,9868880}, 0x7ffefffc1938, 0x7ffefffc1930 )[0m
+:3:hip_platform.cpp         :229 : 913339469998 us: 128906: [tid:0x7fe26f443080] __hipPopCallConfiguration: Returned hipSuccess : 
+:3:hip_module.cpp           :501 : 913339470013 us: 128906: [tid:0x7fe26f443080] [32mhipLaunchKernel ( 0x401f58, {1,1,1}, {256,1,1}, 0x7ffefffc1940, 0, stream:<null> )[0m
+:3:devprogram.cpp           :2675: 913339470665 us: 128906: [tid:0x7fe26f443080] Using Code Object V4.
+GG: GpuAgent::DmaCopy(dst, src, size)..entered.
 GG: queue_lambda entered: 
-GG: CpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::QueueCreate entered...
+  GG:QueueCreate(): size: 40, type: 0
 GG: GpuAgent::CreateBlitKernel() entered...
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa248b8
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fc876c36000, 0x7fc876c32000size: 8304
+  GG: dst, src: 0x7fe26f29e000, 0x7fe26f29a000size: 2070
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 30720, num_cus_:120 kernel_code: 0x1a42b28
-  GG: src_start/dst_start/phase1_size: 7fc876c32000/7fc876c36000/0
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa268a8
+  GG: src_start/dst_start/phase1_size: 7fe26f29a000/7fe26f29e000/0
   GG: phase2_block/phase2_size: 78000/0
   GG: phase3_size: 2070
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7fc876c1e000, 0x7fc876c20000, 7800, ??? 
-:3:devprogram.cpp           :2978: 362336089741 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: _Z2k1v
-:3:hip_module.cpp           :358 : 362336089776 us: 35537: [tid:0x7fc876dda080] [32mihipModuleLaunchKernel ( 0x0x1a3fc90, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffd94f1a2c0, char array:<null>, event:0, event:0, 0, 0 )[0m
-:3:rocdevice.cpp            :2686: 362336089793 us: 35537: [tid:0x7fc876dda080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
-:3:rocdevice.cpp            :2757: 362336097723 us: 35537: [tid:0x7fc876dda080] created hardware queue 0x7fc876c18000 with size 4096 with priority 1, cooperative: 0
-:4:rocdevice.cpp            :1918: 362336097901 us: 35537: [tid:0x7fc876dda080] Allocate hsa host memory 0x7fc76b500000, size 0x80000
-:3:devprogram.cpp           :2675: 362336243426 us: 35537: [tid:0x7fc876dda080] Using Code Object V4.
-GG: DmaCopy(dst, src, size)..entered.
+  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7fe26f286000, 0x7fe26f288000, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7fe26f286000
+  GG:(pkt) kernelarg_address:                                        0x7fe26f288000
+  GG:(pkt) completion signal:                                        7fe26f2c6b00
+:3:devprogram.cpp           :2978: 913339484421 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: _Z2k1v
+:3:hip_module.cpp           :358 : 913339484450 us: 128906: [tid:0x7fe26f443080] [32mihipModuleLaunchKernel ( 0x0xa219d0, 256, 1, 1, 256, 1, 1, 0, stream:<null>, 0x7ffefffc1940, char array:<null>, event:0, event:0, 0, 0 )[0m
+GG: VirtualGPU::VirtualGPU (constructor) entered...
+GG: VirtualGPU::VirtualGPU: device: 0xa13a30
+GG: VirtualGPU::Create() entered...
+:3:rocdevice.cpp            :2686: 913339484466 us: 128906: [tid:0x7fe26f443080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+GG: hsa_queue_create entered...
+  GG: agent handle: ?? ,size: 1000, type: 0, source: ?? 
+GG: GpuAgent::QueueCreate entered...
+  GG:QueueCreate(): size: 1000, type: 0
+:3:rocdevice.cpp            :2757: 913339495422 us: 128906: [tid:0x7fe26f443080] created hardware queue 0x7fe26f280000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 913339495621 us: 128906: [tid:0x7fe26f443080] Allocate hsa host memory 0x7fe163b00000, size 0x80000
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26420
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26428
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26430
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26438
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26440
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26448
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26450
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffefffc1388, attributes: 0, hsa_signal_t: 0xa26458
+:3:devprogram.cpp           :2675: 913339637962 us: 128906: [tid:0x7fe26f443080] Using Code Object V4.
+GG: GpuAgent::DmaCopy(dst, src, size)..entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fc876c08000, 0x7fc876c00000size: 5070
+  GG: dst, src: 0x7fe26f270000, 0x7fe26f268000size: 5070
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0x1a42b28
-  GG: src_start/dst_start/phase1_size: 7fc876c00000/7fc876c08000/0
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa268a8
+  GG: src_start/dst_start/phase1_size: 7fe26f268000/7fe26f270000/0
   GG: phase2_block/phase2_size: 78000/0
   GG: phase3_size: 5070
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 2, 7fc876c1e000, 0x7fc876c20060, 7800, ??? 
-:3:devprogram.cpp           :2978: 362336244312 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
-:3:devprogram.cpp           :2978: 362336244318 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
-:3:devprogram.cpp           :2978: 362336244320 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
-:3:devprogram.cpp           :2978: 362336244321 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
-:3:devprogram.cpp           :2978: 362336244323 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
-:3:devprogram.cpp           :2978: 362336244325 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
-:3:devprogram.cpp           :2978: 362336244326 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
-:3:devprogram.cpp           :2978: 362336244328 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
-:3:devprogram.cpp           :2978: 362336244329 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
-:4:rocmemory.cpp            :941 : 362336244390 us: 35537: [tid:0x7fc876dda080] Locking to pool 0x198eff0, size 0x1000, HostPtr = 0x1a7e000, DevPtr = 0x7fc876c10000
-:4:command.cpp              :339 : 362336244521 us: 35537: [tid:0x7fc876dda080] command is enqueued: 0x1b2bb50
-:3:rocvirtual.cpp           :2723: 362336244530 us: 35537: [tid:0x7fc876dda080] ShaderName : _Z2k1v
-:4:rocvirtual.cpp           :850 : 362336244548 us: 35537: [tid:0x7fc876dda080] HWq=0x7fc876c18000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fc876c36440, kernarg_address=0x7fc76b500000, completion_signal=0x0
-:3:hip_platform.cpp         :676 : 362336244558 us: 35537: [tid:0x7fc876dda080] ihipLaunchKernel: Returned hipSuccess : 
-:3:hip_module.cpp           :502 : 362336244563 us: 35537: [tid:0x7fc876dda080] hipLaunchKernel: Returned hipSuccess : 
-It took me 0.256733 seconds.
+  GG: index, code_handle, args, grid_size_x, completion_signal: 2, 7fe26f286000, 0x7fe26f288060, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7fe26f286000
+  GG:(pkt) kernelarg_address:                                        0x7fe26f288060
+  GG:(pkt) completion signal:                                        7fe26f2c6b00
+:3:devprogram.cpp           :2978: 913339638887 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 913339638892 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 913339638894 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 913339638895 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 913339638897 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 913339638898 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 913339638900 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 913339638901 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 913339638903 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 913339638968 us: 128906: [tid:0x7fe26f443080] Locking to pool 0x971050, size 0x1000, HostPtr = 0xbe7000, DevPtr = 0x7fe26f278000
+GG: VirtualGPU::HwQueueTracker::Create() entered...
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xaea160
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xee3660
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xaf4c80
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xef77d0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf2ae90
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf265b0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa20bb0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xaf77b0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xaf78e0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa7b0a0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa7b1d0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa7b300
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf60860
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf60990
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xedbdb0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xedbea0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xedbfd0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb07ad0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb07c00
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb07d30
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xbe89b0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xbe8ae0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xbe8c10
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa47160
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa47290
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa473c0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa89f60
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa8a090
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa8a1c0
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb07f20
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb08050
+GG: hsa_amd_signal_create() entered...
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb08180
+:4:command.cpp              :339 : 913339639112 us: 128906: [tid:0x7fe26f443080] command is enqueued: 0xa4c8e0
+:3:rocvirtual.cpp           :2728: 913339639118 us: 128906: [tid:0x7fe26f443080] ShaderName : _Z2k1v
+:4:rocvirtual.cpp           :852 : 913339639133 us: 128906: [tid:0x7fe26f443080] HWq=0x7fe26f280000, Dispatch Header = 0xb02 (type=2, barrier=1, acquire=1, release=1), setup=3, grid=[256, 1, 1], workgroup=[256, 1, 1], private_seg_size=0, group_seg_size=0, kernel_obj=0x7fe26f29e440, kernarg_address=0x7fe163b00000, completion_signal=0x0
+:3:hip_platform.cpp         :676 : 913339639151 us: 128906: [tid:0x7fe26f443080] ihipLaunchKernel: Returned hipSuccess : 
+:3:hip_module.cpp           :502 : 913339639154 us: 128906: [tid:0x7fe26f443080] hipLaunchKernel: Returned hipSuccess : 
+It took me 0.258769 seconds.
 Bypassing hipFree/free...
-:3:devprogram.cpp           :2978: 362336244622 us: 35537: [tid:0x7fc876dda080] For Init/Fini: Kernel Name: _Z2k1v
+:3:devprogram.cpp           :2978: 913339639190 us: 128906: [tid:0x7fe26f443080] For Init/Fini: Kernel Name: _Z2k1v

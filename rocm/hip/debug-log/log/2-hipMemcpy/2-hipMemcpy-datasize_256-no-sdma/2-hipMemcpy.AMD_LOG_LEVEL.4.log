@@ -1,6 +1,6 @@
 env_nocopy_str: 
 Setting N to 256MB...
-:3:rocdevice.cpp            :416 : 457893762928 us: 56617: [tid:0x7fbd54bf8080] Initializing HSA stack.
+:3:rocdevice.cpp            :416 : 1927768681719 us: 150061: [tid:0x7fec16c00080] Initializing HSA stack.
 GG: GetEnvVar(HSA_ENABLED_SDMA): 0
 GG: enable_sdma_: 0
 GG: GetEnvVar(HSA_ENABLED_SDMA): 0
@@ -18,1114 +18,1492 @@ GG: GpuAgent.constructor, entered...
  GG: !HSA_LARGE_MODEL enabled and defined(__linux__)
   GG: max_queues_ : 128
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x9a3490
-GG: InitDma: entered...
-  GG: calling queue_lambda...
-  GG: determine/instantiat No. of blit objs to engage...
-  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
-  GG: calling blit_lambda...
-  GG: InitGWS...
-GG: InitDma: entered...
-  GG: calling queue_lambda...
-  GG: determine/instantiat No. of blit objs to engage...
-  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
-  GG: calling blit_lambda...
-  GG: InitGWS...
-GG: InitDma: entered...
-  GG: calling queue_lambda...
-  GG: determine/instantiat No. of blit objs to engage...
-  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
-  GG: calling blit_lambda...
-  GG: InitGWS...
-GG: InitDma: entered...
-  GG: calling queue_lambda...
-  GG: determine/instantiat No. of blit objs to engage...
-  GG: Init blit objs used for D2D/H2D/D2H/P2P ops...
-  GG: calling blit_lambda...
-  GG: InitGWS...
-:3:comgrctx.cpp             :33  : 457893849761 us: 56617: [tid:0x7fbd54bf8080] Loading COMGR library.
-:3:rocdevice.cpp            :207 : 457893849819 us: 56617: [tid:0x7fbd54bf8080] Numa selects cpu agent[0]=0x8b52a0(fine=0x8cc440,coarse=0x9a5b80) for gpu agent=0x9a95b0
-:3:rocdevice.cpp            :1611: 457893850113 us: 56617: [tid:0x7fbd54bf8080] HMM support: 1, xnack: 0, direct host access: 0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb97490
+GG: GpuAgent::InitDma: entered...
+  GG: InitDma(): queues_[QueueBlitOnly].reset(queue_lambda): &queue_lambda/queue_lambda: 0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f00
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): queues_[QueueUtility].reset(queue_lambda): &queue_lambda/queue_lambda: ;0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f20
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blit_cnt set to:9
+  GG: InitDma: blits_[BlitDevToDev].reset([this]() {};
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f40
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitHostToDev].reset([blit_lambda, this]() { return blist_lambda(false, queues_[QueueBlitOnly], true) ; } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f60
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitDevToHost].reset([blit_lambda, this]() { return blit_lambda(false, queues_[QueueUtility], false); } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f80
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): setup xgmi engites...reset with blit_lambda(true, queues_[QueueUtility], false)
+  GG: InitDma(): xgmi No: 3, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 4, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 5, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 6, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 7, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 8, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): InitGWS...
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711e90
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): end: No. of blits_ created: 9
+GG: GpuAgent::InitDma: entered...
+  GG: InitDma(): queues_[QueueBlitOnly].reset(queue_lambda): &queue_lambda/queue_lambda: 0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f00
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): queues_[QueueUtility].reset(queue_lambda): &queue_lambda/queue_lambda: ;0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f20
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blit_cnt set to:9
+  GG: InitDma: blits_[BlitDevToDev].reset([this]() {};
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f40
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitHostToDev].reset([blit_lambda, this]() { return blist_lambda(false, queues_[QueueBlitOnly], true) ; } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f60
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitDevToHost].reset([blit_lambda, this]() { return blit_lambda(false, queues_[QueueUtility], false); } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f80
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): setup xgmi engites...reset with blit_lambda(true, queues_[QueueUtility], false)
+  GG: InitDma(): xgmi No: 3, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 4, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 5, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 6, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 7, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 8, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): InitGWS...
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711e90
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): end: No. of blits_ created: 9
+GG: GpuAgent::InitDma: entered...
+  GG: InitDma(): queues_[QueueBlitOnly].reset(queue_lambda): &queue_lambda/queue_lambda: 0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f00
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): queues_[QueueUtility].reset(queue_lambda): &queue_lambda/queue_lambda: ;0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f20
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blit_cnt set to:9
+  GG: InitDma: blits_[BlitDevToDev].reset([this]() {};
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f40
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitHostToDev].reset([blit_lambda, this]() { return blist_lambda(false, queues_[QueueBlitOnly], true) ; } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f60
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitDevToHost].reset([blit_lambda, this]() { return blit_lambda(false, queues_[QueueUtility], false); } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f80
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): setup xgmi engites...reset with blit_lambda(true, queues_[QueueUtility], false)
+  GG: InitDma(): xgmi No: 3, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 4, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 5, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 6, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 7, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 8, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): InitGWS...
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711e90
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): end: No. of blits_ created: 9
+GG: GpuAgent::InitDma: entered...
+  GG: InitDma(): queues_[QueueBlitOnly].reset(queue_lambda): &queue_lambda/queue_lambda: 0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f00
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): queues_[QueueUtility].reset(queue_lambda): &queue_lambda/queue_lambda: ;0x7ffd90711ef8
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f20
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blit_cnt set to:9
+  GG: InitDma: blits_[BlitDevToDev].reset([this]() {};
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f40
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitHostToDev].reset([blit_lambda, this]() { return blist_lambda(false, queues_[QueueBlitOnly], true) ; } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f60
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): blits_[BlitDevToHost].reset([blit_lambda, this]() { return blit_lambda(false, queues_[QueueUtility], false); } 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711f80
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): setup xgmi engites...reset with blit_lambda(true, queues_[QueueUtility], false)
+  GG: InitDma(): xgmi No: 3, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 4, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 5, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 6, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 7, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): xgmi No: 8, blits_[idx].reset([blit_lambda, this]() { return blist_lambda(true, queues_[QueueUtility], false); 
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711fa0
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): InitGWS...
+    GG: lazy_ptr::reset(std::function<T*()> Constructor:0x7ffd90711e90
+    GG: start: lazy_ptr::print_state: obj.get():  0, target avail?: 0
+    GG: end  : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+  GG: InitDma(): end: No. of blits_ created: 9
+:3:comgrctx.cpp             :33  : 1927768766536 us: 150061: [tid:0x7fec16c00080] Loading COMGR library.
+:3:rocdevice.cpp            :207 : 1927768766602 us: 150061: [tid:0x7fec16c00080] Numa selects cpu agent[0]=0xaa92a0(fine=0xac0440,coarse=0xb99b80) for gpu agent=0xb9d5b0
+:3:rocdevice.cpp            :1611: 1927768766898 us: 150061: [tid:0x7fec16c00080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 457893850569 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc09600000, size 0x101000
-:4:rocdevice.cpp            :1918: 457893850875 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc09400000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768767242 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feacb600000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768767588 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feacb400000, size 0x101000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa48d20
-:4:rocdevice.cpp            :2054: 457893850951 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa device memory 0x7fbc09000000, size 0x100000
-:3:rocdevice.cpp            :207 : 457893850981 us: 56617: [tid:0x7fbd54bf8080] Numa selects cpu agent[0]=0x8b52a0(fine=0x8cc440,coarse=0x9a5b80) for gpu agent=0xa38f60
-:3:rocdevice.cpp            :1611: 457893851102 us: 56617: [tid:0x7fbd54bf8080] HMM support: 1, xnack: 0, direct host access: 0
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc3cd20
+:4:rocdevice.cpp            :2054: 1927768767667 us: 150061: [tid:0x7fec16c00080] Allocate hsa device memory 0x7feacb000000, size 0x100000
+:3:rocdevice.cpp            :207 : 1927768767695 us: 150061: [tid:0x7fec16c00080] Numa selects cpu agent[0]=0xaa92a0(fine=0xac0440,coarse=0xb99b80) for gpu agent=0xc2cf60
+:3:rocdevice.cpp            :1611: 1927768767810 us: 150061: [tid:0x7fec16c00080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 457893851440 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc08e00000, size 0x101000
-:4:rocdevice.cpp            :1918: 457893851806 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc08c00000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768768073 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feacae00000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768768574 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feacac00000, size 0x101000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa4b900
-:4:rocdevice.cpp            :2054: 457893851875 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa device memory 0x7fbc08800000, size 0x100000
-:3:rocdevice.cpp            :207 : 457893851902 us: 56617: [tid:0x7fbd54bf8080] Numa selects cpu agent[0]=0x8b52a0(fine=0x8cc440,coarse=0x9a5b80) for gpu agent=0xa3d330
-:3:rocdevice.cpp            :1611: 457893852019 us: 56617: [tid:0x7fbd54bf8080] HMM support: 1, xnack: 0, direct host access: 0
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc3f900
+:4:rocdevice.cpp            :2054: 1927768768645 us: 150061: [tid:0x7fec16c00080] Allocate hsa device memory 0x7feaca800000, size 0x100000
+:3:rocdevice.cpp            :207 : 1927768768671 us: 150061: [tid:0x7fec16c00080] Numa selects cpu agent[0]=0xaa92a0(fine=0xac0440,coarse=0xb99b80) for gpu agent=0xc31330
+:3:rocdevice.cpp            :1611: 1927768768781 us: 150061: [tid:0x7fec16c00080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 457893852382 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc08600000, size 0x101000
-:4:rocdevice.cpp            :1918: 457893852796 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc08400000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768769026 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feaca600000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768769386 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feaca400000, size 0x101000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa4e270
-:4:rocdevice.cpp            :2054: 457893852873 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa device memory 0x7fb903600000, size 0x100000
-:3:rocdevice.cpp            :207 : 457893852904 us: 56617: [tid:0x7fbd54bf8080] Numa selects cpu agent[0]=0x8b52a0(fine=0x8cc440,coarse=0x9a5b80) for gpu agent=0xa41710
-:3:rocdevice.cpp            :1611: 457893853020 us: 56617: [tid:0x7fbd54bf8080] HMM support: 1, xnack: 0, direct host access: 0
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc42270
+:4:rocdevice.cpp            :2054: 1927768769456 us: 150061: [tid:0x7fec16c00080] Allocate hsa device memory 0x7feaca000000, size 0x100000
+:3:rocdevice.cpp            :207 : 1927768769485 us: 150061: [tid:0x7fec16c00080] Numa selects cpu agent[0]=0xaa92a0(fine=0xac0440,coarse=0xb99b80) for gpu agent=0xc35710
+:3:rocdevice.cpp            :1611: 1927768769597 us: 150061: [tid:0x7fec16c00080] HMM support: 1, xnack: 0, direct host access: 0
 
-:4:rocdevice.cpp            :1918: 457893853052 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbd54a58000, size 0xa0
-:4:rocdevice.cpp            :1918: 457893853389 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc08200000, size 0x101000
-:4:rocdevice.cpp            :1918: 457893853744 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fb903400000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768769628 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7fec16a60000, size 0xa0
+:4:rocdevice.cpp            :1918: 1927768769892 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feac9e00000, size 0x101000
+:4:rocdevice.cpp            :1918: 1927768770186 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feac9c00000, size 0x101000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa50ba0
-:4:rocdevice.cpp            :2054: 457893853849 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa device memory 0x7fb903000000, size 0x100000
-:4:runtime.cpp              :83  : 457893853855 us: 56617: [tid:0x7fbd54bf8080] init
-:3:hip_context.cpp          :50  : 457893853858 us: 56617: [tid:0x7fbd54bf8080] Direct Dispatch: 1
-:4:rocdevice.cpp            :2054: 457893853932 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa device memory 0x7fb8c2e00000, size 0x40000000
-:3:rocdevice.cpp            :2093: 457893853936 us: 56617: [tid:0x7fbd54bf8080] device=0xa486b0, freeMem_ = 0xbf000000
-:3:hip_memory.cpp           :496 : 457893853943 us: 56617: [tid:0x7fbd54bf8080] hipMalloc: Returned hipSuccess : 0x7fb8c2e00000
-:3:hip_memory.cpp           :556 : 457893959483 us: 56617: [tid:0x7fbd54bf8080] [32mhipMemcpy ( 0x7fb8c2e00000, 0x7fbd0a0af010, 1073741824, hipMemcpyHostToDevice )[0m
-:3:rocdevice.cpp            :2686: 457893959532 us: 56617: [tid:0x7fbd54bf8080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc44ba0
+:4:rocdevice.cpp            :2054: 1927768770255 us: 150061: [tid:0x7fec16c00080] Allocate hsa device memory 0x7feac9800000, size 0x100000
+:4:runtime.cpp              :83  : 1927768770262 us: 150061: [tid:0x7fec16c00080] init
+:3:hip_context.cpp          :50  : 1927768770265 us: 150061: [tid:0x7fec16c00080] Direct Dispatch: 1
+:4:rocdevice.cpp            :2054: 1927768770339 us: 150061: [tid:0x7fec16c00080] Allocate hsa device memory 0x7fe783800000, size 0x40000000
+:3:rocdevice.cpp            :2093: 1927768770344 us: 150061: [tid:0x7fec16c00080] device=0xc3c6b0, freeMem_ = 0xbf000000
+:3:hip_memory.cpp           :495 : 1927768770350 us: 150061: [tid:0x7fec16c00080] hipMalloc: Returned hipSuccess : 0x7fe783800000
+:3:hip_memory.cpp           :555 : 1927768874556 us: 150061: [tid:0x7fec16c00080] [32mhipMemcpy ( 0x7fe783800000, 0x7febcc0d5010, 1073741824, hipMemcpyHostToDevice )[0m
+:3:rocdevice.cpp            :2686: 1927768874608 us: 150061: [tid:0x7fec16c00080] number of allocated hardware queues with low priority: 0, with normal priority: 0, with high priority: 0, maximum per priority is: 4
 hipMemcpy.start.
-GG: queue_lambda entered: 
-GG: CpuAgent::CreateInterceptibleQueue entered...
-:3:rocdevice.cpp            :2757: 457893976170 us: 56617: [tid:0x7fbd54bf8080] created hardware queue 0x7fbd54a48000 with size 4096 with priority 1, cooperative: 0
-:4:rocdevice.cpp            :1918: 457893976392 us: 56617: [tid:0x7fbd54bf8080] Allocate hsa host memory 0x7fbc09300000, size 0x80000
+GG: hsa_queue_create entered...
+  GG: agent handle: ?? ,size: 1000, type: 0, source: ?? 
+GG: GpuAgent::QueueCreate entered...
+  GG:QueueCreate(): size: 1000, type: 0
+GG: GpuAgent::QueueCreate queues_[QueueUtility].touch()...
+    GG: lazy_ptr::touch() 
+    GG: : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+    GG: lazy_ptr::created(): returning bool: 
+GG: InitDma(): queue_lambda(): entered: 
+  GG: InitDma(): queue_lambda: CreateInterceptibleQueue(): 
+GG: GpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::QueueCreate entered...
+  GG:QueueCreate(): size: 40, type: 0
+GG: GpuAgent::QueueCreate queues_[QueueUtility].touch()...
+    GG: lazy_ptr::touch() 
+    GG: : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+    GG: lazy_ptr::created(): returning bool: 
+:3:rocdevice.cpp            :2757: 1927768890415 us: 150061: [tid:0x7fec16c00080] created hardware queue 0x7fec16a50000 with size 4096 with priority 1, cooperative: 0
+:4:rocdevice.cpp            :1918: 1927768890603 us: 150061: [tid:0x7fec16c00080] Allocate hsa host memory 0x7feacb300000, size 0x80000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa556e0
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc496e0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa556e8
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc496e8
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa556f0
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc496f0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa556f8
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc496f8
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa55700
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc49700
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa55708
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc49708
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa55710
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc49710
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffed2a3df18, attributes: 0, hsa_signal_t: 0xa55718
-:3:devprogram.cpp           :2675: 457894121590 us: 56617: [tid:0x7fbd54bf8080] Using Code Object V4.
-GG: DmaCopy(dst, src, size)..entered.
+  GG: initial_value: 0, num_consumers: 1, consumers* 0x7ffd90712198, attributes: 0, hsa_signal_t: 0xc49718
+:3:devprogram.cpp           :2675: 1927769038841 us: 150061: [tid:0x7fec16c00080] Using Code Object V4.
+GG: GpuAgent::DmaCopy(dst, src, size)..entered.
+GG: GpuAgent::Dmacopy return blist_[BlitDevtoDev]->SubmitLinear...
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+    GG: lazy_ptr::created(): returning bool: 
+    GG: lazy_ptr::operator*(): returning: std::unique_ptr<T>&0xb9d848
+    GG: : lazy_ptr::print_state: obj.get():  0xc49980, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: GpuAgent::CreateBlitKernel() entered...
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xebd0b8
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1130428
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size): entered.
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fbd098a4000, 0x7fbd0989c000size: 5070
+  GG: dst, src: 0x7febcb8cc000, 0x7febcb8c4000size: 5070
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xb2c998
-  GG: src_start/dst_start/phase1_size: 7fbd0989c000/7fbd098a4000/0
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xc5dc58
+  GG: src_start/dst_start/phase1_size: 7febcb8c4000/7febcb8cc000/0
   GG: phase2_block/phase2_size: 78000/0
   GG: phase3_size: 5070
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7fbd54a0c000, 0x7fbd54a0e000, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd54a0c000
-  GG(pkt): kernelarg_address:                                        0x7fbd54a0e000
-  GG(pkt): completion signal:                                        7fbd54a7b580
-:3:devprogram.cpp           :2978: 457894122722 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
-:3:devprogram.cpp           :2978: 457894122728 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
-:3:devprogram.cpp           :2978: 457894122730 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
-:3:devprogram.cpp           :2978: 457894122732 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
-:3:devprogram.cpp           :2978: 457894122734 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
-:3:devprogram.cpp           :2978: 457894122736 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
-:3:devprogram.cpp           :2978: 457894122738 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
-:3:devprogram.cpp           :2978: 457894122739 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
-:3:devprogram.cpp           :2978: 457894122741 us: 56617: [tid:0x7fbd54bf8080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
-:4:rocmemory.cpp            :941 : 457894122794 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x1000, HostPtr = 0xbff000, DevPtr = 0x7fbd0989a000
-VirtualGPU::HwQueueTracker::Create() entered...
+  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7fec16a14000, 0x7fec16a16000, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7fec16a14000
+  GG:(pkt) kernelarg_address:                                        0x7fec16a16000
+  GG:(pkt) completion signal:                                        7fec16a83580
+GG: GpuAgent::BindTrapHandler(): queues_[QueueUtility]->ExecutePM4(..)
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc49980, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
+:3:devprogram.cpp           :2978: 1927769040028 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferAligned
+:3:devprogram.cpp           :2978: 1927769040034 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWait
+:3:devprogram.cpp           :2978: 1927769040036 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_copyBuffer
+:3:devprogram.cpp           :2978: 1927769040038 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_streamOpsWrite
+:3:devprogram.cpp           :2978: 1927769040040 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRectAligned
+:3:devprogram.cpp           :2978: 1927769040042 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_gwsInit
+:3:devprogram.cpp           :2978: 1927769040044 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_copyBufferRect
+:3:devprogram.cpp           :2978: 1927769040046 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned
+:3:devprogram.cpp           :2978: 1927769040047 us: 150061: [tid:0x7fec16c00080] For Init/Fini: Kernel Name: __amd_rocclr_fillBufferAligned2D
+:4:rocmemory.cpp            :941 : 1927769040101 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x1000, HostPtr = 0x111c000, DevPtr = 0x7febcb87e000
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xae1930
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x174ad80
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf5c590
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x11301f0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xab58e0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xdf2230
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc07870
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1130690
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xf15da0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x12e5b50
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xebd2f0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc81440
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa5b4e0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xcf3330
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa5b610
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xd1e090
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x155b0c0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1748520
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x155b1b0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc4be50
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x155b2e0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x17482b0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xeb2ed0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1748390
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xeb3110
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc504a0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xae98c0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc505d0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xae99f0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xcef100
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xae9b20
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xcef230
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb28ca0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xcef360
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb28dd0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xcef490
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb28f00
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc4b880
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xafdae0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc4b9b0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xafdc10
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc4bae0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xafdd40
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xdd6c50
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc07510
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xdd6d80
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc07640
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xdd6eb0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc07770
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xdd6fe0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa797e0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x11884b0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa79910
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x11885e0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa79a40
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1188710
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x15480a0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1090ce0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x15481d0
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1090dd0
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1548300
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1090f00
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xa5c480
-:3:hip_memory.cpp           :327 : 457894122924 us: 56617: [tid:0x7fbd54bf8080] GG: ihipMemcpyCommand entered.
-:4:command.cpp              :339 : 457894122928 us: 56617: [tid:0x7fbd54bf8080] command is enqueued: 0xa79b40
-:4:rocmemory.cpp            :941 : 457894123526 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2001000, HostPtr = 0x7fbd0a0af000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894123535 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b480
+  GG: initial_value: 0, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0x1091030
+:4:command.cpp              :339 : 1927769040252 us: 150061: [tid:0x7fec16c00080] command is enqueued: 0xd4a870
+:4:rocmemory.cpp            :941 : 1927769040797 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2001000, HostPtr = 0x7febcc0d5000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769040807 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83480
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
-GG: blit_lambda entered: use_xgmi: 0, isHostToDev: 1
-  GG: use_sdma after checking gfx8/1013: 1
- GG: use_sdma after checking sdma_override: 0
-GG: queue_lambda entered: 
-GG: CpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+    GG: lazy_ptr::created(): returning bool: 
+  GG: InitDma(): blit_lambda(): entered: use_xgmi: 0, isHostToDev: 1
+  GG: InitDma(): blit_lambda(): use_sdma after checking gfx8/1013: 1
+  GG: InitDma(): blit_lambda(): use_sdma after checking sdma_override: 0
+    GG: lazy_ptr::operator*(): returning: std::unique_ptr<T>&0xb9d878
+    GG: : lazy_ptr::print_state: obj.get():  0, target avail?: 1
+    GG: lazy_ptr::created(): returning bool: 
+GG: InitDma(): queue_lambda(): entered: 
+  GG: InitDma(): queue_lambda: CreateInterceptibleQueue(): 
+GG: GpuAgent::CreateInterceptibleQueue entered...
+GG: GpuAgent::QueueCreate entered...
+  GG:QueueCreate(): size: 40, type: 0
+GG: GpuAgent::QueueCreate queues_[QueueUtility].touch()...
+    GG: lazy_ptr::touch() 
+    GG: : lazy_ptr::print_state: obj.get():  0xc49980, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: GpuAgent::CreateBlitKernel() entered...
 GG: hsa_amd_signal_create() entered...
-  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xb37ac8
+  GG: initial_value: 1, num_consumers: 0, consumers* 0, attributes: 0, hsa_signal_t: 0xc77708
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8c2e00000, 0x7fb8b7c00010size: 2000ff0
+  GG: dst, src: 0x7fe783800000, 0x7fe778600010size: 2000ff0
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00010/7fb8c2e00000/0
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600010/7fe783800000/0
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 20ff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7fbd09886000, 0x7fbd09888000, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888000
-  GG(pkt): completion signal:                                        7fbd54a7b480
-:4:rocvirtual.cpp           :526 : 457894131034 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b480
-:3:rocvirtual.hpp           :62  : 457894131044 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b480) for -1 ns
-:4:rocmemory.cpp            :941 : 457894133960 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd0c0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894133971 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b400
+  GG: index, code_handle, args, grid_size_x, completion_signal: 0, 7febcb86a000, 0x7febcb86c000, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c000
+  GG:(pkt) completion signal:                                        7fec16a83480
+:4:rocvirtual.cpp           :524 : 1927769048404 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83480
+:3:rocvirtual.hpp           :62  : 1927769048417 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83480) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769051295 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febce0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769051305 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83400
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8c4e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe785800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8c4e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe785800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1, 7fbd09886000, 0x7fbd09888060, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888060
-  GG(pkt): completion signal:                                        7fbd54a7b400
-:4:rocvirtual.cpp           :526 : 457894133995 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b400
-:3:rocvirtual.hpp           :62  : 457894133997 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b400) for -1 ns
-:4:rocmemory.cpp            :941 : 457894136379 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd0e0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894136387 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b380
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1, 7febcb86a000, 0x7febcb86c060, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c060
+  GG:(pkt) completion signal:                                        7fec16a83400
+:4:rocvirtual.cpp           :524 : 1927769051329 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83400
+:3:rocvirtual.hpp           :62  : 1927769051331 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83400) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769053563 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febd00d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769053570 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83380
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8c6e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe787800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8c6e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe787800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 2, 7fbd09886000, 0x7fbd098880c0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098880c0
-  GG(pkt): completion signal:                                        7fbd54a7b380
-:4:rocvirtual.cpp           :526 : 457894136408 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b380
-:3:rocvirtual.hpp           :62  : 457894136410 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b380) for -1 ns
-:4:rocmemory.cpp            :941 : 457894138833 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd100b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894138841 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b300
+  GG: index, code_handle, args, grid_size_x, completion_signal: 2, 7febcb86a000, 0x7febcb86c0c0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c0c0
+  GG:(pkt) completion signal:                                        7fec16a83380
+:4:rocvirtual.cpp           :524 : 1927769053590 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83380
+:3:rocvirtual.hpp           :62  : 1927769053592 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83380) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769055934 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febd20d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769055943 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83300
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8c8e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe789800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8c8e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe789800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 3, 7fbd09886000, 0x7fbd09888120, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888120
-  GG(pkt): completion signal:                                        7fbd54a7b300
-:4:rocvirtual.cpp           :526 : 457894138862 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b300
-:3:rocvirtual.hpp           :62  : 457894138864 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b300) for -1 ns
-:4:rocmemory.cpp            :941 : 457894141183 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd120b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894141191 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b280
+  GG: index, code_handle, args, grid_size_x, completion_signal: 3, 7febcb86a000, 0x7febcb86c120, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c120
+  GG:(pkt) completion signal:                                        7fec16a83300
+:4:rocvirtual.cpp           :524 : 1927769055969 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83300
+:3:rocvirtual.hpp           :62  : 1927769055971 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83300) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769058274 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febd40d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769058281 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83280
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8cae00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe78b800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8cae00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe78b800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 4, 7fbd09886000, 0x7fbd09888180, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888180
-  GG(pkt): completion signal:                                        7fbd54a7b280
-:4:rocvirtual.cpp           :526 : 457894141212 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b280
-:3:rocvirtual.hpp           :62  : 457894141214 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b280) for -1 ns
-:4:rocmemory.cpp            :941 : 457894143486 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd140b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894143493 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b200
+  GG: index, code_handle, args, grid_size_x, completion_signal: 4, 7febcb86a000, 0x7febcb86c180, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c180
+  GG:(pkt) completion signal:                                        7fec16a83280
+:4:rocvirtual.cpp           :524 : 1927769058301 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83280
+:3:rocvirtual.hpp           :62  : 1927769058303 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83280) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769060596 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febd60d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769060603 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83200
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8cce00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe78d800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8cce00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe78d800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 5, 7fbd09886000, 0x7fbd098881e0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098881e0
-  GG(pkt): completion signal:                                        7fbd54a7b200
-:4:rocvirtual.cpp           :526 : 457894143514 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b200
-:3:rocvirtual.hpp           :62  : 457894143516 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b200) for -1 ns
-:4:rocmemory.cpp            :941 : 457894145850 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd160b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894145858 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b180
+  GG: index, code_handle, args, grid_size_x, completion_signal: 5, 7febcb86a000, 0x7febcb86c1e0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c1e0
+  GG:(pkt) completion signal:                                        7fec16a83200
+:4:rocvirtual.cpp           :524 : 1927769060622 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83200
+:3:rocvirtual.hpp           :62  : 1927769060624 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83200) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769063028 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febd80d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769063037 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83180
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8cee00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe78f800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8cee00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe78f800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 6, 7fbd09886000, 0x7fbd09888240, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888240
-  GG(pkt): completion signal:                                        7fbd54a7b180
-:4:rocvirtual.cpp           :526 : 457894145879 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b180
-:3:rocvirtual.hpp           :62  : 457894145881 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b180) for -1 ns
-:4:rocmemory.cpp            :941 : 457894148220 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd180b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894148228 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b100
+  GG: index, code_handle, args, grid_size_x, completion_signal: 6, 7febcb86a000, 0x7febcb86c240, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c240
+  GG:(pkt) completion signal:                                        7fec16a83180
+:4:rocvirtual.cpp           :524 : 1927769063057 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83180
+:3:rocvirtual.hpp           :62  : 1927769063060 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83180) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769065367 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febda0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769065374 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83100
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8d0e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe791800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8d0e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe791800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 7, 7fbd09886000, 0x7fbd098882a0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098882a0
-  GG(pkt): completion signal:                                        7fbd54a7b100
-:4:rocvirtual.cpp           :526 : 457894148249 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b100
-:3:rocvirtual.hpp           :62  : 457894148250 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b100) for -1 ns
-:4:rocmemory.cpp            :941 : 457894150553 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd1a0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894150560 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b080
+  GG: index, code_handle, args, grid_size_x, completion_signal: 7, 7febcb86a000, 0x7febcb86c2a0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c2a0
+  GG:(pkt) completion signal:                                        7fec16a83100
+:4:rocvirtual.cpp           :524 : 1927769065393 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83100
+:3:rocvirtual.hpp           :62  : 1927769065395 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83100) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769067714 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febdc0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769067724 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83080
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8d2e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe793800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8d2e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe793800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 8, 7fbd09886000, 0x7fbd09888300, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888300
-  GG(pkt): completion signal:                                        7fbd54a7b080
-:4:rocvirtual.cpp           :526 : 457894150587 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b080
-:3:rocvirtual.hpp           :62  : 457894150589 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b080) for -1 ns
-:4:rocmemory.cpp            :941 : 457894153084 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd1c0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894153093 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b000
+  GG: index, code_handle, args, grid_size_x, completion_signal: 8, 7febcb86a000, 0x7febcb86c300, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c300
+  GG:(pkt) completion signal:                                        7fec16a83080
+:4:rocvirtual.cpp           :524 : 1927769067746 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83080
+:3:rocvirtual.hpp           :62  : 1927769067748 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83080) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769069850 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febde0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769069859 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83000
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8d4e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe795800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8d4e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe795800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 9, 7fbd09886000, 0x7fbd09888360, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888360
-  GG(pkt): completion signal:                                        7fbd54a7b000
-:4:rocvirtual.cpp           :526 : 457894153117 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b000
-:3:rocvirtual.hpp           :62  : 457894153119 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b000) for -1 ns
-:4:rocmemory.cpp            :941 : 457894155585 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd1e0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894155595 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897f80
+  GG: index, code_handle, args, grid_size_x, completion_signal: 9, 7febcb86a000, 0x7febcb86c360, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c360
+  GG:(pkt) completion signal:                                        7fec16a83000
+:4:rocvirtual.cpp           :524 : 1927769069883 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83000
+:3:rocvirtual.hpp           :62  : 1927769069885 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83000) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769072214 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febe00d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769072222 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bf80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8d6e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe797800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8d6e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe797800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: a, 7fbd09886000, 0x7fbd098883c0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098883c0
-  GG(pkt): completion signal:                                        7fbd09897f80
-:4:rocvirtual.cpp           :526 : 457894155621 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897f80
-:3:rocvirtual.hpp           :62  : 457894155623 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897f80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894158132 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd200b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894158146 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897f00
+  GG: index, code_handle, args, grid_size_x, completion_signal: a, 7febcb86a000, 0x7febcb86c3c0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c3c0
+  GG:(pkt) completion signal:                                        7febcb87bf80
+:4:rocvirtual.cpp           :524 : 1927769072242 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bf80
+:3:rocvirtual.hpp           :62  : 1927769072245 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bf80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769074418 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febe20d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769074427 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bf00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8d8e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe799800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8d8e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe799800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: b, 7fbd09886000, 0x7fbd09888420, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888420
-  GG(pkt): completion signal:                                        7fbd09897f00
-:4:rocvirtual.cpp           :526 : 457894158167 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897f00
-:3:rocvirtual.hpp           :62  : 457894158169 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897f00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894160673 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd220b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894160682 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897e80
+  GG: index, code_handle, args, grid_size_x, completion_signal: b, 7febcb86a000, 0x7febcb86c420, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c420
+  GG:(pkt) completion signal:                                        7febcb87bf00
+:4:rocvirtual.cpp           :524 : 1927769074447 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bf00
+:3:rocvirtual.hpp           :62  : 1927769074451 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bf00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769076693 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febe40d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769076700 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87be80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8dae00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe79b800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8dae00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe79b800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: c, 7fbd09886000, 0x7fbd09888480, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888480
-  GG(pkt): completion signal:                                        7fbd09897e80
-:4:rocvirtual.cpp           :526 : 457894160708 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897e80
-:3:rocvirtual.hpp           :62  : 457894160710 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897e80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894163183 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd240b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894163192 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897e00
+  GG: index, code_handle, args, grid_size_x, completion_signal: c, 7febcb86a000, 0x7febcb86c480, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c480
+  GG:(pkt) completion signal:                                        7febcb87be80
+:4:rocvirtual.cpp           :524 : 1927769076720 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87be80
+:3:rocvirtual.hpp           :62  : 1927769076722 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87be80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769083662 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febe60d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769083671 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87be00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8dce00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe79d800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8dce00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe79d800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: d, 7fbd09886000, 0x7fbd098884e0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098884e0
-  GG(pkt): completion signal:                                        7fbd09897e00
-:4:rocvirtual.cpp           :526 : 457894163213 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897e00
-:3:rocvirtual.hpp           :62  : 457894163215 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897e00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894165482 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd260b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894165490 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897d80
+  GG: index, code_handle, args, grid_size_x, completion_signal: d, 7febcb86a000, 0x7febcb86c4e0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c4e0
+  GG:(pkt) completion signal:                                        7febcb87be00
+:4:rocvirtual.cpp           :524 : 1927769083691 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87be00
+:3:rocvirtual.hpp           :62  : 1927769083694 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87be00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769085789 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febe80d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769085797 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bd80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8dee00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe79f800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8dee00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe79f800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: e, 7fbd09886000, 0x7fbd09888540, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888540
-  GG(pkt): completion signal:                                        7fbd09897d80
-:4:rocvirtual.cpp           :526 : 457894165512 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897d80
-:3:rocvirtual.hpp           :62  : 457894165514 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897d80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894167876 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd280b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894167883 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897d00
+  GG: index, code_handle, args, grid_size_x, completion_signal: e, 7febcb86a000, 0x7febcb86c540, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c540
+  GG:(pkt) completion signal:                                        7febcb87bd80
+:4:rocvirtual.cpp           :524 : 1927769085818 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bd80
+:3:rocvirtual.hpp           :62  : 1927769085820 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bd80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769087917 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febea0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769087925 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bd00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8e0e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7a1800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8e0e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7a1800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: f, 7fbd09886000, 0x7fbd098885a0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098885a0
-  GG(pkt): completion signal:                                        7fbd09897d00
-:4:rocvirtual.cpp           :526 : 457894167905 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897d00
-:3:rocvirtual.hpp           :62  : 457894167907 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897d00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894170153 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd2a0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894170161 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897c80
+  GG: index, code_handle, args, grid_size_x, completion_signal: f, 7febcb86a000, 0x7febcb86c5a0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c5a0
+  GG:(pkt) completion signal:                                        7febcb87bd00
+:4:rocvirtual.cpp           :524 : 1927769087951 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bd00
+:3:rocvirtual.hpp           :62  : 1927769087953 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bd00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769090207 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febec0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769090214 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bc80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8e2e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7a3800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8e2e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7a3800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 10, 7fbd09886000, 0x7fbd09888600, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888600
-  GG(pkt): completion signal:                                        7fbd09897c80
-:4:rocvirtual.cpp           :526 : 457894170182 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897c80
-:3:rocvirtual.hpp           :62  : 457894170184 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897c80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894172433 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd2c0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894172442 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897c00
+  GG: index, code_handle, args, grid_size_x, completion_signal: 10, 7febcb86a000, 0x7febcb86c600, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c600
+  GG:(pkt) completion signal:                                        7febcb87bc80
+:4:rocvirtual.cpp           :524 : 1927769090235 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bc80
+:3:rocvirtual.hpp           :62  : 1927769090236 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bc80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769092420 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febee0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769092428 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bc00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8e4e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7a5800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8e4e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7a5800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 11, 7fbd09886000, 0x7fbd09888660, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888660
-  GG(pkt): completion signal:                                        7fbd09897c00
-:4:rocvirtual.cpp           :526 : 457894172463 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897c00
-:3:rocvirtual.hpp           :62  : 457894172465 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897c00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894174776 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd2e0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894174785 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897b80
+  GG: index, code_handle, args, grid_size_x, completion_signal: 11, 7febcb86a000, 0x7febcb86c660, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c660
+  GG:(pkt) completion signal:                                        7febcb87bc00
+:4:rocvirtual.cpp           :524 : 1927769092449 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bc00
+:3:rocvirtual.hpp           :62  : 1927769092451 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bc00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769094787 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febf00d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769094794 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bb80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8e6e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7a7800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8e6e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7a7800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 12, 7fbd09886000, 0x7fbd098886c0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098886c0
-  GG(pkt): completion signal:                                        7fbd09897b80
-:4:rocvirtual.cpp           :526 : 457894174806 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897b80
-:3:rocvirtual.hpp           :62  : 457894174808 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897b80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894177369 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd300b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894177377 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897b00
+  GG: index, code_handle, args, grid_size_x, completion_signal: 12, 7febcb86a000, 0x7febcb86c6c0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c6c0
+  GG:(pkt) completion signal:                                        7febcb87bb80
+:4:rocvirtual.cpp           :524 : 1927769094816 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bb80
+:3:rocvirtual.hpp           :62  : 1927769094819 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bb80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769097159 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febf20d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769097168 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87bb00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8e8e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7a9800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8e8e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7a9800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 13, 7fbd09886000, 0x7fbd09888720, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888720
-  GG(pkt): completion signal:                                        7fbd09897b00
-:4:rocvirtual.cpp           :526 : 457894177399 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897b00
-:3:rocvirtual.hpp           :62  : 457894177401 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897b00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894179756 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd320b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894179765 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897a80
+  GG: index, code_handle, args, grid_size_x, completion_signal: 13, 7febcb86a000, 0x7febcb86c720, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c720
+  GG:(pkt) completion signal:                                        7febcb87bb00
+:4:rocvirtual.cpp           :524 : 1927769097190 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87bb00
+:3:rocvirtual.hpp           :62  : 1927769097192 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87bb00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769099503 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febf40d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769099511 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87ba80
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8eae00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7ab800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8eae00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7ab800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 14, 7fbd09886000, 0x7fbd09888780, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888780
-  GG(pkt): completion signal:                                        7fbd09897a80
-:4:rocvirtual.cpp           :526 : 457894179790 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897a80
-:3:rocvirtual.hpp           :62  : 457894179792 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897a80) for -1 ns
-:4:rocmemory.cpp            :941 : 457894182200 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd340b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894182208 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897a00
+  GG: index, code_handle, args, grid_size_x, completion_signal: 14, 7febcb86a000, 0x7febcb86c780, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c780
+  GG:(pkt) completion signal:                                        7febcb87ba80
+:4:rocvirtual.cpp           :524 : 1927769099531 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87ba80
+:3:rocvirtual.hpp           :62  : 1927769099534 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87ba80) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769101857 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febf60d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769101865 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87ba00
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8ece00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7ad800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8ece00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7ad800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 15, 7fbd09886000, 0x7fbd098887e0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098887e0
-  GG(pkt): completion signal:                                        7fbd09897a00
-:4:rocvirtual.cpp           :526 : 457894182230 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897a00
-:3:rocvirtual.hpp           :62  : 457894182232 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897a00) for -1 ns
-:4:rocmemory.cpp            :941 : 457894184489 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd360b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894184497 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897980
+  GG: index, code_handle, args, grid_size_x, completion_signal: 15, 7febcb86a000, 0x7febcb86c7e0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c7e0
+  GG:(pkt) completion signal:                                        7febcb87ba00
+:4:rocvirtual.cpp           :524 : 1927769101885 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87ba00
+:3:rocvirtual.hpp           :62  : 1927769101887 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87ba00) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769104269 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febf80d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769104277 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b980
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8eee00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7af800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8eee00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7af800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 16, 7fbd09886000, 0x7fbd09888840, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888840
-  GG(pkt): completion signal:                                        7fbd09897980
-:4:rocvirtual.cpp           :526 : 457894184518 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897980
-:3:rocvirtual.hpp           :62  : 457894184520 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897980) for -1 ns
-:4:rocmemory.cpp            :941 : 457894186867 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd380b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894186875 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897900
+  GG: index, code_handle, args, grid_size_x, completion_signal: 16, 7febcb86a000, 0x7febcb86c840, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c840
+  GG:(pkt) completion signal:                                        7febcb87b980
+:4:rocvirtual.cpp           :524 : 1927769104296 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b980
+:3:rocvirtual.hpp           :62  : 1927769104298 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b980) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769106547 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febfa0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769106555 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b900
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8f0e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7b1800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8f0e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7b1800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 17, 7fbd09886000, 0x7fbd098888a0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098888a0
-  GG(pkt): completion signal:                                        7fbd09897900
-:4:rocvirtual.cpp           :526 : 457894186897 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897900
-:3:rocvirtual.hpp           :62  : 457894186899 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897900) for -1 ns
-:4:rocmemory.cpp            :941 : 457894189165 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd3a0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894189175 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897880
+  GG: index, code_handle, args, grid_size_x, completion_signal: 17, 7febcb86a000, 0x7febcb86c8a0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c8a0
+  GG:(pkt) completion signal:                                        7febcb87b900
+:4:rocvirtual.cpp           :524 : 1927769106576 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b900
+:3:rocvirtual.hpp           :62  : 1927769106578 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b900) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769108831 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febfc0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769108839 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b880
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8f2e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7b3800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8f2e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7b3800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 18, 7fbd09886000, 0x7fbd09888900, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888900
-  GG(pkt): completion signal:                                        7fbd09897880
-:4:rocvirtual.cpp           :526 : 457894189197 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897880
-:3:rocvirtual.hpp           :62  : 457894189199 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897880) for -1 ns
-:4:rocmemory.cpp            :941 : 457894191434 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd3c0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894191441 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897800
+  GG: index, code_handle, args, grid_size_x, completion_signal: 18, 7febcb86a000, 0x7febcb86c900, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c900
+  GG:(pkt) completion signal:                                        7febcb87b880
+:4:rocvirtual.cpp           :524 : 1927769108865 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b880
+:3:rocvirtual.hpp           :62  : 1927769108867 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b880) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769111056 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7febfe0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769111064 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b800
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8f4e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7b5800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8f4e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7b5800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 19, 7fbd09886000, 0x7fbd09888960, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888960
-  GG(pkt): completion signal:                                        7fbd09897800
-:4:rocvirtual.cpp           :526 : 457894191462 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897800
-:3:rocvirtual.hpp           :62  : 457894191464 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897800) for -1 ns
-:4:rocmemory.cpp            :941 : 457894193767 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd3e0b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894193776 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897780
+  GG: index, code_handle, args, grid_size_x, completion_signal: 19, 7febcb86a000, 0x7febcb86c960, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c960
+  GG:(pkt) completion signal:                                        7febcb87b800
+:4:rocvirtual.cpp           :524 : 1927769111083 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b800
+:3:rocvirtual.hpp           :62  : 1927769111085 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b800) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769117539 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec000d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769117548 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b780
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8f6e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7b7800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8f6e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7b7800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1a, 7fbd09886000, 0x7fbd098889c0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd098889c0
-  GG(pkt): completion signal:                                        7fbd09897780
-:4:rocvirtual.cpp           :526 : 457894193800 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897780
-:3:rocvirtual.hpp           :62  : 457894193802 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897780) for -1 ns
-:4:rocmemory.cpp            :941 : 457894196061 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd400b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894196068 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897700
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1a, 7febcb86a000, 0x7febcb86c9c0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86c9c0
+  GG:(pkt) completion signal:                                        7febcb87b780
+:4:rocvirtual.cpp           :524 : 1927769117568 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b780
+:3:rocvirtual.hpp           :62  : 1927769117571 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b780) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769119881 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec020d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769119889 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b700
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8f8e00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7b9800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8f8e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7b9800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1b, 7fbd09886000, 0x7fbd09888a20, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888a20
-  GG(pkt): completion signal:                                        7fbd09897700
-:4:rocvirtual.cpp           :526 : 457894196089 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897700
-:3:rocvirtual.hpp           :62  : 457894196091 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897700) for -1 ns
-:4:rocmemory.cpp            :941 : 457894198506 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd420b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894198514 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897680
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1b, 7febcb86a000, 0x7febcb86ca20, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86ca20
+  GG:(pkt) completion signal:                                        7febcb87b700
+:4:rocvirtual.cpp           :524 : 1927769119910 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b700
+:3:rocvirtual.hpp           :62  : 1927769119912 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b700) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769122286 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec040d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769122295 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b680
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8fae00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7bb800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8fae00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7bb800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1c, 7fbd09886000, 0x7fbd09888a80, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888a80
-  GG(pkt): completion signal:                                        7fbd09897680
-:4:rocvirtual.cpp           :526 : 457894198536 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897680
-:3:rocvirtual.hpp           :62  : 457894198538 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897680) for -1 ns
-:4:rocmemory.cpp            :941 : 457894200990 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd440b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894200998 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897600
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1c, 7febcb86a000, 0x7febcb86ca80, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86ca80
+  GG:(pkt) completion signal:                                        7febcb87b680
+:4:rocvirtual.cpp           :524 : 1927769122314 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b680
+:3:rocvirtual.hpp           :62  : 1927769122316 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b680) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769124566 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec060d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769124573 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b600
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8fce00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7bd800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8fce00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7bd800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1d, 7fbd09886000, 0x7fbd09888ae0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888ae0
-  GG(pkt): completion signal:                                        7fbd09897600
-:4:rocvirtual.cpp           :526 : 457894201019 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897600
-:3:rocvirtual.hpp           :62  : 457894201021 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897600) for -1 ns
-:4:rocmemory.cpp            :941 : 457894203432 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd460b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894203439 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd09897580
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1d, 7febcb86a000, 0x7febcb86cae0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86cae0
+  GG:(pkt) completion signal:                                        7febcb87b600
+:4:rocvirtual.cpp           :524 : 1927769124592 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b600
+:3:rocvirtual.hpp           :62  : 1927769124594 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b600) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769127014 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec080d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769127027 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7febcb87b580
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb8fee00ff0, 0x7fb8b7c00000size: 2000000
+  GG: dst, src: 0x7fe7bf800ff0, 0x7fe778600000size: 2000000
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb8fee00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7bf800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1fff0
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1e, 7fbd09886000, 0x7fbd09888b40, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888b40
-  GG(pkt): completion signal:                                        7fbd09897580
-:4:rocvirtual.cpp           :526 : 457894203460 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd09897580
-:3:rocvirtual.hpp           :62  : 457894203462 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd09897580) for -1 ns
-:4:rocmemory.cpp            :941 : 457894205923 us: 56617: [tid:0x7fbd54bf8080] Locking to pool 0x9a5b80, size 0x2000000, HostPtr = 0x7fbd480b0000, DevPtr = 0x7fb8b7c00000
-:4:rocblit.cpp              :668 : 457894205931 us: 56617: [tid:0x7fbd54bf8080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fbd54a7b500
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1e, 7febcb86a000, 0x7febcb86cb40, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86cb40
+  GG:(pkt) completion signal:                                        7febcb87b580
+:4:rocvirtual.cpp           :524 : 1927769127058 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7febcb87b580
+:3:rocvirtual.hpp           :62  : 1927769127060 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7febcb87b580) for -1 ns
+:4:rocmemory.cpp            :941 : 1927769129568 us: 150061: [tid:0x7fec16c00080] Locking to pool 0xb99b80, size 0x2000000, HostPtr = 0x7fec0a0d6000, DevPtr = 0x7fe778600000
+:4:rocblit.cpp              :668 : 1927769129579 us: 150061: [tid:0x7fec16c00080] HSA Asycn Copy wait_event=0x0, completion_signal=0x7fec16a83500
 GG; hsa_amd_memory_async_copy: entered...
 GG: Runtime::CopyMemory.(2)
-GG: DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::DmaCopy(dst, dst_agent, src, src_agent, size, dep_signals, out_signal)..entered.
+GG: GpuAgent::GetPcieBlit entered...
+  GG: GpuAgent::GetPcieBlit: blits_[BlitHostDev] or blits_[BlitDevToHost]
+    GG: lazy_ptr::operator->() entered...
+    GG: : lazy_ptr::print_state: obj.get():  0xc77680, target avail?: 0
+    GG: lazy_ptr::created(): returning bool: 
 GG: BlitKernel::SubmitLinearCopyCommand(dst, src, size, dep_signals, out_signal): entered.
-  GG: dst, src: 0x7fb900e00ff0, 0x7fb8b7c00000size: 1fff010
+  GG: dst, src: 0x7fe7c1800ff0, 0x7fe778600000size: 1fff010
   GG: num_barrier_packet: 0
   GG: total_num_packet: 1
-  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xa5c788
-  GG: src_start/dst_start/phase1_size: 7fb8b7c00000/7fb900e00ff0/10
+  GG: num_workitems(aligned): 7800, num_cus_:78 kernel_code: 0xca6688
+  GG: src_start/dst_start/phase1_size: 7fe778600000/7fe7c1800ff0/10
   GG: phase2_block/phase2_size: 78000/1fe0000
   GG: phase3_size: 1f000
 GG: BlitKernel::PopulateQueue: entered (2)
-  GG: index, code_handle, args, grid_size_x, completion_signal: 1f, 7fbd09886000, 0x7fbd09888ba0, 7800, ??? 
-  GG(pkt): ---------------------.
-  GG(pkt): dumpAqlPacket (dispatch) entered.
-  GG(pkt): HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_INVALID
-  GG(pkt): HSA_PACKET_HEADER_BARRIER (1-bit):                  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  0
-  GG(pkt): workgroup size (x,y,z):                                   40, 1, 1
-  GG(pkt): grid size (x,y,z):                                        7800, 1, 1
-  GG(pkt): kernel_object:                                            7fbd09886000
-  GG(pkt): kernelarg_address:                                        0x7fbd09888ba0
-  GG(pkt): completion signal:                                        7fbd54a7b500
-:4:rocvirtual.cpp           :526 : 457894205951 us: 56617: [tid:0x7fbd54bf8080] Host wait on completion_signal=0x7fbd54a7b500
-:3:rocvirtual.hpp           :62  : 457894205953 us: 56617: [tid:0x7fbd54bf8080] Host active wait for Signal = (0x7fbd54a7b500) for -1 ns
-:4:command.cpp              :280 : 457894207903 us: 56617: [tid:0x7fbd54bf8080] queue marker to command queue: 0xa55400
-:4:command.cpp              :339 : 457894207908 us: 56617: [tid:0x7fbd54bf8080] command is enqueued: 0xadaed0
-:4:command.cpp              :170 : 457894207912 us: 56617: [tid:0x7fbd54bf8080] Command 0xa79b40 complete
-:4:command.cpp              :168 : 457894207914 us: 56617: [tid:0x7fbd54bf8080] Command 0xadaed0 complete (Wall: 457894207913, CPU: 0, GPU: 0 us)
-:4:command.cpp              :245 : 457894207916 us: 56617: [tid:0x7fbd54bf8080] waiting for event 0xa79b40 to complete, current status 0
-:4:command.cpp              :259 : 457894207918 us: 56617: [tid:0x7fbd54bf8080] event 0xa79b40 wait completed
-:3:hip_memory.cpp           :557 : 457894207923 us: 56617: [tid:0x7fbd54bf8080] hipMemcpy: Returned hipSuccess : : duration: 248440 us
+  GG: index, code_handle, args, grid_size_x, completion_signal: 1f, 7febcb86a000, 0x7febcb86cba0, 7800, ??? 
+  GG:(pkt) ---------------------.
+  GG:(pkt) dumpAqlPacket (dispatch) entered.
+  GG:(pkt) HSA_PACKET_HEADER_TYPE:                             HSA_PACKET_TYPE_KERNEL_DISPATCH
+  GG:(pkt) HSA_PACKET_HEADER_BARRIER (1-bit):                  0
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  400
+  GG:(pkt) HSA_PACKET_HEADER_(SC)ACQUIRE_FENCE_SCOPE (2-bit):  1400
+  GG:(pkt) workgroup size (x,y,z):                                   40, 1, 1
+  GG:(pkt) grid size (x,y,z):                                        7800, 1, 1
+  GG:(pkt) kernel_object:                                            7febcb86a000
+  GG:(pkt) kernelarg_address:                                        0x7febcb86cba0
+  GG:(pkt) completion signal:                                        7fec16a83500
+:4:rocvirtual.cpp           :524 : 1927769129604 us: 150061: [tid:0x7fec16c00080] Host wait on completion_signal=0x7fec16a83500
+:3:rocvirtual.hpp           :62  : 1927769129606 us: 150061: [tid:0x7fec16c00080] Host active wait for Signal = (0x7fec16a83500) for -1 ns
+:4:command.cpp              :280 : 1927769131245 us: 150061: [tid:0x7fec16c00080] queue marker to command queue: 0xc49400
+:4:command.cpp              :339 : 1927769131251 us: 150061: [tid:0x7fec16c00080] command is enqueued: 0xce3ab0
+:4:command.cpp              :170 : 1927769131254 us: 150061: [tid:0x7fec16c00080] Command 0xd4a870 complete
+:4:command.cpp              :168 : 1927769131257 us: 150061: [tid:0x7fec16c00080] Command 0xce3ab0 complete (Wall: 1927769131256, CPU: 0, GPU: 0 us)
+:4:command.cpp              :245 : 1927769131259 us: 150061: [tid:0x7fec16c00080] waiting for event 0xd4a870 to complete, current status 0
+:4:command.cpp              :259 : 1927769131261 us: 150061: [tid:0x7fec16c00080] event 0xd4a870 wait completed
+:3:hip_memory.cpp           :556 : 1927769131265 us: 150061: [tid:0x7fec16c00080] hipMemcpy: Returned hipSuccess : : duration: 256709 us
 hipMemcpy.end
-It took me 0.248507 seconds.
-:3:hip_memory.cpp           :537 : 457894207963 us: 56617: [tid:0x7fbd54bf8080] [32mhipFree ( 0x7fb8c2e00000 )[0m
-:3:rocdevice.cpp            :2636: 457894207970 us: 56617: [tid:0x7fbd54bf8080] No HW event
-:4:commandqueue.cpp         :128 : 457894207973 us: 56617: [tid:0x7fbd54bf8080] HW Event not ready, awaiting completion instead
-:4:commandqueue.cpp         :140 : 457894207975 us: 56617: [tid:0x7fbd54bf8080] All commands finished
-:4:rocdevice.cpp            :2070: 457894208061 us: 56617: [tid:0x7fbd54bf8080] Free hsa memory 0x7fb8c2e00000
-:3:rocdevice.cpp            :2093: 457894208064 us: 56617: [tid:0x7fbd54bf8080] device=0xa486b0, freeMem_ = 0xff000000
-:3:hip_memory.cpp           :539 : 457894208067 us: 56617: [tid:0x7fbd54bf8080] hipFree: Returned hipSuccess : 
+It took me 0.256771 seconds.
+:3:hip_memory.cpp           :536 : 1927769131289 us: 150061: [tid:0x7fec16c00080] [32mhipFree ( 0x7fe783800000 )[0m
+:3:rocdevice.cpp            :2636: 1927769131295 us: 150061: [tid:0x7fec16c00080] No HW event
+:4:commandqueue.cpp         :128 : 1927769131297 us: 150061: [tid:0x7fec16c00080] HW Event not ready, awaiting completion instead
+:4:commandqueue.cpp         :140 : 1927769131299 us: 150061: [tid:0x7fec16c00080] All commands finished
+:4:rocdevice.cpp            :2070: 1927769131381 us: 150061: [tid:0x7fec16c00080] Free hsa memory 0x7fe783800000
+:3:rocdevice.cpp            :2093: 1927769131386 us: 150061: [tid:0x7fec16c00080] device=0xc3c6b0, freeMem_ = 0xff000000
+:3:hip_memory.cpp           :538 : 1927769131388 us: 150061: [tid:0x7fec16c00080] hipFree: Returned hipSuccess : 
