@@ -3,13 +3,14 @@ FILENAMES=(\
 1-hipMalloc\ 
 2-hipMemcpy\ 
 4-hipKernel\ 
+10-stream-2p\ 
 )
 
 TEST_MODE=0
-QUICK_MODE=1
+QUICK_MODE=0
 if [[ $QUICK_MODE -eq 1 ]] ; then
 FILENAMES=(\
-2-hipMemcpy\ 
+4-hipKernel\ 
 )
 fi
 

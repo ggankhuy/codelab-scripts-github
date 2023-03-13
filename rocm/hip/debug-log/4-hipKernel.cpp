@@ -6,6 +6,8 @@
 #include <iostream>
 #include <iomanip>
 
+#define HIPSETDEVICE 0
+
 using namespace std;
 
 __global__ void k1() {
@@ -16,12 +18,22 @@ __global__ void k1() {
     }
 }
 
+
+#if HIPSETDEVICE == 1
+__global__ void k2() {
+    size_t start = clock64();
+    size_t elapsed = 0;
+    while (elapsed < 100000000) {
+        elapsed = clock64() - start;
+    }
+}
+#endif
+
 #define N 64
 #define N 1048576
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 #define timer 0
-#define HIPSETDEVICE 0
 int main (void) {
     using namespace std::chrono;
     int *a, *b, *c;
@@ -65,14 +77,17 @@ int main (void) {
         cout << "Bypassing hipMemcpy..." << endl;
     }
 
+    #if HIPSETDEVICE == 1
     hipSetDevice(0);
+    #endif
+
 	k1<<<1, 256, 0, 0>>>();
 
     #if HIPSETDEVICE == 1
     hipSetDevice(1);
 	k1<<<1, 256, 0, 0>>>();
     hipSetDevice(2);
-	k1<<<1, 256, 0, 0>>>();
+	k1<<<2, 256, 0, 0>>>();
     #endif
 
     if (env_timer_str != "1") {
