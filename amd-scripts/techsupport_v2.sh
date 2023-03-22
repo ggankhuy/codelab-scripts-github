@@ -65,9 +65,9 @@ mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST
 
 if [[ $p1 == "--help" ]] ; then
 	clear
-	echo "usage: "
-	echo "$0 - get host information without specifying VM"
-	echo "$0 <vm_index> get host and guest information. Use virsh to get vm index."
+	echo "Usage: "
+	echo "$0 - get host information for libgv or amdgpu logs"
+	echo "$0 <vm_Id> get both host and guest information. Use virsh list to list the VMs and get the corresponding ID."
 	exit 0
 fi
 
