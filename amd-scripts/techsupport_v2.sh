@@ -12,6 +12,8 @@
 #   - if in instance, both amdgpu and libgv(gim) installed, it will gather only libgv information and ignore amdgpu.
 #   - To gather guest log, guest VM must be running and amdgpu on guest must be loaded.
 #   - libgv and gim is used interchangeably, meaning kvm based virtualization drivers.
+#   - for guest VM, it is assumed rocm is instsalled.
+#   - for virtualization host/guest systems, it is assumed host is running gim/libgv and guest is running rocm.
 
 # log file structure:
 # ts/
@@ -28,8 +30,8 @@
 
 p1=$1
 DEBUG=1
-SINGLE_BAR='---------------------------------------'
-DOUBLE_BAR='======================================='
+SINGLE_BAR=`for i in {1..50}; do echo -n '-'; done`
+DOUBLE_BAR=`for i in {1..50}; do echo -n '='; done`
 DATE=`date +%Y%m%d-%H-%M-%S`
 CONFIG_PATH_PLAT_INFO=./ts/$DATE
 CONFIG_FILE_TAR=./ts/$DATE/$DATE-techsupport.tar
@@ -59,20 +61,19 @@ CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kern
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST
 
-function host_guest_1()  {
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST GCC VER: " `gcc --version | grep gcc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST G++ VER: " `g++ --version | grep g++` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST C++ VER: " `c++ --version | grep c++` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST CC VER: " `cc --version | grep cc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST HCC VER: " `hcc --version | grep hcc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "CLANG VER: " `clang --version | grep clang` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VIRT. SW VER: " `virsh --version` | tee -a $CONFIG_FILE_PLAT_INFO
-	
-}
+if [[ $p1 == "--help" ]] ; then
+	clear
+	echo "usage: "
+	echo "$0 - get host information without specifying VM"
+	echo "$0 <vm_index> get host and guest information. Use virsh to get vm index."
+	exit 0
+fi
+
+apt install virt-what sshpass wcstools -y 
+if [[ $?  -ne 0 ]] ; then
+	echo "ERROR: Failed to install packages..."
+	exit 1
+fi
 
 #   Start gathering logs.
 #   If p1 is not specified, gather only host system.
@@ -93,15 +94,15 @@ function ts_libgv_compat_full_logs() {
 }
 
 function ts_helper_full_logs() {
-    p1=$1
+    local p1=$1
     if [[ $DEBUG ]] ; then
         echo "ts_helper_summary_logs entered..."
         echo "p1: $p1"
     fi
 
     dmesg | tee $CONFIG_FILE_DMESG_HOST
-    cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
-	cat /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
+    #cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
+	#cat /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
     dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
 
     if [[ $p1 == "amdgpu" ]] ; then
@@ -119,12 +120,14 @@ function ts_helper_full_logs() {
     fi
 }
 function ts_helper_summary_logs() {
-    p1=$1
+    local p1=$1
     if [[ $DEBUG ]] ; then
         echo "ts_helper_summary_logs entered..."
         echo "p1: $p1"
     fi
-
+    echo $DOUBLE_BAR|  tee -a $COFNIG_FILE_PLAT_INFO
+    echo "LIBGV HOST SUMMARY:"
+    echo $DOUBLE_BAR|  tee -a $COFNIG_FILE_PLAT_INFO
 	echo    "HOSTNAME:  " `hostname` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 
@@ -190,7 +193,37 @@ function ts_libgv_compat_summary_logs() {
 }
 
 function ts_guest() {
-    echo "ts_guest..."
+    vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
+    if [[ $DEBUG ]] ; then
+        echo "ts_guest entered, p1: $p1"
+        echo "guest IP: $vmIp"
+    fi
+	if [[ -z $vmIp ]] ; then
+        echo "Warning: Unable to determine guest O/S IP, will not gather guest logs."
+		echo "Use virsh to determine running VM-s indices."
+    	return 1
+    fi
+
+	#echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'` | tee -a $CONFIG_FILE_PLAT_INFO
+
+    echo $DOUBLE_BAR|  tee -a $COFNIG_FILE_PLAT_INFO
+    echo "LIBGV GUEST SUMMARY: $vmIP"
+    echo $DOUBLE_BAR|  tee -a $COFNIG_FILE_PLAT_INFO
+	echo "VM OS:"`sshpass -p amd1234 ssh root@$vmIp 'cat /etc/os-release | grep PRETTY_NAME'`| tee -a $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "GPU.rocm-smi:"`sshpass -p amd1234 ssh root@$vmIp 'rocm-smi --showall | grep series:'`| tee -a $CONFIG_FILE_PLAT_INFO
+	echo "GPU.rocminfo:"`sshpass -p amd1234 ssh root@$vmIp 'rocminfo | grep gfx'`| tee -a $CONFIG_FILE_PLAT_INFO
+	echo "GPU.lspci:"`sshpass -p amd1234 ssh root@$vmIp 'lspci | grep Disp'`| tee -a $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "GPUDRIVER:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep version'`| tee -a $CONFIG_FILE_PLAT_INFO
+
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "GPUDRIVER(DKMS):"`sshpass -p amd1234 ssh root@$vmIp 'dkms status | grep amdgpu'`| tee -a $CONFIG_FILE_PLAT_INFO
+
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "ROCM VERSION:"`sshpass -p amd1234 ssh root@$vmIp 'cat /opt/rocm/.info/version'`| tee -a $CONFIG_FILE_PLAT_INFO
 }
 
 AMDGPU_PRESENCE=`dkms status | grep amdgpu`
@@ -206,8 +239,8 @@ if [[ $LIBGV_PRESENCE ]] ; then
     ts_libgv_compat_full_logs
     if [[ $1 ]] ; then
         echo "Gathering guest log: "
-        ts_guest
         ts_libgv_compat_summary_logs
+        ts_guest
     fi
 elif [[ $AMDGPU_PRESENCE ]] ; then 
     echo "Gathering amdgpu compatible logs..."
@@ -224,14 +257,29 @@ tree $CONFIG_PATH_PLAT_INFO
 
 exit 0
 
+function host_guest_1()  {
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST GCC VER: " `gcc --version | grep gcc` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST G++ VER: " `g++ --version | grep g++` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST C++ VER: " `c++ --version | grep c++` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST CC VER: " `cc --version | grep cc` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "HOST HCC VER: " `hcc --version | grep hcc` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "CLANG VER: " `clang --version | grep clang` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "VIRT. SW VER: " `virsh --version` | tee -a $CONFIG_FILE_PLAT_INFO
+	
+}
+
 function host_guest_2() {
 
     # if on host. 
 
 	if [[ -z `virt-what` ]] ; then
 		dmesg | tee $CONFIG_FILE_DMESG_HOST
-		cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
-		cat  /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
+		#cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
+		#cat  /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
         dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
         modinfo amdgpu | tee $CONFIG_FILE_MODINFO_AMDGPU_HOST
         for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_AMDGPU_HOST 
@@ -243,21 +291,6 @@ function host_guest_2() {
 		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/kern.log' >  $CONFIG_FILE_KERNLOG_GUEST
 	fi
 }
-
-if [[ $p1 == "--help" ]] ; then
-	clear
-	echo "usage: "
-	echo "$0 - get host information without specifying VM"
-	echo "$0 <vm_index> get host and guest information. Use virsh to get vm index."
-	exit 0
-fi
-
-apt install virt-what sshpass wcstools -y 
-
-if [[ $?  -ne 0 ]] ; then
-	echo "ERROR: Failed to install packages..."
-	exit 1
-fi
 
 function do_inside_vm () {
 	echo do_inside_vm
@@ -362,7 +395,3 @@ else
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 	host_guest_1
 fi
-
-
-
-
