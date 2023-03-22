@@ -11,6 +11,7 @@
 # To gather guest log, guest VM must be running and amdgpu on guest must be loaded.
 
 p1=$1
+DEBUG=1
 SINGLE_BAR='---------------------------------------'
 DOUBLE_BAR='======================================='
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -85,8 +86,17 @@ function ts_amdgpu_compat_full_logs() {
     rocm-smi --showall 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
 }
 
-function ts_amdgpu_compat() {
-    echo    "ts_amdgpu_compat..."
+function ts_libgv_compat_full_logs() {
+    return 0
+}
+
+function ts_helper_summary_logs() {
+    p1=$1
+    if [[ $DEBUG ]] ; then
+        echo "ts_helper_summary_logs entered..."
+        echo "p1: $p1"
+    fi
+
 	echo    "HOSTNAME:  " `hostname` | tee $CONFIG_FILE_PLAT_INFO
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 
@@ -103,36 +113,52 @@ function ts_amdgpu_compat() {
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 	echo "O/S KERNEL: 	"`uname -r` | tee -a $CONFIG_FILE_PLAT_INFO
 
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "GPU:      " | tee -a $CONFIG_FILE_PLAT_INFO
-    if [[ `which rocm-smi` ]] ; then
-        rocm-smi --showall | grep "series:" 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
-    elif [[ `rocminfo` ]] ; then
-        rocminfo | grep gfx 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
-    elif [[ `lspci` ]] ; then
-        lspci | grep Disp 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
+    if [[ $p1 == "amdgpu" ]] ; then
+    	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+	    echo "GPU:      " | tee -a $CONFIG_FILE_PLAT_INFO
+        if [[ `which rocm-smi` ]] ; then
+            rocm-smi --showall | grep "series:" 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
+            elif [[ `rocminfo` ]] ; then
+            rocminfo | grep gfx 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
+        elif [[ `lspci` ]] ; then
+            lspci | grep Disp 2>&1 | tee -a $CONFIG_FILE_PLAT_INFO
+        else
+            echo "Unable to determine GPU, neither rocm-smi, rocminfo or lspci utilities available" | tee -a $CONFIG_FILE_PLAT_INFO
+        fi
+
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+        echo "GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"` | tee -a $CONFIG_FILE_PLAT_INFO
+        modinfo amdgpu | egrep "^filename|^version" | tee -a $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+        echo "GPUDRIVER(DKMS):   "`dkms status | grep amdgpu` | tee -a $CONFIG_FILE_PLAT_INFO
+
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+
+        echo -n "ROCM VERSION: " | tee -a $CONFIG_FILE_PLAT_INFO
+        if [[ -f /opt/rocm/.info/version ]] ; then
+            cat /opt/rocm/.info/version | tee -a $CONFIG_FILE_PLAT_INFO
+        else
+            echo "Unable to determine rocm version. Is ROCm installed?"
+        fi
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+    elif [[ $p1 == "libgv" ]] ; then
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+        echo "GPUDRIVER:   "`lsmod | egrep "^gim|^gim"` | tee -a $CONFIG_FILE_PLAT_INFO
+        modinfo gim | egrep "^filename|^version" | tee -a $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+        echo "GPUDRIVER(DKMS):   "`dkms status | grep gim` | tee -a $CONFIG_FILE_PLAT_INFO
+        echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
+    elif [[ $p1 = "" ]] ; then
+        echo "Warning: p1 is empty, neither amdgpu or libgv specific logs will be gathered."
     else
-        echo "Unable to determine GPU, neither rocm-smi, rocminfo or lspci utilities available" | tee -a $CONFIG_FILE_PLAT_INFO
+        echo "warning: Unknown parameter! "
     fi
-
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-    echo "GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"` | tee -a $CONFIG_FILE_PLAT_INFO
-    modinfo amdgpu | egrep "^filename|^version" | tee -a $CONFIG_FILE_PLAT_INFO
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-    echo "GPUDRIVER(DKMS):   "`dkms status | grep amdgpu` | tee -a $CONFIG_FILE_PLAT_INFO
-
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-
-    echo -n "ROCM VERSION: " | tee -a $CONFIG_FILE_PLAT_INFO
-    if [[ -f /opt/rocm/.info/version ]] ; then
-        cat /opt/rocm/.info/version | tee -a $CONFIG_FILE_PLAT_INFO
-    else
-        echo "Unable to determine rocm version. Is ROCm installed?"
-    fi
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 }
-function ts_libgv_compat() {
-    echo "ts_libgv_compat..."
+function ts_amdgpu_compat_summary_logs() {
+    ts_helper_summary_logs amdgpu
+}
+function ts_libgv_compat_summary_logs() {
+    ts_helper_summary_logs libgv
 }
 
 function ts_guest() {
@@ -148,14 +174,16 @@ echo "LIBGV_PRESENCE: $LIBGV_PRESENCE"
 
 if [[ $LIBGV_PRESENCE ]] ; then
     echo "Gathering libgv compatible logs..."
+    ts_libgv_compat_summary_logs
+    ts_libgv_compat_full_logs
     if [[ $1 ]] ; then
         echo "Gathering guest log: "
         ts_guest
-        ts_libgv_compat
+        ts_libgv_compat_summary_logs
     fi
 elif [[ $AMDGPU_PRESENCE ]] ; then 
     echo "Gathering amdgpu compatible logs..."
-    ts_amdgpu_compat
+    ts_amdgpu_compat_summary_logs
     ts_amdgpu_compat_full_logs
 else
     echo "Unable to find either amdgpu or libgv on host system."
