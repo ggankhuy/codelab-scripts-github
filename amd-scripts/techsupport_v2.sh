@@ -41,10 +41,8 @@ CONFIG_SUBDIR_GUEST=guest
 
 CONFIG_FILE_PARM_AMDGPU_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-amdgpu-host.log
 CONFIG_FILE_PARM_LIBGV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-libgv-host.log
-
 CONFIG_FILE_MODINFO_AMDGPU_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-modinfo-amdgpu-host.log
 CONFIG_FILE_MODINFO_LIBGV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-modinfo-libgv-host.log
-
 CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmesg-host.log
 CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-syslog-host.log
 CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-host.log
@@ -52,11 +50,15 @@ CONFIG_FILE_DMIDECODE_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmid
 CONIG_FILE_ROCMINFO_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-rocminfo-host.log
 CONFIG_FILE_ROCMSMI_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-rocm-smi-host.log
 
+CONFIG_FILE_PARM_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-parm-amdgpu-guest.log
 CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-guest-$p1.log
 CONFIG_FILE_CLINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-clinfo-$p1.log
 CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-modinfo-amdgpu-$p1.log
 CONFIG_FILE_SYSLOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-syslog-guest.log
 CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-guest.log
+CONFIG_FILE_DMIDECODE_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmidecode-guest.log
+CONIG_FILE_ROCMINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-rocminfo-guest.log
+CONFIG_FILE_ROCMSMI_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-rocm-smi-guest.log
 
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST
@@ -192,7 +194,7 @@ function ts_libgv_compat_summary_logs() {
     ts_helper_summary_logs libgv
 }
 
-function ts_guest() {
+function ts_helper_guest_summary_logs() {
     vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
     if [[ $DEBUG ]] ; then
         echo "ts_guest entered, p1: $p1"
@@ -226,6 +228,23 @@ function ts_guest() {
 	echo "ROCM VERSION:"`sshpass -p amd1234 ssh root@$vmIp 'cat /opt/rocm/.info/version'`| tee -a $CONFIG_FILE_PLAT_INFO
 }
 
+function ts_helper_guest_full_logs() {
+	sshpass -p amd1234 ssh root@$vmIp 'dmesg' 2>&1 | tee -a $CONFIG_FILE_DMESG_GUEST
+    #cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_GUEST
+	#cat /var/log/kern.log | tee $CONFIG_FILE_KERN_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'dmidecode' 2>&1 | tee $CONFIG_FILE_DMIDECODE_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' 2>&1 | tee $CONFIG_FILE_MODINFO_AMDGPU_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done' 2>&1 | \
+        tee $CONFIG_FILE_PARM_AMDGPU_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'rocminfo' 2>&1 | tee $CONFIG_FILE_ROCMINFO_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'rocm-smi --showall' 2>&1 | tee $CONFIG_FILE_ROCMSMI_GUEST
+}
+
+function ts_guest() {
+    ts_helper_guest_summary_logs
+    ts_helper_guest_full_logs
+}
+
 AMDGPU_PRESENCE=`dkms status | grep amdgpu`
 LIBGV_PRESENCE=`dkms status | grep gim`
 echo "AMDGPU_PRESENCE: $AMDGPU_PRESENCE"
@@ -253,7 +272,7 @@ fi
 echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 echo LOG FILES: $CONFIG_PATH_PLAT_INFO:
 tar -cvf $CONFIG_FILE_TAR $CONFIG_PATH_PLAT_INFO
-tree $CONFIG_PATH_PLAT_INFO
+tree -fs $CONFIG_PATH_PLAT_INFO
 
 exit 0
 
