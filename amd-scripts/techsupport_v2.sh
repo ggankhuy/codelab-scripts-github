@@ -1,14 +1,30 @@
-
+# Platform info script to gather system information.
 #!/usr/bin/sh
 
-# Platform info script to gather system information.
 
 # Usage:
 # techsupport.sh - to display host information.
 # techsupport.sh <VMno> - to display both host and guest information.
 
-# To run this script, either amdgpu or libgv must be installed and loaded.
-# To gather guest log, guest VM must be running and amdgpu on guest must be loaded.
+# Requirements/assumptions:
+#   - To run this script, either amdgpu or libgv must be installed and loaded and this script will determine 
+#   the presence using dkms status and gather respective logs.
+#   - if in instance, both amdgpu and libgv(gim) installed, it will gather only libgv information and ignore amdgpu.
+#   - To gather guest log, guest VM must be running and amdgpu on guest must be loaded.
+#   - libgv and gim is used interchangeably, meaning kvm based virtualization drivers.
+
+# log file structure:
+# ts/
+#       <DATE>
+#           <DATE>-platform-summary log (containing overall information on host + guest(if applicable)
+# <DATE->-techsupport.tar
+#           host part: cpu, gpu model, amdgpu/libgv version, kernel versO/Sn, host os version.
+#           guest part: cpu, gpu mod(guest) version, kernel version, guest O/S version.
+#       host/
+#           host logs: dmesg, modi(or libgv) info amdgpu, amdgpu(or libgv) parameters, rocminfo, rocm-smi.
+#       guest/
+#           guest logs: dmesg, modinfo amdgpu, amdgpu parameters, rocminfo, rocm-smi.
+
 
 p1=$1
 DEBUG=1
@@ -67,17 +83,6 @@ function host_guest_1()  {
 #       libgv compatible logs (virt) from host.
 #       gather guest logs.
 #
-
-#   logs file structure:
-#   ts/
-#       <DATE>
-#           <DATE>-platform-summary log (containing overall information on host + guest(if applicable)
-#           host part: cpu, gpu model, amdgpu/libgv version, kernel version, host os version.
-#           guest part: cpu, gpu model, amdgpu/libgv) version, kernel version, host os version.
-#       host/
-#           host logs: dmesg, modinfo amdgpu, amdgpu parameters, rocminfo, rocm-smi.
-#       guest/
-#           guest logs: dmesg, modinfo amdgpu, amdgpu parameters, rocminfo, rocm-smi.
 
 function ts_amdgpu_compat_full_logs() {
     ts_helper_full_logs amdgpu
@@ -211,8 +216,6 @@ elif [[ $AMDGPU_PRESENCE ]] ; then
 else
     echo "Unable to find either amdgpu or libgv on host system."
 fi
-
-exit 0
 
 echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 echo LOG FILES: $CONFIG_PATH_PLAT_INFO:
