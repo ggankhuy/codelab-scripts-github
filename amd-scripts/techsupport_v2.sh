@@ -22,7 +22,11 @@ CONFIG_SUBDIR_HOST=host
 CONFIG_SUBDIR_GUEST=guest
 
 CONFIG_FILE_PARM_AMDGPU_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-amdgpu-host.log
+CONFIG_FILE_PARM_LIBGV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-libgv-host.log
+
 CONFIG_FILE_MODINFO_AMDGPU_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-modinfo-amdgpu-host.log
+CONFIG_FILE_MODINFO_LIBGV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-modinfo-libgv-host.log
+
 CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmesg-host.log
 CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-syslog-host.log
 CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-host.log
@@ -76,20 +80,39 @@ function host_guest_1()  {
 #           guest logs: dmesg, modinfo amdgpu, amdgpu parameters, rocminfo, rocm-smi.
 
 function ts_amdgpu_compat_full_logs() {
-	dmesg | tee $CONFIG_FILE_DMESG_HOST
-	cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
-	cat  /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
-    dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
-    modinfo amdgpu | tee $CONFIG_FILE_MODINFO_AMDGPU_HOST
-    for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_AMDGPU_HOST 
-    rocminfo 2>&1 | tee $CONFIG_FILE_ROCMINFO_HOST
-    rocm-smi --showall 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
+    ts_helper_full_logs amdgpu
 }
 
 function ts_libgv_compat_full_logs() {
-    return 0
+    ts_helper_full_logs libgv
 }
 
+function ts_helper_full_logs() {
+    p1=$1
+    if [[ $DEBUG ]] ; then
+        echo "ts_helper_summary_logs entered..."
+        echo "p1: $p1"
+    fi
+
+    dmesg | tee $CONFIG_FILE_DMESG_HOST
+    cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
+	cat /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
+    dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
+
+    if [[ $p1 == "amdgpu" ]] ; then
+        modinfo amdgpu | tee $CONFIG_FILE_MODINFO_AMDGPU_HOST
+        for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_AMDGPU_HOST 
+        rocminfo 2>&1 | tee $CONFIG_FILE_ROCMINFO_HOST
+        rocm-smi --showall 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
+    elif [[ $p1 == "libgv" ]] ; then
+        modinfo gim | tee $CONFIG_FILE_MODINFO_LIBGV_HOST
+        for i in /sys/module/gim/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_LIBGV_HOST 
+    elif [[ $p1 = "" ]] ; then
+        echo "Warning: p1 is empty, neither amdgpu or libgv specific logs will be gathered."
+    else
+        echo "warning: Unknown parameter! "
+    fi
+}
 function ts_helper_summary_logs() {
     p1=$1
     if [[ $DEBUG ]] ; then
