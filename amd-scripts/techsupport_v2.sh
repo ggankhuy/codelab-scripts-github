@@ -140,29 +140,34 @@ function ts_guest() {
 }
 
 AMDGPU_PRESENCE=`dkms status | grep amdgpu`
-#LIBGV_PRESENCE=$((/sys/bus/pci/drivers/gim))
+LIBGV_PRESENCE=`dkms status | grep gim`
 echo "AMDGPU_PRESENCE: $AMDGPU_PRESENCE"
+echo "LIBGV_PRESENCE: $LIBGV_PRESENCE"
 
-if [[ -z $1 ]] ; then
-    echo "No cmdline parameter, default log capture..."
-    if [[ ! -z $AMDGPU_PRESENCE ]] ; then
-        ts_amdgpu_compat
-        ts_amdgpu_compat_full_logs
-   #elif [[ -f "/sys/bus/pci/drivers/gim" ]] then
-    #    ts_libgv_compat
-    else
-        echo "Unable to find either amdgpu or libgv on host system."
-        exit 1
-    fi
-else
+# If both libgv and amdgpu present, libgv will take presedence...
+
+if [[ $LIBGV_PRESENCE ]] ; then
+    echo "Gathering libgv compatible logs..."
+    if [[ $1 ]] ; then
+        echo "Gathering guest log: "
         ts_guest
         ts_libgv_compat
+    fi
+elif [[ $AMDGPU_PRESENCE ]] ; then 
+    echo "Gathering amdgpu compatible logs..."
+    ts_amdgpu_compat
+    ts_amdgpu_compat_full_logs
+else
+    echo "Unable to find either amdgpu or libgv on host system."
 fi
+
+exit 0
 
 echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 echo LOG FILES: $CONFIG_PATH_PLAT_INFO:
 tar -cvf $CONFIG_FILE_TAR $CONFIG_PATH_PLAT_INFO
 tree $CONFIG_PATH_PLAT_INFO
+
 exit 0
 
 function host_guest_2() {
