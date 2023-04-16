@@ -1,4 +1,2 @@
 source lib.sh
-
-install_anaconda
-
+install_python
