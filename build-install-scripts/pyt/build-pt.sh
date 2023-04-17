@@ -1,5 +1,5 @@
 # Anaconda defs.
-source ../lib.sh
+source ../../api/lib.sh
 
 CONFIG_UPGRADE_ANACONDA=1
 
