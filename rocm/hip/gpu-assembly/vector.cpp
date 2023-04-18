@@ -95,9 +95,9 @@ int main (void) {
     const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
 
-    if (env_op_str == "add") { hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
-    if (env_op_str == "mul") { hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
-    if (env_op_str == "mul_add") { hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
+    if (env_op_str == "add") { cout << "Launching add()..." << endl; hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
+    if (env_op_str == "mul") { cout << "Launching mul()..." << endl; hipLaunchKernelGGL(mul, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
+    if (env_op_str == "mul_add") { cout << "Launching mul_add()" << endl; hipLaunchKernelGGL(mul_add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
 
     hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
     hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
