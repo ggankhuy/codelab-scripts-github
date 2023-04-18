@@ -8,7 +8,6 @@ SET(CMAKE_CXX_COMPILER "/usr/bin/hipcc")
 #set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(PROJECT_NAME vector)
-#option(OPT_SUB_PROJECT_NAME "sub project name" $SUB_PROJECT_NAME)
 
 message(STATUS projectname...: ${PROJECT_NAME})
 message(STATUS subprojectname: ${SUB_PROJECT_NAME})
@@ -18,8 +17,13 @@ project(${PROJECT_NAME})
 configure_file(vector.h.in ../vector.h)
 configure_file(vector.h.in vector.h)
 add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
-target_compile_definitions(${PROJECT_NAME} PUBLIC OPT_SUB_PROJECT_NAME=1)
-#message(STATUS "opt: ${OPT_SUB_PROJECT_NAME}")
+target_compile_definitions(${PROJECT_NAME} PUBLIC OPT_SUB_PROJECT_NAME=${SUB_PROJECT_NAME})
+if (OPT_SUB_PROJECT_NAME)
+    message(STATUS "libamdhip props: ")
+else()
+    message(STATUS "libamdhip propsx: ")
+endif()
+
 list(APPEND CMAKE_PREFIX_PATH)
 
 # does not work without building hip first...
