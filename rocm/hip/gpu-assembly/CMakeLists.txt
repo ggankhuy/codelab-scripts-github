@@ -6,9 +6,15 @@ SET(CMAKE_C_COMPILER "/usr/bin/hipcc")
 SET(CMAKE_CXX_COMPILER "/usr/bin/hipcc")
 #set(CMAKE_C_STANDARD 11)
 #set(CMAKE_C_STANDARD_REQUIRED True)
-
+set(PROJECT_NAME vector)
 include_directories("/opt/rocm/hip/include")
+option(OPT_SUB_PROJECT_NAME "sub project name" $SUB_PROJECT_NAME)
+message(STATUS "opt: ${OPT_SUB_PROJECT_NAME})
+#configure_file(vector.h.in vector.h)
+
 message(STATUS projectname...: ${PROJECT_NAME})
+message(STATUS subprojectname: ${SUB_PROJECT_NAME})     
+
 project(${PROJECT_NAME})
 add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
 list(APPEND CMAKE_PREFIX_PATH)

@@ -2,10 +2,20 @@
 
 #include <stdio.h>
 #include "hip/hip_runtime.h"
+//#include "vector.h"
 
 #define N 64
-#define ARRSIZE 3
 #define LOOPSTRIDE 8
+
+#if OPT_SUB_PROJECT_NAME==vector-4
+#define N 4
+#define LOOPSTRIDE 1
+#elif OPT_SUB_PROJECT_NAME==vector-1024
+#define N 8
+#define LOOPSTRIDE 32
+#endif
+
+#define ARRSIZE 3
 __global__ void add(int *a, int*b, int *c) {
 	int tid = hipBlockIdx_x;
 	c[tid] = a[tid] + b[tid];
@@ -16,7 +26,7 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
     
-
+    printf("N/LOOPSTRIDE: %u, %u.\n", N, LOOPSTRIDE);
     a = (int*)malloc(N * sizeof(int));
     b = (int*)malloc(N * sizeof(int));
     c = (int*)malloc(N * sizeof(int));
