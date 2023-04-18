@@ -16,17 +16,19 @@ for sub_project_name in vector vector4 vector1024 ; do
     mkdir ./log
     mkdir $BUILD_DIR
     mkdir ./bindir
-    #cd $BUILD_DIR
-    #rm -rf ./*
+    sudo rm -rf ./bindir/*
+    rm -rf $BUILD_DIR/*
+    cd $BUILD_DIR
+    sudo ln -s ../vector.cpp .
+    sudo ln -s ../vector.h .
 
     export PROJECT_NAME=$sub_project_name
+    CMD="hipcc --save-temps -DOPT_SUB_PROJECT_NAME=$sub_project_name $project_name.cpp -o $project_name"
+    echo $CMD
+    $CMD
 
-    #hipcc --save-temps -DSUB_PROJECT_NAME=$sub_project_name $FILENAME.cpp -o 
-    echo hipcc -DOPT_SUB_PROJECT_NAME=$sub_project_name $project_name.cpp -o $project_name
-    sleep 4
-    hipcc -DOPT_SUB_PROJECT_NAME=$sub_project_name $project_name.cpp -o $project_name
-
-    mv ${project_name} ./bindir/${sub_project_name}
-    ./bindir/${project_name} | tee -a ./$BUILD_DIR/$LOG_FILE_EXEC
+    ln -s `pwd`/${project_name} ../bindir/${sub_project_name}
+    ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
+    cd ..
 
 done
