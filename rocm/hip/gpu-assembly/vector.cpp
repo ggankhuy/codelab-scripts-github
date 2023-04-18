@@ -3,24 +3,29 @@
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 #include "vector.h"
+#include <string.h>
 
+/*
 #define N 64
 #define LOOPSTRIDE 8
-
 #ifdef OPT_SUB_PROJECT_NAME
  #undef LOOPSTRIDE
  #undef N
- #endif
 
  #if OPT_SUB_PROJECT_NAME == vector4
   #define N 4
   #define LOOPSTRIDE 1
  #elif OPT_SUB_PROJECT_NAME == vector1024
-  #define N 8
+  #define N 1024
   #define LOOPSTRIDE 32
  #endif
+#endif
+*/
 
 #define ARRSIZE 3
+
+using namespace std;
+
 __global__ void add(int *a, int*b, int *c) {
 	int tid = hipBlockIdx_x;
 	c[tid] = a[tid] + b[tid];
@@ -30,6 +35,18 @@ int main (void) {
     int *a, *b, *c;
     int *dev_a, *dev_b, *dev_c;
     int i ;
+
+    int N = 64;
+    int LOOPSTRIDE = 8;
+
+    char* env_project_name;
+    string env_project_name_str = "";
+
+    env_project_name=std::getenv("PROJECT_NAME");
+    env_project_name ? env_project_name_str=string(env_project_name): "" ;
+
+    if (env_project_name_str == "vector4") { N = 4; LOOPSTRIDE=1; }
+    if (env_project_name_str == "vector1024") { N = 1024; LOOPSTRIDE=N/16; }
     
     printf("N/LOOPSTRIDE: %u, %u.\n", N, LOOPSTRIDE);
     a = (int*)malloc(N * sizeof(int));

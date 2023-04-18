@@ -4,10 +4,13 @@ compiler="hipcc"
 cmake_executable="cmake"
 project_name=vector
 
+LOG_FILE_BUILD=cmake-stdout.log
+LOG_FILE_EXEC=exec.log
+
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
 
-for sub_project_name in vector vector4 ; do
+for sub_project_name in vector vector4 vector1024 ; do
     echo "Generating project: $project_name..."
     BUILD_DIR=build-$sub_project_name
     mkdir ./log
@@ -24,9 +27,11 @@ for sub_project_name in vector vector4 ; do
         -DROCM_PATH=${rocm_path} \
         -DPROJECT_NAME=${project_name} \
         -DSUB_PROJECT_NAME=$sub_project_name \
-        .. 2>&1 | tee $BUILD_DIR/cmake-stdout.log
-    make
+        .. 2>&1 | tee -a ./$LOG_FILE_BUILD
+    sleep 4
+    make 2>&1  | tee -a ./$LOG_FILE_BUILD
     cp ${project_name} ../bindir/${sub_project_name}
+    ./${project_name} | tee -a ./$LOG_FILE_EXEC
     cd ..
 done
 tree bindir

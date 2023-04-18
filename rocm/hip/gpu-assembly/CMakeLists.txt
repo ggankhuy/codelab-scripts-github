@@ -14,17 +14,20 @@ message(STATUS subprojectname: ${SUB_PROJECT_NAME})
 
 include_directories("/opt/rocm/hip/include")
 project(${PROJECT_NAME})
-configure_file(vector.h.in ../vector.h)
-configure_file(vector.h.in vector.h)
+add_compile_definitions(OPT_SUB_PROJECT_NAME=1)
 add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
-target_compile_definitions(${PROJECT_NAME} PUBLIC OPT_SUB_PROJECT_NAME=${SUB_PROJECT_NAME})
-if (OPT_SUB_PROJECT_NAME)
-    message(STATUS "libamdhip props: ")
+
+#target_compile_definitions(${PROJECT_NAME} PUBLIC OPT_SUB_PROJECT_NAME=1)
+
+if(OPT_SUB_PROJECT_NAME)
+    message(STATUS "OPT_SUB_PROJECT_NAME: ${OPT_SUB_PROJECT_NAME}")
 else()
-    message(STATUS "libamdhip propsx: ")
+    message(STATUS "OPT_SUB_PROJECT_NAME: not defined...")
 endif()
 
 list(APPEND CMAKE_PREFIX_PATH)
+configure_file(vector.h.in ../vector.h)
+configure_file(vector.h.in vector.h)
 
 # does not work without building hip first...
 #find_package(hip REQUIRED CONFIG PATHS ${HIP_DIR} $ENV{ROCM_PATH})
