@@ -7,12 +7,12 @@
 #define N 64
 #define LOOPSTRIDE 8
 
-#if OPT_SUB_PROJECT_NAME==vector-4
-#define N 4
-#define LOOPSTRIDE 1
-#elif OPT_SUB_PROJECT_NAME==vector-1024
-#define N 8
-#define LOOPSTRIDE 32
+#if OPT_SUB_PROJECT_NAME == vector4
+ #define N 4
+ #define LOOPSTRIDE 1
+#elif OPT_SUB_PROJECT_NAME == vector1024
+ #define N 8
+ #define LOOPSTRIDE 32
 #endif
 
 #define ARRSIZE 3

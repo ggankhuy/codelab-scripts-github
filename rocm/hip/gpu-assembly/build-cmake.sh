@@ -7,7 +7,7 @@ project_name=vector
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
 
-for sub_project_name in vector vector-4 ; do
+for sub_project_name in vector vector4 ; do
     echo "Generating project: $project_name..."
     BUILD_DIR=build-$sub_project_name
     mkdir ./log
