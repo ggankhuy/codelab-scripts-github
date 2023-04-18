@@ -7,13 +7,18 @@
 #define N 64
 #define LOOPSTRIDE 8
 
-#if OPT_SUB_PROJECT_NAME == vector4
- #define N 4
- #define LOOPSTRIDE 1
-#elif OPT_SUB_PROJECT_NAME == vector1024
- #define N 8
- #define LOOPSTRIDE 32
-#endif
+#ifdef OPT_SUB_PROJECT_NAME
+ #undef LOOPSTRIDE
+ #undef N
+ #endif
+
+ #if OPT_SUB_PROJECT_NAME == vector4
+  #define N 4
+  #define LOOPSTRIDE 1
+ #elif OPT_SUB_PROJECT_NAME == vector1024
+  #define N 8
+  #define LOOPSTRIDE 32
+ #endif
 
 #define ARRSIZE 3
 __global__ void add(int *a, int*b, int *c) {

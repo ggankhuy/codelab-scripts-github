@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.10)
 
 SET(CMAKE_C_COMPILER "/usr/bin/hipcc")
 SET(CMAKE_CXX_COMPILER "/usr/bin/hipcc")
-#set(CMAKE_C_STANDARD 11)
-#set(CMAKE_C_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(PROJECT_NAME vector)
 
