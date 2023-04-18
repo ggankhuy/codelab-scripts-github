@@ -11,6 +11,22 @@ LOG_FILE_EXEC=exec.log
 rm -rf bindir/*
 
 for sub_project_name in vector vector4 vector1024 ; do
+
+    case "$sub_project_name" in
+        "vector")
+            echo "Setting export variables for vector"
+            export OP=add
+            ;;
+        "vector4")
+            echo "Setting export variables for vector4"
+            export OP=mul
+            ;;
+        "vector1024")
+            echo "Setting export variables for vector1024"
+            export OP=mul_add
+            ;;
+    esac
+
     echo "Generating project: $project_name..."
     BUILD_DIR=build-$sub_project_name
     mkdir ./log
