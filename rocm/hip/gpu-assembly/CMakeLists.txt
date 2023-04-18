@@ -1,3 +1,5 @@
+#https://stackoverflow.com/questions/65886495/how-to-link-so-files-with-cmake
+
 cmake_minimum_required(VERSION 3.10)
 
 SET(CMAKE_C_COMPILER "/usr/bin/hipcc")
