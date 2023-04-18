@@ -8,7 +8,7 @@ SET(CMAKE_CXX_COMPILER "/usr/bin/hipcc")
 #set(CMAKE_C_STANDARD_REQUIRED True)
 
 include_directories("/opt/rocm/hip/include")
-
+message(STATUS projectname...: ${PROJECT_NAME})
 project(${PROJECT_NAME})
 add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
 list(APPEND CMAKE_PREFIX_PATH)

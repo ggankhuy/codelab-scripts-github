@@ -3,7 +3,8 @@ rocm_rpath=" -Wl,--enable-new-dtags -Wl,--rpath,/opt/rocm/lib:/opt/rocm/lib64"
 compiler="hipcc"
 cmake_executable="cmake"
 
-for i in project_name in vector vector-1024 ; do
+for project_name in vector vector-1024 ; do
+    echo "Generating project: $project_name..."
     mkdir ./log
     mkdir build
     cd build
@@ -15,9 +16,9 @@ for i in project_name in vector vector-1024 ; do
         -DCMAKE_MODULE_PATH="${rocm_path}/hip/cmake" \
         -DCMAKE_SHARED_LINKER_FLAGS="${rocm_rpath}" \
         -DROCM_PATH=${rocm_path} \
-        -DPROJECT_NAME=${project_name}
+        -DPROJECT_NAME=$project_name \
         ..
-        make
+    make
     cd ..
 done
 
