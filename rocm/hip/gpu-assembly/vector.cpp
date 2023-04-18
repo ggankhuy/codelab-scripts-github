@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
-#define N 8
+#define N 64
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 __global__ void add(int *a, int*b, int *c) {
 	int tid = hipBlockIdx_x;
-	c[tid] = b[tid] + b[tid];
+	c[tid] = a[tid] + b[tid];
 }
 
 int main (void) {
