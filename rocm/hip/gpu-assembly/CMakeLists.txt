@@ -9,8 +9,8 @@ SET(CMAKE_CXX_COMPILER "/usr/bin/hipcc")
 
 include_directories("/opt/rocm/hip/include")
 
-project(vector)
-add_executable(vector vector.cpp)
+project(${PROJECT_NAME})
+add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
 list(APPEND CMAKE_PREFIX_PATH)
 
 # does not work without building hip first...
