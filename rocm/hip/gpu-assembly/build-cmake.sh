@@ -7,6 +7,7 @@ for project_name in vector vector-1024 ; do
     echo "Generating project: $project_name..."
     mkdir ./log
     mkdir build
+    mkdir bindir
     cd build
     rm -rf ./*
     #cmake -DCMAKE_PREFIX_PATH=/opt/rocm/hip/lib .. 2>&1 | tee ./log/cmake.log/
@@ -19,6 +20,7 @@ for project_name in vector vector-1024 ; do
         -DPROJECT_NAME=$project_name \
         ..
     make
+    cp ${project_name} ../bindir/
     cd ..
 done
 
