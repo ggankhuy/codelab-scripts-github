@@ -51,8 +51,8 @@ __global__ void add(float* a, float* b, float *c, const int nx, const int ny) {
     int x = blockDim.x * blockIdx.x + threadIdx.x;
     int y = blockDim.y * blockIdx.y + threadIdx.y;
     
-    if (x < nx && y < ny)
-        c[y * nx + x] = a[y * nx + x] + b[y * nx + x];
+    //if (x < nx && y < ny)
+    c[y * nx + x] = a[y * nx + x] + b[y * nx + x];
 }
 
 int main() {
@@ -61,8 +61,8 @@ int main() {
     float* matrixC;
     float* gpuMatrixA;
     float* gpuMatrixB; 
-    float* gpuMatrixC;;
-    int LOOPSTRIDE = 1;
+    float* gpuMatrixC;
+    int LOOPSTRIDE = 4;
 
     /*
     char* env_project_name;
@@ -102,6 +102,7 @@ int main() {
     hipMemcpy(gpuMatrixC, matrixC, N * sizeof(float), hipMemcpyHostToDevice);
 
     // Lauching kernel from host
+    printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y, THREADS_X, THREADS_Y, WIDTH_X, WIDTH_Y);
     add<<<dim3(WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(gpuMatrixA, gpuMatrixB, gpuMatrixC, WIDTH_X, WIDTH_Y);
     //matrixTranspose<<<dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(gpuMatrixC, gpuMatrixA, WIDTH);
     /*hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),
