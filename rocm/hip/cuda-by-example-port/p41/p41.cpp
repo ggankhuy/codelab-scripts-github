@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
-#define N 64
+#define N 8192
+#define N 512
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 __global__ void add(int *a, int*b, int *c) {
-	int tid = hipBlockIdx_x;
+	int tid = hipBlockDim_x * hipBlockIdx_x + hipThreadIdx_x;
 	c[tid] = a[tid] + b[tid];
 }
 
@@ -30,7 +31,7 @@ int main (void) {
 		c[i] = 999;
 	}
 
-	for (int i = 0; i < N ; i+=LOOPSTRIDE ) {
+	for (int i = 0; i < N ; i+=LOOPSTRIDE*4 ) {
         printf("Before add: a/b: %d, %d.\n", a[i], b[i]);
 	}
 
@@ -38,8 +39,10 @@ int main (void) {
    	hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
    	hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
     
-    const unsigned blocks = 256;
-    const unsigned threadsPerBlock = 1;
+    const unsigned threadsPerBlock = 16;
+    const unsigned blocks = N/16;
+
+    printf("blocks/threads: %d, %d.\n", blocks, threadsPerBlock);
 
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
 
@@ -47,7 +50,7 @@ int main (void) {
     hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
     hipMemcpy(c, dev_c, N * sizeof(int), hipMemcpyDeviceToHost);
 
-	for (int i = 0; i < N; i+=LOOPSTRIDE )
+	for (int i = 0; i < N; i+=LOOPSTRIDE*4 )
 		printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]);
 
     hipFree(dev_a);

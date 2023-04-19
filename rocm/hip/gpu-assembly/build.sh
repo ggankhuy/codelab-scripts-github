@@ -10,9 +10,19 @@ LOG_FILE_EXEC=exec.log
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
 
-for sub_project_name in vector vector4 vector1024 ; do
+#for sub_project_name in vector vector4 vector64 vector1024 matrix16x16; do
+for sub_project_name in vector ; do
 
+    for envvar in OP DATATYPE DATASHAPE ; do
+        unset $envvar
+    done
+    echo "-----------------"
     case "$sub_project_name" in
+        "matrix16x16")
+            echo "Setting export variables for matrix16x16"
+            export DATATYPE=int
+            export DATASHAPE=matrix
+            ;;
         "vector")
             echo "Setting export variables for vector"
             export OP=add
@@ -24,6 +34,7 @@ for sub_project_name in vector vector4 vector1024 ; do
         "vector1024")
             echo "Setting export variables for vector1024"
             export OP=mul_add
+            
             ;;
     esac
 

@@ -28,7 +28,7 @@
 using namespace std;
 
 __global__ void add(int *a, int*b, int *c) {
-	int tid = hipBlockIdx_x;
+	int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
 	c[tid] = a[tid] + b[tid];
 }
 
@@ -47,8 +47,8 @@ int main (void) {
     int *dev_a, *dev_b, *dev_c;
     int i ;
 
-    int N = 64;
-    int LOOPSTRIDE = 8;
+    int N = 16384;
+    int LOOPSTRIDE = 256;
 
     // process project_name env var.
 
@@ -92,12 +92,19 @@ int main (void) {
    	hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
    	hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
     
-    const unsigned blocks = 256;
     const unsigned threadsPerBlock = 1;
+    const unsigned blocks = (N+1)/threadsPerBlock;
+    printf("N: %d. <<<%d, %d>>>.\n", N, blocks, threadsPerBlock);
 
+    if (env_op_str == "add") { cout << "Launching add()..." << endl; add<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
+    if (env_op_str == "mul") { cout << "Launching mul()..." << endl; mul<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
+    if (env_op_str == "mul_add") { cout << "Launching mul_add()" << endl; mul_add<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
+
+    /*
     if (env_op_str == "add") { cout << "Launching add()..." << endl; hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
     if (env_op_str == "mul") { cout << "Launching mul()..." << endl; hipLaunchKernelGGL(mul, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
     if (env_op_str == "mul_add") { cout << "Launching mul_add()" << endl; hipLaunchKernelGGL(mul_add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
+    */
 
     hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
     hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
