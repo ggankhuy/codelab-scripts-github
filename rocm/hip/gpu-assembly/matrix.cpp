@@ -20,34 +20,58 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <iostream>
-
-// hip header file
+#include <stdio.h>
 #include "hip/hip_runtime.h"
+#include "vector.h"
+#include <iostream>
+#include <string.h>
 
+#define WIDTH_X 16
+#define WIDTH_Y 16
 
-#define WIDTH 1024
+#define NUM (WIDTH_X * WIDTH_Y)
 
+#define THREADS_X 4
+#define THREADS_Y 4
+#define THREADS_Z 1
 
-#define NUM (WIDTH * WIDTH)
-
-#define THREADS_PER_BLOCK_X 4
-#define THREADS_PER_BLOCK_Y 4
-#define THREADS_PER_BLOCK_Z 1
+using namespace std;
 
 // Device (Kernel) function, it must be void
+
+/*
 __global__ void matrixTranspose(float* out, float* in, const int width) {
     int x = blockDim.x * blockIdx.x + threadIdx.x;
     int y = blockDim.y * blockIdx.y + threadIdx.y;
     out[y * width + x] = in[x * width + y];
 }
+*/
+
+__global__ void add(float* a, float* b, float *c, const int nx, const int ny) {
+    int x = blockDim.x * blockIdx.x + threadIdx.x;
+    int y = blockDim.y * blockIdx.y + threadIdx.y;
+    
+    if (x < nx && y < ny)
+        c[y * nx + x] = a[y * nx + x] + b[y * nx + x];
+}
 
 int main() {
-    float* Matrix;
-    float* TransposeMatrix;
-    float* gpuMatrix;
-    float* gpuTransposeMatrix;
+    float* matrixA;
+    float* matrixB;
+    float* matrixC;
+    float* gpuMatrixA;
+    float* gpuMatrixB; 
+    float* gpuMatrixC;;
+    int LOOPSTRIDE = 1;
 
+    /*
+    char* env_project_name;
+    string env_project_name_str = "";
+    env_project_name=std::getenv("PROJECT_NAME");
+    env_project_name ? env_project_name_str=string(env_project_name): "" ;
+
+    if (env_project_name_str == "matrix1024") { NUM = 4; LOOPSTRIDE=1; }
+    */
     hipDeviceProp_t devProp;
     hipGetDeviceProperties(&devProp, 0);
 
@@ -56,39 +80,54 @@ int main() {
     int i;
     int errors;
 
-    Matrix = (float*)malloc(NUM * sizeof(float));
-    TransposeMatrix = (float*)malloc(NUM * sizeof(float));
+    matrixA = (float*)malloc(NUM * sizeof(float));
+    matrixB = (float*)malloc(NUM * sizeof(float));
+    matrixC = (float*)malloc(NUM * sizeof(float));
 
     // initialize the input data
     for (i = 0; i < NUM; i++) {
-        Matrix[i] = (float)i * 10.0f;
+        matrixA[i] = (float)i * 1.0f;
+        matrixA[i] = (float)i * 2.0f;
+        matrixA[i] = 999.0f;
     }
 
     // allocate the memory on the device side
-    hipMalloc((void**)&gpuMatrix, NUM * sizeof(float));
-    hipMalloc((void**)&gpuTransposeMatrix, NUM * sizeof(float));
+    hipMalloc((void**)&gpuMatrixA, NUM * sizeof(float));
+    hipMalloc((void**)&gpuMatrixB, NUM * sizeof(float));
+    hipMalloc((void**)&gpuMatrixC, NUM * sizeof(float));
 
     // Memory transfer from host to device
-    hipMemcpy(gpuMatrix, Matrix, NUM * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixA, matrixA, NUM * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixB, matrixB, NUM * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixC, matrixC, NUM * sizeof(float), hipMemcpyHostToDevice);
 
     // Lauching kernel from host
-    //matrixTranspose<<<dim3(WIDTH / THREADS_PER_BLOCK_X, WIDTH / THREADS_PER_BLOCK_Y),  dim3(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y)>>>(gpuTransposeMatrix, gpuMatrix, WIDTH);
-    hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / THREADS_PER_BLOCK_X, WIDTH / THREADS_PER_BLOCK_Y),
-                    dim3(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y), 0, 0, gpuTransposeMatrix,
-                    gpuMatrix, WIDTH);
+    add<<<dim3(WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(gpuMatrixA, gpuMatrixB, gpuMatrixC, WIDTH_X, WIDTH_Y);
+    //matrixTranspose<<<dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(gpuMatrixC, gpuMatrixA, WIDTH);
+    /*hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),
+                    dim3(THREADS_X, THREADS_Y), 0, 0, gpuMatrixC,
+                    gpuMatrixA, WIDTH);
+    */
 
     // Memory transfer from device to host
-    hipMemcpy(TransposeMatrix, gpuTransposeMatrix, NUM * sizeof(float), hipMemcpyDeviceToHost);
+ 
+    hipMemcpy(matrixA, gpuMatrixA, NUM * sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(matrixB, gpuMatrixB, NUM * sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(matrixC, gpuMatrixC, NUM * sizeof(float), hipMemcpyDeviceToHost);
 
     // verify the results
 
     // free the resources on device side
-    hipFree(gpuMatrix);
-    hipFree(gpuTransposeMatrix);
+
+    hipFree(gpuMatrixA);
+    hipFree(gpuMatrixB);
+    hipFree(gpuMatrixC);
 
     // free the resources on host side
-    free(Matrix);
-    free(TransposeMatrix);
+
+    free(matrixA);
+    free(matrixB);
+    free(matrixC);
 
     return errors;
 }

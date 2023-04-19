@@ -69,12 +69,12 @@ int main (void) {
 
     cout << "env_op: string: " << env_op_str << endl;
     
-    a = (int*)malloc(N * sizeof(int));
-    b = (int*)malloc(N * sizeof(int));
-    c = (int*)malloc(N * sizeof(int));
- 	hipMalloc(&dev_a, N * sizeof(int) );
- 	hipMalloc(&dev_b, N * sizeof(int) );
- 	hipMalloc(&dev_c, N * sizeof(int) );
+    a = (int*)malloc(NUM * sizeof(int));
+    b = (int*)malloc(NUM * sizeof(int));
+    c = (int*)malloc(NUM * sizeof(int));
+ 	hipMalloc(&dev_a, NUM * sizeof(int) );
+ 	hipMalloc(&dev_b, NUM * sizeof(int) );
+ 	hipMalloc(&dev_c, NUM * sizeof(int) );
 
 	for (int i = 0; i < N ; i ++ ) {
 		a[i]  = i;
@@ -88,17 +88,19 @@ int main (void) {
         if (env_op_str == "mul_add") { printf("Before mul_add: a/b: %d, %d.\n", a[i], b[i]); }
 	}
 
-   	hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-   	hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
-   	hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
+   	hipMemcpy(dev_a, a, NUM * sizeof(int), hipMemcpyHostToDevice);
+   	hipMemcpy(dev_b, b, NUM * sizeof(int), hipMemcpyHostToDevice);
+   	hipMemcpy(dev_c, c, NUM * sizeof(int), hipMemcpyHostToDevice);
     
     const unsigned threadsPerBlock = 1;
     const unsigned blocks = (N+1)/threadsPerBlock;
     printf("N: %d. <<<%d, %d>>>.\n", N, blocks, threadsPerBlock);
 
+    /*
     if (env_op_str == "add") { cout << "Launching add()..." << endl; add<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
     if (env_op_str == "mul") { cout << "Launching mul()..." << endl; mul<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
     if (env_op_str == "mul_add") { cout << "Launching mul_add()" << endl; mul_add<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c); }
+    */
 
     /*
     if (env_op_str == "add") { cout << "Launching add()..." << endl; hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
@@ -106,9 +108,9 @@ int main (void) {
     if (env_op_str == "mul_add") { cout << "Launching mul_add()" << endl; hipLaunchKernelGGL(mul_add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c); }
     */
 
-    hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
-    hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
-    hipMemcpy(c, dev_c, N * sizeof(int), hipMemcpyDeviceToHost);
+    hipMemcpy(a, dev_a, NUM * sizeof(int), hipMemcpyDeviceToHost);
+    hipMemcpy(b, dev_b, NUM * sizeof(int), hipMemcpyDeviceToHost);
+    hipMemcpy(c, dev_c, NUM * sizeof(int), hipMemcpyDeviceToHost);
 
 	for (int i = 0; i < N; i+=LOOPSTRIDE ) {
         if (env_op_str == "add") { printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]); }
