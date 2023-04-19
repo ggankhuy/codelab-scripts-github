@@ -31,8 +31,8 @@ THE SOFTWARE.
 
 #define N (WIDTH_X * WIDTH_Y)
 
-#define THREADS_X 4
-#define THREADS_Y 4
+#define THREADS_X 16
+#define THREADS_Y 16
 #define THREADS_Z 1
 
 using namespace std;
@@ -62,7 +62,7 @@ int main() {
     int* dev_a;
     int* dev_b; 
     int* dev_c;
-    int LOOPSTRIDE = 4;
+    int LOOPSTRIDE = 8;
 
     /*
     char* env_project_name;
