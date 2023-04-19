@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define WIDTH_X 16
 #define WIDTH_Y 16
 
-#define NUM (WIDTH_X * WIDTH_Y)
+#define N (WIDTH_X * WIDTH_Y)
 
 #define THREADS_X 4
 #define THREADS_Y 4
@@ -70,7 +70,7 @@ int main() {
     env_project_name=std::getenv("PROJECT_NAME");
     env_project_name ? env_project_name_str=string(env_project_name): "" ;
 
-    if (env_project_name_str == "matrix1024") { NUM = 4; LOOPSTRIDE=1; }
+    if (env_project_name_str == "matrix1024") { N = 4; LOOPSTRIDE=1; }
     */
     hipDeviceProp_t devProp;
     hipGetDeviceProperties(&devProp, 0);
@@ -80,26 +80,26 @@ int main() {
     int i;
     int errors;
 
-    matrixA = (float*)malloc(NUM * sizeof(float));
-    matrixB = (float*)malloc(NUM * sizeof(float));
-    matrixC = (float*)malloc(NUM * sizeof(float));
+    matrixA = (float*)malloc(N * sizeof(float));
+    matrixB = (float*)malloc(N * sizeof(float));
+    matrixC = (float*)malloc(N * sizeof(float));
 
     // initialize the input data
-    for (i = 0; i < NUM; i++) {
+    for (i = 0; i < N; i++) {
         matrixA[i] = (float)i * 1.0f;
-        matrixA[i] = (float)i * 2.0f;
-        matrixA[i] = 999.0f;
+        matrixB[i] = (float)i * 2.0f;
+        matrixC[i] = 999.0f;
     }
 
     // allocate the memory on the device side
-    hipMalloc((void**)&gpuMatrixA, NUM * sizeof(float));
-    hipMalloc((void**)&gpuMatrixB, NUM * sizeof(float));
-    hipMalloc((void**)&gpuMatrixC, NUM * sizeof(float));
+    hipMalloc((void**)&gpuMatrixA, N * sizeof(float));
+    hipMalloc((void**)&gpuMatrixB, N * sizeof(float));
+    hipMalloc((void**)&gpuMatrixC, N * sizeof(float));
 
     // Memory transfer from host to device
-    hipMemcpy(gpuMatrixA, matrixA, NUM * sizeof(float), hipMemcpyHostToDevice);
-    hipMemcpy(gpuMatrixB, matrixB, NUM * sizeof(float), hipMemcpyHostToDevice);
-    hipMemcpy(gpuMatrixC, matrixC, NUM * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixA, matrixA, N * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixB, matrixB, N * sizeof(float), hipMemcpyHostToDevice);
+    hipMemcpy(gpuMatrixC, matrixC, N * sizeof(float), hipMemcpyHostToDevice);
 
     // Lauching kernel from host
     add<<<dim3(WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(gpuMatrixA, gpuMatrixB, gpuMatrixC, WIDTH_X, WIDTH_Y);
@@ -111,11 +111,20 @@ int main() {
 
     // Memory transfer from device to host
  
-    hipMemcpy(matrixA, gpuMatrixA, NUM * sizeof(float), hipMemcpyDeviceToHost);
-    hipMemcpy(matrixB, gpuMatrixB, NUM * sizeof(float), hipMemcpyDeviceToHost);
-    hipMemcpy(matrixC, gpuMatrixC, NUM * sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(matrixA, gpuMatrixA, N * sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(matrixB, gpuMatrixB, N * sizeof(float), hipMemcpyDeviceToHost);
+    hipMemcpy(matrixC, gpuMatrixC, N * sizeof(float), hipMemcpyDeviceToHost);
 
     // verify the results
+
+    for (int i = 0; i < N; i+=LOOPSTRIDE ) {
+        printf("After add: %d: %f + %f = %f\n", i, matrixA[i], matrixB[i], matrixC[i]);
+        /*
+        if (env_op_str == "add") { printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]); }
+        if (env_op_str == "mul") { printf("After mul: %d: %u * %u = %u\n", i, a[i], b[i], c[i]); }
+        if (env_op_str == "mul_add") { printf("After mul_add: %d: %u * 2 + %u = %u\n", i, a[i], b[i], c[i]); }
+        */
+    }
 
     // free the resources on device side
 
