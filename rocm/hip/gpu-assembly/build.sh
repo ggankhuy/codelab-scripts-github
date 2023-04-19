@@ -11,7 +11,7 @@ LOG_FILE_EXEC=exec.log
 rm -rf bindir/*
 
 #for sub_project_name in vector ; do
-for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1; do
+for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1; do
 
 #    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
 #    if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
@@ -31,6 +31,10 @@ for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1; d
             # unused for now.
             export DATATYPE=int
             export DATASHAPE=matrix
+            ;;
+        "matrix_256x256_32x32x1")
+            echo "Setting export variables for 32x32_8x8x1"
+            export FILENAME=matrix
             ;;
         "vector")
             echo "Setting export variables for vector"
@@ -55,8 +59,8 @@ for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1; d
     mkdir ./log
     mkdir $BUILD_DIR
     mkdir ./bindir
-    sudo rm -rf ./bindir/*
-    rm -rf $BUILD_DIR/*
+    #sudo rm -rf ./bindir/*
+    #rm -rf $BUILD_DIR/*
     cd $BUILD_DIR
     sudo ln -s ../$FILENAME.cpp .
     sudo ln -s ../$FILENAME.h .
@@ -66,8 +70,10 @@ for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1; d
     echo $CMD
     $CMD
 
+    echo ln -s `pwd`/${sub_project_name} ../bindir/${sub_project_name}
     ln -s `pwd`/${sub_project_name} ../bindir/${sub_project_name}
     AMD_LOG_LEVEL=4 ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
     cd ..
-
+    ls -l bindir
 done
+tree -fs bindir
