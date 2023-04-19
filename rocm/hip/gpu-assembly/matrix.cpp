@@ -22,18 +22,9 @@ THE SOFTWARE.
 
 #include <stdio.h>
 #include "hip/hip_runtime.h"
-#include "vector.h"
+//#include "vector.h"
 #include <iostream>
 #include <string.h>
-
-#define WIDTH_X 16
-#define WIDTH_Y 16
-
-#define N (WIDTH_X * WIDTH_Y)
-
-#define THREADS_X 16
-#define THREADS_Y 16
-#define THREADS_Z 1
 
 using namespace std;
 
@@ -62,16 +53,31 @@ int main() {
     int* dev_a;
     int* dev_b; 
     int* dev_c;
-    int LOOPSTRIDE = 8;
 
-    /*
+    // default: matrix: 16x16 = 256, blockDim(x,y,1)=4,4,1.
+
+    int MAT_X = 16;
+    int MAT_Y = 16;
+
+    int N = (MAT_X * MAT_Y);
+
+    int T_X = 4;
+    int T_Y = 4;
+    int T_Z = 1;
+
+    int LOOPSTRIDE = 1;
+
     char* env_project_name;
     string env_project_name_str = "";
     env_project_name=std::getenv("PROJECT_NAME");
     env_project_name ? env_project_name_str=string(env_project_name): "" ;
 
-    if (env_project_name_str == "matrix1024") { N = 4; LOOPSTRIDE=1; }
-    */
+    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
+    if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
+    if (env_project_name_str == "matrix_256x256_32x32x1") { MAT_X=16; MAT_Y=64; N=MAT_X*MAT_Y; T_X=32; T_Y=32; T_Z=1; }
+    if (env_project_name_str == "matrix_256x256_64x16x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=64; T_Y=16; T_Z=1; }
+    if (env_project_name_str == "matrix_256x256_16x64x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=16; T_Y=64; T_Z=1; }
+
     /*
     hipDeviceProp_t devProp;
     hipGetDeviceProperties(&devProp, 0);
@@ -92,7 +98,7 @@ int main() {
         a[i] = (int)i + acc;
         b[i] = (int)i * 4 + acc;
 
-        if (i % WIDTH_X == 0) {
+        if (i % MAT_X == 0) {
             printf("adding 1000/2000.\n");
             acc+=1024; 
         }
@@ -110,11 +116,11 @@ int main() {
     hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
 
     // Lauching kernel from host
-    printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y, THREADS_X, THREADS_Y, WIDTH_X, WIDTH_Y);
-    add<<<dim3(WIDTH_X / THREADS_X, WIDTH_Y / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(dev_a, dev_b, dev_c, WIDTH_X, WIDTH_Y);
-    //matrixTranspose<<<dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),  dim3(THREADS_X, THREADS_Y)>>>(dev_c, dev_a, WIDTH);
-    /*hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / THREADS_X, WIDTH / THREADS_Y),
-                    dim3(THREADS_X, THREADS_Y), 0, 0, dev_c,
+    printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
+    add<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+    //matrixTranspose<<<dim3(WIDTH / T_X, WIDTH / T_Y),  dim3(T_X, T_Y)>>>(dev_c, dev_a, WIDTH);
+    /*hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / T_X, WIDTH / T_Y),
+                    dim3(T_X, T_Y), 0, 0, dev_c,
                     dev_a, WIDTH);
     */
 

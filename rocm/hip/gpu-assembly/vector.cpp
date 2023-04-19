@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "hip/hip_runtime.h"
-#include "vector.h"
+//#include "vector.h"
 #include <iostream>
 #include <string.h>
 
