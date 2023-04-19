@@ -86,9 +86,16 @@ int main() {
     c = (int*)malloc(N * sizeof(int));
 
     // initialize the input data
+
+    int acc = 0;
     for (i = 0; i < N; i++) {
-        a[i] = (int)i * 5;
-        b[i] = (int)i * 10;
+        a[i] = (int)i + acc;
+        b[i] = (int)i * 4 + acc;
+
+        if (i % WIDTH_X == 0) {
+            printf("adding 1000/2000.\n");
+            acc+=1024; 
+        }
         c[i] = 999;
     }
 
