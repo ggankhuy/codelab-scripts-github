@@ -11,7 +11,7 @@ LOG_FILE_EXEC=exec.log
 rm -rf bindir/*
 
 #for sub_project_name in vector ; do
-for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1; do
+for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1 matrix_256x256_32x32x1_float; do
 
 #    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
 #    if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
@@ -35,6 +35,11 @@ for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 ma
         "matrix_256x256_32x32x1")
             echo "Setting export variables for 32x32_8x8x1"
             export FILENAME=matrix
+            ;;
+        "matrix_256x256_32x32x1_float")
+            echo "Setting export variables for 32x32_8x8x1"
+            export FILENAME=matrix
+            export DATATYPE=float
             ;;
         "vector")
             echo "Setting export variables for vector"

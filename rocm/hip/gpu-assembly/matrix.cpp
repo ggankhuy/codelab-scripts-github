@@ -47,20 +47,12 @@ __global__ void add(int* a, int* b, int *c, const int nx, const int ny) {
 }
 
 int main() {
-    int* a;
-    int* b;
-    int* c;
-    int* dev_a;
-    int* dev_b; 
-    int* dev_c;
 
     // default: matrix: 16x16 = 256, blockDim(x,y,1)=4,4,1.
 
     int MAT_X = 16;
     int MAT_Y = 16;
-
     int N = (MAT_X * MAT_Y);
-
     int T_X = 4;
     int T_Y = 4;
     int T_Z = 1;
@@ -78,6 +70,12 @@ int main() {
     if (env_project_name_str == "matrix_256x256_64x16x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=64; T_Y=16; T_Z=1; }
     if (env_project_name_str == "matrix_256x256_16x64x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=16; T_Y=64; T_Z=1; }
 
+    if (env_project_name_str == "matrix_256x256_32x32x1_float") {
+        float *a, *b, *c, *dev_a, *dev_b, *dev_c;
+    } else {
+        int *a, *b, *c, *dev_a, *dev_b, *dev_c;
+    }
+
     /*
     hipDeviceProp_t devProp;
     hipGetDeviceProperties(&devProp, 0);
@@ -87,17 +85,22 @@ int main() {
     int i;
     int errors;
 
-    a = (int*)malloc(N * sizeof(int));
-    b = (int*)malloc(N * sizeof(int));
-    c = (int*)malloc(N * sizeof(int));
-
+    if (env_project_name_str == "matrix_256x256_32x32x1_float") {
+        a = (float*)malloc(N * sizeof(int));  b = (float*)malloc(N * sizeof(int)); c = (float*)malloc(N * sizeof(int));
+    } else {
+        a = (int*)malloc(N * sizeof(int));  b = (int*)malloc(N * sizeof(int)); c = (int*)malloc(N * sizeof(int));
+    }
     // initialize the input data
 
     int acc = 0;
     for (i = 0; i < N; i++) {
-        a[i] = (int)i + acc;
-        b[i] = (int)i * 4 + acc;
-
+        if (env_project_name_str == "matrix_256x256_32x32x1_float") {
+            a[i] = (float)i + acc;
+            b[i] = (float)i * 4 + acc;
+        else {
+            a[i] = (int)i + acc;
+            b[i] = (int)i * 4 + acc;
+        }
         if (i % MAT_X == 0) {
             printf("adding 1000/2000.\n");
             acc+=1024; 
@@ -106,39 +109,72 @@ int main() {
     }
 
     // allocate the memory on the device side
-    hipMalloc((void**)&dev_a, N * sizeof(int));
-    hipMalloc((void**)&dev_b, N * sizeof(int));
-    hipMalloc((void**)&dev_c, N * sizeof(int));
 
-    // Memory transfer from host to device
-    hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-    hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
-    hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
+    if (env_project_name_str == "matrix_256x256_32x32x1_float") { 
+        hipMalloc((void**)&dev_a, N * sizeof(float)); 
+        hipMalloc((void**)&dev_b, N * sizeof(float));
+        hipMalloc((void**)&dev_c, N * sizeof(float));
 
-    // Lauching kernel from host
-    printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
-    add<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
-    //matrixTranspose<<<dim3(WIDTH / T_X, WIDTH / T_Y),  dim3(T_X, T_Y)>>>(dev_c, dev_a, WIDTH);
-    /*hipLaunchKernelGGL(matrixTranspose, dim3(WIDTH / T_X, WIDTH / T_Y),
-                    dim3(T_X, T_Y), 0, 0, dev_c,
-                    dev_a, WIDTH);
-    */
+        // Memory transfer from host to device
 
-    // Memory transfer from device to host
+        hipMemcpy(dev_a, a, N * sizeof(float), hipMemcpyHostToDevice);
+        hipMemcpy(dev_b, b, N * sizeof(float), hipMemcpyHostToDevice);
+        hipMemcpy(dev_c, c, N * sizeof(float), hipMemcpyHostToDevice);
+
+        // Lauching kernel from host
+
+        printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
+        add-float<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+    } else {
+        hipMalloc((void**)&dev_a, N * sizeof(int)); 
+        hipMalloc((void**)&dev_b, N * sizeof(int));
+        hipMalloc((void**)&dev_c, N * sizeof(int));
+
+        // Memory transfer from host to device
+
+        hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
+        hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
+        hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
+
+        // Lauching kernel from host
+
+        printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
+        add<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+    }
+
+    if (env_project_name_str == "matrix_256x256_32x32x1_float") { 
+        // Memory transfer from device to host
  
-    hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
-    hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
-    hipMemcpy(c, dev_c, N * sizeof(int), hipMemcpyDeviceToHost);
+        hipMemcpy(a, dev_a, N * sizeof(float), hipMemcpyDeviceToHost);
+        hipMemcpy(b, dev_b, N * sizeof(float), hipMemcpyDeviceToHost);
+        hipMemcpy(c, dev_c, N * sizeof(float), hipMemcpyDeviceToHost);
 
-    // verify the results
+        // verify the results
+    
+        for (int i = 0; i < N; i+=LOOPSTRIDE ) {
+            printf("After add: %d: %f + %f = %f\n", i, a[i], b[i], c[i]);
+            /*
+            if (env_op_str == "add") { printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]); }
+            if (env_op_str == "mul") { printf("After mul: %d: %u * %u = %u\n", i, a[i], b[i], c[i]); }
+            if (env_op_str == "mul_add") { printf("After mul_add: %d: %u * 2 + %u = %u\n", i, a[i], b[i], c[i]); }
+            */
+    } else {
 
-    for (int i = 0; i < N; i+=LOOPSTRIDE ) {
-        printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]);
-        /*
-        if (env_op_str == "add") { printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]); }
-        if (env_op_str == "mul") { printf("After mul: %d: %u * %u = %u\n", i, a[i], b[i], c[i]); }
-        if (env_op_str == "mul_add") { printf("After mul_add: %d: %u * 2 + %u = %u\n", i, a[i], b[i], c[i]); }
-        */
+        // Memory transfer from device to host
+ 
+        hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
+        hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);
+        hipMemcpy(c, dev_c, N * sizeof(int), hipMemcpyDeviceToHost);
+
+        // verify the results
+    
+        for (int i = 0; i < N; i+=LOOPSTRIDE ) {
+            printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]);
+            /*
+            if (env_op_str == "add") { printf("After add: %d: %u + %u = %u\n", i, a[i], b[i], c[i]); }
+            if (env_op_str == "mul") { printf("After mul: %d: %u * %u = %u\n", i, a[i], b[i], c[i]); }
+            if (env_op_str == "mul_add") { printf("After mul_add: %d: %u * 2 + %u = %u\n", i, a[i], b[i], c[i]); }
+            */
     }
 
     // free the resources on device side
