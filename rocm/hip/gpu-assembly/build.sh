@@ -55,7 +55,7 @@ for sub_project_name in vector ; do
     $CMD
 
     ln -s `pwd`/${project_name} ../bindir/${sub_project_name}
-    ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
+    AMD_LOG_LEVEL=4 ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
     cd ..
 
 done
