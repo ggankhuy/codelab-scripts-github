@@ -42,7 +42,7 @@ echo -ne "" | tee $SUMMARY_LOG
 
 # Create executables through loop.
 
-FILENAME=matrix
+FILENAME=tensor
 
     #ADD_INT32_4 \
     #ADD_INT32_1024 \
