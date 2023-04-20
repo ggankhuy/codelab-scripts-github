@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "cmp_args.h"
 
+#define SET_MAT_DIM(x,y,z) MAT_X=(x) ; MAT_Y=(y); MAT_Z=(z);
+#define SET_TILE_DIM(x,y) T_X=(x) ; T_Y=(y); T_Z=1;
 using namespace std;
 
 // Device (Kernel) function, it must be void
@@ -59,6 +61,7 @@ class matrix
         int LOOPSTRIDE = 1;
         int MAT_X = 16;
         int MAT_Y = 16;
+        int MAT_Z = 1;
         int N = (MAT_X * MAT_Y);
         int T_X = 4;
         int T_Y = 4;
@@ -74,12 +77,29 @@ class matrix
             env_project_name=std::getenv("PROJECT_NAME");
             env_project_name ? env_project_name_str=string(env_project_name): "" ;
 
+            SET_MAT_DIM(X,Y,Z)
+            SET_TILE_DIM(TILEX, TILEY)
+
+            /*
+            #if X==X8  MAT_X = 8; #endif
+            #if X==X16  MAT_X = 16; #endif
+            #if X==X64  MAT_X = 64; #endif
+            #if X==X256  MAT_X = 256; #endif
+            
+            #if TILEY=1 T_Y=1 #endif
+            #if TILEY=4 T_Y=4 #endif
+            # ...
+            */
+            N=MAT_X*MAT_Y;
+
+            /*
             if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
             if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
             if (env_project_name_str == "matrix_256x256_32x32x1") { MAT_X=16; MAT_Y=64; N=MAT_X*MAT_Y; T_X=32; T_Y=32; T_Z=1; }
             if (env_project_name_str == "matrix_256x256_32x32x1_float") { MAT_X=16; MAT_Y=64; N=MAT_X*MAT_Y; T_X=32; T_Y=32; T_Z=1; }
             if (env_project_name_str == "matrix_256x256_64x16x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=64; T_Y=16; T_Z=1; }
             if (env_project_name_str == "matrix_256x256_16x64x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=16; T_Y=64; T_Z=1; }
+            */
             LOOPSTRIDE=N/16;
         }
         void initMatrix() {
@@ -107,9 +127,9 @@ class matrix
 
         void dispResult(int pre_op=0) {
             for (int i = 0; i < N; i+=LOOPSTRIDE ) {
-                #if DATATYPE==ARG_DATATYPE_FP32
+                #if DATATYPE==FP32
                     pre_op ? printf("Before add: %d: %f, %f.\n", i, a[i], b[i]) : printf("After add: %d: %f + %f = %f.\n", i, a[i], b[i], c[i]);
-                #elif DATATYPE==ARG_DATATYPE_INT32
+                #elif DATATYPE==INT32
                     pre_op ? printf("Before add: %d: %u, %u.\n", i, a[i], b[i]) : printf("After add: %d: %u + %u = %u.\n", i, a[i], b[i], c[i]);
                 #else
                  #error "DATATYPE not specified p3."
@@ -142,10 +162,10 @@ class matrix
         void memCpyD2H() { memCpy(0); }    
 
         void callKernel() {
-            #if DATATYPE==ARG_DATATYPE_FP32
+            #if DATATYPE==FP32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
                 add<float><<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
-            #elif DATATYPE==ARG_DATATYPE_INT32
+            #elif DATATYPE==INT32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
                 add<int><<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
             #else
@@ -157,9 +177,9 @@ class matrix
 
 int main() {
     printf("Starting matrix computation...\n");
-    #if DATATYPE==ARG_DATATYPE_FP32
+    #if DATATYPE==FP32
     matrix <float>m1;
-    #elif DATATYPE==ARG_DATATYPE_INT32
+    #elif DATATYPE==INT32
     matrix <int>m1;
     #else
      #error "DATA TYPE not specified (main)."
