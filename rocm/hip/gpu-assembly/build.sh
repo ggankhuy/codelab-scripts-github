@@ -83,8 +83,8 @@ for EXEC_NAME_PART in \
 
         TILE_ARG="-DTILEX=$TILE_X -DTILEY=$TILE_Y"
 
-        BUILD_DIR=build-$EXEC_NAME_PART-$tile
-        EXEC_NAME_FULL=$BUILD_DIR
+        BUILD_DIR=build/$EXEC_NAME_PART-$tile
+        EXEC_NAME_FULL=$EXEC_NAME_PART-$tile
         echo "Generating project: $BUILD_DIR"
         echo "tokens: $TOKEN_X $TOKEN_Y $TOKEN_Z, tiles: $TILE_X $TILE_Y"
 
@@ -103,14 +103,13 @@ for EXEC_NAME_PART in \
         fi
 
         mkdir ./log
-        mkdir $BUILD_DIR
+        mkdir -p $BUILD_DIR
         mkdir ./bindir
-        #sudo rm -rf ./bindir/*
-        #rm -rf $BUILD_DIR/*
+
         cd $BUILD_DIR
-        sudo ln -s ../$FILENAME.cpp .
-        sudo ln -s ../$FILENAME.h .
-        sudo ln -s ../$CMP_ARGS_FILENAME_C_HDR .
+        sudo ln -s ../../$FILENAME.cpp .
+        sudo ln -s ../../$FILENAME.h .
+        sudo ln -s ../../$CMP_ARGS_FILENAME_C_HDR .
 
         export PROJECT_NAME=$EXEC_NAME_PART
 
@@ -118,10 +117,10 @@ for EXEC_NAME_PART in \
         echo "$CMD" 2>&1 | tee build.log
         $CMD 2>&1 | tee -a build.log
 
-        echo ln -s `pwd`/${EXEC_NAME_FULL} ../bindir/${EXEC_NAME_FULL}
-        ln -s `pwd`/${EXEC_NAME_FULL} ../bindir/${EXEC_NAME_FULL}
-        ../bindir/${EXEC_NAME_FULL} | tee -a ./$LOG_FILE_EXEC
-        cd ..
+        echo ln -s `pwd`/${EXEC_NAME_FULL} ../../bindir/${EXEC_NAME_FULL}
+        ln -s `pwd`/${EXEC_NAME_FULL} ../../bindir/${EXEC_NAME_FULL}
+        ../../bindir/${EXEC_NAME_FULL} | tee -a ./$LOG_FILE_EXEC
+        cd ../..
         echo "$BUILD_DIR: OK" | tee -a $SUMMARY_LOG
         done
 done
