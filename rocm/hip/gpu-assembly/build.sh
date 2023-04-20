@@ -44,24 +44,23 @@ echo -ne "" | tee $SUMMARY_LOG
 
 FILENAME=tensor
 
-    #ADD_INT32_4 \
-    #ADD_INT32_1024 \
-    #ADD_FP32_16_16; do
 for EXEC_NAME_PART in \
     ADD_INT32_8 \
-    ADD_INT32_64 \
+    ADD_INT32_16384 \
     ADD_INT32_16_16 \
+    ADD_INT32_8192_8192 \
+    ADD_FP32_8192_8192 \
     ;do
 
-    echo "========================"
+    echo "========================" | tee -a $SUMMARY_LOG
     TOKEN_OP=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f1`
     TOKEN_DATATYPE=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f2`
     TOKEN_X=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f3`
     TOKEN_Y=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f4`
     TOKEN_Z=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f5`
 
-    if TOKEN_Y="" ; then TOKEN_Y=1 ; fi
-    if TOKEN_Z="" ; then TOKEN_Z=1 ; fi
+    if [[ -z $TOKEN_Y ]] ; then TOKEN_Y=1 ; fi
+    if [[ -z $TOKEN_Z ]] ; then TOKEN_Z=1 ; fi
 
     ARG1="-DOP=$TOKEN_OP"
     ARG2="-DDATATYPE=$TOKEN_DATATYPE"
@@ -76,7 +75,7 @@ for EXEC_NAME_PART in \
     # 4x4, 8x8, 16x16, 32x32, 16x64, 64x16
     # inside vector. 
 
-    for tile in 4x1 8x1 4x4 8x8; do
+    for tile in 4x1 8x1 4x4 8x8 32x32 64x16 16x64 ; do
         echo "------------------------"
         TILE_X=`echo $tile | tr -s ' '  |cut -d 'x' -f1`
         TILE_Y=`echo $tile | tr -s ' '  |cut -d 'x' -f2`
@@ -114,12 +113,17 @@ for EXEC_NAME_PART in \
         export PROJECT_NAME=$EXEC_NAME_PART
 
         CMD="hipcc --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME_FULL"
+        CMD="hipcc --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME_FULL"
+        CMD908="hipcc --offload-arch=gfx908 --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME_FULL-gfx908"
+        CMD906="hipcc --offload-arch=gfx906 --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME_FULL-gfx908"
         echo "$CMD" 2>&1 | tee build.log
         $CMD 2>&1 | tee -a build.log
+        $CMD908 2>&1 | tee -a build908.log
+        $CMD906 2>&1 | tee -a build906.log
 
         echo ln -s `pwd`/${EXEC_NAME_FULL} ../../bindir/${EXEC_NAME_FULL}
         ln -s `pwd`/${EXEC_NAME_FULL} ../../bindir/${EXEC_NAME_FULL}
-        ../../bindir/${EXEC_NAME_FULL} | tee -a ./$LOG_FILE_EXEC
+        #../../bindir/${EXEC_NAME_FULL} | tee -a ./$LOG_FILE_EXEC
         cd ../..
         echo "$BUILD_DIR: OK" | tee -a $SUMMARY_LOG
         done
