@@ -26,6 +26,18 @@ THE SOFTWARE.
 #include <iostream>
 #include <string.h>
 
+#define ARG_OP_ADD 1
+#define ARG_OP_MUL 2
+#define ARG_OP_MUL_ADD 3
+
+#define ARG_DATATYPE_INT32 1
+#define ARG_DATATYPE_FP32 2
+
+#define ARG_DATASIZE_VEC_4 1
+#define ARG_DATASIZE_VEC_8 2
+#define ARG_DATASIZE_VEC_64 3
+#define ARG_DATASIZE_VEC_1024 4
+
 using namespace std;
 
 // Device (Kernel) function, it must be void
