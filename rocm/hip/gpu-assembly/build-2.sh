@@ -7,6 +7,7 @@ rocm_path=/opt/rocm
 CMP_ARGS_FILENAME_SRC=cmp_args_2.txt
 CMP_ARGS_FILENAME_SH=cmp_args.sh
 CMP_ARGS_FILENAME_C_HDR=cmp_args.h
+SUMMARY_LOG=summary.log
 
 cat $CMP_ARGS_FILENAME_SRC > $CMP_ARGS_FILENAME_SH
 echo "" | tee $CMP_ARGS_FILENAME_C_HDR
@@ -24,6 +25,7 @@ done < "$CMP_ARGS_FILENAME_SRC"
 
 
 source $CMP_ARGS_FILENAME_SH
+SLEEP=0
 
 # This script defines.
 
@@ -36,6 +38,7 @@ LOG_FILE_BUILD=cmake-stdout.log
 LOG_FILE_EXEC=exec.log
 
 rm -rf bindir/*
+echo -ne "" | tee $SUMMARY_LOG
 
 # Create executables through loop.
 
@@ -44,18 +47,18 @@ FILENAME=matrix
     #ADD_INT32_4 \
     #ADD_INT32_1024 \
     #ADD_FP32_16_16; do
-for EXEC_NAME in \
+for EXEC_NAME_PART in \
     ADD_INT32_8 \
     ADD_INT32_64 \
     ADD_INT32_16_16 \
     ;do
 
-    echo "------------------------"
-    TOKEN_OP=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f1`
-    TOKEN_DATATYPE=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f2`
-    TOKEN_X=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f3`
-    TOKEN_Y=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f4`
-    TOKEN_Z=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f5`
+    echo "========================"
+    TOKEN_OP=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f1`
+    TOKEN_DATATYPE=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f2`
+    TOKEN_X=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f3`
+    TOKEN_Y=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f4`
+    TOKEN_Z=`echo $EXEC_NAME_PART | tr -s ' '  |cut -d '_' -f5`
 
     if TOKEN_Y="" ; then TOKEN_Y=1 ; fi
     if TOKEN_Z="" ; then TOKEN_Z=1 ; fi
@@ -73,13 +76,32 @@ for EXEC_NAME in \
     # 4x4, 8x8, 16x16, 32x32, 16x64, 64x16
     # inside vector. 
 
-    #for tile in 4x4 8x8 32x32 16x64 64x16; do
-    for tile in 4x4 8x8; do
+    for tile in 4x1 8x1 4x4 8x8; do
+        echo "------------------------"
         TILE_X=`echo $tile | tr -s ' '  |cut -d 'x' -f1`
         TILE_Y=`echo $tile | tr -s ' '  |cut -d 'x' -f2`
+
         TILE_ARG="-DTILEX=$TILE_X -DTILEY=$TILE_Y"
-        echo "Generating project: $project_name..."
-        BUILD_DIR=build-$EXEC_NAME
+
+        BUILD_DIR=build-$EXEC_NAME_PART-$tile
+        EXEC_NAME_FULL=$BUILD_DIR
+        echo "Generating project: $BUILD_DIR"
+        echo "tokens: $TOKEN_X $TOKEN_Y $TOKEN_Z, tiles: $TILE_X $TILE_Y"
+
+        if [[ $TILE_X -gt $TOKEN_X ]] ; then 
+            echo "1. tile X=$TILE_X is greater than X-dim=$TOKEN_X of tensor. This build will skip." ; 
+            sleep $SLEEP
+            echo "$BUILD_DIR: BYPASS" | tee -a $SUMMARY_LOG
+            continue 
+        fi
+
+        if [[ $TILE_Y -gt $TOKEN_Y ]] ; then 
+            echo "2. tile Y=$TILE_Y is greater than Y-dim=$TOKEN_Y of tensor. This build will skip." ; 
+            sleep $SLEEP 
+            echo "$BUILD_DIR: BYPASS" | tee -a $SUMMARY_LOG
+            continue 
+        fi
+
         mkdir ./log
         mkdir $BUILD_DIR
         mkdir ./bindir
@@ -90,17 +112,17 @@ for EXEC_NAME in \
         sudo ln -s ../$FILENAME.h .
         sudo ln -s ../$CMP_ARGS_FILENAME_C_HDR .
 
-        export PROJECT_NAME=$EXEC_NAME
+        export PROJECT_NAME=$EXEC_NAME_PART
 
-        CMD="hipcc --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME"
-        echo "$CMD"
-        $CMD
+        CMD="hipcc --save-temps $COMPILER_ARGS $TILE_ARG $FILENAME.cpp -o $EXEC_NAME_FULL"
+        echo "$CMD" 2>&1 | tee build.log
+        $CMD 2>&1 | tee -a build.log
 
-        echo ln -s `pwd`/${EXEC_NAME} ../bindir/${EXEC_NAME}
-        ln -s `pwd`/${EXEC_NAME} ../bindir/${EXEC_NAME}
-        ../bindir/${EXEC_NAME} | tee -a ./$LOG_FILE_EXEC
+        echo ln -s `pwd`/${EXEC_NAME_FULL} ../bindir/${EXEC_NAME_FULL}
+        ln -s `pwd`/${EXEC_NAME_FULL} ../bindir/${EXEC_NAME_FULL}
+        ../bindir/${EXEC_NAME_FULL} | tee -a ./$LOG_FILE_EXEC
         cd ..
-        ls -l bindir
+        echo "$BUILD_DIR: OK" | tee -a $SUMMARY_LOG
         done
 done
 tree -fs bindir

@@ -81,6 +81,16 @@ class matrix
             N=MAT_X*MAT_Y;
             LOOPSTRIDE=N/16;
             if (LOOPSTRIDE==0) {LOOPSTRIDE=1;}
+
+            /*
+            #if TILEX > X
+             #error TILEX= is greater than X dimension. This will not compile.
+            #endif
+
+            #if TILEX > Y
+             #error TILEY is greater than Y dimension. This will not compile.
+            #endif  
+            */
             printf("Data initialized to MAT_X/Y=%d,%d, N=%d, T_X/Y/Z=%d, %d, %d.\n", MAT_X, MAT_Y, N, T_X, T_Y, T_Z);
         }
 
