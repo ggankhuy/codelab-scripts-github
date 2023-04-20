@@ -66,18 +66,13 @@ __global__ void addFloat(float* a, float* b, float *c, const int nx, const int n
     c[tidx] = a[tidx] + b[tidx];
 }
 
+template <class T>
 class matrix 
 {
     public:
 
    
-        #if DATATYPE==ARG_DATATYPE_INT32
-         int * a, * b, * c, *dev_a, *dev_b, *dev_c;
-        #elif DATATYPE==ARG_DATATYPE_FP32
-         float *a, *b, *c,  *dev_a, *dev_b, *dev_c;
-        #else
-         #error "DATATYPE not specified."
-        #endif
+         T * a, * b, * c, *dev_a, *dev_b, *dev_c;
         int LOOPSTRIDE = 1;
         int MAT_X = 16;
         int MAT_Y = 16;
@@ -108,15 +103,8 @@ class matrix
             int acc = 0;
 
             for (int i = 0; i < N; i++) {
-                #if DATATYPE==ARG_DATATYPE_INT32
-                    a[i] = (int)i + acc;
-                    b[i] = (int)i * 4 + acc;
-                #elif DATATYPE==ARG_DATATYPE_FP32
-                    a[i] = (float)i + acc;
-                    b[i] = (float)i * 4 + acc;
-                #else
-                 #error "DATATYPE not specified."
-                #endif
+                a[i] = (T)i + acc;
+                b[i] = (T)i * 4 + acc;
 
                 if (i % MAT_X == 0) {
                     acc+=1024; 
@@ -126,23 +114,12 @@ class matrix
         }
 
         void allocMem() {
-            #if DATATYPE==ARG_DATATYPE_FP32
-                a = (float*)malloc(N * sizeof(float));  
-                b = (float*)malloc(N * sizeof(float)); 
-                c = (float*)malloc(N * sizeof(float));
-                hipMalloc((void**)&dev_a, N * sizeof(float)); 
-                hipMalloc((void**)&dev_b, N * sizeof(float));
-                hipMalloc((void**)&dev_c, N * sizeof(float));
-            #elif DATATYPE==ARG_DATATYPE_INT32
-                a = (int*)malloc(N * sizeof(int));  
-                b = (int*)malloc(N * sizeof(int)); 
-                c = (int*)malloc(N * sizeof(int));
-                hipMalloc((void**)&dev_a, N * sizeof(int)); 
-                hipMalloc((void**)&dev_b, N * sizeof(int));
-                hipMalloc((void**)&dev_c, N * sizeof(int));
-            #else
-             #error "DATATYPE not specified p2."
-            #endif
+                a = (T*)malloc(N * sizeof(T));  
+                b = (T*)malloc(N * sizeof(T)); 
+                c = (T*)malloc(N * sizeof(T));
+                hipMalloc((void**)&dev_a, N * sizeof(T)); 
+                hipMalloc((void**)&dev_b, N * sizeof(T));
+                hipMalloc((void**)&dev_c, N * sizeof(T));
         }
 
         void dispResult(int pre_op=0) {
@@ -158,52 +135,28 @@ class matrix
         }
 
         void freeMem() {
-            #if DATATYPE==ARG_DATATYPE_FP32
             hipFree(dev_a);             
             hipFree(dev_b);
             hipFree(dev_c);
             free(a);
             free(b);
             free(c);
-            #elif DATATYPE==ARG_DATATYPE_INT32
-            hipFree(dev_a);
-            hipFree(dev_b);
-            hipFree(dev_c);
-            free(a);
-            free(b);
-            free(c);
-            #else
-             #error "DATATYPE not specified p4."
-            #endif
         }
 
-        void memCpyD2H() {
-            #if DATATYPE==ARG_DATATYPE_FP32
-                hipMemcpy(dev_a, a, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(dev_b, b, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(dev_c, c, N * sizeof(float), hipMemcpyHostToDevice);
-            #elif DATATYPE==ARG_DATATYPE_INT32
-                hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-                hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
-                hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
-            #else
-             #error "DATATYPE not specified p5."
-            #endif
+        void memCpy(int h2d=1) {
+            if (h2d == 1) {
+                hipMemcpy(dev_a, a, N * sizeof(T), hipMemcpyHostToDevice);
+                hipMemcpy(dev_b, b, N * sizeof(T), hipMemcpyHostToDevice);
+                hipMemcpy(dev_c, c, N * sizeof(T), hipMemcpyHostToDevice);
+            } else {
+                hipMemcpy(a, dev_a, N * sizeof(T), hipMemcpyHostToDevice);
+                hipMemcpy(b, dev_b, N * sizeof(T), hipMemcpyHostToDevice);
+                hipMemcpy(c, dev_c, N * sizeof(T), hipMemcpyHostToDevice);
+            }
         }    
 
-        void memCpyH2D() {
-            #if DATATYPE==ARG_DATATYPE_FP32
-                hipMemcpy(a, dev_a, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(b, dev_b, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(c, dev_c, N * sizeof(float), hipMemcpyHostToDevice);
-            #elif DATATYPE==ARG_DATATYPE_INT32
-                hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
-                hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
-                hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
-            #else
-             #error "DATATYPE not specified p6."
-            #endif
-        }    
+        void memCpyH2D() { memCpy(1); }    
+        void memCpyD2H() { memCpy(0); }    
 
         void callKernel() {
             #if DATATYPE==ARG_DATATYPE_FP32
@@ -221,7 +174,13 @@ class matrix
 
 int main() {
     printf("Starting matrix computation...\n");
-    matrix m1;
+    #if DATATYPE==ARG_DATATYPE_FP32
+    matrix <float>m1;
+    #elif DATATYPE==ARG_DATATYPE_INT32
+    matrix <int>m1;
+    #else
+     #error "DATA TYPE not specified (main)."
+    #endif
     m1.set_data();
     m1.allocMem();
     m1.initMatrix();
