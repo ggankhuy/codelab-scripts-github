@@ -76,36 +76,14 @@ class matrix
         void set_data() {
             env_project_name=std::getenv("PROJECT_NAME");
             env_project_name ? env_project_name_str=string(env_project_name): "" ;
-
             SET_MAT_DIM(X,Y,Z)
             SET_TILE_DIM(TILEX, TILEY)
-
-            /*
-            #if X==X8  MAT_X = 8; #endif
-            #if X==X16  MAT_X = 16; #endif
-            #if X==X64  MAT_X = 64; #endif
-            #if X==X256  MAT_X = 256; #endif
-            
-            #if TILEY=1 T_Y=1 #endif
-            #if TILEY=4 T_Y=4 #endif
-            # ...
-            */
             N=MAT_X*MAT_Y;
-
-            /*
-            if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
-            if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
-            if (env_project_name_str == "matrix_256x256_32x32x1") { MAT_X=16; MAT_Y=64; N=MAT_X*MAT_Y; T_X=32; T_Y=32; T_Z=1; }
-            if (env_project_name_str == "matrix_256x256_32x32x1_float") { MAT_X=16; MAT_Y=64; N=MAT_X*MAT_Y; T_X=32; T_Y=32; T_Z=1; }
-            if (env_project_name_str == "matrix_256x256_64x16x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=64; T_Y=16; T_Z=1; }
-            if (env_project_name_str == "matrix_256x256_16x64x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=16; T_Y=64; T_Z=1; }
-            */
             LOOPSTRIDE=N/16;
             if (LOOPSTRIDE==0) {LOOPSTRIDE=1;}
             printf("Data initialized to MAT_X/Y=%d,%d, N=%d, T_X/Y/Z=%d, %d, %d.\n", MAT_X, MAT_Y, N, T_X, T_Y, T_Z);
-            //sleep(3);
-             
         }
+
         void initMatrix() {
             int acc = 0;
 
@@ -113,9 +91,9 @@ class matrix
                 a[i] = (T)i + acc;
                 b[i] = (T)i * 4 + acc;
 
-                if (i % MAT_X == 0) {
-                    acc+=1024; 
-                }
+                //if (i % MAT_X == 0) {
+                    //acc+=1024; 
+                //}
                 c[i] = 999;
             }
         }

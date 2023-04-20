@@ -35,20 +35,20 @@ project_name=vector
 LOG_FILE_BUILD=cmake-stdout.log
 LOG_FILE_EXEC=exec.log
 
-#for EXEC_NAME in vector vector-4 ; do
 rm -rf bindir/*
 
 # Create executables through loop.
 
 FILENAME=matrix
 
+    #ADD_INT32_4 \
+    #ADD_INT32_1024 \
+    #ADD_FP32_16_16; do
 for EXEC_NAME in \
-    ADD_INT32_4 \
     ADD_INT32_8 \
     ADD_INT32_64 \
-    ADD_INT32_1024 \
     ADD_INT32_16_16 \
-    ADD_FP32_16_16; do
+    ;do
 
     echo "------------------------"
     TOKEN_OP=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f1`
