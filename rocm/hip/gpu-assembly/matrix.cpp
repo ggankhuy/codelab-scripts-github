@@ -145,12 +145,12 @@ class matrix
             #endif
         }
 
-        void dispResult() {
+        void dispResult(int pre_op=0) {
             for (int i = 0; i < N; i+=LOOPSTRIDE ) {
                 #if DATATYPE==ARG_DATATYPE_FP32
-                    printf("After add: %d: %f + %f = %f.\n", i, a[i], b[i], c[i]);
+                    pre_op ? printf("Before add: %d: %f, %f.\n", i, a[i], b[i]) : printf("After add: %d: %f + %f = %f.\n", i, a[i], b[i], c[i]);
                 #elif DATATYPE==ARG_DATATYPE_INT32
-                    printf("After add: %d: %u + %u = %u.\n", i, a[i], b[i], c[i]);
+                    pre_op ? printf("Before add: %d: %u, %u.\n", i, a[i], b[i]) : printf("After add: %d: %u + %u = %u.\n", i, a[i], b[i], c[i]);
                 #else
                  #error "DATATYPE not specified p3."
                 #endif
@@ -225,6 +225,7 @@ int main() {
     m1.set_data();
     m1.allocMem();
     m1.initMatrix();
+    m1.dispResult(1);
     m1.memCpyH2D();
     m1.callKernel();
     m1.memCpyD2H();
