@@ -1,4 +1,24 @@
 rocm_path=/opt/rocm
+CMP_ARGS_FILENAME_SRC=cmp_args.txt
+CMP_ARGS_FILENAME_SH=cmp_args.sh
+CMP_ARGS_FILENAME_C_HDR=cmp_args.h
+
+cat $CMP_ARGS_FILENAME_SRC | tee -a $CMP_ARGS_FILENAME_SH
+echo "" | tee $CMP_ARGS_FILENAME_C_HDR
+while IFS= read -r line
+do
+    VAR=`echo "$line" | tr -s ' ' | cut -d '=' -f1`
+    VALUE=`echo "$line" | tr -s ' ' | cut -d '=' -f2`
+    if [[ ! -z $VAR ]] && [[ ! -z $VALUE ]] ; then 
+        echo "#define $VAR $VALUE" | tee -a $CMP_ARGS_FILENAME_C_HDR 
+    else
+        echo "" | tee -a $CMP_ARGS_FILENAME_C_HDR
+
+    fi
+done < "$CMP_ARGS_FILENAME_SRC"
+
+source $CMP_ARGS_FILENAME_SH
+
 rocm_rpath=" -Wl,--enable-new-dtags -Wl,--rpath,/opt/rocm/lib:/opt/rocm/lib64"
 compiler="hipcc"
 cmake_executable="cmake"
@@ -9,18 +29,6 @@ LOG_FILE_EXEC=exec.log
 
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
-
-ARG_OP_ADD=1
-ARG_OP_MUL=2
-ARG_OP_MUL_ADD=3
-
-ARG_DATATYPE_INT32=1
-ARG_DATATYPE_FP32=2
-
-ARG_DATASIZE_VEC_4=1
-ARG_DATASIZE_VEC_8=2
-ARG_DATASIZE_VEC_64=3
-ARG_DATASIZE_VEC_1024=4
 
 for sub_project_name in vector matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
 #for sub_project_name in vector vector1024MA; do
@@ -83,6 +91,7 @@ for sub_project_name in vector matrix_256x256_32x32x1 matrix_256x256_32x32x1_flo
     cd $BUILD_DIR
     sudo ln -s ../$FILENAME.cpp .
     sudo ln -s ../$FILENAME.h .
+    sudo ln -s ../$CMP_ARGS_FILENAME_C_HDR .
 
     export PROJECT_NAME=$sub_project_name
 
