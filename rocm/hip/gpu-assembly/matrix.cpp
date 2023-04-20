@@ -50,15 +50,8 @@ __global__ void matrixTranspose(int* out, int* in, const int width) {
 }
 */
 
-__global__ void add(int* a, int* b, int *c, const int nx, const int ny) {
-    int x = blockDim.x * blockIdx.x + threadIdx.x;
-    int y = blockDim.y * blockIdx.y + threadIdx.y;
-    int tidx= y * nx + x;
-    //if (x < nx && y < ny)
-    c[tidx] = a[tidx] + b[tidx];
-}
-
-__global__ void addFloat(float* a, float* b, float *c, const int nx, const int ny) {
+template<class T>
+__global__ void add(T* a, T* b, T *c, const T nx, const T ny) {
     int x = blockDim.x * blockIdx.x + threadIdx.x;
     int y = blockDim.y * blockIdx.y + threadIdx.y;
     int tidx= y * nx + x;
@@ -161,10 +154,10 @@ class matrix
         void callKernel() {
             #if DATATYPE==ARG_DATATYPE_FP32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
-                addFloat<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+                add<float><<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
             #elif DATATYPE==ARG_DATATYPE_INT32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
-                add<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+                add<int><<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
             #else
              #error "DATATYPE not specified p7."
             #endif
