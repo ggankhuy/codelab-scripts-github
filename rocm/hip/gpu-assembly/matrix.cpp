@@ -103,7 +103,7 @@ class matrix
             LOOPSTRIDE=N/16;
             if (LOOPSTRIDE==0) {LOOPSTRIDE=1;}
             printf("Data initialized to MAT_X/Y=%d,%d, N=%d, T_X/Y/Z=%d, %d, %d.\n", MAT_X, MAT_Y, N, T_X, T_Y, T_Z);
-            sleep(3);
+            //sleep(3);
              
         }
         void initMatrix() {
@@ -188,7 +188,7 @@ int main() {
     #else
      #error "DATA TYPE not specified (main)."
     #endif
-    m1.set_data();
+    //m1.set_data();
     m1.allocMem();
     m1.initMatrix();
     m1.dispResult(1);

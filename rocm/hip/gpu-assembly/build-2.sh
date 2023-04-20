@@ -50,6 +50,7 @@ for EXEC_NAME in \
     ADD_INT32_16_16 \
     ADD_FP32_16_16; do
 
+    echo "------------------------"
     TOKEN_OP=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f1`
     TOKEN_DATATYPE=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f2`
     TOKEN_X=`echo $EXEC_NAME | tr -s ' '  |cut -d '_' -f3`
