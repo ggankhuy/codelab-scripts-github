@@ -10,7 +10,7 @@ LOG_FILE_EXEC=exec.log
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
 
-for sub_project_name in matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
+for sub_project_name in vector matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
 #for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1 matrix_256x256_32x32x1_float; do
 
 #    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
@@ -31,6 +31,7 @@ for sub_project_name in matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
             # unused for now.
             export DATATYPE=int
             export DATASHAPE=matrix
+            export OP=add
             ;;
         "matrix_256x256_32x32x1")
             echo "Setting export variables for 32x32_8x8x1"
@@ -71,7 +72,7 @@ for sub_project_name in matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
     sudo ln -s ../$FILENAME.h .
 
     export PROJECT_NAME=$sub_project_name
-    CMD="hipcc --save-temps -DOPT_SUB_PROJECT_NAME=$sub_project_name $FILENAME.cpp -o $sub_project_name"
+    CMD="hipcc --save-temps $FILENAME.cpp -o $sub_project_name"
     echo $CMD
     $CMD
 
