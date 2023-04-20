@@ -25,7 +25,7 @@ THE SOFTWARE.
 //#include "vector.h"
 #include <iostream>
 #include <string.h>
-
+#include <unistd.h>
 #include "cmp_args.h"
 
 #define SET_MAT_DIM(x,y,z) MAT_X=(x) ; MAT_Y=(y); MAT_Z=(z);
@@ -101,6 +101,10 @@ class matrix
             if (env_project_name_str == "matrix_256x256_16x64x1") { MAT_X=256; MAT_Y=256; N=MAT_X*MAT_Y; T_X=16; T_Y=64; T_Z=1; }
             */
             LOOPSTRIDE=N/16;
+            if (LOOPSTRIDE==0) {LOOPSTRIDE=1;}
+            printf("Data initialized to MAT_X/Y=%d,%d, N=%d, T_X/Y/Z=%d, %d, %d.\n", MAT_X, MAT_Y, N, T_X, T_Y, T_Z);
+            sleep(3);
+             
         }
         void initMatrix() {
             int acc = 0;
