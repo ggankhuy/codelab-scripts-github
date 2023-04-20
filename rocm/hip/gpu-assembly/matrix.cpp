@@ -69,8 +69,15 @@ __global__ void addFloat(float* a, float* b, float *c, const int nx, const int n
 class matrix 
 {
     public:
-        int * a, * b, * c, *dev_a, *dev_b, *dev_c;
-        float *f32_a, *f32_b, *f32_c, *f32_dev_a, *f32_dev_b, *f32_dev_c;
+
+   
+        #if DATATYPE==ARG_DATATYPE_INT32
+         int * a, * b, * c, *dev_a, *dev_b, *dev_c;
+        #elif DATATYPE==ARG_DATATYPE_FP32
+         float *a, *b, *c,  *dev_a, *dev_b, *dev_c;
+        #else
+         #error "DATATYPE not specified."
+        #endif
         int LOOPSTRIDE = 1;
         int MAT_X = 16;
         int MAT_Y = 16;
@@ -99,14 +106,18 @@ class matrix
         }
         void initMatrix() {
             int acc = 0;
+
             for (int i = 0; i < N; i++) {
-                if (env_project_name_str == "matrix_256x256_32x32x1_float") {
-                    f32_a[i] = (float)i + acc;
-                    f32_b[i] = (float)i * 4 + acc;
-                } else {
+                #if DATATYPE==ARG_DATATYPE_INT32
                     a[i] = (int)i + acc;
                     b[i] = (int)i * 4 + acc;
-                }
+                #elif DATATYPE==ARG_DATATYPE_FP32
+                    a[i] = (float)i + acc;
+                    b[i] = (float)i * 4 + acc;
+                #else
+                 #error "DATATYPE not specified."
+                #endif
+
                 if (i % MAT_X == 0) {
                     acc+=1024; 
                 }
@@ -115,102 +126,100 @@ class matrix
         }
 
         void allocMem() {
-            if (env_project_name_str == "matrix_256x256_32x32x1_float")  {
-                f32_a = (float*)malloc(N * sizeof(float));  
-                f32_b = (float*)malloc(N * sizeof(float)); 
-                f32_c = (float*)malloc(N * sizeof(float));
-                hipMalloc((void**)&f32_dev_a, N * sizeof(float)); 
-                hipMalloc((void**)&f32_dev_b, N * sizeof(float));
-                hipMalloc((void**)&f32_dev_c, N * sizeof(float));
-            } else {
+            #if DATATYPE==ARG_DATATYPE_FP32
+                a = (float*)malloc(N * sizeof(float));  
+                b = (float*)malloc(N * sizeof(float)); 
+                c = (float*)malloc(N * sizeof(float));
+                hipMalloc((void**)&dev_a, N * sizeof(float)); 
+                hipMalloc((void**)&dev_b, N * sizeof(float));
+                hipMalloc((void**)&dev_c, N * sizeof(float));
+            #elif DATATYPE==ARG_DATATYPE_INT32
                 a = (int*)malloc(N * sizeof(int));  
                 b = (int*)malloc(N * sizeof(int)); 
                 c = (int*)malloc(N * sizeof(int));
                 hipMalloc((void**)&dev_a, N * sizeof(int)); 
                 hipMalloc((void**)&dev_b, N * sizeof(int));
                 hipMalloc((void**)&dev_c, N * sizeof(int));
-            }
+            #else
+             #error "DATATYPE not specified p2."
+            #endif
         }
 
         void dispResult() {
             for (int i = 0; i < N; i+=LOOPSTRIDE ) {
-                if (env_project_name_str == "matrix_256x256_32x32x1_float") {
-                    printf("After add: %d: %f + %f = %f.\n", i, f32_a[i], f32_b[i], f32_c[i]);
-                } else {
+                #if DATATYPE==ARG_DATATYPE_FP32
+                    printf("After add: %d: %f + %f = %f.\n", i, a[i], b[i], c[i]);
+                #elif DATATYPE==ARG_DATATYPE_INT32
                     printf("After add: %d: %u + %u = %u.\n", i, a[i], b[i], c[i]);
-                }
+                #else
+                 #error "DATATYPE not specified p3."
+                #endif
             }
         }
 
         void freeMem() {
-            if (env_project_name_str == "matrix_256x256_32x32x1_float") {
-                hipFree(f32_dev_a);
-                hipFree(f32_dev_b);
-                hipFree(f32_dev_c);
-                free(f32_a);
-                free(f32_b);
-                free(f32_c);
-            } else {
-                hipFree(dev_a);
-                hipFree(dev_b);
-                hipFree(dev_c);
-                free(a);
-                free(b);
-                free(c);
-            }
+            #if DATATYPE==ARG_DATATYPE_FP32
+            hipFree(dev_a);             
+            hipFree(dev_b);
+            hipFree(dev_c);
+            free(a);
+            free(b);
+            free(c);
+            #elif DATATYPE==ARG_DATATYPE_INT32
+            hipFree(dev_a);
+            hipFree(dev_b);
+            hipFree(dev_c);
+            free(a);
+            free(b);
+            free(c);
+            #else
+             #error "DATATYPE not specified p4."
+            #endif
         }
 
         void memCpyD2H() {
-            if (env_project_name_str == "matrix_256x256_32x32x1_float")  {
-                hipMemcpy(f32_dev_a, f32_a, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(f32_dev_b, f32_b, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(f32_dev_c, f32_c, N * sizeof(float), hipMemcpyHostToDevice);
-            } else {
+            #if DATATYPE==ARG_DATATYPE_FP32
+                hipMemcpy(dev_a, a, N * sizeof(float), hipMemcpyHostToDevice);
+                hipMemcpy(dev_b, b, N * sizeof(float), hipMemcpyHostToDevice);
+                hipMemcpy(dev_c, c, N * sizeof(float), hipMemcpyHostToDevice);
+            #elif DATATYPE==ARG_DATATYPE_INT32
                 hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
                 hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
                 hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
-            }
+            #else
+             #error "DATATYPE not specified p5."
+            #endif
         }    
 
         void memCpyH2D() {
-            if (env_project_name_str == "matrix_256x256_32x32x1_float")  {
-                hipMemcpy(f32_a, f32_dev_a, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(f32_b, f32_dev_b, N * sizeof(float), hipMemcpyHostToDevice);
-                hipMemcpy(f32_c, f32_dev_c, N * sizeof(float), hipMemcpyHostToDevice);
-            } else {
+            #if DATATYPE==ARG_DATATYPE_FP32
+                hipMemcpy(a, dev_a, N * sizeof(float), hipMemcpyHostToDevice);
+                hipMemcpy(b, dev_b, N * sizeof(float), hipMemcpyHostToDevice);
+                hipMemcpy(c, dev_c, N * sizeof(float), hipMemcpyHostToDevice);
+            #elif DATATYPE==ARG_DATATYPE_INT32
                 hipMemcpy(dev_a, a, N * sizeof(int), hipMemcpyHostToDevice);
                 hipMemcpy(dev_b, b, N * sizeof(int), hipMemcpyHostToDevice);
                 hipMemcpy(dev_c, c, N * sizeof(int), hipMemcpyHostToDevice);
-            }
+            #else
+             #error "DATATYPE not specified p6."
+            #endif
         }    
 
         void callKernel() {
-            if (env_project_name_str == "matrix_256x256_32x32x1_float") {
+            #if DATATYPE==ARG_DATATYPE_FP32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
-                addFloat<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(f32_dev_a, f32_dev_b, f32_dev_c, MAT_X, MAT_Y);
-            }else {
+                addFloat<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
+            #elif DATATYPE==ARG_DATATYPE_INT32
                 printf("<<<dim3(%u, %u), (%u, %u)>>>, widthx/y: %u, %u.\n", MAT_X / T_X, MAT_Y / T_Y, T_X, T_Y, MAT_X, MAT_Y);
                 add<<<dim3(MAT_X / T_X, MAT_Y / T_Y),  dim3(T_X, T_Y)>>>(dev_a, dev_b, dev_c, MAT_X, MAT_Y);
-            }
+            #else
+             #error "DATATYPE not specified p7."
+            #endif
         }
     private:
 };
 
 int main() {
-
-    // default: matrix: 16x16 = 256, blockDim(x,y,1)=4,4,1.
-
-/*
-77:        void set_data() {
-88:        void initMatrix() {
-106:        void allocMem() {
-125:        void dispResult() {
-135:        void freeMem() {
-153:        void memCpyD2H() {
-165:        void memCpyH2D() {
-177:        void callKernel() {
-*/
-
     printf("Starting matrix computation...\n");
     matrix m1;
     m1.set_data();

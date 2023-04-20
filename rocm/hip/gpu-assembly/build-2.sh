@@ -22,8 +22,8 @@ ARG_DATASIZE_VEC_8=2
 ARG_DATASIZE_VEC_64=3
 ARG_DATASIZE_VEC_1024=4
 
-#for sub_project_name in vector matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
-for sub_project_name in vector vector1024MA; do
+for sub_project_name in vector matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
+#for sub_project_name in vector vector1024MA; do
 #for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1 matrix_256x256_32x32x1_float; do
 
 #    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
