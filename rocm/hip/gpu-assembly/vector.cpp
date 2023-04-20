@@ -42,6 +42,22 @@ __global__ void mul_add(int *a, int*b, int *c) {
 	c[tid] = a[tid] * 2 + b[tid];
 }
 
+class matrix 
+{
+    public:
+        int * a, * b, * c, *dev_a, *dev_b, *dev_c;
+        float *f32_a, *f32_b, *f32_c, *f32_dev_a, *f32_dev_b, *f32_dev_c;
+
+        void memCpyD2H() {
+        }    
+
+        void memCpyH2D() {
+        }    
+
+        void callKernel() {
+        }
+    private:
+}
 int main (void) {
     int *a, *b, *c;
     int *dev_a, *dev_b, *dev_c;

@@ -10,8 +10,8 @@ LOG_FILE_EXEC=exec.log
 #for sub_project_name in vector vector-4 ; do
 rm -rf bindir/*
 
-#for sub_project_name in vector ; do
-for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1 matrix_256x256_32x32x1_float; do
+for sub_project_name in matrix_256x256_32x32x1 matrix_256x256_32x32x1_float ; do
+#for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 matrix_256x256_32x32x1 matrix_256x256_32x32x1_float; do
 
 #    if (env_project_name_str == "matrix_32x32_8x8x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=8; T_Y=8; T_Z=1; }
 #    if (env_project_name_str == "matrix_32x32_4x4x1") { MAT_X=32; MAT_Y=32; N=(MAT_X*MAT_Y; T_X=4; T_Y=4; T_Z=1;  }
@@ -77,7 +77,7 @@ for sub_project_name in vector vector4 vector64 vector1024 matrix_32x32_8x8x1 ma
 
     echo ln -s `pwd`/${sub_project_name} ../bindir/${sub_project_name}
     ln -s `pwd`/${sub_project_name} ../bindir/${sub_project_name}
-    AMD_LOG_LEVEL=4 ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
+    ../bindir/${sub_project_name} | tee -a ./$LOG_FILE_EXEC
     cd ..
     ls -l bindir
 done
