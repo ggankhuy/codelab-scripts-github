@@ -7,7 +7,7 @@ import subprocess
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=0
+TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
@@ -21,6 +21,8 @@ indent=""
 depFile=None
 component=None
 build_llvm=""
+build_py=""
+build_cmake=""
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -35,17 +37,45 @@ def dispHelp():
     print("--vermajor=<RocmVersion> specify rocm version. i.e. 5.2")
     print("--verminor=<RocmMinorVersion> specify rocm minor version. If not specified, defaults to 0.")
     print("--llvmno: Do not build LLVM.")
+    print("--pyno: Do not build and install python.")
+    print("--cmakeno: Do not build and install cmake.")
+    print("--py: Force build and install python.")
+    print("--cmake: Force build and install cmake.")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
     print("Build hipfft specify gg.dat as dependency file: python3 build-rocm.py --component=hipfft --dep=gg.dat")
     exit(0) 
 
+# validate conflicting args.
+
+sys_argv=sys.argv
+
+if "--pyno" in sys_argv and "--py" in sys_argv: 
+    print("Can not have both --pyno and --py")
+    exit(1)
+
+if "--cmakeno" in sys_argv and "--cmake" in sys_argv: 
+    print("Can not have both --cmakeno and --cmake")
+    exit(1)
+
 for i in sys.argv:
     print("Processing ", i)
     try:
         if re.search("--dep=", i):
            depFile=i.split('=')[1].strip()
+
+        if re.search("--pyno=", i):
+           build_py=i.split('=')[1].strip()
+
+        if re.search("--cmakeno=", i):
+           build_cmake=i.split('=')[1].strip()
+
+        if re.search("--py=", i):
+           build_py=i.split('=')[1].strip()
+
+        if re.search("--cmake=", i):
+           build_cmake=i.split('=')[1].strip()
 
         if re.search("--component", i):
             component=i.split('=')[1].strip()
@@ -192,6 +222,7 @@ print("list_non_dag: ", list_non_dag)
 # else (not component):
     # build dag and build everything in dag.
 
+print("--------------")
 if component:
     if DEBUG:
         print("component specified: ", component)
@@ -209,10 +240,28 @@ if component:
         exit(1)
 else:
     print("building list for everything to build...")
-    finalList=list_dag + list_non_dag
 
+    if DEBUG:
+        print("inserting list_dag to final_list first...")
+    finalList=list_dag
+
+    if DEBUG:
+        print("inserting list_non_dag (everything) to final_list one by one...")
+
+    for i in list_non_dag:
+        if build_llvm=="--llvmno" and i == "llvm":
+            print(" llvm: passing...")
+            continue
+        if i in list_dag:
+            print(" - ", i, ": already in list_dag, bypassing...")
+        else:
+            print(i, ": inserting into final_list...")
+            finalList.append(i)
+
+print("--------------")
 print("Final list: ", finalList)
-    
+
+print("--------------")
 counter = 0
 for j in finalList:
     if j in components_built:
@@ -223,9 +272,9 @@ for j in finalList:
         else:
             print("calling build script with " + str(j))
             if counter == 0:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), build_llvm, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             else:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno', 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             print("out: ", out)
 
             if out != 0:

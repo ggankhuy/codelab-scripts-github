@@ -1,6 +1,8 @@
 echo "build.sh entered..."
 
 CONFIG_BUILD_LLVM=1
+CONFIG_BUILD_PY=0
+CONFIG_BUILD_CMAKE=0
 NPROC=`nproc`
 
 for var in "$@"
@@ -28,6 +30,26 @@ do
     if [[ $var == "--llvmno" ]] ; then
         echo "Will bypass llvm build."
         CONFIG_BUILD_LLVM=0
+    fi
+
+    if [[ $var == "--cmakeno" ]] ; then
+        echo "Will bypass cmake build."
+        CONFIG_BUILD_CMAKE=0
+    fi
+
+    if [[ $var == "--cmake" ]] ; then
+        echo "Will force cmake build."
+        CONFIG_BUILD_CMAKE=1
+    fi
+
+    if [[ $var == "--pyno" ]] ; then
+        echo "Will bypass python build."
+        CONFIG_BUILD_PY=0
+    fi
+
+    if [[ $var == "--py" ]] ; then
+        echo "Will force python build."
+        CONFIG_BUILD_PY=0
     fi
 done
 
@@ -503,6 +525,20 @@ function ROCgdb() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
 }
+
+if [[ $CONFIG_BUILD_PY -eq ]] ; then
+    echo "Building and installing python..."
+    install_python
+else
+    echo "Bypassing python..."
+fi
+
+if [[ $CONFIG_BUILD_CMAKE -eq ]] ; then
+    echo "Building and installing cmake.../not implemented/"
+    #install_cmake
+else
+    echo "Bypassing cmake..."
+fi
 
 pushd $ROCM_SRC_FOLDER
 if [[ $CONFIG_BUILD_LLVM -eq 1 ]] ; then

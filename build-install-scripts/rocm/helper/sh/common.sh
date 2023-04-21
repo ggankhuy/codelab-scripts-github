@@ -157,4 +157,3 @@ case "$OS_NAME" in
      ;;
 esac 
 
-install_python
