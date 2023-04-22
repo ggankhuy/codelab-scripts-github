@@ -64,11 +64,13 @@ function install_python() {
 }
 
 function SINGLE_LINE() {
-    for i in 40 ; do echo -ne "-" 2>&1 | tee -a $LOG_SUMMARY ; done
+    local counter
+    for counter in 40 ; do echo -ne "-" 2>&1 | tee -a $LOG_SUMMARY ; done
 }
  
 function DOUBLE_LINE() {
-    for i in 40 ; do echo -ne "=" 2>&1 | tee -a $LOG_SUMMARY ; done
+    local counter
+    for counter in 40 ; do echo -ne "=" 2>&1 | tee -a $LOG_SUMMARY ; done
 } 
 
 function build_entry () {
@@ -77,7 +79,6 @@ function build_entry () {
     DOUBLE_LINE
     echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
     DOUBLE_LINE
-    t1=$SECONDS
 }
 
 function build_exit() {
