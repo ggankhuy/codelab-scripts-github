@@ -1,5 +1,6 @@
 rocBLAS: hipAMD
 hipAMD: COMGR
+rocSOLVER: rocBLAS
 rocFFT: rocBLAS
 ROCmValidationSuite: hipAMD
 ROCT-Thunk-Interface: 

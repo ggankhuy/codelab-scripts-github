@@ -273,11 +273,11 @@ function rocBLAS() {
     build_entry $i
     #patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
     #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
-    popd
     pushd $ROCM_SRC_FOLDER/$i
     ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
     build_exit $CURR_BIULD
 }
 
