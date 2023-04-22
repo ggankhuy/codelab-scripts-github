@@ -24,6 +24,8 @@ component=None
 build_llvm=""
 build_py=""
 build_cmake=""
+build_package=""
+build_fast=""
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -42,6 +44,7 @@ def dispHelp():
     print("--cmakeno: Do not build and install cmake.")
     print("--py: Force build and install python.")
     print("--cmake: Force build and install cmake.")
+    print("--package: Build packages whenever possible.")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
@@ -92,6 +95,12 @@ for i in sys.argv:
     
         if re.search("--llvmno",i):
             build_llvm="--llvmno"
+
+        if re.search("--package",i):
+            build_package="--package"
+
+        if re.search("--fast",i):
+            build_fast="--fast"
 
     except Exception as msg:
         print(msg)
@@ -281,9 +290,9 @@ for j in finalList:
         else:
             print("calling build script with " + str(j))
             if counter == 0:
-                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_fast, build_package, build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             else:
-                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_fast, build_package, '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             print("out: ", out)
 
             if out != 0:
