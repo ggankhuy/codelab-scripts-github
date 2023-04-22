@@ -4,10 +4,11 @@ import sys
 import os
 import subprocess
 #from matplotlib import pyplot as plt
+
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=1
+TEST_MODE=0
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
@@ -115,7 +116,7 @@ depFileContent=depFileHandle.readlines()
 shell='sh'
 osname=os.popen("cat /etc/os-release | grep NAME").read().strip()
 
-if re.search("ubuntu", re.I):
+if re.search("ubuntu", osname, re.I):
     shell='bash'
 
 #   recurring predecessor to find all ancentral predecessors from current node.
