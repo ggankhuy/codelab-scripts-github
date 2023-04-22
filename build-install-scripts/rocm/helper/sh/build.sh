@@ -11,7 +11,7 @@ FAST_BUILD=1
 
 FAST_BUILD_ROCBLAS_OPT=" -icd "
 
-if [[ $FAST_BUILD -eq ]] ; then
+if [[ $FAST_BUILD -eq 1 ]] ; then
     FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
 fi
 
@@ -538,14 +538,14 @@ function ROCgdb() {
     popd
 }
 
-if [[ $CONFIG_BUILD_PY -eq ]] ; then
+if [[ $CONFIG_BUILD_PY -eq 1 ]] ; then
     echo "Building and installing python..."
     install_python
 else
     echo "Bypassing python..."
 fi
 
-if [[ $CONFIG_BUILD_CMAKE -eq ]] ; then
+if [[ $CONFIG_BUILD_CMAKE -eq 1 ]] ; then
     echo "Building and installing cmake.../not implemented/"
     #install_cmake
 else
