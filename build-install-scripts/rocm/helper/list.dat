@@ -35,3 +35,4 @@ ROCmValidationSuite
 ROCR_Runtime
 roctracer
 ROCgdb
+rocm-cmake
