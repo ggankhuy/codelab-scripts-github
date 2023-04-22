@@ -16,7 +16,7 @@ case "$OS_NAME" in
         PKG_EXEC=apt
         SHELL=bash
         apt-get update -y
-        for i in git-lfs cmake python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
+        for i in vim-common git-lfs cmake python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
         do  
             echo "Installing $i...."
             $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
@@ -25,6 +25,7 @@ case "$OS_NAME" in
             fi 
         done
       #gem install json
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
         
       ;;
    "CentOS Linux")
@@ -33,7 +34,7 @@ case "$OS_NAME" in
       SHELL=sh
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
       $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      install_pip_libs_centos
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
@@ -41,7 +42,7 @@ case "$OS_NAME" in
       SHELL=sh
       $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      install_pip_libs_centos
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1

@@ -6,8 +6,8 @@ CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 
-function install_pip_libs_centos() {
-    for i in cppheaderparser pyyaml ; do
+function install_pip_libs() {
+    for i in $@; do
         echo =======================
         pip3 install $i
     done
