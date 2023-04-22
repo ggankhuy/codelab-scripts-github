@@ -3,6 +3,18 @@ echo "build.sh entered..."
 CONFIG_BUILD_LLVM=1
 CONFIG_BUILD_PY=0
 CONFIG_BUILD_CMAKE=0
+
+FAST_BUILD=1
+
+# These are not values when fast builds are disabled although 
+# variable names suggests otherwise.
+
+FAST_BUILD_ROCBLAS_OPT=" -icd "
+
+if [[ $FAST_BUILD -eq ]] ; then
+    FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
+fi
+
 NPROC=`nproc`
 
 for var in "$@"
@@ -231,7 +243,7 @@ function rocBLAS() {
     #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
     popd
     pushd $ROCM_SRC_FOLDER/$i
-    ./install.sh -icda gfx908 | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
 }
