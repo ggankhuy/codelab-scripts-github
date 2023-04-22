@@ -16,7 +16,7 @@ case "$OS_NAME" in
         PKG_EXEC=apt
         SHELL=bash
         apt-get update -y
-        for i in git-lfs cmake python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
+        for i in vim-common git-lfs cmake python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
         do  
             echo "Installing $i...."
             $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
