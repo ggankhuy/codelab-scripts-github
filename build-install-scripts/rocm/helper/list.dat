@@ -30,9 +30,9 @@ MIVisionX
 rocRAND
 rccl
 rocALUTION 
-ROCm_OpenCL_Runtime
+ROCm-OpenCL-Runtime
 ROCmValidationSuite
-ROCR_Runtime
+ROCR-Runtime
 roctracer
 ROCgdb
 rocm-cmake
