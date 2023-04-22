@@ -10,7 +10,6 @@ function install_pip_libs() {
     for i in $@; do
         echo =======================
         pip3 install $i
-        sleep 10
     done
     
 }
