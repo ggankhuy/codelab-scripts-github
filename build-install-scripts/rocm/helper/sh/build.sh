@@ -1,3 +1,4 @@
+set -x
 echo "build.sh entered..."
 
 CONFIG_BUILD_LLVM=1
@@ -96,6 +97,7 @@ fi
 # Componentwise build options. Some of them are defined to get build working.
 
 CONFIG_MIOPEN_BUILD_ROCBLAS=" -DMIOPEN_USE_ROCBLAS=off" 
+CONFIG_TENSILE_INSTALL_PIP=0
 
 echo major/minor: $vermajor, $verminor
 source sh/common.sh
@@ -269,9 +271,37 @@ function rocBLAS() {
     i=rocBLAS
     CURR_BUILD=$i
     build_entry $i
-    #patch_rocblas $base_dir_this_script/rocBLAS/cmake/ $base_dir_api 
-    #cat rocBLAS/cmake/virtualenv.cmake  | grep upgrade -i | tee $LOG_DIR/$CURR_BUILD.log
+
+    # checkout tensile 
+
     pushd $ROCM_SRC_FOLDER/$i
+    tensileTag=`cat ./tensile_tag.txt`
+
+    if [[ $tensileTag ]] ; then
+        if [[ $CONFIG_TENSILE_INSTALL_PIP -eq 1 ]] ; then
+            pushd ..
+            mkdir Tensile
+            python3 -m pip install git+https://github.com/ROCmSoftwarePlatform/Tensile.git@5aec08937473b27865fa969bb38a83bcf9463c2b -t ./Tensile
+            FAST_BUILD_ROCBLAS_OPT=$FAST_BUILD_ROCBLAS_OPT" -t $ROCM_SRC_FOLDER/Tensile/Tensile "
+            popd
+        else
+            pushd ..
+            git clone https://github.com/ROCmSoftwarePlatform/Tensile.git
+            cd Tensile
+            git checkout $tensileTag
+            tensileTagOK=`git log | grep $tensileTag`
+            if [[ -z $tensileTagOK ]] ; then
+                echo "Warning: unable to checkout Tensile with commit tag: $tensileTag, will do a full build"
+            else 
+                FAST_BUILD_ROCBLAS_OPT=$FAST_BUILD_ROCBLAS_OPT" -t $ROCM_SRC_FOLDER/Tensile "
+            fi
+            cd ..
+            popd
+        fi
+    fi
+    echo "rocBLAS build/install cmd:" 
+    echo ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
+    sleep 10
     ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -403,6 +433,8 @@ function rocSPARSE() {
 function rocFFT() { 
     f1 rocFFT 
 }
+
+#-DCMAKE_PREFIX_PATH
 
 function HIP_Examples() {
     CURR_BUILD=HIP-Examples
