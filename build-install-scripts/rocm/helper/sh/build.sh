@@ -339,11 +339,7 @@ function f1() {
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
     pwd
-    if [[ $i == "rocSOLVER" ]] ; then
-        ./install.sh -i 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    else
-        ./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    fi
+    ./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
     build_exit $CURR_BIULD
