@@ -3,17 +3,8 @@ echo "build.sh entered..."
 CONFIG_BUILD_LLVM=1
 CONFIG_BUILD_PY=0
 CONFIG_BUILD_CMAKE=0
-
-FAST_BUILD=1
-
-# These are not values when fast builds are disabled although 
-# variable names suggests otherwise.
-
-FAST_BUILD_ROCBLAS_OPT=" -icd "
-
-if [[ $FAST_BUILD -eq ]] ; then
-    FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
-fi
+CONFIG_BUILD_PACKAGE=0
+CONFIG_BUILD_FAST=0
 
 NPROC=`nproc`
 
@@ -59,11 +50,37 @@ do
         CONFIG_BUILD_PY=0
     fi
 
-    if [[ $var == "--py" ]] ; then
-        echo "Will force python build."
-        CONFIG_BUILD_PY=0
+    if [[ $var == "--fast" ]] ; then
+        echo "Will speed up build whenever possible."
+        CONFIG_BUILD_FAST=1
+    fi
+
+    if [[ $var == "--package" ]] ; then
+        echo "Will create package whenever possible."
+        CONFIG_BUILD_PACKAGE=1
     fi
 done
+
+if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
+    echo "will build packages..."
+    CONFIG_BUILD_PKGS_LOC=/rocm-packages/
+    BUILD_TARGET=package
+    INSTALL_SH_PACKAGE="-p"
+    INSTALL_TARGET=package
+    mkdir -p $CONFIG_BUILD_PKGS_LOC
+else
+    echo "will not build packages..."
+    BUILD_TARGET=""
+    INSTALL_SH_PACKAGE=""
+    INSTALL_TARGET=install
+fi
+
+FAST_BUILD_ROCBLAS_OPT=" -icd "
+
+if [[ $CONFIG_BUILD_FAST -eq 1 ]] ; then
+    FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
+fi
+
 
 echo major/minor: $verminor, $vermajor
 source sh/common.sh

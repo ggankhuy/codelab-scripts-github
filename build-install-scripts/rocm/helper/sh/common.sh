@@ -107,20 +107,6 @@ ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
 echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
 export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 
-if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
-    echo "will build packages..."
-    CONFIG_BUILD_PKGS_LOC=/rocm-packages/
-    BUILD_TARGET=package
-    INSTALL_SH_PACKAGE="-p"
-    INSTALL_TARGET=package
-    mkdir -p $CONFIG_BUILD_PKGS_LOC
-else
-    echo "will not build packages..."
-    BUILD_TARGET=""
-    INSTALL_SH_PACKAGE=""
-    INSTALL_TARGET=install
-fi
-
 OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
 echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
