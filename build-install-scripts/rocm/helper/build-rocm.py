@@ -110,6 +110,14 @@ else:
 depFileHandle=open(depFile)
 depFileContent=depFileHandle.readlines()
 
+# set shell type.
+
+shell='sh'
+osname=os.popen("cat /etc/os-release | grep NAME").read().strip()
+
+if re.search("ubuntu", re.I):
+    shell='bash'
+
 #   recurring predecessor to find all ancentral predecessors from current node.
 #   buildDag must have been called b efore calling this function to populate graph.
 
@@ -272,9 +280,9 @@ for j in finalList:
         else:
             print("calling build script with " + str(j))
             if counter == 0:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             else:
-                out = subprocess.call(['sh','./sh/build.sh', 'comp=' + str(j), '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
+                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
             print("out: ", out)
 
             if out != 0:
