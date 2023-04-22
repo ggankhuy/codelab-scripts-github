@@ -25,6 +25,7 @@ case "$OS_NAME" in
             fi 
         done
       #gem install json
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
         
       ;;
    "CentOS Linux")
@@ -33,7 +34,7 @@ case "$OS_NAME" in
       SHELL=sh
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
       $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      install_pip_libs_centos
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
       ;;
    "CentOS Stream")
       echo "CentOS is detected..."
@@ -41,7 +42,7 @@ case "$OS_NAME" in
       SHELL=sh
       $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
       $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      install_pip_libs_centos
+      install_pip_libs cppheaderparser pyyaml CppHeaderParser
       ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
