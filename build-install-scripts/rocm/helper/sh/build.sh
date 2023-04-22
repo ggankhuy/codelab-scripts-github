@@ -85,12 +85,17 @@ else
     INSTALL_TARGET=install
 fi
 
+# FAST build options.
+
 FAST_BUILD_ROCBLAS_OPT=" -icd "
 
 if [[ $CONFIG_BUILD_FAST -eq 1 ]] ; then
     FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
 fi
 
+# Componentwise build options. Some of them are defined to get build working.
+
+CONFIG_MIOPEN_BUILD_ROCBLAS=" -DMIOPEN_USE_ROCBLAS=off" 
 
 echo major/minor: $vermajor, $verminor
 source sh/common.sh
@@ -291,7 +296,7 @@ function MIOpen() {
     rm -rf ./*
     echo "current dir: "  | tee $LOG_DIR/$CURR_BUILD-2.log
     pwd 2>&1 | tee $LOG_DIR/$CURR_BUILD-2.log
-    CXX=/opt/rocm/llvm/bin/clang++ cmake -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    CXX=/opt/rocm/llvm/bin/clang++ cmake $CONFIG_MIOPEN_BUILD_ROCBLAS -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1." >> $LOG_SUMMARY ; fi
 
     echo "make -j$NPROC $BUILD_TARGET 2>&1" | tee $LOG_DIR/$CURR_BUILD-3.log
