@@ -63,19 +63,26 @@ function install_python() {
     cd ..
 }
 
+function SINGLE_LINE() {
+    for i in 40 ; do echo -ne "-" 2>&1 | tee -a $LOG_SUMMARY ; done
+}
+ 
+function DOUBLE_LINE() {
+    for i in 40 ; do echo -ne "=" 2>&1 | tee -a $LOG_SUMMARY ; done
+} 
+
 function build_entry () {
-    t2=$SECONDS
-    if  [[ ! -z $t1 ]] ; then
-        echo Build took $((t2-t1)) seconds 2>&1 | tee -a $LOG_SUMMARY
-        echo "............................." 2>&1 | tee -a $LOG_SUMMARY
-    else
-        echo "Did not log previous build" 2>&1 | tee -a $LOG_SUMMARY
-    fi
-    L_CURR_BUILD=$1
-    echo "............................." 2>&1 | tee -a $LOG_SUMMARY
-    echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
-    echo "............................." 2>&1 | tee -a $LOG_SUMMARY
     t1=$SECONDS
+    L_CURR_BUILD=$1
+    DOUBLE_LINE
+    echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
+    DOUBLE_LINE
+    t1=$SECONDS
+}
+
+function build_exit() {
+    t2=$SECONDS
+    echo Build took $((t2-t1)) seconds 2>&1 | tee -a $LOG_SUMMARY
 }
 
 function setup_root_rocm_softlink () {
@@ -92,6 +99,9 @@ LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
 #ROCM_SRC_FOLDER=~/ROCm-$VERSION
 ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
+
+# these are settings both common to shell and python.
+
 LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
 

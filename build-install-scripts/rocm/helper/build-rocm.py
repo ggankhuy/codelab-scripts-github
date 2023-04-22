@@ -120,10 +120,18 @@ else:
 depFileHandle=open(depFile)
 depFileContent=depFileHandle.readlines()
 
-# set shell type.
+# Set shell script based initializations here. 
+# 1. Set shell type.
 
 shell='sh'
 osname=os.popen("cat /etc/os-release | grep NAME").read().strip()
+
+LOG_DIR="/log/rocmbuild/"
+LOG_SUMMARY=LOG_DIR + "/build-summary.log"
+LOG_SUMMARY_L2=LOG_DIR + "/build-summary-l2.log"
+os.popen("rm -rf " + str(LOG_DIR)).read()
+os.popen("echo -ne '' | tee " + str(LOG_SUMMARY))
+os.popen("echo -ne '' | tee " + str(LOG_SUMMARY_L2))
 
 if re.search("ubuntu", osname, re.I):
     shell='bash'
