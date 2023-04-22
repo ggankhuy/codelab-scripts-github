@@ -5,6 +5,16 @@ CONFIG_BUILD_PY=0
 CONFIG_BUILD_CMAKE=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_BUILD_FAST=0
+CONFIG_TEST_MODE=0
+DEBUG=1
+
+if [[ $CONFIG_TEST_MODE -eq 1 ]]; then
+    echo "TEST_MODE: sh/build.sh is called with parameters: '$@'"
+    exit 0
+fi
+if [[ $DEBUG -eq 1 ]] ; then
+    echo "DBG: sh/build.sh is called with parameters: '$@'"
+fi
 
 NPROC=`nproc`
 

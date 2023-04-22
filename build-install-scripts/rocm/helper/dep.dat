@@ -1,6 +1,6 @@
 rocBLAS: hipAMD
 hipAMD: COMGR
-rocfft: rocblas
+rocFFT: rocBLAS
 ROCmValidationSuite: hipAMD
 ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
