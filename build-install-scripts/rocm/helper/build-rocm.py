@@ -288,7 +288,7 @@ print("--------------")
 print("Final list: ", finalList)
 
 print("--------------")
-out = subprocess.call([shell,'./sh/prebuild.sh')
+out = subprocess.call([shell,'./sh/prebuild.sh'])
 counter = 0
 for j in finalList:
     if j in components_built:
