@@ -158,18 +158,11 @@ function ROCm_Device_Lib() {
     build_exit $CURR_BUILD
 }
 
+function rocm_cmake() {
+    f4 rocm_cmake
+}
 function ROCmValidationSuite() {
-    CURR_BUILD=ROCmValidationSuite
-    pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
-    mkdir build ; cd build
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
-    cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
-    make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
-    popd
-    build_exit $CURR_BIULD
+    f4 ROCmValidationSuite
 }
 
 function ROCT_Thunk_Interface() {
@@ -531,7 +524,7 @@ function ROCmValidationSuite() {
 function f4 () {
     i=$1
     CURR_BUILD=$i
-    pushd $ROCM_SRC_FOLDER/ROCmValidationSuite
+    pushd $ROCM_SRC_FOLDER/$i
     mkdir build ; cd build
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
     cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
