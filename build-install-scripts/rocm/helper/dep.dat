@@ -3,7 +3,7 @@ hipAMD: COMGR
 HIP_Examples: hipAMD
 rocSOLVER: rocBLAS
 rocFFT: rocBLAS rocRAND
-ROCmValidationSuite: hipAMD
+ROCmValidationSuite: hipAMD rocBLAS
 ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
 AMDMIGraphX: protobuf rocBLAS MIOpen
