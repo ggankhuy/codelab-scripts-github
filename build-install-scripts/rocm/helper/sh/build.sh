@@ -92,7 +92,7 @@ if [[ $CONFIG_BUILD_FAST -eq 1 ]] ; then
 fi
 
 
-echo major/minor: $verminor, $vermajor
+echo major/minor: $vermajor, $verminor
 source sh/common.sh
 
 function llvm() {
