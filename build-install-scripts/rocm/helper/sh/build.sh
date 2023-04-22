@@ -107,6 +107,7 @@ function llvm() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     popd
+    build_exit $CURR_BUILD
 }
 
 function f3 () {
@@ -124,6 +125,7 @@ function f3 () {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    build_exit $i
 }
 
 function rocminfo()  {
@@ -148,6 +150,7 @@ function ROCm_Device_Lib() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     #cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
+    build_exit $CURR_BUILD
 }
 
 function ROCmValidationSuite() {
@@ -161,6 +164,7 @@ function ROCmValidationSuite() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
     popd
+    build_exit $CURR_BIULD
 }
 
 function ROCT_Thunk_Interface() {
@@ -222,6 +226,7 @@ function COMGR() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function protobuf() {
@@ -237,7 +242,7 @@ function protobuf() {
     make -j`nproc` 
     make $INSTALL_TARGET    
     cd ../..
-
+    build_exit $CURR_BIULD
 }
 
 function AMDMIGraphX() {
@@ -259,7 +264,7 @@ function AMDMIGraphX() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
-
+    build_exit $CURR_BIULD
 }
 
 function rocBLAS() {
@@ -273,6 +278,7 @@ function rocBLAS() {
     ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    build_exit $CURR_BIULD
 }
 
 function MIOpen() {
@@ -297,6 +303,7 @@ function MIOpen() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-4.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3." >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function hipAMD() {
@@ -322,6 +329,7 @@ function hipAMD() {
     #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    build_exit $CURR_BIULD
 }
 
 
@@ -338,6 +346,7 @@ function f1() {
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function rocPRIM() {
@@ -360,6 +369,7 @@ function f2() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function rocThrust() {
@@ -380,6 +390,7 @@ function f2a() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 
@@ -407,7 +418,7 @@ function HIP_Examples() {
     ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
-
+    build_exit $CURR_BIULD
 }
 
 function MIVisionX() {
@@ -424,6 +435,7 @@ function MIVisionX() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function rocRAND() {
@@ -436,6 +448,7 @@ function rocRAND() {
     CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/build" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     make -j`nproc` install | tee $LOG_DIR/$CURR_BUILD.log
 #   f5 rocRAND
+    build_exit $CURR_BIULD
 }
 
 function rccl() {
@@ -458,6 +471,7 @@ function f5() {
     #CXX=/opt/rocm/bin/hipcc cmake .. 2>&1 | tee -a $CURR_BUILD
     #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
     #popd
+    build_exit $CURR_BIULD
 }
 
 function rocALUTION () {
@@ -474,11 +488,10 @@ function rocALUTION () {
     make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-3.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3" >> $LOG_SUMMARY ; fi
     popd
-
+    build_exit $CURR_BIULD
 }
 
 function ROCm_OpenCL_Runtime() {
-
     pushd $ROCM_SRC_FOLDER/ROCclr
     PWD=$ROCM_SRC_FOLDER/ROCclr/build
     OPENCL_DIR=$ROCM_SRC_FOLDER/ROCm-OpenCL-Runtime/
@@ -507,7 +520,7 @@ function ROCm_OpenCL_Runtime() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
-
+    build_exit $CURR_BIULD
 }
 
 function ROCmValidationSuite() {
@@ -526,6 +539,7 @@ function f4 () {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
     popd
+    build_exit $CURR_BIULD
 }
 
 function ROCR_Runtime() {
@@ -541,6 +555,7 @@ function ROCR_Runtime() {
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 function roctracer() {
@@ -551,7 +566,7 @@ function roctracer() {
     pushd $ROCM_SRC_FOLDER/$i
     ./build.sh
     popd
-
+    build_exit $CURR_BIULD
 }
 
 function ROCgdb() {
@@ -563,6 +578,7 @@ function ROCgdb() {
     make -j$NPROC
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    build_exit $CURR_BIULD
 }
 
 if [[ $CONFIG_BUILD_PY -eq 1 ]] ; then
