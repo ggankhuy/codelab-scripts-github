@@ -1,15 +1,17 @@
-ROCM_VERSION=5.2.0
+#/opt/rocm-4.5.2/hip/include/hip/
+#-I$(ROCM_PATH)/hsa/include
 rm -rf build/*
 mkdir build
 cd build
-for FILENAME in sscal example_sgemm example_sgemm_strided_batched; do 
-    echo building $FILENAME...
-    ln -s ../$FILENAME.cpp
-    for i in helpers.hpp ArgParser.hpp ; do 
-        ln -s ../$FILENAME .
-    done
-
-    hipcc --offload-arch=gfx908 --save-temps -c $FILENAME.cpp
-    hipcc $FILENAME.o  /opt/rocm-$ROCM_VERSION/lib/librocblas.so -o $FILENAME.out
+FILENAME=sscal
+FILENAME=example_sgemm
+#FILENAME=gemm
+ln -s ../$FILENAME.cpp
+for i in helpers.hpp ArgParser.hpp ; do 
+    ln -s ../$i .
 done
+
+hipcc --offload-arch=gfx908 --save-temps -c $FILENAME.cpp
+hipcc $FILENAME.o  /opt/rocm/lib/librocblas.so
 cd ..
+
