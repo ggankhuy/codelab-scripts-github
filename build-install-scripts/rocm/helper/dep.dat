@@ -2,7 +2,7 @@ rocBLAS: hipAMD
 hipAMD: COMGR
 HIP_Examples: hipAMD
 rocSOLVER: rocBLAS
-rocFFT: rocBLAS
+rocFFT: rocBLAS rocRAND
 ROCmValidationSuite: hipAMD rocBLAS
 ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
