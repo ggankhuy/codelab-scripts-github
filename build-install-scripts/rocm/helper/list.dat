@@ -4,7 +4,7 @@ rocminfo
 MIOpenGEMM
 ROCm_Device_Lib
 ROCmValidationSuite
-ROCT_Thunk_Interface
+ROCT-Thunk-Interface
 rocm_bandwidth_test
 rocm_cmake 
 rocm_smi_lib 
