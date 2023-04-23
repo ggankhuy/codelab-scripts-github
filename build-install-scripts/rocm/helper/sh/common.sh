@@ -6,6 +6,30 @@ CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 
+function set_os_type() {
+   OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+   echo "OS_NAME: $OS_NAME"
+   case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      PKG_EXT=deb
+      ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      PKG_EXT=rpm
+      return 0
+      ;;
+   *)
+      echo "Unsupported O/S, exiting..."
+      PKG_EXEC=""
+      PKG_EXT=""
+      return 1
+     ;;
+    esac
+}
+
 function install_pip_libs() {
     for i in $@; do
         echo =======================
