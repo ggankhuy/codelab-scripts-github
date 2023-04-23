@@ -1,4 +1,4 @@
-set -x
+#set -x
 echo "build.sh entered..."
 
 CONFIG_BUILD_LLVM=1
@@ -306,6 +306,8 @@ function rocBLAS() {
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
+    
+    yum install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.rpm 2>&1 | tee -a $LOG_SUMMARY    
     build_exit $CURR_BIULD
 }
 
