@@ -24,7 +24,11 @@ function install_python() {
 
     if [[ $? -ne 0 ]] ; then return 1 ; fi
 
-    CURR_VER=`python3 --version  | cut -d ' ' -f2`
+    if [[ `which python3` ]] ; then 
+        CURR_VER=`python3 --version  | cut -d ' ' -f2`
+    else
+        echo "Unable to find python3 path, assuming not installed..."
+    fi
 
     if [[ -z $1 ]] ; then
         echo "install_python: don't know what version to install."
@@ -33,7 +37,7 @@ function install_python() {
     PYTHON_VER=$1
 
     echo "Installing python version: $PYTHON_VER..."
-    sleep 10
+    sleep 3
     #PYTHON_VER_MAJOR=3.10
     #PYTHON_VER_MINOR=10
     #PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
