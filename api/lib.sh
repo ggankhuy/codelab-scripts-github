@@ -80,10 +80,10 @@ function install_python() {
     fi
     PATH_PYTHON_U=`which python$PYTHON_VER_MAJOR`
     echo "new path: $PATH_PYTHON_U"
-    rm -rf /usr/bin/python
+    mv /usr/bin/python /usr/bin/python.old
     echo ln -s $PATH_PYTHON_U /usr/bin/python
     ln -s $PATH_PYTHON_U /usr/bin/python
-    rm -rf /usr/bin/python3
+    mv /usr/bin/python3 /usr/bin/python3.old
     ln -s /usr/bin/python /usr/bin/python3
     cd ..
     return 0
