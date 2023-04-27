@@ -25,10 +25,19 @@ function install_python() {
     if [[ $? -ne 0 ]] ; then return 1 ; fi
 
     CURR_VER=`python3 --version  | cut -d ' ' -f2`
-    PYTHON_VER_MAJOR=3.10
-    PYTHON_VER_MINOR=10
 
-    PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
+    if [[ -z $1 ]] ; then
+        echo "install_python: don't know what version to install."
+        return 
+    fi
+    PYTHON_VER=$1
+
+    echo "Installing python version: $PYTHON_VER..."
+    sleep 10
+    #PYTHON_VER_MAJOR=3.10
+    #PYTHON_VER_MINOR=10
+    #PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
+
     PYTHON_FULL_NAME=Python-$PYTHON_VER
     PYTHON_TAR=$PYTHON_FULL_NAME.tgz
 
