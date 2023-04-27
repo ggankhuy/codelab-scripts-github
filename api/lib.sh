@@ -80,7 +80,15 @@ function install_conda() {
     
     # Anaconda defs.
 
-    FILE_ANACONDA=Anaconda3-2021.11-Linux-x86_64.sh
+   
+    if [[ $1 ]] ; then
+        FILE_ANACONDA=$1
+    else
+        FILE_ANACONDA=Anaconda3-2021.11-Linux-x86_64.sh
+    fi
+    echo "Installing the version: $FILE_ANACONDA" 
+    sleep 5
+
     PREFIX_ANACONDA=/Anaconda3
     CONFIG_UPGRADE_ANACONDA=1
     EXEC_PATH_CONDA=$PREFIX_ANACONDA/bin/conda
