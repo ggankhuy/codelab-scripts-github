@@ -76,9 +76,9 @@ int main(int argc, char **argv) {
         //cudaStreamCreate(&streams[i]);
         cudaStreamCreateWithFlags(&streams[s], cudaStreamNonBlocking);
 
-        cudaHostMalloc((void**)&h_a[s], N);
-        cudaHostMalloc((void**)&h_b[s], N);
-        cudaHostMalloc((void**)&h_c[s], N);
+        cudaHostAlloc((void**)&h_a[s], N, cudaHostAllocDefault);
+        cudaHostAlloc((void**)&h_b[s], N, cudaHostAllocDefault);
+        cudaHostAlloc((void**)&h_c[s], N, cudaHostAllocDefault);
 
         cudaMalloc(&d_a[s], N);
         cudaMalloc(&d_b[s], N);
@@ -162,6 +162,6 @@ int main(int argc, char **argv) {
 
     for (int s = 0; s < num_streams; s++) {
         cudaStreamDestroy(streams[s]);
-        hipFree(d_a[s]);
+        cudaFree(d_a[s]);
     }
 }
