@@ -3,7 +3,7 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <hip/hip_runtime.h>
+//#include <[hip/hip_runtime.h>
 //#define N 1000000
 #define N 4
 
@@ -68,21 +68,21 @@ int main(int argc, char **argv) {
     int *h_c[num_streams];
     int *d_c[num_streams];
 
-    hipStream_t streams[num_streams];
+    cudaStream_t streams[num_streams];
 
     // Create streams and allocate host and device memory for each.
 
     for (int s = 0; s < num_streams; s++) {
-        //hipStreamCreate(&streams[i]);
-        hipStreamCreateWithFlags(&streams[s], hipStreamNonBlocking);
+        //cudaStreamCreate(&streams[i]);
+        cudaStreamCreateWithFlags(&streams[s], cudaStreamNonBlocking);
 
-        hipHostMalloc((void**)&h_a[s], N);
-        hipHostMalloc((void**)&h_b[s], N);
-        hipHostMalloc((void**)&h_c[s], N);
+        cudaHostMalloc((void**)&h_a[s], N);
+        cudaHostMalloc((void**)&h_b[s], N);
+        cudaHostMalloc((void**)&h_c[s], N);
 
-        hipMalloc(&d_a[s], N);
-        hipMalloc(&d_b[s], N);
-        hipMalloc(&d_c[s], N);
+        cudaMalloc(&d_a[s], N);
+        cudaMalloc(&d_b[s], N);
+        cudaMalloc(&d_c[s], N);
 
         for (int j = 0; j < N; j++) {
             h_a[s][j]  = j + num_streams * 1000 * s;
@@ -112,9 +112,9 @@ int main(int argc, char **argv) {
     
         // make async copy for current stream.
 
-        hipMemcpyAsync(d_a[s], h_a[s], N, hipMemcpyHostToDevice, streams[s]);
-        hipMemcpyAsync(d_b[s], h_b[s], N, hipMemcpyHostToDevice, streams[s]);
-        hipMemcpyAsync(d_c[s], h_c[s], N, hipMemcpyHostToDevice, streams[s]);
+        cudaMemcpyAsync(d_a[s], h_a[s], N, cudaMemcpyHostToDevice, streams[s]);
+        cudaMemcpyAsync(d_b[s], h_b[s], N, cudaMemcpyHostToDevice, streams[s]);
+        cudaMemcpyAsync(d_c[s], h_c[s], N, cudaMemcpyHostToDevice, streams[s]);
 
         // i = 0, slow launches first or 3rd. i=1, fast launches second and 4th.
 
@@ -145,13 +145,13 @@ int main(int argc, char **argv) {
             }
         // copy back.
         
-        hipMemcpyAsync(h_a[s], d_a[s], N, hipMemcpyDeviceToHost, streams[s]);
-        hipMemcpyAsync(h_b[s], d_b[s], N, hipMemcpyDeviceToHost, streams[s]);
-        hipMemcpyAsync(h_c[s], d_c[s], N, hipMemcpyDeviceToHost, streams[s]);
+        cudaMemcpyAsync(h_a[s], d_a[s], N, cudaMemcpyDeviceToHost, streams[s]);
+        cudaMemcpyAsync(h_b[s], d_b[s], N, cudaMemcpyDeviceToHost, streams[s]);
+        cudaMemcpyAsync(h_c[s], d_c[s], N, cudaMemcpyDeviceToHost, streams[s]);
         }
     }
 
-    hipDeviceSynchronize();
+    cudaDeviceSynchronize();
 
     for (int s = 0; s < num_streams; s++) {
         for (int j = 0; j < N; j++) {
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
 
     for (int s = 0; s < num_streams; s++) {
-        hipStreamDestroy(streams[s]);
+        cudaStreamDestroy(streams[s]);
         hipFree(d_a[s]);
     }
 }
