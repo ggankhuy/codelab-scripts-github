@@ -6,7 +6,7 @@
 double seconds() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec + (double)tp.tv_usec*1.e-6);
+    return ((double)tp.tv_sec + (double)tp.tv_usec * 1.e-6);
 }
 
 __global__ void warmingup(float * c) {
@@ -19,7 +19,7 @@ __global__ void warmingup(float * c) {
     } else {
         b = 200.0f;        
     }
-    c[tid] =a + b;
+    c[tid] = a + b;
 } 
 
 __global__ void mathKernel1(float * c) {
@@ -32,7 +32,7 @@ __global__ void mathKernel1(float * c) {
     } else {
         b = 200.0f;        
     }
-    c[tid] =a + b;
+    c[tid] = a + b;
 } 
 
 __global__ void mathKernel2(float * c) {
@@ -45,7 +45,7 @@ __global__ void mathKernel2(float * c) {
     } else {
         b = 200.0f;        
     }
-    c[tid] =a + b;
+    c[tid] = a + b;
 } 
 
 __global__ void mathKernel3(float * c) {
@@ -58,7 +58,7 @@ __global__ void mathKernel3(float * c) {
     } else {
         b = 200.0f;        
     }
-    c[tid] =a + b;
+    c[tid] = a + b;
 } 
 __global__ void mathKernel4(float * c) {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -83,8 +83,8 @@ int main (int argc, char **argv) {
     
     // setup a data size.
 
-    int size = 64;
-    int blocksize = 64;
+    int size = 16384 * 1024;
+    int blocksize = 1024;
     if (argc > 1) blocksize = atoi(argv[1]);
     if (argc > 2) size = atoi(argv[2]);
 
@@ -94,7 +94,7 @@ int main (int argc, char **argv) {
 
     dim3 block(blocksize, 1);
     dim3 grid((size+block.x-1)/block.x, 1);
-    printf("Execution configured (block %d grid %d\n", block.x, grid.x);
+    printf("Execution configured (block %d grid %d).\n", block.x, grid.x);
 
     // alloc gpu memory.
 
@@ -128,7 +128,7 @@ int main (int argc, char **argv) {
     iElaps = seconds() - iStart;
     printf("MathKernel2 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
 
-    /*
+    
     // run kernel 3
 
     iStart = seconds();
@@ -144,5 +144,5 @@ int main (int argc, char **argv) {
     cudaDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("MathKernel4 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
-    */
+    
 }
