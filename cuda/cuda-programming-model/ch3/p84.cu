@@ -3,70 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <lib.h>
-
-__global__ void warmingup(float * c) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float a,b;
-    a = b = 0.0f;
-    
-    if (tid % 2 == 0 ) {
-        a = 100.0f;
-    } else {
-        b = 200.0f;        
-    }
-    c[tid] = a + b;
-} 
-
-__global__ void mathKernel1(float * c) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float a,b;
-    a = b = 0.0f;
-    
-    if (tid % 2 == 0 ) {
-        a = 100.0f;
-    } else {
-        b = 200.0f;        
-    }
-    c[tid] = a + b;
-} 
-
-__global__ void mathKernel2(float * c) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float a,b;
-    a = b = 0.0f;
-    
-    if ((tid / warpSize ) % 2  == 0 ) {
-        a = 100.0f;
-    } else {
-        b = 200.0f;        
-    }
-    c[tid] = a + b;
-} 
-
-__global__ void mathKernel3(float * c) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float a,b;
-    a = b = 0.0f;
-    
-    if (tid % 2 == 0 ) {
-        a = 100.0f;
-    } else {
-        b = 200.0f;        
-    }
-    c[tid] = a + b;
-} 
-__global__ void mathKernel4(float * c) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float a,b;
-    a = b = 0.0f;
-    
-    if (tid % 2 == 0 ) {
-        a = 100.0f;
-    } else {
-        b = 200.0f;        
-    }
-    c[tid] =a + b;
-} 
+#include <kernels.h>
 
 int main (int argc, char **argv) {
     // setup device.
