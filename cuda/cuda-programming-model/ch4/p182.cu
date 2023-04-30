@@ -1,17 +1,7 @@
 #include <iostream>
 #include <sys/time.h>
-
-void initialData(float * ip, int size) {
-
-    // generate different seed for random number.
-
-    time_t t;
-    srand((unsigned) time (&t));
-
-    for (int i = 0; i < size; i ++ ) {
-        ip[i] = (float)(rand() & 0xFF ) / 10.0f;
-    }
-}
+#include <lib.h>
+#include <kernels.h>
 
 void usage() {
     printf("Usage: ");
@@ -22,12 +12,6 @@ void usage() {
     printf("p4 p5: nx, ny.\n");
     return;
 }
-double seconds() {
-    struct timeval tp;
-    gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec + (double)tp.tv_usec*1.e-6);
-}
-
 
 __global__ void copyRow(float * out, float * in, const int nx, const int ny) {
     unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
