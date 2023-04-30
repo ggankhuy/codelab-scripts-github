@@ -1,1 +1,1 @@
-nvcc p99.cu ../lib.cu -I..
+nvcc p99.cu ../lib.cu ../kernels.cu -I..

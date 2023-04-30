@@ -2,12 +2,7 @@
 //#include <cuda_runtime.h>
 #include <stdbool.h>
 #include <stdio.h>
-
-double seconds() {
-    struct timeval tp;
-    gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec + (double)tp.tv_usec * 1.e-6);
-}
+#include <lib.h>
 
 __global__ void warmingup(float * c) {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;

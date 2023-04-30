@@ -1,22 +1,14 @@
+
 #include <stdio.h>
 #include <cuda_runtime.h>
 #include <sys/time.h>
 #include <stdbool.h>
 #include <lib.h>
+#include <kernels.h>
 
 //#include <lib1.h>
 
 // #define DYN_BUILD
-
-__global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, int ny) {
-    unsigned int ix = threadIdx.x + blockIdx.x + blockDim.x;
-    unsigned int iy = threadIdx.y + blockIdx.y + blockDim.y;
-    unsigned int idx = iy * nx + ix;
-
-    if (ix < nx && iy < ny) {
-        MatC[idx] = MatA[idx] + MatB[idx];
-    }
-}
 
 int main(int argc, char ** argv) {
     printf("%s Starting...\n", argv[0]);
