@@ -1,6 +1,8 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <lib.h>
+#include <kernels.h>
 
 /*
 #define CHECK(call)
@@ -14,24 +16,6 @@
 }
 */
 
-double cpusecond() {
-    struct timeval tp;
-    gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec * (double)tp.tv_usec*1.e-6);
-}
-
-void initialData(float * ip, int size) {
-
-    // generate different seed for random number.
-
-    time_t t;
-    srand((unsigned) time (&t));
-
-    for (int i = 0; i < size; i ++ ) {
-        ip[i] = (float)(rand() & 0xFF ) / 10.0f;
-    }
-}
-
 void sumArraysOnHost(float * A, float *B, float *C, const int N) {
     for (int idx = 0; idx < N ; idx++) 
         C[idx] = A[idx] + B[idx];
@@ -41,7 +25,6 @@ __global__ void sumArraysOnGPU(float *A, float *B, float*C, const int N) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i < N) C[i] = A[i] + B[i];
 }
-
 
 int main(int argc, char **argv) {
     printf("%s Starting...\n", argv[0]);
@@ -73,19 +56,19 @@ int main(int argc, char **argv) {
 
     // initialize data at host side.
 
-    iStart = cpusecond();
+    iStart = seconds();
     initialData(h_A, nElem);
     initialData(h_B, nElem);
-    iElaps = cpusecond() - iStart;
+    iElaps = seconds() - iStart;
 
     memset(hostRef, 0, nBytes);
     memset(gpuRef, 0, nBytes);
 
     // add vector at host side for result checks.
 
-    iStart = cpusecond();
+    iStart = seconds();
     sumArraysOnHost(h_A, h_B, hostRef, nElem);
-    iElaps = cpusecond()  - iStart;
+    iElaps = seconds()  - iStart;
     
     // malloc device global memory.
 
@@ -105,10 +88,10 @@ int main(int argc, char **argv) {
     dim3 block(iLen);
     dim3 grid((nElem + block.x - 1)/block.x);
     
-    iStart = cpusecond();
+    iStart = seconds();
     sumArraysOnGPU <<<grid, block>>>(d_A, d_B, d_C, nElem);
     cudaDeviceSynchronize();
-    iElaps = cpusecond() - iStart;
+    iElaps = seconds() - iStart;
     printf("sumArraysOnGPU<<<%d, %d>>> Time elapsed %f sec\n", grid.x, block.x, iElaps);
 
     // copy kernel result back to host side
