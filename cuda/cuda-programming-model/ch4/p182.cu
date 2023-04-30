@@ -16,7 +16,8 @@ void initialData(float * ip, int size) {
 void usage() {
     printf("Usage: ");
     printf("<execname> <p1> <p2> <p3> <p4> where: \n");
-    printf("p1: kernel name: either 0 (row) or 1 (col) transpose.\n");
+    printf("p1: kernel name: \n");
+    printf(" - 0:copyrow\n - 1:copyCol\n - 2: transposeRow\n - 3: transposeCol.\n");
     printf("p2 p3: blockx, blocky.\n");
     printf("p4 p5: nx, ny.\n");
     return;
@@ -25,6 +26,25 @@ double seconds() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
     return ((double)tp.tv_sec + (double)tp.tv_usec*1.e-6);
+}
+
+
+__global__ void copyRow(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
+
+    if (ix < nx && iy < ny) {
+        out[iy * nx + ix] = in[iy * nx + ix];
+    }
+}
+
+__global__ void copyCol(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
+
+    if (ix < nx && iy < ny) {
+        out[ix * ny + iy] = in[ix * ny + iy];
+    }
 }
 
 __global__ void transposeNaiveRow(float * out, float * in, const int nx, const int ny) {
@@ -126,10 +146,18 @@ int main(int argc, char **argv) {
 
     switch(iKernel) {
         case 0:
+            kernel=&copyRow;
+            kernelName = "copyRow    ";
+            break;
+        case 1:
+            kernel=&copyCol;
+            kernelName = "copyCol    ";
+            break;
+        case 2:
             kernel=&transposeNaiveRow;
             kernelName = "NaiveRow    ";
             break;
-        case 1:
+        case 3:
             kernel=&transposeNaiveCol;
             kernelName = "NaiveCol     ";
             break;
