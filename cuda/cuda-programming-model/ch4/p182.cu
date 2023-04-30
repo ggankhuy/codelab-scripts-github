@@ -13,6 +13,14 @@ void initialData(float * ip, int size) {
     }
 }
 
+void usage() {
+    printf("Usage: ");
+    printf("<execname> <p1> <p2> <p3> <p4> where: \n");
+    printf("p1: kernel name: either 0 (row) or 1 (col) transpose.\n");
+    printf("p2 p3: blockx, blocky.\n");
+    printf("p4 p5: nx, ny.\n");
+    return;
+}
 double seconds() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
@@ -64,6 +72,7 @@ int main(int argc, char **argv) {
     int blockx=16;
     int blocky=16;
 
+    if (argc == 1) {usage(); return 1;};
     if (argc > 1) iKernel = atoi(argv[1]);
     if (argc > 2) blockx = atoi(argv[2]);
     if (argc > 3) blocky = atoi(argv[3]);
