@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <cuda_runtime.h>
+#include <hip/hip_runtime.h>
 #include <sys/time.h>
 #include <stdbool.h>
 #include <lib.h>
@@ -11,10 +11,10 @@ int main(int argc, char ** argv) {
     // set up device.
 
     int dev = 0;
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, dev);
+    hipDeviceProp_t deviceProp;
+    hipGetDeviceProperties(&deviceProp, dev);
     printf("Using Device %d: %s\n", dev, deviceProp.name);
-    cudaSetDevice(dev);
+    hipSetDevice(dev);
 
     int nx = 1<<14;
     int ny = 1<<14;
@@ -50,14 +50,14 @@ int main(int argc, char ** argv) {
     // malloc device global memory.
 
     float *d_MatA, *d_MatB, *d_MatC;
-    cudaMalloc((void**)&d_MatA, nBytes);
-    cudaMalloc((void**)&d_MatB, nBytes);
-    cudaMalloc((void**)&d_MatC, nBytes);
+    hipMalloc((void**)&d_MatA, nBytes);
+    hipMalloc((void**)&d_MatB, nBytes);
+    hipMalloc((void**)&d_MatC, nBytes);
 
     // trabsfer data from host to device.
 
-    cudaMemcpy(d_MatA, h_A, nBytes, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_MatB, h_B, nBytes, cudaMemcpyHostToDevice);
+    hipMemcpy(d_MatA, h_A, nBytes, hipMemcpyHostToDevice);
+    hipMemcpy(d_MatB, h_B, nBytes, hipMemcpyHostToDevice);
 
     // invoke kernel at host side.
 
@@ -68,14 +68,14 @@ int main(int argc, char ** argv) {
 
     iStart = seconds();
     sumMatrixOnGPU2D <<< grid, block >>> (d_MatA, d_MatB, d_MatC, nx, ny);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     
     printf("sumMatrixOnGPU2D <<<(%d, %d), (%d, %d) >>> elapsed %f sec\n", grid.x, grid.y, block.x, block.y, iElaps);
 
     // copy kernel result back to host side.
 
-    cudaMemcpy(gpuRef, d_MatC, nBytes, cudaMemcpyDeviceToHost);
+    hipMemcpy(gpuRef, d_MatC, nBytes, hipMemcpyDeviceToHost);
 
     // check device results.
 
@@ -83,9 +83,9 @@ int main(int argc, char ** argv) {
     
     // free device global memory.
 
-    cudaFree(d_MatA);
-    cudaFree(d_MatB);
-    cudaFree(d_MatC);
+    hipFree(d_MatA);
+    hipFree(d_MatB);
+    hipFree(d_MatC);
 
     // free host memory.
 
@@ -96,7 +96,7 @@ int main(int argc, char ** argv) {
 
     // reset device
 
-    cudaDeviceReset();
+    hipDeviceReset();
     return 0;
 }
 

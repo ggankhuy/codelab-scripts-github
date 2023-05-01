@@ -1,5 +1,5 @@
 #include <sys/time.h>
-//#include <cuda_runtime.h>
+#include <hip/hip_runtime.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <lib.h>
@@ -9,8 +9,8 @@ int main (int argc, char **argv) {
     // setup device.
 
     int dev = 0;
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, dev);
+    hipDeviceProp_t deviceProp;
+    hipGetDeviceProperties(&deviceProp, dev);
     printf("%s using Device %d: %s\n", argv[0], dev, deviceProp.name);
     
     // setup a data size.
@@ -32,15 +32,15 @@ int main (int argc, char **argv) {
 
     float *d_C;
     size_t nBytes = size * sizeof(float);
-    cudaMalloc((float**)&d_C, nBytes);
+    hipMalloc((float**)&d_C, nBytes);
 
     // run a warmup kernel to remove overheard.
 
     size_t iStart, iElaps;
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iStart = seconds();
     warmingup<<<grid, block>>>(d_C);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("Warmup <<<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
 
@@ -48,7 +48,7 @@ int main (int argc, char **argv) {
 
     iStart = seconds();
     mathKernel1<<<grid, block>>>(d_C);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("MathKernel1 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
 
@@ -56,7 +56,7 @@ int main (int argc, char **argv) {
 
     iStart = seconds();
     mathKernel2<<<grid, block>>>(d_C);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("MathKernel2 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
 
@@ -65,7 +65,7 @@ int main (int argc, char **argv) {
 
     iStart = seconds();
     mathKernel1<<<grid, block>>>(d_C);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("MathKernel3 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
 
@@ -73,7 +73,7 @@ int main (int argc, char **argv) {
 
     iStart = seconds();
     mathKernel1<<<grid, block>>>(d_C);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("MathKernel4 <<<%4d %4d >>> elapsed %d sec \n", grid.x, block.x, iElaps);
     
