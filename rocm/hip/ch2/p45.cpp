@@ -1,4 +1,4 @@
-#include <cuda_runtime.h>
+#include <hip/hip_runtime.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <lib.h>
@@ -7,10 +7,10 @@
 /*
 #define CHECK(call)
 {
-    const cudaError_t error = call;
-    if (error != cudaSuccess) {
+    const hipError_t error = call;
+    if (error != hipSuccess) {
         printf("Error: %s:%d, ", __FILE__, __LINE);
-        printf("code: %d, reason: %s\n", error, cudaErrorString(error));
+        printf("code: %d, reason: %s\n", error, hipErrorString(error));
         exit(1);
     }
 }
@@ -32,10 +32,10 @@ int main(int argc, char **argv) {
     // setup device.
 
     int dev = 0;
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, dev);
+    hipDeviceProp_t deviceProp;
+    hipGetDeviceProperties(&deviceProp, dev);
     printf("Using Device %d: %s\n", dev, deviceProp.name);
-    cudaSetDevice(dev);
+    hipSetDevice(dev);
 
     // setup device size of vectors.
 
@@ -73,14 +73,14 @@ int main(int argc, char **argv) {
     // malloc device global memory.
 
     float *d_A, *d_B, *d_C;
-    cudaMalloc((float**)&d_A, nBytes);
-    cudaMalloc((float**)&d_B, nBytes);
-    cudaMalloc((float**)&d_C, nBytes);
+    hipMalloc((float**)&d_A, nBytes);
+    hipMalloc((float**)&d_B, nBytes);
+    hipMalloc((float**)&d_C, nBytes);
 
     // transfer data from host to device
 
-    cudaMemcpy(d_A, h_A, nBytes, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice);
+    hipMemcpy(d_A, h_A, nBytes, hipMemcpyHostToDevice);
+    hipMemcpy(d_B, h_B, nBytes, hipMemcpyHostToDevice);
 
     // invoke kernel at host side.
 
@@ -90,19 +90,19 @@ int main(int argc, char **argv) {
     
     iStart = seconds();
     sumArraysOnGPU <<<grid, block>>>(d_A, d_B, d_C, nElem);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     printf("sumArraysOnGPU<<<%d, %d>>> Time elapsed %f sec\n", grid.x, block.x, iElaps);
 
     // copy kernel result back to host side
 
-    cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost);
+    hipMemcpy(gpuRef, d_C, nBytes, hipMemcpyDeviceToHost);
     
     // free device global memory
 
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
+    hipFree(d_A);
+    hipFree(d_B);
+    hipFree(d_C);
 
     // free host memory.
 

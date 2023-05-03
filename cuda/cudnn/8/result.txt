@@ -1,0 +1,5 @@
+Forward:   2 GFLOPS
+Backward:   5 GFLOPS, (  3 GFLOPS), (2611 GFLOPS)
+y checksum 1.315793E+06     hy checksum 1.315212E+05
+dx checksum 6.676003E+01    dhx checksum 6.425073E+01
+dw checksum 1.453766E+09

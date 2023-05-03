@@ -1,9 +1,14 @@
+
 #include <stdio.h>
 #include <cuda_runtime.h>
 #include <sys/time.h>
 #include <stdbool.h>
 #include <lib.h>
 #include <kernels.h>
+
+//#include <lib1.h>
+
+// #define DYN_BUILD
 
 int main(int argc, char ** argv) {
     printf("%s Starting...\n", argv[0]);

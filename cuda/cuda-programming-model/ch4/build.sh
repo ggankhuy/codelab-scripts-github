@@ -1,3 +1,3 @@
-for i in p45 p53; do
+for i in p182; do
     nvcc $i.cu ../lib.cu ../kernels.cu -I.. -o $i.out
 done
