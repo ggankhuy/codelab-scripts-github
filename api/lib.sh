@@ -25,10 +25,14 @@ function install_python() {
     if [[ $? -ne 0 ]] ; then return 1 ; fi
 
     CURR_VER=`python3 --version  | cut -d ' ' -f2`
-    PYTHON_VER_MAJOR=3.10
-    PYTHON_VER_MINOR=10
 
-    PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
+    #PYTHON_VER_MAJOR=3.9
+    #PYTHON_VER_MINOR=10
+
+    if [[ -z $1 ]] ; then echo "Need to specify python version." ; return 1; fi
+
+    PYTHON_VER=$1
+    #PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
     PYTHON_FULL_NAME=Python-$PYTHON_VER
     PYTHON_TAR=$PYTHON_FULL_NAME.tgz
 
@@ -50,6 +54,7 @@ function install_python() {
     fi
     
     wget -nc https://www.python.org/ftp/python/$PYTHON_VER/$PYTHON_TAR
+    if [[ $? -ne 0 ]] ; then echo "Unable to wget $PYTHON_TAR" ; return 1 ; fi
     tar -xvf $PYTHON_TAR
     cd $PYTHON_FULL_NAME
 
