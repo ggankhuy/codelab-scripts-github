@@ -1,12 +1,14 @@
 rocBLAS: hipAMD
 hipAMD: COMGR
-rocfft: rocblas
-ROCmValidationSuite: hipAMD
+HIP_Examples: hipAMD
+rocSOLVER: rocBLAS
+rocFFT: rocBLAS rocRAND
+ROCmValidationSuite: hipAMD rocBLAS
 ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
 AMDMIGraphX: protobuf rocBLAS MIOpen
 hipBLAS: rocBLAS rocSOLVER
 hipSPARSE: rocSPARSE
 rocSPARSE: rocPRIM
-rocALUTION: hipAMD rocBLAS
+rocALUTION: hipAMD rocBLAS rocRAND
 rocRAND: hipAMD

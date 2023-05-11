@@ -6,8 +6,53 @@ CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 
-function install_pip_libs_centos() {
-    for i in cppheaderparser pyyaml ; do
+LOG_DIR=/log/rocmbuild/
+NPROC=`nproc`
+#ROCM_SRC_FOLDER=~/ROCm-$VERSION
+ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
+
+# these are settings both common to shell and python.
+
+LOG_SUMMARY=$LOG_DIR/build-summary.log
+LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+VERSION=$vermajor
+MINOR_VERSION=$verminor
+mkdir /log/rocmbuild/ -p
+if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
+echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
+export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
+
+function set_os_type() {
+   OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+   echo "OS_NAME: $OS_NAME"
+   case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      PKG_EXT=deb
+      ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      PKG_EXT=rpm
+      return 0
+      ;;
+   *)
+      echo "Unsupported O/S, exiting..."
+      PKG_EXEC=""
+      PKG_EXT=""
+      return 1
+     ;;
+    esac
+}
+
+function install_pip_libs() {
+    for i in $@; do
         echo =======================
         pip3 install $i
     done
@@ -63,19 +108,27 @@ function install_python() {
     cd ..
 }
 
+function SINGLE_LINE() {
+    local counter
+    for counter in 40 ; do echo -ne "-" 2>&1 | tee -a $LOG_SUMMARY ; done
+}
+ 
+function DOUBLE_LINE() {
+    local counter
+    for counter in 40 ; do echo -ne "=" 2>&1 | tee -a $LOG_SUMMARY ; done
+} 
+
 function build_entry () {
-    t2=$SECONDS
-    if  [[ ! -z $t1 ]] ; then
-        echo Build took $((t2-t1)) seconds 2>&1 | tee -a $LOG_SUMMARY
-        echo "............................." 2>&1 | tee -a $LOG_SUMMARY
-    else
-        echo "Did not log previous build" 2>&1 | tee -a $LOG_SUMMARY
-    fi
-    L_CURR_BUILD=$1
-    echo "............................." 2>&1 | tee -a $LOG_SUMMARY
-    echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
-    echo "............................." 2>&1 | tee -a $LOG_SUMMARY
     t1=$SECONDS
+    L_CURR_BUILD=$1
+    DOUBLE_LINE
+    echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
+    DOUBLE_LINE
+}
+
+function build_exit() {
+    t2=$SECONDS
+    echo Build took $((t2-t1)) seconds 2>&1 | tee -a $LOG_SUMMARY
 }
 
 function setup_root_rocm_softlink () {
@@ -88,73 +141,3 @@ function setup_root_rocm_softlink () {
     fi
 }
 
-LOG_DIR=/log/rocmbuild/
-NPROC=`nproc`
-#ROCM_SRC_FOLDER=~/ROCm-$VERSION
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
-LOG_SUMMARY=$LOG_DIR/build-summary.log
-LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
-
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
-
-VERSION="5.2"
-MINOR_VERSION="0"
-VERSION=$vermajor
-MINOR_VERSION=$verminor
-mkdir /log/rocmbuild/ -p
-ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
-echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
-export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
-
-if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
-    echo "will build packages..."
-    CONFIG_BUILD_PKGS_LOC=/rocm-packages/
-    BUILD_TARGET=package
-    INSTALL_SH_PACKAGE="-p"
-    INSTALL_TARGET=package
-    mkdir -p $CONFIG_BUILD_PKGS_LOC
-else
-    echo "will not build packages..."
-    BUILD_TARGET=""
-    INSTALL_SH_PACKAGE=""
-    INSTALL_TARGET=install
-fi
-
-OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
-echo "OS_NAME: $OS_NAME"
-case "$OS_NAME" in
-   "Ubuntu")
-        echo "Ubuntu is detected..."
-        PKG_EXEC=apt
-        apt-get update
-        for i in python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
-        do  
-            $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
-            if [[ $? -ne 0 ]] ; then 
-                echo "Failed to install $i" | tee -a $LOG_SUMMARY_L2 ; 
-            fi 
-        done
-      #gem install json
-        
-      ;;
-   "CentOS Linux")
-      echo "CentOS is detected..."
-      PKG_EXEC=yum
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      install_pip_libs_centos
-      ;;
-   "CentOS Stream")
-      echo "CentOS is detected..."
-      PKG_EXEC=yum
-      $PKG_EXEC install gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      install_pip_libs_centos
-      ;;
-   *)
-     echo "Unsupported O/S, exiting..." ; exit 1
-     ;;
-esac 
-
-install_python
