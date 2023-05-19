@@ -1,6 +1,13 @@
 #set -x
 echo "build.sh entered..."
 
+CONFIG_BUILD_LLVM=1
+CONFIG_BUILD_CMAKE=0
+CONFIG_BUILD_PY=0
+CONFIG_BUILD_FAST=0
+CONFIG_BUILD_PACKAGE=0
+CONFIG_TEST_MODE=0
+
 for var in "$@"
 do
     echo var: $var
@@ -51,6 +58,11 @@ do
     if [[ $var == "--package" ]] ; then
         echo "Will create package whenever possible."
         CONFIG_BUILD_PACKAGE=1
+    fi
+
+    if [[ $var == "--testmode" ]] ; then
+        echo "Will create package whenever possible."
+        CONFIG_TEST_MODE=1
     fi
 done
 
@@ -600,8 +612,17 @@ fi
 pushd $ROCM_SRC_FOLDER
 if [[ $CONFIG_BUILD_LLVM -eq 1 ]] ; then
     llvm
+    if [[ $CONFIG_TEST_MODE -eq 1 ]] ; 
+        echo "build.sh: TEST_MODE: building llvm..."
+    fi
+
 fi
-$COMP
-ret=$?
+if [[ $CONFIG_TEST_MODE -eq 1 ]] ; 
+    echo "build.sh: TEST_MODE: building $COMP..."
+    exit 0
+else
+    $COMP
+    ret=$?
+    exit $ret
+fi
 popd
-exit $ret

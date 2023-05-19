@@ -103,22 +103,12 @@ function install_python() {
     cd ..
 }
 
-function SINGLE_LINE() {
-    local counter
-    for counter in 40 ; do echo -ne "-" 2>&1 | tee -a $LOG_SUMMARY ; done
-}
- 
-function DOUBLE_LINE() {
-    local counter
-    for counter in 40 ; do echo -ne "=" 2>&1 | tee -a $LOG_SUMMARY ; done
-} 
-
 function build_entry () {
     t1=$SECONDS
     L_CURR_BUILD=$1
-    DOUBLE_LINE
+    print_double_bar
     echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
-    DOUBLE_LINE
+    print_double_bar
 }
 
 function build_exit() {
