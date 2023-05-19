@@ -1,24 +1,6 @@
 #set -x
 echo "build.sh entered..."
 
-CONFIG_BUILD_LLVM=1
-CONFIG_BUILD_PY=0
-CONFIG_BUILD_CMAKE=0
-CONFIG_BUILD_PACKAGE=0
-CONFIG_BUILD_FAST=0
-CONFIG_TEST_MODE=0
-DEBUG=1
-
-if [[ $CONFIG_TEST_MODE -eq 1 ]]; then
-    echo "TEST_MODE: sh/build.sh is called with parameters: '$@'"
-    exit 0
-fi
-if [[ $DEBUG -eq 1 ]] ; then
-    echo "DBG: sh/build.sh is called with parameters: '$@'"
-fi
-
-NPROC=`nproc`
-
 for var in "$@"
 do
     echo var: $var
@@ -72,35 +54,8 @@ do
     fi
 done
 
-if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
-    echo "will build packages..."
-    CONFIG_BUILD_PKGS_LOC=/rocm-packages/
-    BUILD_TARGET=package
-    INSTALL_SH_PACKAGE="-p"
-    INSTALL_TARGET=package
-    mkdir -p $CONFIG_BUILD_PKGS_LOC
-else
-    echo "will not build packages..."
-    BUILD_TARGET=""
-    INSTALL_SH_PACKAGE=""
-    INSTALL_TARGET=install
-fi
-
-# FAST build options.
-
-FAST_BUILD_ROCBLAS_OPT=" -icd "
-
-if [[ $CONFIG_BUILD_FAST -eq 1 ]] ; then
-    FAST_BUILD_ROCBLAS_OPT=" -ida gf908 -l asm_full "
-fi
-
-# Componentwise build options. Some of them are defined to get build working.
-
-CONFIG_MIOPEN_BUILD_ROCBLAS=" -DMIOPEN_USE_ROCBLAS=off" 
-CONFIG_TENSILE_INSTALL_PIP=0
-
-echo major/minor: $vermajor, $verminor
 source sh/common.sh
+source sh/prebuild.sh
 
 set_os_type
 install_packages cmake
