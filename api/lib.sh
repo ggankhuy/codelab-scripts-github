@@ -32,15 +32,11 @@ function install_python() {
 
     if [[ -z $1 ]] ; then
         echo "install_python: don't know what version to install."
-        return 
+        return 1
     fi
     PYTHON_VER=$1
 
     echo "Installing python version: $PYTHON_VER..."
-    sleep 3
-    #PYTHON_VER_MAJOR=3.10
-    #PYTHON_VER_MINOR=10
-    #PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
 
     PYTHON_FULL_NAME=Python-$PYTHON_VER
     PYTHON_TAR=$PYTHON_FULL_NAME.tgz
@@ -63,6 +59,7 @@ function install_python() {
     fi
     
     wget -nc https://www.python.org/ftp/python/$PYTHON_VER/$PYTHON_TAR
+    if [[ $? -ne 0 ]] ; then echo "Unable to wget $PYTHON_TAR" ; return 1 ; fi
     tar -xvf $PYTHON_TAR
     cd $PYTHON_FULL_NAME
 
@@ -93,7 +90,15 @@ function install_conda() {
     
     # Anaconda defs.
 
-    FILE_ANACONDA=Anaconda3-2021.11-Linux-x86_64.sh
+   
+    if [[ $1 ]] ; then
+        FILE_ANACONDA=$1
+    else
+        FILE_ANACONDA=Anaconda3-2021.11-Linux-x86_64.sh
+    fi
+    echo "Installing the version: $FILE_ANACONDA" 
+    sleep 5
+
     PREFIX_ANACONDA=/Anaconda3
     CONFIG_UPGRADE_ANACONDA=1
     EXEC_PATH_CONDA=$PREFIX_ANACONDA/bin/conda
