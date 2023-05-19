@@ -77,7 +77,7 @@ else
 fi
 
 set_os_type
-install_packages cmake
+install_packages cmake chrpath
 install_pip_libs CppHeaderParser
 
 function llvm() {
