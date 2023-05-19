@@ -6,6 +6,22 @@ function print_double_bar() {
     for i in {1..50} ; echo =" ; done
 }
 
+LOG_DIR=/log/rocmbuild/
+NPROC=`nproc`
+ROCM_INST_FOLDER=/opt/rocm-$VERSION_MAJOR.$VERSION_MAJOR_MINOR
+
+# these are settings both common to shell and python.
+
+LOG_SUMMARY=$LOG_DIR/build-summary.log
+LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+VERSION_MAJOR=$vermajor
+VERSION_MINOR=$verminor
+mkdir $LOG_DIR -p
+
 function set_os_type() {
    OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
    echo "OS_NAME: $OS_NAME"

@@ -12,8 +12,6 @@ TEST_MODE=0
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
-rocmVersionMajor=5.2
-rocmVersionMinor=0
 
 # used by def recur_pred
 
@@ -27,6 +25,9 @@ build_cmake=""
 build_package=""
 build_fast=""
 
+rocmVersionMajor=""
+rocmVersionMinor=""
+
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
 CONFIG_DAG_ENABLE=1 
@@ -37,8 +38,8 @@ def dispHelp():
     print("--help: display this help menu.")
     print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
     print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
-    print("--vermajor=<RocmVersion> specify rocm version. i.e. 5.2")
-    print("--verminor=<RocmMinorVersion> specify rocm minor version. If not specified, defaults to 0.")
+    print("--vermajor=<RocmVersion> force specify rocm version. i.e. 5.2")
+    print("--verminor=<RocmMinorVersion> force specify rocm minor version. If not specified, defaults to 0.")
     print("--llvmno: Do not build LLVM.")
     print("--pyno: Do not build and install python.")
     print("--cmakeno: Do not build and install cmake.")
@@ -116,6 +117,32 @@ if not depFile:
     print("dependency file not specified, using default: ", depFile)
 else:
     print("dependency file: ", depFile)
+
+# determine version
+
+
+rocmVersionInstalled=os.popen("cat /opt/rocm/.info/version").read().strip().split('-')[0]
+
+if rocmVersionInstalled:
+    rocmVersionMajorInstalled=rocmVersionInstalled.split(".")[0] + "." + rocmVersionInstalled.split(".")[1]
+    rocmVersionMinorInstalled=rocmVersionInstalled.split(".")[2]
+
+if not rocmVersionMajor:
+    if not rocmVersionMajorInstalled:
+        print("ROCm is not installed.")
+        print("can not determine installed version from /opt/rocm/.info/version nor you specified the version to build")
+        print("Either you need to install specific ROCm version or specify in command line.")
+        exit(1)
+    else:
+        rocmVersionMajor=rocmVersionMajorInstalled
+
+if not rocmVersionMinor:
+    if not rocmVersionMinorInstalled:
+        rocmVersionMinorInstalled=0
+    else:
+        rocmVersionMinor=rocmVersionMinorInstalled
+
+print("ROCm version: ", rocmVersionMajor, rocmVersionMinor)
 
 depFileHandle=open(depFile)
 depFileContent=depFileHandle.readlines()
