@@ -62,7 +62,7 @@ do
 
     if [[ $var == "--testmode" ]] ; then
         echo "Will create package whenever possible."
-        CONFIG_TEST_MODE=1
+        CONFIG_TEST_MODE=`echo $var | cut -d '=' -f2`
     fi
 done
 
@@ -78,7 +78,7 @@ fi
 
 set_os_type
 install_packages cmake
-install_pip_libs 
+install_pip_libs CppHeaderParser
 
 function llvm() {
     CURR_BUILD=llvm-project
@@ -612,12 +612,12 @@ fi
 pushd $ROCM_SRC_FOLDER
 if [[ $CONFIG_BUILD_LLVM -eq 1 ]] ; then
     llvm
-    if [[ $CONFIG_TEST_MODE -eq 1 ]] ; 
+    if [[ $CONFIG_TEST_MODE -eq 1 ]] ; then
         echo "build.sh: TEST_MODE: building llvm..."
     fi
 
 fi
-if [[ $CONFIG_TEST_MODE -eq 1 ]] ; 
+if [[ $CONFIG_TEST_MODE -eq 1 ]] ;  then
     echo "build.sh: TEST_MODE: building $COMP..."
     exit 0
 else
