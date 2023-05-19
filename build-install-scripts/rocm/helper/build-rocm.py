@@ -8,7 +8,7 @@ import subprocess
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=1
+TEST_MODE=0
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()

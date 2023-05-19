@@ -36,7 +36,7 @@ ROCM_SRC_SCRIPT=rocm-source.sh
 ROCM_SRC_FOLDER=$PWD/ROCm-$VERSION_MAJOR/
 echo ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER
 
-if [[ ! -f $ROCM_SRC_FOLDER ]] ; then
+if [[ ! -d $ROCM_SRC_FOLDER ]] ; then
         echo "$ROCM_SRC_FOLDER does not exist."
     if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
         echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
