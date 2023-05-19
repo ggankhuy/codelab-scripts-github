@@ -8,8 +8,8 @@ CONFIG_DISABLE_hipBLAS=1
 
 LOG_DIR=/log/rocmbuild/
 NPROC=`nproc`
-#ROCM_SRC_FOLDER=~/ROCm-$VERSION
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
+#ROCM_SRC_FOLDER=~/ROCm-$VERSION_MAJOR
+ROCM_INST_FOLDER=/opt/rocm-$VERSION_MAJOR.$VERSION_MAJOR_MINOR
 
 # these are settings both common to shell and python.
 
@@ -19,12 +19,12 @@ LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
-VERSION=$vermajor
-MINOR_VERSION=$verminor
+VERSION_MAJOR=$vermajor
+VERSION_MINOR=$verminor
 mkdir /log/rocmbuild/ -p
-if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
-ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
-echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
+if [[ -z $VERSION_MAJOR ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION_MAJOR/
+echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, major/minor version: $VERSION_MAJOR/VERSION_MINOR"
 export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 
 function set_os_type() {
