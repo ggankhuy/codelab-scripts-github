@@ -6,11 +6,11 @@ ROCm_Device_Lib
 ROCmValidationSuite
 ROCT_Thunk_Interface
 rocm_bandwidth_test
-rocm_cmake 
+rocm-cmake 
 rocm_smi_lib 
 rocprofiler
 rocr_debug_agent
-clang_ocl
+clang-ocl
 COMGR
 protobuf
 AMDMIGraphX
@@ -25,7 +25,7 @@ hipBLAS
 hipSPARSE 
 rocSPARSE 
 rocFFT 
-HIP_Examples
+HIP-Examples
 MIVisionX
 rocRAND
 rccl
@@ -36,3 +36,4 @@ ROCR-Runtime
 roctracer
 ROCgdb
 rocm-cmake
+half
