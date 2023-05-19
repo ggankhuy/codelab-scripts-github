@@ -1,31 +1,10 @@
-CONFIG_TEST=0
-FAST_INSTALL=0
-ESSENTIAL_INSTALL=0
-CONFIG_BUILD_PACKAGE=0
-CONFIG_BYPASS_LLVM=0
-CONFIG_DISABLE_rocSOLVER=1
-CONFIG_DISABLE_hipBLAS=1
+function print_single_bar() {
+    for i in {1..50} ; echo "-" ; done
+}
 
-LOG_DIR=/log/rocmbuild/
-NPROC=`nproc`
-#ROCM_SRC_FOLDER=~/ROCm-$VERSION
-ROCM_INST_FOLDER=/opt/rocm-$VERSION.$MINOR_VERSION
-
-# these are settings both common to shell and python.
-
-LOG_SUMMARY=$LOG_DIR/build-summary.log
-LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
-
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
-
-VERSION=$vermajor
-MINOR_VERSION=$verminor
-mkdir /log/rocmbuild/ -p
-if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
-ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
-echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
-export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
+function print_double_bar() {
+    for i in {1..50} ; echo =" ; done
+}
 
 function set_os_type() {
    OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
@@ -51,9 +30,19 @@ function set_os_type() {
     esac
 }
 
+function install_packages() {
+    if [[ -z $PKG_EXEC  ]] ; then echo "PKG_EXEC is not defined. Call set_os_type first!" ; return 1 ; fi
+    for i in $@; do
+        print_single_bar
+        echo "installing $i..."
+        $PKG_EXEC install -y $i
+    done
+}
+
 function install_pip_libs() {
     for i in $@; do
-        echo =======================
+        print_single_bar
+        echo "installing $i..."
         pip3 install $i
     done
     
