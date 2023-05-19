@@ -74,14 +74,6 @@ if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; 
 
 DEBUG=1
 
-if [[ $CONFIG_TEST_MODE -eq 1 ]]; then
-    echo "TEST_MODE: sh/build.sh is called with parameters: '$@'"
-    exit ERROR_CODE_OK
-fi
-if [[ $DEBUG -eq 1 ]] ; then
-    echo "DBG: sh/build.sh is called with parameters: '$@'"
-fi
-
 if [[ $CONFIG_BUILD_PACKAGE -ne 0 ]] ; then
     echo "will build packages..."
     CONFIG_BUILD_PKGS_LOC=/rocm-packages/
