@@ -54,7 +54,8 @@ do
     fi
 done
 
-./sh/prebuild.sh
+source sh/common.sh 
+source sh/prebuild.sh
 ERROR_CODE=$?
 if [[ $ERROR_CODE -ne 0 ]] ; then 
     echo "Error during prebuild stage: error code: $ERROR_CODE" ;
