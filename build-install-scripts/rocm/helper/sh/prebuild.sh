@@ -37,15 +37,17 @@ ROCM_SRC_FOLDER=$PWD/ROCm-$VERSION_MAJOR/
 echo ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER
 
 if [[ ! -d $ROCM_SRC_FOLDER ]] ; then
-        echo "$ROCM_SRC_FOLDER does not exist."
-    if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
-        echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
-        echo "I did not see ROCm source checked out in current directory nor I see rocm-source.sh. Can not continue."
-        exit $ERROR_CODE_ROCM_SRC
-    else
-        echo "Checkout ROCm source..."
-        ./sh/$ROCM_SRC_SCRIPT $VERSION_MAJOR
-    fi
+    echo "$ROCM_SRC_FOLDER does not exist."
+
+    #if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
+    #    echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
+    #    echo "I did not see ROCm source checked out in current directory nor I see rocm-source.sh. Can not continue."
+    #    exit $ERROR_CODE_ROCM_SRC
+    #else
+    #    ./sh/$ROCM_SRC_SCRIPT $VERSION_MAJOR
+    #fi
+    echo "Checkout ROCm source..."
+    rocm_source_dw $VERSION_MAJOR
 else
     echo "I do see $ROCM_SRC_FOLDER present. Assuming all ROCm source files are checked out successfully. Continuing..."
 fi
