@@ -315,7 +315,7 @@ print("--------------")
 print("Final list: ", finalList)
 
 print("--------------")
-#out = subprocess.call([shell,'./sh/prebuild.sh'])
+
 counter = 0
 for j in finalList:
     if j in components_built:
@@ -332,7 +332,7 @@ for j in finalList:
             print("out: ", out)
 
             if out != 0:
-                print("Failed to build " + str(out) + ". Unable to continue further.")  
+                print("Failed to build: error code " + str(out) + ". Unable to continue further.")  
                 quit(1)
         components_built.append(j)
         counter += 1

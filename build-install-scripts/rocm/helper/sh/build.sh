@@ -54,8 +54,14 @@ do
     fi
 done
 
-source sh/common.sh
-source sh/prebuild.sh
+./sh/prebuild.sh
+ERROR_CODE=$?
+if [[ $ERROR_CODE -ne 0 ]] ; then 
+    echo "Error during prebuild stage: error code: $ERROR_CODE" ;
+    exit $ERROR_CODE
+else
+    echo "Prebuild stage is OK. continuing."
+fi
 
 set_os_type
 install_packages cmake
@@ -260,7 +266,6 @@ function rocBLAS() {
     fi
     echo "rocBLAS build/install cmd:" 
     echo ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
-    sleep 10
     ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
 #   ./install.sh -icd --no-tensile --logic asm_full | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi

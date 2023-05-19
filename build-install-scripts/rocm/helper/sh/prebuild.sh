@@ -5,9 +5,9 @@ source sh/common.sh
 # setup all environment related variables.
 
 NPROC=`nproc`
+PWD=`pwd`
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
-ROCM_INST_FOLDER=/opt/rocm/
 
 # setup all version related variables.
 
@@ -16,6 +16,13 @@ VERSION_MINOR=$verminor
 VERSION=$VERSION_MAJOR.$VERSION_MINOR
 echo "major/minor version: $VERSION_MAJOR/$VERSION_MINOR"
 
+# error codes.
+
+ERROR_CODE_OK=0
+ERROR_CODE_ROCM_SRC=100
+ERROR_CODE_ROCM_SRC_SCRIPT=101
+ERROR_CODE_VERSION=102
+
 # setup log paths.
 
 LOG_DIR=/log/rocmbuild/
@@ -23,14 +30,34 @@ LOG_SUMMARY=$LOG_DIR/build-summary.log
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-L2.log
 mkdir $LOG_DIR -p
 
-# setup all paths related variables except log.
+# setup src folder and its variables.
 
-ROCM_INST_FOLDER=/opt/rocm/
-ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION_MAJOR/
+ROCM_SRC_SCRIPT=rocm-source.sh
+ROCM_SRC_FOLDER=$PWD/ROCm-$VERSION_MAJOR/
+echo ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER
+
+if [[ ! -f $ROCM_SRC_FOLDER ]] ; then
+        echo "$ROCM_SRC_FOLDER???"
+    if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
+        echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
+        echo "I did not see ROCm source checked out in current directory nor I see rocm-source.sh. Can not continue."
+        exit $ERROR_CODE_ROCM_SRC
+    else
+        echo "Checkout ROCm source..."
+        ./sh/$ROCM_SRC_SCRIPT $VERSION_MAJOR
+    fi
+else
+    echo "I do see $ROCM_SRC_FOLDER present. Assuming all ROCm source files are checked out successfully. Continuing..."
+fi
+
 export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
 echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER"
 
-# setup all build related configurations, switches etc.,
+# setup all paths related variables except log.
+
+ROCM_INST_FOLDER=/opt/rocm/
+
+# setup all build related options.
 
 CONFIG_TEST=0
 FAST_INSTALL=0
@@ -45,7 +72,7 @@ CONFIG_TENSILE_INSTALL_PIP=0
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
-if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
+if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit ERROR_CODE_VERSION ; fi
 
 CONFIG_BUILD_LLVM=1
 CONFIG_BUILD_PY=0
@@ -57,7 +84,7 @@ DEBUG=1
 
 if [[ $CONFIG_TEST_MODE -eq 1 ]]; then
     echo "TEST_MODE: sh/build.sh is called with parameters: '$@'"
-    exit 0
+    exit ERROR_CODE_OK
 fi
 if [[ $DEBUG -eq 1 ]] ; then
     echo "DBG: sh/build.sh is called with parameters: '$@'"
