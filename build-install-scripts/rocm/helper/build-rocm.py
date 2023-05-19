@@ -8,7 +8,7 @@ import subprocess
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=0
+TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
@@ -323,17 +323,21 @@ for j in finalList:
     else:
         if TEST_MODE == 1:
             print("test mode: building " + j)
+        print("calling build script with " + str(j))
+        if counter == 0:
+            out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
+                    build_fast, build_package, build_llvm, build_py, build_cmake, \
+                    'vermajor=' + str(rocmVersionMajor), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         else:
-            print("calling build script with " + str(j))
-            if counter == 0:
-                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_fast, build_package, build_llvm, build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
-            else:
-                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), build_fast, build_package, '--llvmno', build_py, build_cmake, 'vermajor=' + str(rocmVersionMajor), 'verminor=' + str(rocmVersionMinor)])
-            print("out: ", out)
+                out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
+                build_fast, build_package, '--llvmno', build_py, build_cmake, \
+                'vermajor=' + str(rocmVersionMajor), '--testmode' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+        print("out: ", out)
 
-            if out != 0:
-                print("Failed to build: error code " + str(out) + ". Unable to continue further.")  
-                quit(1)
+        if out != 0:
+            print("Failed to build: error code " + str(out) + ". Unable to continue further.")  
+            quit(1)
+
         components_built.append(j)
         counter += 1
 

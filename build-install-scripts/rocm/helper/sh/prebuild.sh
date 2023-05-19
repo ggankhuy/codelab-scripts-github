@@ -37,7 +37,7 @@ ROCM_SRC_FOLDER=$PWD/ROCm-$VERSION_MAJOR/
 echo ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER
 
 if [[ ! -f $ROCM_SRC_FOLDER ]] ; then
-        echo "$ROCM_SRC_FOLDER???"
+        echo "$ROCM_SRC_FOLDER does not exist."
     if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
         echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
         echo "I did not see ROCm source checked out in current directory nor I see rocm-source.sh. Can not continue."
@@ -58,12 +58,8 @@ echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER"
 ROCM_INST_FOLDER=/opt/rocm/
 
 # setup all build related options.
+# do not put here any command line switches coming from python code.
 
-CONFIG_TEST=0
-FAST_INSTALL=0
-ESSENTIAL_INSTALL=0
-CONFIG_BUILD_PACKAGE=0
-CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 CONFIG_MIOPEN_BUILD_ROCBLAS=" -DMIOPEN_USE_ROCBLAS=off" 
@@ -74,12 +70,6 @@ export LANG=C.UTF-8
 
 if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit ERROR_CODE_VERSION ; fi
 
-CONFIG_BUILD_LLVM=1
-CONFIG_BUILD_PY=0
-CONFIG_BUILD_CMAKE=0
-CONFIG_BUILD_PACKAGE=0
-CONFIG_BUILD_FAST=0
-CONFIG_TEST_MODE=0
 DEBUG=1
 
 if [[ $CONFIG_TEST_MODE -eq 1 ]]; then
