@@ -8,7 +8,7 @@ import subprocess
 import networkx as nx
 
 DEBUG=1
-TEST_MODE=0
+TEST_MODE=1
 DEBUG_L2=0
 components_built=[]
 graph = nx.DiGraph()
@@ -237,10 +237,16 @@ def buildDag(depFileContent):
 
 finalList=[]
 
-if DEBUG:
-    print("Reading list.dat")
+if TEST_MODE==1:
+    DAT_FILE="list-test.dat"
+else:
+    DAT_FILE="list.dat"
 
-listDatHandle=open("list.dat")
+if DEBUG:
+    print("Reading ", DAT_FILE)
+
+listDatHandle=open("list-test.dat")
+
 listDatContent=listDatHandle.readlines()
 if DEBUG:
     print("Building list_dag...")
@@ -323,6 +329,7 @@ for j in finalList:
     else:
         if TEST_MODE == 1:
             print("test mode: building " + j)
+
         print("calling build script with " + str(j))
         if counter == 0:
             out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
@@ -331,7 +338,7 @@ for j in finalList:
         else:
                 out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                 build_fast, build_package, '--llvmno', build_py, build_cmake, \
-                'vermajor=' + str(rocmVersionMajor), '--testmode' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                'vermajor=' + str(rocmVersionMajor), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         print("out: ", out)
 
         if out != 0:
