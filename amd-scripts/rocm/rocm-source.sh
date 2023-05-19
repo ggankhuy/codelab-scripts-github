@@ -13,6 +13,7 @@ echo "OS_NAME: $OS_NAME"
 case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
+      ln -s /usr/bin/python3  /usr/bin/python
       PKG_EXEC=apt
       ln -s /usr/bin/python3  /usr/bin/python
       ;;
