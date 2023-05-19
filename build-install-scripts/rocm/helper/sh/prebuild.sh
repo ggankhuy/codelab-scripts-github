@@ -1,3 +1,9 @@
+# import function definitions.
+
+source sh/common.sh
+
+# setup all environment related variables.
+
 CONFIG_TEST=0
 FAST_INSTALL=0
 ESSENTIAL_INSTALL=0
@@ -6,47 +12,38 @@ CONFIG_BYPASS_LLVM=0
 CONFIG_DISABLE_rocSOLVER=1
 CONFIG_DISABLE_hipBLAS=1
 
-source sh/common.sh
+LOG_DIR=./log/rocmbuild/
+NPROC=`nproc`
 
-OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
-echo "OS_NAME: $OS_NAME"
-case "$OS_NAME" in
-   "Ubuntu")
-        echo "Ubuntu is detected..."
-        PKG_EXEC=apt
-        SHELL=bash
-        apt-get update -y
-        for i in vim-common git-lfs cmake python3-pip sqlite3 libsqlite3-dev libbz2-dev nlohmann-json-dev half libboost-all-dev python-msgpack pybind11-dev numactl libudev1 libudev-dev chrpath pciutils pciutils-dev libdw libdw-dev 
-        do  
-            echo "Installing $i...."
-            $PKG_EXEC install $i  -y 2>&1 | tee -a $LOG_SUMMARY_L2 
-            if [[ $? -ne 0 ]] ; then 
-                echo "Failed to install $i" | tee -a $LOG_SUMMARY_L2 ; 
-            fi 
-        done
-      #gem install json
-      install_pip_libs cppheaderparser pyyaml CppHeaderParser
-        
-      ;;
-   "CentOS Linux")
-      echo "CentOS is detected..."
-      PKG_EXEC=yum
-      SHELL=sh
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      install_pip_libs cppheaderparser pyyaml CppHeaderParser
-      ;;
-   "CentOS Stream")
-      echo "CentOS is detected..."
-      PKG_EXEC=yum
-      SHELL=sh
-      $PKG_EXEC install git-lfs gcc g++ make cmake libelf-dev libdw-dev numactl numactl-devel -y
-      $PKG_EXEC install --skip-broken sqlite-devel sqlite half boost boost-devel gcc make cmake  numactl numactl-devel dpkg pciutils-devel mesa-libGL-devel libpciaccess-dev libpci-dev -y  2>&1 | tee -a $LOG_SUMMARY_L2
-      install_pip_libs cppheaderparser pyyaml CppHeaderParser
-      ;;
-   *)
-     echo "Unsupported O/S, exiting..." ; exit 1
-     ;;
-esac 
+ROCM_INST_FOLDER=/opt/rocm/
 
+# attempt to determine rocm version.
+# if rocm is already installed, it will set the version on installed version.
+# if rocm is not already installed, exit with error.
+# At this point, we havent tested if build will be successful without rocm installation, nor test.
+
+VERSION_STRING=`cat /opt/rocm/.info/version`
+if [[ -z $VERSION_STRING ]] ; then echo "I can not determine ROCm version. Install ROCm first." ; exit 1 ; fi 
+
+ROCM_VERSION=`echo $VERSION_STRING | cut -d '-' -f1`
+echo "VERSION_STRING: $VERSION_STRNG"
+MAJOR_VERSION=
+
+ROCM_SRC_FOLDER=/root/gg/git/ROCm-$VERSION/
+echo "ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER, minor version: $MINOR_VERSION"
+export ROCM_SRC_FOLDER=$ROCM_SRC_FOLDER
+
+# these are settings both common to shell and python.
+
+LOG_SUMMARY=$LOG_DIR/build-summary.log
+LOG_SUMMARY_L2=$LOG_DIR/build-summary-l2.log
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+VERSION=$vermajor
+MINOR_VERSION=$verminor
+mkdir $LOG_DIR -p
+
+if [[ -z $VERSION ]] ; then echo "You need to specify at least major version" ; exit 1 ; fi
 

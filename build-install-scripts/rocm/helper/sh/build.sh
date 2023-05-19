@@ -103,6 +103,8 @@ echo major/minor: $vermajor, $verminor
 source sh/common.sh
 
 set_os_type
+install_packages cmake
+install_pip_libs 
 
 function llvm() {
     CURR_BUILD=llvm-project
@@ -309,7 +311,7 @@ function rocBLAS() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
     
-    $PKG_EXEC install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.$PKG_EXT 2>&1 | tee -a $LOG_SUMMARY    
+    $PKG_EXEC install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.$PKG_EXT 2>&1 | tee -a $LOG_SUMMARY
     build_exit $CURR_BIULD
 }
 
