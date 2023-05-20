@@ -42,6 +42,9 @@ if [[ ! -d $ROCM_SRC_FOLDER ]] ; then
     echo "$ROCM_SRC_FOLDER does not exist."
     echo "Checkout ROCm source..."
     rocm_source_dw $VERSION_MAJOR
+    if [[ $? -ne 0 ]] ; then
+        exit 1
+    fi
 else
     echo "I do see $ROCM_SRC_FOLDER present. Assuming all ROCm source files are checked out successfully. Continuing..."
 fi
