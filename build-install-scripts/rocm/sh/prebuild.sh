@@ -8,6 +8,8 @@ NPROC=`nproc`
 PWD=`pwd`
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
+export PATH=$PATH:/opt/rocm/bin:/opt/rocm/llvm/bin
+echo PATH: $PATH
 
 # setup all version related variables.
 
@@ -38,14 +40,6 @@ echo ROCM_SRC_FOLDER: $ROCM_SRC_FOLDER
 
 if [[ ! -d $ROCM_SRC_FOLDER ]] ; then
     echo "$ROCM_SRC_FOLDER does not exist."
-
-    #if [[ ! -f $PWD/sh/$ROCM_SRC_SCRIPT ]] ; then
-    #    echo "$PWD/sh/$ROCM_SRC_SCRIPT???"
-    #    echo "I did not see ROCm source checked out in current directory nor I see rocm-source.sh. Can not continue."
-    #    exit $ERROR_CODE_ROCM_SRC
-    #else
-    #    ./sh/$ROCM_SRC_SCRIPT $VERSION_MAJOR
-    #fi
     echo "Checkout ROCm source..."
     rocm_source_dw $VERSION_MAJOR
 else

@@ -1,6 +1,8 @@
 #set -x
 echo "build.sh entered..."
 
+#   Command line variables passed down from python script. Do not put any other declaration of variables here.
+
 CONFIG_BUILD_LLVM=1
 CONFIG_BUILD_CMAKE=0
 CONFIG_BUILD_PY=0
