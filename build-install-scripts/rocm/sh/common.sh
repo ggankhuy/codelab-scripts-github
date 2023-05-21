@@ -107,14 +107,14 @@ function install_python() {
 function build_entry () {
     t1=$SECONDS
     L_CURR_BUILD=$1
-    print_double_bar
-    echo " Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
+    print_double_bar | tee -a $LOG_SUMMARY
+    echo "Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
     print_double_bar
 }
 
 function build_exit() {
     t2=$SECONDS
-    echo Build took $((t2-t1)) seconds 2>&1 | tee -a $LOG_SUMMARY
+    echo "Build took $((t2-t1)) seconds" 2>&1 | tee -a $LOG_SUMMARY
 }
 
 function setup_root_rocm_softlink () {

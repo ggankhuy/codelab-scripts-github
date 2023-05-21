@@ -240,7 +240,7 @@ finalList=[]
 if TEST_MODE==1:
     DAT_FILE="list-test.dat"
 else:
-    DAT_FILE="list.dat"
+    DAT_FILE="list-test.dat"
 
 if DEBUG:
     print("Reading ", DAT_FILE)

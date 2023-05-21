@@ -3,3 +3,4 @@ llvm
 rocminfo
 ROCm_Device_Lib
 hipAMD
+#rocBLAS
