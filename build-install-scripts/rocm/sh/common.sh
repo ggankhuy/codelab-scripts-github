@@ -1,5 +1,9 @@
 echo "common.sh entered..."
 
+ERROR_VERSION=300
+ERROR_ROCM_SRC_REPO_INIT=301
+ERROR_ROCM_SRC_REPO_SYNC=302
+
 function print_single_bar() {
     local i
     for i in {1..50} ; do echo -ne "-" ; done
@@ -135,7 +139,7 @@ function rocm_source_dw() {
     HOME_DIR=`pwd`
     if [[ -z $p1 ]] ; then
         echo "Version not specified."
-        return 200
+        return $ERROR_VERSION
     else
         CONFIG_VERSION=$p1
     fi
@@ -164,8 +168,16 @@ function rocm_source_dw() {
     $SUDO chmod a+x ~/bin/repo
     echo "repo init..."
     $SUDO ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
+    if [[ $? -ne 0 ]] ; then
+        echo "Error: Unable to do initialize repo."
+        return $ERROR_ROCM_SRC_REPO_INIT
+    fi
     echo "repo sync..."
     $SUDO ~/bin/repo sync
+    if [[ $? -ne 0 ]] ; then
+        echo "Error: Unable to perform repo sync."
+        return $ERROR_ROCM_SRC_REPO_SYNC
+    fi
     echo "ROCm source is downloaded to $DIR_NAME"
     echo "push $DIR_NAME to get there..."
     popd
