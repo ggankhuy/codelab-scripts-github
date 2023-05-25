@@ -79,8 +79,8 @@ else
 fi
 
 set_os_type
-install_packages cmake chrpath
-install_pip_libs CppHeaderParser
+install_packages python3-pip cmake chrpath 
+install_pip_libs CppHeaderParser networkx
 
 function llvm() {
     CURR_BUILD=llvm-project
