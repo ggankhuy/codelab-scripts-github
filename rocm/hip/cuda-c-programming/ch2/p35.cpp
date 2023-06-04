@@ -1,4 +1,4 @@
-#include <cuda_runtime.h>
+#include "hip/hip_runtime.h"
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -31,6 +31,6 @@ int main(int argc, char **argv) {
     grid.x = (nElem + block.x-1)/block.x;
     printf("grid.x: %d block.x %d\n", grid.x, block.x);
 
-    cudaDeviceReset();
+    hipDeviceReset();
     return 0;
 }

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <cuda_runtime.h>
 #include <sys/time.h>
 #include <stdbool.h>
 

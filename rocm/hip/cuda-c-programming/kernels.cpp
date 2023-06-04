@@ -1,5 +1,5 @@
 #include <sys/time.h>
-//#include <cuda_runtime.h>
+#include <hip/hip_runtime.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <lib.h>
@@ -8,17 +8,17 @@
 // p108.cu kernels.
 
 __global__ void warmup(int * g_idata, int *g_odata, unsigned int n) {
-    unsigned int tid = threadIdx_x;
-    unsigned int idx = blockIdx_x * blockDim_x + threadIdx_x;
-    int *idata = g_idata + blockIdx_x * blockDim_x;
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
 }
 __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n) {
-    unsigned int tid = threadIdx_x;
-    unsigned int idx = blockIdx_x * blockDim_x + threadIdx_x;
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
 
     // convert global data poitner to the local pointer of this block.
 
-    int *idata = g_idata + blockIdx_x * blockDim_x;
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
 
     // boundary check.
 
@@ -26,12 +26,12 @@ __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n
 
     // in-place reduction in global memory.
 
-    for (int stride = 1; stride < blockDim_x; stride *= 2) {
+    for (int stride = 1; stride < hipBlockDim_x; stride *= 2) {
 
         // convert tid into local array index.
 
         int index = 2 * stride * tid;
-        if (index < blockDim_x) {
+        if (index < hipBlockDim_x) {
             idata[index] += idata[index+stride];
         }    
 
@@ -42,16 +42,16 @@ __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n
 
     // write result for htis block to global mem.
 
-    if (tid == 0) g_odata[blockIdx_x] = idata[0];
+    if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
 __global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n) {
-    unsigned int tid = threadIdx_x;
-    unsigned int idx = blockIdx_x * blockDim_x + threadIdx_x;
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
 
     // convert global data poitner to the local pointer of this block.
 
-    int *idata = g_idata + blockIdx_x * blockDim_x;
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
 
     // boundary check.
 
@@ -59,7 +59,7 @@ __global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n) {
 
     // in-place reduction in global memory.
 
-    for (int stride = blockDim_x/2; stride > 0; stride >>= 1) {
+    for (int stride = hipBlockDim_x/2; stride > 0; stride >>= 1) {
 
         // convert tid into local array index
 
@@ -75,11 +75,11 @@ __global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n) {
 
     // write result for htis block to global mem.
 
-    if (tid == 0) g_odata[blockIdx_x] = idata[0];
+    if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
 __global__ void warmingup(float * c) {
-    int tid = blockIdx_x * blockDim_x + threadIdx_x;
+    int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;
     a = b = 0.0f;
     
@@ -92,7 +92,7 @@ __global__ void warmingup(float * c) {
 } 
 
 __global__ void mathKernel1(float * c) {
-    int tid = blockIdx_x * blockDim_x + threadIdx_x;
+    int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;
     a = b = 0.0f;
     
@@ -105,7 +105,7 @@ __global__ void mathKernel1(float * c) {
 } 
 
 __global__ void mathKernel2(float * c) {
-    int tid = blockIdx_x * blockDim_x + threadIdx_x;
+    int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;
     a = b = 0.0f;
     
@@ -118,7 +118,7 @@ __global__ void mathKernel2(float * c) {
 } 
 
 __global__ void mathKernel3(float * c) {
-    int tid = blockIdx_x * blockDim_x + threadIdx_x;
+    int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;
     a = b = 0.0f;
     
@@ -130,7 +130,7 @@ __global__ void mathKernel3(float * c) {
     c[tid] = a + b;
 } 
 __global__ void mathKernel4(float * c) {
-    int tid = blockIdx_x * blockDim_x + threadIdx_x;
+    int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;
     a = b = 0.0f;
     
@@ -143,8 +143,8 @@ __global__ void mathKernel4(float * c) {
 } 
 
 __global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, int ny) {
-    unsigned int ix = threadIdx_x + blockIdx_x + blockDim_x;
-    unsigned int iy = threadIdx_y + blockIdx_y + blockDim_y;
+    unsigned int ix = hipThreadIdx_x + hipBlockIdx_x + hipBlockDim_x;
+    unsigned int iy = hipThreadIdx_y + hipBlockIdx_y + hipBlockDim_y;
     unsigned int idx = iy * nx + ix;
 
     if (ix < nx && iy < ny) {
