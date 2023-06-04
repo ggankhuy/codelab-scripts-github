@@ -14,48 +14,6 @@ void usage() {
     return;
 }*/
 
-__global__ void copyRow(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[iy * nx + ix] = in[iy * nx + ix];
-    }
-}
-
-__global__ void copyCol(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[ix * ny + iy] = in[ix * ny + iy];
-    }
-}
-
-__global__ void transposeNaiveRow(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[ix*ny + iy] = in[iy * nx + ix];
-    }
-}
-
-__global__ void transposeNaiveCol(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
-    if (ix<nx && iy<ny) {
-        out[iy * nx + ix] = in[ix * ny + iy];
-    }
-}
-__global__ void warmup(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
-    if (ix<nx && iy<ny) {
-        out[iy * nx + ix] = in[ix * ny + iy];
-    }
-} 
-
 int main(int argc, char **argv) {
     // setup a device.
 
@@ -67,74 +25,58 @@ int main(int argc, char **argv) {
     cudaSetDevice(dev);
 
     int nElem = 1<<20; // total number of elements to reduce.
+    printf(" with array size %d\n", nElem);
+   size_t nBytes = nElem * sizeof(float);
 
-    ///if (argc == 1) {usage(); return 1;};
+    int blocksize = 512;
+    int offset = 0;
+
     if (argc > 1) offset  = atoi(argv[1]);
     if (argc > 2) blocksize = atoi(argv[2]);
 
-    printf(" with matrix nx %d ny %d with kernel %d.\n", nx, ny, iKernel);
-    size_t nBytes  = nx * ny * sizeof(float);
-    
-    // execution configuration
+    // execution configuration.
 
     dim3 block(blockx, blocky);
-    dim3 grid((nx+block.x-1)/block.x, (ny+block.y-1)/block.y);
+    dim3 grid((nElemm+block.x-1)/block.x, 1);
 
     // allocate host memory.
 
     float *h_A = (float*)malloc(nBytes);
+    float *h_B = (float*)malloc(nBytes);
     float *hostRef = (float*)malloc(nBytes);
     float *gpuRef = (float*)malloc(nBytes);
 
     // init host array.
 
-    initialData(h_A, nx*ny);
-    
-    // transport at host (skipping).
+    initialData(h_A, nElem);
+    memcpy(h_B, h_A, nBytes);
 
+    // summary at host side
+
+    // sumArraysOnHost(h_A, h_B, hostRef, nElem, offset);
+    
     // allocate device memory.
 
-    float *d_A, *d_C;
+    float *d_A, *d_B, *d_C;
     cudaMalloc((float**)&d_A, nBytes);
+    cudaMalloc((float**)&d_B, nBytes);
     cudaMalloc((float**)&d_C, nBytes);
 
     // copy data from host to device
 
     cudaMemcpy(d_A, h_A, nBytes, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice); //d_B, h_A on book???
 
     // warmup to avoid start overhead.
 
     double iStart = seconds();
-    warmup <<< grid, block >>> (d_C, d_A, nx, ny);
+    warmup <<< grid, block >>> (d_C, d_A, d_C, nElem, offset);
     cudaDeviceSynchronize();
     double iElaps = seconds() - iStart;
-    printf("warmup elapsed %f sec.\n", iElaps);
+    printf("warmup <<< %4d, %4d >>> offset %4d elapsed %f sec.\n", grid.x, block.x, offset, iElaps);
     
-    // kernel pointer and descriptor.
-
-    void (*kernel)(float *, float*, int, int);
-    char *kernelName;
-
-    // setup a kernel.
-
-    switch(iKernel) {
-        case 0:
-            kernel=&copyRow;
-            kernelName = "copyRow    ";
-            break;
-        case 1:
-            kernel=&copyCol;
-            kernelName = "copyCol    ";
-            break;
-        case 2:
-            kernel=&transposeNaiveRow;
-            kernelName = "NaiveRow    ";
-            break;
-        case 3:
-            kernel=&transposeNaiveCol;
-            kernelName = "NaiveCol     ";
-            break;
-    }
+    cudaMemcpy*gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost);
+    //checkResult(hostRef, gpuRef, nElem-offset);
 
     // run kernel.
 
@@ -150,16 +92,12 @@ int main(int argc, char **argv) {
     
     // check kernel results. skipping.
 
-    /*if (iKernel>1) {
-        cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost);
-    }*/
-    
-    // free host and device memory.
-
     cudaFree(d_A);
+    cudaFree(d_B);
     cudaFree(d_C);
     free(h_A);
-    free(gpuRef);
+    free(h_B);
+    cudaDeviceReset();  
 
     return 0;
 
