@@ -32,7 +32,7 @@ done
 
 
 counter=0
-for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0 cloudpickle mlxtend
+for i in neuralnet matplotlib pandas sklearn Pillow scipy==1.2.0 cloudpickle mlxtend torchtext torchdata
 do
     echo $SINGLE_BAR | tee $LOG_FOLDER/setup.pip3.$counter.log
     echo "DBG: executing '$i'..." | tee -a $LOG_FOLDER/setup.pip3.$counter.log
@@ -45,7 +45,7 @@ done
 #pip3 install torch torchvision --extra-index-url https://download.pytorch.org/whl/rocm4.5.2 2>&1  | tee $LOG_FOLDER/torch.torchvision.log
 
 #For 5.1.1
-pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/rocm5.1.1
+pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/rocm5.1.1 | tee $LOG_FOLDER/torch.torchvision.log
 
 # For 5.2
 #pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/rocm5.2/

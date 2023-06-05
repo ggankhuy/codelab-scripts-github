@@ -1,4 +1,4 @@
-CUDA_PATH ?= /usr/local/cuda-10.1
+CUDA_PATH ?= /usr/local/cuda/
 HOST_COMPILER ?= g++
 NVCC	  := $(CUDA_PATH)/bin/nvcc -ccbin $(HOST_COMPILER)
 

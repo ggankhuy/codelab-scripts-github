@@ -49,14 +49,8 @@ int main()
     float             alpha = 1.1, beta = 0.9;
 
     rocblas_int m = DIM1, n = DIM2, k = DIM3;
-    rocblas_int lda, ldb, ldc, size_a, size_b, size_c;
+    rocblas_int lda, ldb, ldc, size_a=DIM1, size_b=DIM2, size_c=DIM3;
     int         a_stride_1, a_stride_2, b_stride_1, b_stride_2;
-
-    // Naming: da is in GPU (device) memory. ha is in CPU (host) memory
-    vector<float> ha(size_a);
-    vector<float> hb(size_b);
-    vector<float> hc(size_c);
-    vector<float> hc_gold(size_c);
 
     std::cout << "sgemm example" << std::endl;
     if(transa == rocblas_operation_none)
@@ -93,6 +87,12 @@ int main()
     }
     ldc    = m;
     size_c = n * ldc;
+
+    // Naming: da is in GPU (device) memory. ha is in CPU (host) memory
+    vector<float> ha(size_a);
+    vector<float> hb(size_b);
+    vector<float> hc(size_c);
+    vector<float> hc_gold(size_c);
 
     // initial data on host
     srand(1);
