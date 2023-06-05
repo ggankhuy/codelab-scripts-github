@@ -23,6 +23,10 @@ __global__ void checkIndex(int * pKernelResp) {
         *(pKernelResp+9)=hipGridDim_x;
         *(pKernelResp+10)=hipGridDim_y;
         *(pKernelResp+11)=hipGridDim_z;
+
+        for (int i  = 0 ; i < 12 ; i ++) {
+            *(pKernelResp+i) = i * 2;
+        }
 }
 
 int main(int argc, char **argv) {
@@ -45,11 +49,11 @@ int main(int argc, char **argv) {
     // check grid and block dimension from device side
 
     checkIndex <<<grid,block>>>(kernelRes);
-    printf("threadIdx: (%d, %d, %d) blockIdx: (%d, %d, %d) blockDim (%d, %d, %d) gridDim: (%d, %d, %d)\n", \
+    /*printf("threadIdx: (%d, %d, %d) blockIdx: (%d, %d, %d) blockDim (%d, %d, %d) gridDim: (%d, %d, %d)\n", \
         *(kernelRes+0), *(kernelRes+1), *(kernelRes+2), \
         *(kernelRes+3), *(kernelRes+4), *(kernelRes+5), \
         *(kernelRes+6), *(kernelRes+7), *(kernelRes+8), \
-        *(kernelRes+9), *(kernelRes+10), *(kernelRes+11));
+        *(kernelRes+9), *(kernelRes+10), *(kernelRes+11));*/
     hipDeviceReset();
     return 0;
 }
