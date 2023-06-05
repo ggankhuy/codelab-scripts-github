@@ -47,3 +47,8 @@ void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) {
                 ia += nx; ib += nx, ic += nx;
         }
 }
+
+void sumArraysOnHost(float * A, float *B, float *C, const int N) {
+    for (int idx = 0; idx < N ; idx++) 
+        C[idx] = A[idx] + B[idx];
+}

@@ -142,6 +142,11 @@ __global__ void mathKernel4(float * c) {
     c[tid] =a + b;
 } 
 
+__global__ void sumArraysOnGPU(float *A, float *B, float*C, const int N) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < N) C[i] = A[i] + B[i];
+}
+
 __global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, int ny) {
     unsigned int ix = hipThreadIdx_x + hipBlockIdx_x + hipBlockDim_x;
     unsigned int iy = hipThreadIdx_y + hipBlockIdx_y + hipBlockDim_y;

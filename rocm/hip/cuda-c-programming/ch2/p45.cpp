@@ -16,16 +16,6 @@
 }
 */
 
-void sumArraysOnHost(float * A, float *B, float *C, const int N) {
-    for (int idx = 0; idx < N ; idx++) 
-        C[idx] = A[idx] + B[idx];
-}
-
-__global__ void sumArraysOnGPU(float *A, float *B, float*C, const int N) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    if (i < N) C[i] = A[i] + B[i];
-}
-
 int main(int argc, char **argv) {
     printf("%s Starting...\n", argv[0]);
 
