@@ -1,0 +1,85 @@
+System info:
+
+5.19.0-38-generic
+PRETTY_NAME="Ubuntu 22.04.2 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.2 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+Sat Apr 15 13:52:12 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 2070 S...    On | 00000000:01:00.0  On |                  N/A |
+| 41%   38C    P8               14W / 215W|      1MiB /  8192MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+cuda-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-cccl-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-command-line-tools-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-compiler-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-cudart-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-cudart-dev-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-cuobjdump-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-cupti-12-1/unknown,now 12.1.62-1 amd64 [installed,automatic]
+cuda-cupti-dev-12-1/unknown,now 12.1.62-1 amd64 [installed,automatic]
+cuda-cuxxfilt-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-demo-suite-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-documentation-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-driver-dev-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-drivers-530/unknown,now 530.30.02-1 amd64 [installed,automatic]
+cuda-drivers/unknown,now 530.30.02-1 amd64 [installed,automatic]
+cuda-gdb-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-libraries-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-libraries-dev-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-nsight-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nsight-compute-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-nsight-systems-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-nvcc-12-1/unknown,now 12.1.66-1 amd64 [installed,automatic]
+cuda-nvdisasm-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvml-dev-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvprof-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvprune-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvrtc-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvrtc-dev-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-nvtx-12-1/unknown,now 12.1.66-1 amd64 [installed,automatic]
+cuda-nvvp-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-opencl-12-1/unknown,now 12.1.56-1 amd64 [installed,automatic]
+cuda-opencl-dev-12-1/unknown,now 12.1.56-1 amd64 [installed,automatic]
+cuda-profiler-api-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-repo-ubuntu2204-12-1-local/now 12.1.0-530.30.02-1 amd64 [installed,local]
+cuda-runtime-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-sanitizer-12-1/unknown,now 12.1.55-1 amd64 [installed,automatic]
+cuda-toolkit-12-1-config-common/unknown,now 12.1.55-1 all [installed,automatic]
+cuda-toolkit-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-toolkit-12-config-common/unknown,now 12.1.55-1 all [installed,automatic]
+cuda-toolkit-config-common/unknown,now 12.1.55-1 all [installed,automatic]
+cuda-tools-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda-visual-tools-12-1/unknown,now 12.1.0-1 amd64 [installed,automatic]
+cuda/unknown,now 12.1.0-1 amd64 [installed]
+libcudart11.0/jammy,now 11.5.117~11.5.1-1ubuntu1 amd64 [installed,auto-removable]
+nvidia-cuda-gdb/jammy,now 11.5.114~11.5.1-1ubuntu1 amd64 [installed,auto-removable]
+nvidia-cuda-toolkit-doc/jammy,jammy,now 11.5.1-1ubuntu1 all [installed,auto-removable]
+01:00.0 VGA compatible controller: NVIDIA Corporation TU104 [GeForce RTX 2070 SUPER] (rev a1)
+01:00.1 Audio device: NVIDIA Corporation TU104 HD Audio Controller (rev a1)
+01:00.2 USB controller: NVIDIA Corporation TU104 USB 3.1 Host Controller (rev a1)
+01:00.3 Serial bus controller: NVIDIA Corporation TU104 USB Type-C UCSI Controller (rev a1)

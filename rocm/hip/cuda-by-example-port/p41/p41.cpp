@@ -44,7 +44,8 @@ int main (void) {
 
     printf("blocks/threads: %d, %d.\n", blocks, threadsPerBlock);
 
-    hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
+    //hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
+    add<<<blocks, threadsPerBlock, 0>>>(dev_a, dev_b, dev_c);
 
     hipMemcpy(a, dev_a, N * sizeof(int), hipMemcpyDeviceToHost);
     hipMemcpy(b, dev_b, N * sizeof(int), hipMemcpyDeviceToHost);

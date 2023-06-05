@@ -1,0 +1,1 @@
+hipcc --save-temps *.cpp
