@@ -30,12 +30,12 @@ void checkResult(float * hostRef, float * gpuRef, const int N) {
         if (abs(hostRef[i] - gpuRef[i] > epsilon)) 
         {
             match = 0;
-            printf("Arrays do not match!\n");
-            printf("host %5.2f gpu %5.2f at current %d\n", hostRef[i], gpuRef[i], i);
+            printf("different on %dth element: host %f gpu %f\n", i, hostRef[i], gpuRef[i]);
             break;
 
         }
     }
+    if (!match)  printf("Arrays do not match.\n\n");
 }
 
 void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) { 
@@ -51,4 +51,12 @@ void sumMatrixOnHost(float *A, float *B, float *C, const int nx, const int ny) {
 void sumArraysOnHost(float * A, float *B, float *C, const int N) {
     for (int idx = 0; idx < N ; idx++) 
         C[idx] = A[idx] + B[idx];
+}
+
+void sumArraysOnHost(float *A, float *B, float *C, const int n, int offset)
+{
+    for (int idx = offset, k = 0; idx < n; idx++, k++)
+    {
+        C[k] = A[idx] + B[idx];
+    }
 }

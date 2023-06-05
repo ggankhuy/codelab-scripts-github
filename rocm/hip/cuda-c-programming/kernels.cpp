@@ -199,3 +199,20 @@ __global__ void warmup(float * out, float * in, const int nx, const int ny) {
         out[iy * nx + ix] = in[ix * ny + iy];
     }
 } 
+
+__global__ void warmup(float *A, float *B, float *C, const int n, int offset)
+{
+    unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int k = i + offset;
+
+    if (k < n) C[i] = A[k] + B[k];
+}
+
+__global__ void readOffset(float *A, float *B, float *C, const int n,
+                           int offset)
+{
+    unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int k = i + offset;
+
+    if (k < n) C[i] = A[k] + B[k];
+}

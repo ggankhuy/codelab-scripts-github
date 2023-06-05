@@ -2,27 +2,27 @@
 #include <sys/time.h>
 #include <lib.h>
 #include <kernels.h>
+#include <hip/hip_runtime.h>
 
-/*
+
 void usage() {
+    printf("Example for mem-misailgned read...");
     printf("Usage: ");
-    printf("<execname> <p1> <p2> <p3> <p4> where: \n");
-    printf("p1: kernel name: \n");
-    printf(" - 0:copyrow\n - 1:copyCol\n - 2: transposeRow\n - 3: transposeCol.\n");
-    printf("p2 p3: blockx, blocky.\n");
-    printf("p4 p5: nx, ny.\n");
+    printf("<execname> <p1> where: \n");
+    printf("p1: offset from alignment.\n");
     return;
-}*/
+
+}
 
 int main(int argc, char **argv) {
     // setup a device.
 
     int dev = 0;
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, dev);
+    hipDeviceProp_t deviceProp;
+    hipGetDeviceProperties(&deviceProp, dev);
     printf("%s starting reduction at ", argv[0]);
     printf("device %d: %s", dev, deviceProp.name);
-    cudaSetDevice(dev);
+    hipSetDevice(dev);
 
     int nElem = 1<<20; // total number of elements to reduce.
     printf(" with array size %d\n", nElem);
@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
 
     // execution configuration.
 
-    dim3 block(blockx, blocky);
-    dim3 grid((nElemm+block.x-1)/block.x, 1);
+    dim3 block(blocksize, 1);
+    dim3 grid((nElem+block.x-1)/block.x, 1);
 
     // allocate host memory.
 
@@ -53,51 +53,51 @@ int main(int argc, char **argv) {
 
     // summary at host side
 
-    // sumArraysOnHost(h_A, h_B, hostRef, nElem, offset);
+    sumArraysOnHost(h_A, h_B, hostRef, nElem, offset);
     
     // allocate device memory.
 
     float *d_A, *d_B, *d_C;
-    cudaMalloc((float**)&d_A, nBytes);
-    cudaMalloc((float**)&d_B, nBytes);
-    cudaMalloc((float**)&d_C, nBytes);
+    hipMalloc((float**)&d_A, nBytes);
+    hipMalloc((float**)&d_B, nBytes);
+    hipMalloc((float**)&d_C, nBytes);
 
     // copy data from host to device
 
-    cudaMemcpy(d_A, h_A, nBytes, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice); //d_B, h_A on book???
+    hipMemcpy(d_A, h_A, nBytes, hipMemcpyHostToDevice);
+    hipMemcpy(d_B, h_B, nBytes, hipMemcpyHostToDevice); //d_B, h_A on book???
 
     // warmup to avoid start overhead.
 
     double iStart = seconds();
     warmup <<< grid, block >>> (d_C, d_A, d_C, nElem, offset);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     double iElaps = seconds() - iStart;
     printf("warmup <<< %4d, %4d >>> offset %4d elapsed %f sec.\n", grid.x, block.x, offset, iElaps);
     
-    cudaMemcpy*gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost);
-    //checkResult(hostRef, gpuRef, nElem-offset);
+    hipMemcpy(gpuRef, d_C, nBytes, hipMemcpyDeviceToHost);
+    checkResult(hostRef, gpuRef, nElem-offset);
 
     // run kernel.
 
     iStart = seconds();
-    kernel <<<grid, block>>>(d_C, d_A, nx, ny);
-    cudaDeviceSynchronize();
+    readOffset<<<grid, block>>>(d_A, d_B, d_C, nElem, offset);
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
 
-    // calculate eff. bw.
+    printf("readOffset <<< %4d, $4d >>> offset %4d elapsed %f sec\n", grid.x, block.x, offset, iElaps);
 
-    float ibnd = 2*nx*ny*sizeof(float)/1e9/iElaps;
-    printf("%s elapsed %f sec <<< grid (%d,%d) block (%d,%d) >>> effective bw: %f GB\n", kernelName, iElaps, grid.x, grid.y, block.x, block.y, ibnd);
-    
+    hipMemcpy(gpuRef, d_C, nBytes, hipMemcpyDeviceToHost);
+    checkResult(hostRef, gpuRef, nElem-offset);
+
     // check kernel results. skipping.
 
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
+    hipFree(d_A);
+    hipFree(d_B);
+    hipFree(d_C);
     free(h_A);
     free(h_B);
-    cudaDeviceReset();  
+    hipDeviceReset();  
 
     return 0;
 

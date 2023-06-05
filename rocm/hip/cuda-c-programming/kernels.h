@@ -15,6 +15,7 @@ __global__ void mathKernel1(float * c);
 __global__ void mathKernel2(float * c);
 __global__ void mathKernel3(float * c);
 __global__ void mathKernel4(float * c);
+
 __global__ void sumArraysOnGPU(float *A, float *B, float*C, const int N);
 __global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, int ny);
 
@@ -23,5 +24,7 @@ __global__ void copyCol(float * out, float * in, const int nx, const int ny);
 
 __global__ void transposeNaiveRow(float * out, float * in, const int nx, const int ny);
 __global__ void transposeNaiveCol(float * out, float * in, const int nx, const int ny);
-__global__ void warmup(float * out, float * in, const int nx, const int ny);
 
+__global__ void warmup(float * out, float * in, const int nx, const int ny);
+__global__ void warmup(float *A, float *B, float *C, const int n, int offset);
+__global__ void readOffset(float *A, float *B, float *C, const int n, int offset);
