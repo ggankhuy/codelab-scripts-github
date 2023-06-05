@@ -81,7 +81,6 @@ int main(int argc, char **argv) {
     printf("warmup <<< %4d, %4d >>> offset %4d elapsed %f sec.\n", grid.x, block.x, offset, iElaps);
     
     hipMemcpy(gpuRef, d_C, nBytes, hipMemcpyDeviceToHost);
-    checkResult(hostRef, gpuRef, nElem-offset);
 
     // run kernel.
 
@@ -90,7 +89,7 @@ int main(int argc, char **argv) {
     hipDeviceSynchronize();
     iElaps = seconds() - iStart;
 
-    printf("readOffset <<< %4d, $4d >>> offset %4d elapsed %f sec\n", grid.x, block.x, offset, iElaps);
+    printf("readOffset <<< %4d, %4d >>> offset %4d elapsed %f sec\n", grid.x, block.x, offset, iElaps);
 
     hipMemcpy(gpuRef, d_C, nBytes, hipMemcpyDeviceToHost);
     checkResult(hostRef, gpuRef, nElem-offset);
