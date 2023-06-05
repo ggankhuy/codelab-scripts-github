@@ -15,6 +15,7 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
+
     // setup a device.
 
     int dev = 0;
@@ -24,9 +25,11 @@ int main(int argc, char **argv) {
     printf("device %d: %s", dev, deviceProp.name);
     hipSetDevice(dev);
 
-    int nElem = 1<<20; // total number of elements to reduce.
+    // total number of elements to reduce and assoc-d bytes.
+
+    int nElem = 1<<20;                          
     printf(" with array size %d\n", nElem);
-   size_t nBytes = nElem * sizeof(float);
+    size_t nBytes = nElem * sizeof(float);
 
     int blocksize = 512;
     int offset = 0;
@@ -34,7 +37,9 @@ int main(int argc, char **argv) {
     if (argc > 1) offset  = atoi(argv[1]);
     if (argc > 2) blocksize = atoi(argv[2]);
 
-    // execution configuration.
+    printf("offset: %d, blocksize: %d.\n", offset, blocksize);
+
+    // Execution configuration.
 
     dim3 block(blocksize, 1);
     dim3 grid((nElem+block.x-1)/block.x, 1);
@@ -51,7 +56,7 @@ int main(int argc, char **argv) {
     initialData(h_A, nElem);
     memcpy(h_B, h_A, nBytes);
 
-    // summary at host side
+    // sum array at host side.
 
     sumArraysOnHost(h_A, h_B, hostRef, nElem, offset);
     
@@ -65,7 +70,7 @@ int main(int argc, char **argv) {
     // copy data from host to device
 
     hipMemcpy(d_A, h_A, nBytes, hipMemcpyHostToDevice);
-    hipMemcpy(d_B, h_B, nBytes, hipMemcpyHostToDevice); //d_B, h_A on book???
+    hipMemcpy(d_B, h_A, nBytes, hipMemcpyHostToDevice); //d_B, h_A on book???
 
     // warmup to avoid start overhead.
 
