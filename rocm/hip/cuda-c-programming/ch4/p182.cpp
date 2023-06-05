@@ -2,6 +2,7 @@
 #include <sys/time.h>
 #include <lib.h>
 #include <kernels.h>
+#include <hip/hip_runtime.h>
 
 void usage() {
     printf("Usage: ");
@@ -12,48 +13,6 @@ void usage() {
     printf("p4 p5: nx, ny.\n");
     return;
 }
-
-__global__ void copyRow(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[iy * nx + ix] = in[iy * nx + ix];
-    }
-}
-
-__global__ void copyCol(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[ix * ny + iy] = in[ix * ny + iy];
-    }
-}
-
-__global__ void transposeNaiveRow(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
-
-    if (ix < nx && iy < ny) {
-        out[ix*ny + iy] = in[iy * nx + ix];
-    }
-}
-
-__global__ void transposeNaiveCol(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
-    if (ix<nx && iy<ny) {
-        out[iy * nx + ix] = in[ix * ny + iy];
-    }
-}
-__global__ void warmup(float * out, float * in, const int nx, const int ny) {
-    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
-    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
-    if (ix<nx && iy<ny) {
-        out[iy * nx + ix] = in[ix * ny + iy];
-    }
-} 
 
 int main(int argc, char **argv) {
     // setup a device.

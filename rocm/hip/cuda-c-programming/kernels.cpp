@@ -157,3 +157,45 @@ __global__ void sumMatrixOnGPU2D(float *MatA, float *MatB, float *MatC, int nx, 
     }
 }
 
+
+__global__ void copyRow(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
+
+    if (ix < nx && iy < ny) {
+        out[iy * nx + ix] = in[iy * nx + ix];
+    }
+}
+
+__global__ void copyCol(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
+
+    if (ix < nx && iy < ny) {
+        out[ix * ny + iy] = in[ix * ny + iy];
+    }
+}
+
+__global__ void transposeNaiveRow(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix = blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy = blockDim.y * blockIdx.y + threadIdx.y;
+
+    if (ix < nx && iy < ny) {
+        out[ix*ny + iy] = in[iy * nx + ix];
+    }
+}
+
+__global__ void transposeNaiveCol(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
+    if (ix<nx && iy<ny) {
+        out[iy * nx + ix] = in[ix * ny + iy];
+    }
+}
+__global__ void warmup(float * out, float * in, const int nx, const int ny) {
+    unsigned int ix=blockDim.x * blockIdx.x + threadIdx.x;
+    unsigned int iy=blockDim.y * blockIdx.y + threadIdx.y;
+    if (ix<nx && iy<ny) {
+        out[iy * nx + ix] = in[ix * ny + iy];
+    }
+} 
