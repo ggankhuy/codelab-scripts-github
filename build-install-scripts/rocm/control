@@ -1,0 +1,5 @@
+Package: rocm-builder
+Version: 1.0
+Architecture: amd64
+Maintainer: Guyen G. ggankhuy@amd.com
+Description: Complete rocm builder suite.
