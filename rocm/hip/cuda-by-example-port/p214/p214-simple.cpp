@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 
-#define N 64
+#define N 1024
 #define ARRSIZE 3
 #define LOOPSTRIDE 8
 __global__ void add(int *a, int*b, int *c) {

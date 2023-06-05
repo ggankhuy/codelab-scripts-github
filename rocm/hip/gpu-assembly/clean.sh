@@ -1,0 +1,9 @@
+rm *.csv
+rm *.db
+rm *.json
+rm *.txt
+rm *.bc
+rm *.cui
+rm *.s
+rm *.o
+rm *.out
