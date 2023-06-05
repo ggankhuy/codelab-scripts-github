@@ -1,8 +1,5 @@
 /* ************************************************************************
-<<<<<<< HEAD
  * Copyright 2016-2022 Advanced Micro Devices, Inc.
- * ************************************************************************ */
-=======
  * Copyright (C) 2016-2022 Advanced Micro Devices, Inc. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +21,6 @@
  *
  * ************************************************************************ */
 
->>>>>>> dev-gpu-rocm-support-tmp
 #include "rocblas.h"
 #include <cstdio>
 #include <cstdlib>
