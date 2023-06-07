@@ -60,3 +60,17 @@ void sumArraysOnHost(float *A, float *B, float *C, const int n, int offset)
         C[k] = A[idx] + B[idx];
     }
 }
+
+void printData(char *msg, int *in,  const int size)
+{
+    printf("%s: ", msg);
+
+    for (int i = 0; i < size; i++)
+    {
+        printf("%5d", in[i]);
+        fflush(stdout);
+    }
+
+    printf("\n");
+    return;
+}

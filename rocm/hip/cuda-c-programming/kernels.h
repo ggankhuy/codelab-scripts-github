@@ -28,3 +28,17 @@ __global__ void transposeNaiveCol(float * out, float * in, const int nx, const i
 __global__ void warmup(float * out, float * in, const int nx, const int ny);
 __global__ void warmup(float *A, float *B, float *C, const int n, int offset);
 __global__ void readOffset(float *A, float *B, float *C, const int n, int offset);
+
+#ifndef P220
+#define P220
+#define BDIMX 32
+#define BDIMY 32
+#define IPAD  1
+#endif
+
+__global__ void setRowReadRow (int *out);
+__global__ void setColReadCol (int *out);
+__global__ void setRowReadCol(int *out);
+__global__ void setRowReadColDyn(int *out);
+__global__ void setRowReadColPad(int *out);
+__global__ void setRowReadColDynPad(int *out);
