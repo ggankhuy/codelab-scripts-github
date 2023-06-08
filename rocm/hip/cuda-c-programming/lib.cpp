@@ -63,11 +63,13 @@ void sumArraysOnHost(float *A, float *B, float *C, const int n, int offset)
 
 void printData(char *msg, int *in,  const int size)
 {
-    printf("%s: ", msg);
+    printf("msg: %s: , size: %d", msg, size);
 
     for (int i = 0; i < size; i++)
     {
-        printf("%5d", in[i]);
+        if (i % 16 == 0)
+            printf("\n");
+        printf("%4d", in[i]);
         fflush(stdout);
     }
 
