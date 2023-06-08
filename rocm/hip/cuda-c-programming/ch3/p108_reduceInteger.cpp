@@ -1,14 +1,9 @@
-
 #include <stdio.h>
-#include <cuda_runtime.h>
+#include <hip/hip_runtime.h>
 #include <sys/time.h>
 #include <stdbool.h>
 #include <lib.h>
 #include <kernels.h>
-
-//#include <lib1.h>
-
-// #define DYN_BUILD
 
 int main(int argc, char ** argv) {
     printf("%s Starting...\n", argv[0]);
@@ -16,10 +11,10 @@ int main(int argc, char ** argv) {
     // set up device.
 
     int dev = 0;
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, dev);
+    hipDeviceProp_t deviceProp;
+    hipGetDeviceProperties(&deviceProp, dev);
     printf("Using Device %d: %s\n", dev, deviceProp.name);
-    cudaSetDevice(dev);
+    hipSetDevice(dev);
 
     bool bresult = false;
 
@@ -60,24 +55,24 @@ int main(int argc, char ** argv) {
     // allocate device memory.
 
     int *d_idata, *d_odata;
-    cudaMalloc((void**)&d_idata, bytes);
-    cudaMalloc((void**)&d_odata, bytes);
+    hipMalloc((void**)&d_idata, bytes);
+    hipMalloc((void**)&d_odata, bytes);
 
     // cpu reduction, skipping....
 
     // kernel1. recursive Reduce.
 
-    cudaMemcpy(d_idata, h_idata, bytes, cudaMemcpyHostToDevice);
-    cudaDeviceSynchronize();
+    hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
+    hipDeviceSynchronize();
 
     iStart = seconds();
 
     warmup<<<grid, block>>>(d_idata, d_odata, size);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
 
     iElaps = seconds() - iStart;
 
-    cudaMemcpy(h_odata, d_odata, grid.x*sizeof(int), cudaMemcpyDeviceToHost);
+    hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
     int gpu_sum=0;
 
     for (int i = 0; i < grid.x; i++) { gpu_sum += h_odata[i]; }
@@ -85,27 +80,27 @@ int main(int argc, char ** argv) {
     printf("gpu warmup elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
     // kern1l reduce Neighbored.
-    cudaMemcpy(d_idata, h_idata, bytes, cudaMemcpyHostToDevice);
-    cudaDeviceSynchronize();
+    hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
+    hipDeviceSynchronize();
     iStart = seconds();
     reduceNeighboredLess<<<grid, block>>>(d_idata, d_odata, size);
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iStart = seconds();
-    cudaMemcpy(h_odata, d_odata, grid.x*sizeof(int), cudaMemcpyDeviceToHost);
+    hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
     gpu_sum = 0;
     for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
     printf("gpu neighbored: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
-    cudaDeviceSynchronize();
+    hipDeviceSynchronize();
     iElaps = seconds() - iStart;
 
-    cudaMemcpy(h_odata, d_odata, grid.x/8*sizeof(int), cudaMemcpyDeviceToHost);
+    hipMemcpy(h_odata, d_odata, grid.x/8*sizeof(int), hipMemcpyDeviceToHost);
     gpu_sum = 0;
     for (int i = 0; i < grid.x/8; i++) { gpu_sum += h_odata[i];}
     printf("gpu Cmptnroll elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
-    cudaFree(d_idata);
-    cudaFree(d_odata);
+    hipFree(d_idata);
+    hipFree(d_odata);
 
     // free host memory.
 
@@ -114,7 +109,7 @@ int main(int argc, char ** argv) {
 
     // reset device
 
-    cudaDeviceReset();
+    hipDeviceReset();
     return 0;
 }
 
