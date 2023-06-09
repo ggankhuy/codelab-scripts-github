@@ -85,7 +85,8 @@ int main(int argc, char ** argv) {
     hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
     hipDeviceSynchronize();
     iStart = seconds();
-    reduceNeighbored<<<grid, block>>>(d_idata, d_odata, size);
+    //reduceNeighbored<<<grid, block>>>(d_idata, d_odata, size);
+    reduceNeighboredLess<<<grid, block>>>(d_idata, d_odata, size);
     hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
