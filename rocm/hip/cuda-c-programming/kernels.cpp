@@ -88,7 +88,7 @@ __global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n) {
 
     // boundary check.
 
-    if (idx <= n ) return;
+    if (idx >= n ) return;
 
     // in-place reduction in global memory.
 
