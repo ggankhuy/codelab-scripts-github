@@ -12,6 +12,39 @@ __global__ void warmup(int * g_idata, int *g_odata, unsigned int n) {
     unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
 }
+
+
+__global__ void reduceNeighbored(int * g_idata, int *g_odata, unsigned int n) {
+    unsigned int tid = hipThreadIdx_x;
+
+    // convert global data poitner to the local pointer of this block.
+
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
+
+    // boundary check.
+
+    if (tid <= n ) return;
+
+    // in-place reduction in global memory.
+
+    for (int stride = 1; stride < hipBlockDim_x; stride *= 2) {
+
+        // convert tid into local array index.
+
+        if ((tid % (2 * stride)) == 0) {
+            idata[tid] += idata[tid + stride];
+        }    
+
+        // synchronize within threadblock.
+
+        __syncthreads();
+    }
+
+    // write result for htis block to global mem.
+
+    if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
+}
+
 __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n) {
     unsigned int tid = hipThreadIdx_x;
     unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;

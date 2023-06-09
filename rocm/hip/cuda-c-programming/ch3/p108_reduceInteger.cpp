@@ -56,48 +56,50 @@ int main(int argc, char ** argv) {
 
     int *d_idata, *d_odata;
     hipMalloc((void**)&d_idata, bytes);
-    hipMalloc((void**)&d_odata, bytes);
+    hipMalloc((void**)&d_odata, grid.x*sizeof(int));
 
     // cpu reduction, skipping....
+
+    iStart = seconds();
+    int cpu_sum = recursiveReduce(tmp, size);
+    iElaps = seconds() - iStart;
+    printf("cpu reduce elapsed %d ms cpu sum: %d.\n", iElaps, cpu_sum);
 
     // kernel1. recursive Reduce.
 
     hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
     hipDeviceSynchronize();
-
     iStart = seconds();
-
     warmup<<<grid, block>>>(d_idata, d_odata, size);
     hipDeviceSynchronize();
-
     iElaps = seconds() - iStart;
-
     hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
     int gpu_sum=0;
 
     for (int i = 0; i < grid.x; i++) { gpu_sum += h_odata[i]; }
     
-    printf("gpu warmup elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+    printf("gpu warmup elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
     // kern1l reduce Neighbored.
+
     hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
     hipDeviceSynchronize();
     iStart = seconds();
-    reduceNeighboredLess<<<grid, block>>>(d_idata, d_odata, size);
+    reduceNeighbored<<<grid, block>>>(d_idata, d_odata, size);
     hipDeviceSynchronize();
-    iStart = seconds();
+    iElaps = seconds() - iStart;
     hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
     gpu_sum = 0;
+
     for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
     printf("gpu neighbored: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
     hipDeviceSynchronize();
     iElaps = seconds() - iStart;
-
     hipMemcpy(h_odata, d_odata, grid.x/8*sizeof(int), hipMemcpyDeviceToHost);
     gpu_sum = 0;
     for (int i = 0; i < grid.x/8; i++) { gpu_sum += h_odata[i];}
-    printf("gpu Cmptnroll elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+    printf("gpu Cmptnroll elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x/8, block.x);
 
     hipFree(d_idata);
     hipFree(d_odata);

@@ -76,3 +76,23 @@ void printData(char *msg, int *in,  const int size)
     printf("\n");
     return;
 }
+
+int recursiveReduce(int * data, int const size) {
+    // terminate check
+    
+    if ( size == 1 ) return data[0];
+
+    //renew the strdide
+
+    int const stride = size / 2;
+    
+    // in-place reduction.
+
+    for (int i = 0; i < stride ; i++) {
+        data[i] = data[i + stride];
+    }
+
+    // call recursively.
+
+    return recursiveReduce(data, stride);
+}

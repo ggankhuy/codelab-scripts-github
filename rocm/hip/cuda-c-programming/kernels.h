@@ -7,6 +7,7 @@
 // p108.cu
 
 __global__ void warmup(int * g_idata, int *g_odata, unsigned int n);
+__global__ void reduceNeighbored(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n);
 
