@@ -23,7 +23,7 @@ __global__ void reduceNeighbored(int * g_idata, int *g_odata, unsigned int n) {
 
     // boundary check.
 
-    if (tid <= n ) return;
+    if (tid >= n ) return;
 
     // in-place reduction in global memory.
 
