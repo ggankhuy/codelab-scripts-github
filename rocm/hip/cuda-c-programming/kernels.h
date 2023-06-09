@@ -45,3 +45,4 @@ __global__ void setRowReadColDyn(int *out);
 __global__ void setRowReadColPad(int *out);
 __global__ void setRowReadColDynPad(int *out);
 
+__global__ void transposeSmem(float * out, float * in, int nx, int ny);

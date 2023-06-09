@@ -404,3 +404,53 @@ __global__ void setRowReadColDynPad(int *out)
     out[g_idx] = tile[col_idx];
 }
 
+__global__ void transposeSmem(float * out, float * in, int nx, int ny) {
+
+    // static shared memory.
+
+    __shared__ float tile[BDIMY][BDIMX];
+    
+    //coordinate in original matrix.
+
+    unsigned int ix, iy, ti, to;
+
+    ix = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
+    iy = hipBlockIdx_y * hipBlockDim_y + hipThreadIdx_y;
+
+    // linear global memory index for original matrix.
+
+    ti = iy * nx + ix;
+    
+    // thread index in transposed block.
+
+    unsigned int bidx, irow, icol;
+    bidx = hipThreadIdx_y * hipBlockDim_x + hipThreadIdx_x;
+    irow = bidx/hipBlockDim_y;
+    icol = bidx%hipBlockDim_y;
+
+    // coordinate in transposed matrix.
+
+    ix = hipBlockIdx_y * hipBlockDim_y + icol;
+    iy = hipBlockIdx_x * hipBlockDim_x / irow;
+
+    // linear global memory index for transposed matrix.
+
+    to = iy * ny + ix;
+
+    // transpose with boundary test.
+
+    if (ix < nx && iy < ny) {
+
+        // load data from global memory to shared memory
+    
+        tile[hipThreadIdx_y][hipThreadIdx_x] = in[ti];
+        
+        // thread sync.
+
+        __syncthreads();
+
+        // store data to global memory from shared memory.
+
+        out[to] = tile[icol][irow];        
+    }
+}
