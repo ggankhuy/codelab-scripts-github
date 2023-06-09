@@ -111,6 +111,47 @@ __global__ void reduceNeighboredInterleaved(int * g_idata, int *g_odata, unsigne
     if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
+
+// p232
+
+__global__ void reduceGmem(int * g_idata, int *g_odata, unsigned int n) {
+    // set thread id.
+
+    unsigned int tid = hipThreadIdx_x;
+    int *idata = g_idata + hipBlockIdx_x + hipBlockDim_x;
+
+    //boundary check.
+
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
+   if (idx >= n) return ;
+
+    // in-place reduction in global memory.
+
+    if (hipBlockIdx_x >= 1024 && tid < 512) idata[tid] += idata[tid+512];
+    __syncthreads();
+    if (hipBlockIdx_x >= 512 && tid < 256) idata[tid] += idata[tid+256];
+    __syncthreads();
+    if (hipBlockIdx_x >= 256 && tid < 128) idata[tid] += idata[tid+128];
+    __syncthreads();
+    if (hipBlockIdx_x >= 128 && tid < 64) idata[tid] += idata[tid+64];
+    __syncthreads();
+
+    // unrolling warp
+
+    if (tid < 32) {
+        volatile int * vsmem = idata;
+        vsmem[tid] += vsmem[tid + 32];
+        vsmem[tid] += vsmem[tid + 16];
+        vsmem[tid] += vsmem[tid + 8];
+        vsmem[tid] += vsmem[tid + 4];
+        vsmem[tid] += vsmem[tid + 2];
+        vsmem[tid] += vsmem[tid + 1];
+    } 
+
+    // write result for this block to global mem.
+    if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
+}
+
 __global__ void warmingup(float * c) {
     int tid = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
     float a,b;

@@ -10,6 +10,7 @@ __global__ void warmup(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighbored(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighboredInterleaved(int * g_idata, int *g_odata, unsigned int n);
+__global__ void reduceGmem(int * g_idata, int *g_odata, unsigned int n);
 
 __global__ void warmingup(float * c);
 __global__ void mathKernel1(float * c);
@@ -43,3 +44,4 @@ __global__ void setRowReadCol(int *out);
 __global__ void setRowReadColDyn(int *out);
 __global__ void setRowReadColPad(int *out);
 __global__ void setRowReadColDynPad(int *out);
+
