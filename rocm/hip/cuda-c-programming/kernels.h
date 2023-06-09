@@ -9,7 +9,7 @@
 __global__ void warmup(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighbored(int * g_idata, int *g_odata, unsigned int n);
 __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n);
-__global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n);
+__global__ void reduceNeighboredInterleaved(int * g_idata, int *g_odata, unsigned int n);
 
 __global__ void warmingup(float * c);
 __global__ void mathKernel1(float * c);

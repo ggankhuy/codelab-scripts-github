@@ -78,7 +78,7 @@ __global__ void reduceNeighboredLess(int * g_idata, int *g_odata, unsigned int n
     if (tid == 0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
-__global__ void reduceInterleaved(int * g_idata, int *g_odata, unsigned int n) {
+__global__ void reduceNeighboredInterleaved(int * g_idata, int *g_odata, unsigned int n) {
     unsigned int tid = hipThreadIdx_x;
     unsigned int idx = hipBlockIdx_x * hipBlockDim_x + hipThreadIdx_x;
 
