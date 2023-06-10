@@ -509,7 +509,7 @@ __global__ void reduceUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n) {
 
     // write result for this block to global mem.
 
-    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+    if (tid ==0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
 __global__ void reduceCompleteUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n) {
@@ -548,7 +548,6 @@ __global__ void reduceCompleteUnrollWarp8 (int *g_idata, int *g_odata, unsigned 
         __syncthreads();
     if(hipBlockDim_x >= 128 && tid < 64 ) idata[tid] += idata[tid + 64];
         __syncthreads();
-    }
 
     // unrolling warp
 
@@ -564,7 +563,7 @@ __global__ void reduceCompleteUnrollWarp8 (int *g_idata, int *g_odata, unsigned 
 
     // write result for this block to global mem.
 
-    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+    if (tid ==0) g_odata[hipBlockIdx_x] = idata[0];
 }
 
 template <unsigned int iBlockSize>
@@ -604,7 +603,6 @@ __global__ void reduceCompleteUnroll(int *g_idata, int *g_odata, unsigned int n)
         __syncthreads();
     if(iBlockSize >= 128 && tid < 64 ) idata[tid] += idata[tid + 64];
         __syncthreads();
-    }
 
     // unrolling warp
 
@@ -620,5 +618,5 @@ __global__ void reduceCompleteUnroll(int *g_idata, int *g_odata, unsigned int n)
 
     // write result for this block to global mem.
 
-    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+    if (tid ==0) g_odata[hipBlockIdx_x] = idata[0];
 }
