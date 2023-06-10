@@ -7,11 +7,11 @@ mkdir -p $OUT_DIR
 while IFS= read -r line
 
 do
-    outputFile=$FILENAME.$solIndexNo.yaml
+    outputFile=$FILENAME.$solIndexNo.out.yaml
     if [[ `echo $line | grep SolutionIndex` ]] ; then
         echo "$line"
         solIndexNo=$((solIndexNo+1))
     fi
     lineNo=$((lineNo+1))
-    echo $line >> $OUTPUT_DIR/$outputFile
+    echo $line >> $outputFile
 done < "$FILENAME.yaml"
