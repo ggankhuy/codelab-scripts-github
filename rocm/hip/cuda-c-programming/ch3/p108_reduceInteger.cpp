@@ -94,7 +94,7 @@ int main(int argc, char ** argv) {
     for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
     printf("gpu reduceNeighbored: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
-    // kern1l reduce Neighbored.
+    // kern1l reduce NeighboredLess
 
     hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
     hipDeviceSynchronize();
@@ -108,12 +108,54 @@ int main(int argc, char ** argv) {
     for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
     printf("gpu reduceNeighboredLess: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
-    // kern1l reduce Neighbored.
+    // kern1l reduce NeighboredInterleaved.
 
     hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
     hipDeviceSynchronize();
     iStart = seconds();
     reduceNeighboredInterleaved<<<grid, block>>>(d_idata, d_odata, size);
+    hipDeviceSynchronize();
+    iElaps = seconds() - iStart;
+    hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
+    gpu_sum = 0;
+
+    for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
+    printf("gpu reduceNeighboredInterleave: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+
+    // kern1l reduce reduceUnrollWarp8.
+
+    hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
+    hipDeviceSynchronize();
+    iStart = seconds();
+    reduceUnrollWarp8<<<grid, block>>>(d_idata, d_odata, size);
+    hipDeviceSynchronize();
+    iElaps = seconds() - iStart;
+    hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
+    gpu_sum = 0;
+
+    for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
+    printf("gpu reduceNeighboredInterleave: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+
+    // kern1l reduce reduceCompleteUnrollWarp8
+
+    hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
+    hipDeviceSynchronize();
+    iStart = seconds();
+    reduceCompleteUnrollWarp8<<<grid, block>>>(d_idata, d_odata, size);
+    hipDeviceSynchronize();
+    iElaps = seconds() - iStart;
+    hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
+    gpu_sum = 0;
+
+    for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
+    printf("gpu reduceNeighboredInterleave: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+
+    // kern1l reduce reduceCompleteUnroll.
+
+    hipMemcpy(d_idata, h_idata, bytes, hipMemcpyHostToDevice);
+    hipDeviceSynchronize();
+    iStart = seconds();
+    reduceCompleteUnroll<<<grid, block>>>(d_idata, d_odata, size);
     hipDeviceSynchronize();
     iElaps = seconds() - iStart;
     hipMemcpy(h_odata, d_odata, grid.x*sizeof(int), hipMemcpyDeviceToHost);
