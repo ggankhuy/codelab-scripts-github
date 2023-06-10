@@ -46,3 +46,6 @@ __global__ void setRowReadColPad(int *out);
 __global__ void setRowReadColDynPad(int *out);
 
 __global__ void transposeSmem(float * out, float * in, int nx, int ny);
+__global__ void reduceUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n);
+__global__ void reduceCompleteUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n);
+__global__ void reduceCompleteUnroll(int *g_idata, int *g_odata, unsigned int n);

@@ -454,3 +454,171 @@ __global__ void transposeSmem(float * out, float * in, int nx, int ny) {
         out[to] = tile[icol][irow];        
     }
 }
+
+// p117
+
+__global__ void reduceUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n) {
+    
+    // set thread ID.
+
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x * 8 + hipThreadIdx_x;
+    
+    // convert global data pointer to the local pointer of this block.
+
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
+    
+    // unrolling 8.
+
+    if (idx + 7 * hipBlockIdx_x < n ) {
+        int a1 = g_idata[idx];
+        int a2 = g_idata[idx+hipBlockIdx_x];
+        int a3 = g_idata[idx+2*hipBlockIdx_x];
+        int a4 = g_idata[idx+3*hipBlockIdx_x];
+        int b1 = g_idata[idx+4*hipBlockIdx_x];
+        int b2 = g_idata[idx+5*hipBlockIdx_x];
+        int b3 = g_idata[idx+6*hipBlockIdx_x];
+        int b4 = g_idata[idx+7*hipBlockIdx_x];
+        g_idata[idx] = a1+a2+a3+a4+b1+b2+b3+b4;
+    }
+    __syncthreads();
+
+    // in place reduction in global memory.
+
+    for (int stride = hipBlockDim_x / 2; stride > 32 ; stride >>=1 ) {
+        if (tid < stride) {
+            idata[tid] += idata[tid + stride]; 
+        }
+
+        // synchronize within threadblock.
+
+        __syncthreads();
+    }
+
+    // unrolling warp
+
+    if (tid < 32) {
+        volatile int *vmem = idata;
+        vmem[tid] += vmem[tid + 32];
+        vmem[tid] += vmem[tid + 16];
+        vmem[tid] += vmem[tid + 8];
+        vmem[tid] += vmem[tid + 4];
+        vmem[tid] += vmem[tid + 2];
+        vmem[tid] += vmem[tid + 1];
+    }
+
+    // write result for this block to global mem.
+
+    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+}
+
+__global__ void reduceCompleteUnrollWarp8 (int *g_idata, int *g_odata, unsigned int n) {
+    
+    // set thread ID.
+
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x * 8 + hipThreadIdx_x;
+    
+    // convert global data pointer to the local pointer of this block.
+
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
+    
+    // unrolling 8.
+
+    if (idx + 7 * hipBlockIdx_x < n ) {
+        int a1 = g_idata[idx];
+        int a2 = g_idata[idx+hipBlockIdx_x];
+        int a3 = g_idata[idx+2*hipBlockIdx_x];
+        int a4 = g_idata[idx+3*hipBlockIdx_x];
+        int b1 = g_idata[idx+4*hipBlockIdx_x];
+        int b2 = g_idata[idx+5*hipBlockIdx_x];
+        int b3 = g_idata[idx+6*hipBlockIdx_x];
+        int b4 = g_idata[idx+7*hipBlockIdx_x];
+        g_idata[idx] = a1+a2+a3+a4+b1+b2+b3+b4;
+    }
+    __syncthreads();
+
+    // in place reduction and complete unroll
+
+    if(hipBlockDim_x >= 1024 && tid < 512 ) idata[tid] += idata[tid + 512];
+        __syncthreads();
+    if(hipBlockDim_x >= 512 && tid < 256 ) idata[tid] += idata[tid + 256];
+        __syncthreads();
+    if(hipBlockDim_x >= 256 && tid < 128 ) idata[tid] += idata[tid + 128];
+        __syncthreads();
+    if(hipBlockDim_x >= 128 && tid < 64 ) idata[tid] += idata[tid + 64];
+        __syncthreads();
+    }
+
+    // unrolling warp
+
+    if (tid < 32) {
+        volatile int *vmem = idata;
+        vmem[tid] += vmem[tid + 32];
+        vmem[tid] += vmem[tid + 16];
+        vmem[tid] += vmem[tid + 8];
+        vmem[tid] += vmem[tid + 4];
+        vmem[tid] += vmem[tid + 2];
+        vmem[tid] += vmem[tid + 1];
+    }
+
+    // write result for this block to global mem.
+
+    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+}
+
+template <unsigned int iBlockSize>
+__global__ void reduceCompleteUnroll(int *g_idata, int *g_odata, unsigned int n) {
+    
+    // set thread ID.
+
+    unsigned int tid = hipThreadIdx_x;
+    unsigned int idx = hipBlockIdx_x * hipBlockDim_x * 8 + hipThreadIdx_x;
+    
+    // convert global data pointer to the local pointer of this block.
+
+    int *idata = g_idata + hipBlockIdx_x * hipBlockDim_x;
+    
+    // unrolling 8.
+
+    if (idx + 7 * hipBlockIdx_x < n ) {
+        int a1 = g_idata[idx];
+        int a2 = g_idata[idx+hipBlockIdx_x];
+        int a3 = g_idata[idx+2*hipBlockIdx_x];
+        int a4 = g_idata[idx+3*hipBlockIdx_x];
+        int b1 = g_idata[idx+4*hipBlockIdx_x];
+        int b2 = g_idata[idx+5*hipBlockIdx_x];
+        int b3 = g_idata[idx+6*hipBlockIdx_x];
+        int b4 = g_idata[idx+7*hipBlockIdx_x];
+        g_idata[idx] = a1+a2+a3+a4+b1+b2+b3+b4;
+    }
+    __syncthreads();
+
+    // in place reduction and complete unroll
+
+    if(iBlockSize >= 1024 && tid < 512 ) idata[tid] += idata[tid + 512];
+        __syncthreads();
+    if(iBlockSize >= 512 && tid < 256 ) idata[tid] += idata[tid + 256];
+        __syncthreads();
+    if(iBlockSize >= 256 && tid < 128 ) idata[tid] += idata[tid + 128];
+        __syncthreads();
+    if(iBlockSize >= 128 && tid < 64 ) idata[tid] += idata[tid + 64];
+        __syncthreads();
+    }
+
+    // unrolling warp
+
+    if (tid < 32) {
+        volatile int *vmem = idata;
+        vmem[tid] += vmem[tid + 32];
+        vmem[tid] += vmem[tid + 16];
+        vmem[tid] += vmem[tid + 8];
+        vmem[tid] += vmem[tid + 4];
+        vmem[tid] += vmem[tid + 2];
+        vmem[tid] += vmem[tid + 1];
+    }
+
+    // write result for this block to global mem.
+
+    if (tid ==0) g_odata[hipBLockIdx_x] = idata[0];
+}
