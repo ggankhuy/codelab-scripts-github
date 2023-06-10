@@ -1,0 +1,21 @@
+Python 3.8.10 (default, Mar 13 2023, 10:26:41) 
+[GCC 9.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import Yaml
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'Yaml'
+>>> import yaml
+>>> from yaml import load
+>>> stream=open("test.yaml")
+>>> content=yaml.load(stream)
+<stdin>:1: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+>>> content
+[[[32, 8192, 1, 32], [48, 3.835]], [[32, 4096, 1, 32], [115, 1.789]], [[32, 32768, 1, 32], [73, 11.652]]]
+>>> for i in content:
+...     print (i)
+... 
+[[32, 8192, 1, 32], [48, 3.835]]
+[[32, 4096, 1, 32], [115, 1.789]]
+[[32, 32768, 1, 32], [73, 11.652]]
+>>> 
