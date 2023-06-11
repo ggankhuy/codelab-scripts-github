@@ -23,9 +23,14 @@ while [[ $solIdx ]]
 do
     echo "..."
     solIdx=`yq eval -M '.[7]['$idx'][1][0]' $input`
-    echo "solIdx: $solIdx"
     idx=$((idx+1))
-    echo "processing"
     yq eval -M '.[7]['$idx']' $input
-    sleep 1
+
+    if [[ $solIdx < 10 ]] ; then
+        echo "outputting to interm..."
+        echo -ne "  - - " >> $interim ; 
+        yq eval -M '.[7]['$idx'][0]' $input | tee -a $interim
+        echo -ne "    - " >> $interim ; 
+        yq eval -M '.[7]['$idx'][1]' $input | tee -a $interim
+    fi
 done
