@@ -1,4 +1,5 @@
 FILENAME=arcturus_Cijk_Ailk_Bjlk_DB
+FILENAME=aldebaran_Cijk_Ailk_Bjlk_DB
 
 lineNo=0
 solIndexNo=0

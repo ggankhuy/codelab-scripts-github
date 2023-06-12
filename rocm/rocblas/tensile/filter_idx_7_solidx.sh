@@ -19,20 +19,27 @@ echo -ne "" > $output
 idx=0
 solIdx=1
 
-for i in {0..4}; do
+for idx in {0..4}; do
+    echo -ne "  - " >> $output ;
     yq eval -M '.['$idx']' $input >> $output
 done
 
+echo -ne "  - " >> $output
+idx=0
 while [[ $solIdx ]] ; do
-    solIdx=`yq eval -M '.[5]['$idx']' $input` | grep SolutionIndex
+    echo "processing [5][$idx]..."
+    solIdx=`yq eval -M '.[5]['$idx']' $input | grep SolutionIndex | tr -s ' ' | cut -d " " -f2`
     echo "[5]: SolutionIndex: $solIdx"
     if [[ $solIdx == "null" ]] ; then
         break
     fi
+
     if [[ $solIdx -le 10 ]] ; then
         echo "outputting to interm..."
+        echo -ne "  - " >> $output ;
         yq eval -M '.[5]['$idx']' $input >> $output
     fi
+    idx=$((idx+1))
 done
 
 yq eval -M '.[6]' $input >> $output
@@ -57,3 +64,4 @@ do
     fi
     idx=$((idx+1))
 done
+yq $output -o $output.json
