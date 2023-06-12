@@ -43,7 +43,10 @@ for i in range(0, 8):
             if (content_in[0][i][j][1][0] < 10):
                 print("Updating [7]: SolutionIndex: ", content_in[0][i][j], ", iter=", j)
                 content_out[0][i].append(content_in[0][i][j])
-yaml.dump(content_out, f_out)
+
+# add null list to prevent fatal error message.
+content_out[0].append([])
+yaml.dump(content_out[0], f_out)
 f_out.close()
 f.close()
 
