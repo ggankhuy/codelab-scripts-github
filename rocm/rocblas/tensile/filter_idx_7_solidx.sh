@@ -14,23 +14,46 @@ output=arcturus_Cijk_Ailk_Bjlk_SB_filtered.yaml
 # if first number is less than 10, then record current and prev. line.
 
 prev_line=""
-echo -ne "" > $interim
+echo -ne "" > $output
 
 idx=0
 solIdx=1
 
-while [[ $solIdx ]] 
+for i in {0..4}; do
+    yq eval -M '.['$idx']' $input >> $output
+done
+
+while [[ $solIdx ]] ; do
+    solIdx=`yq eval -M '.[5]['$idx']' $input` | grep SolutionIndex
+    echo "[5]: SolutionIndex: $solIdx"
+    if [[ $solIdx == "null" ]] ; then
+        break
+    fi
+    if [[ $solIdx -le 10 ]] ; then
+        echo "outputting to interm..."
+        yq eval -M '.[5]['$idx']' $input >> $output
+    fi
+done
+
+yq eval -M '.[6]' $input >> $output
+
+while [[ $solIdx ]] ;  
 do
     echo "..."
+    echo "$idx"
     solIdx=`yq eval -M '.[7]['$idx'][1][0]' $input`
-    idx=$((idx+1))
+    echo "solIdx: $solIdx" 
+    if [[ $solIdx == "null" ]] ; then
+        break
+    fi
     yq eval -M '.[7]['$idx']' $input
 
-    if [[ $solIdx < 10 ]] ; then
+    if [[ $solIdx -le 10 ]] ; then
         echo "outputting to interm..."
-        echo -ne "  - - " >> $interim ; 
-        yq eval -M '.[7]['$idx'][0]' $input | tee -a $interim
-        echo -ne "    - " >> $interim ; 
-        yq eval -M '.[7]['$idx'][1]' $input | tee -a $interim
+        echo -ne "  - - " >> $output ; 
+        yq eval -M '.[7]['$idx'][0]' $input | tee -a $output
+        echo -ne "    - " >> $output ; 
+        yq eval -M '.[7]['$idx'][1]' $input | tee -a $output
     fi
+    idx=$((idx+1))
 done
