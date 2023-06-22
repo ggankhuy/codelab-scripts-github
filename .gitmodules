@@ -1,0 +1,3 @@
+[submodule "build-install-scripts/rocm"]
+	path = build-install-scripts/rocm
+	url = https://github.amd.com/dcgpu-custeng/rocm-build-suite
