@@ -81,10 +81,13 @@ fi
 echo build.sh: PATH: $PATH
 
 set_os_type
-
+echo "PKG_EXEC: $PKG_EXEC"
 case "$PKG_EXEC" in
-   "deb")
-        install_packages cmake chrpath libpci-dev half
+   "apt")
+        # vim-common: rocm5.5 rocr-runtime.
+        # libnuma-dev: rocm5.5 roct-thunk-interface.
+
+        install_packages cmake chrpath libpci-dev half vim-common libnuma-dev
       ;;
 
    "yum")
