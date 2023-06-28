@@ -78,9 +78,22 @@ else
     echo "Prebuild stage is OK. continuing."
 fi
 
+echo build.sh: PATH: $PATH
+
 set_os_type
-install_packages python3-pip cmake chrpath 
-install_pip_libs CppHeaderParser networkx
+
+case "$PKG_EXEC" in
+   "deb")
+        install_packages cmake chrpath libpci-dev
+      ;;
+
+   "yum")
+        install_packages cmake libstdc++-devel libpci-devel gcc g++
+      ;;
+   *)
+esac
+
+install_pip_libs CppHeaderParser
 
 function llvm() {
     CURR_BUILD=llvm-project
@@ -460,7 +473,7 @@ function rocRAND() {
 
     hip_DIR="$ROCM_SRC_FOLDER/hipamd"
     echo CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipamd" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    CXX=hipcc cmake -DBUILD_HIPRAND=OFF -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     make -j`nproc` install | tee $LOG_DIR/$CURR_BUILD.log
 #   f5 rocRAND
     build_exit $CURR_BIULD

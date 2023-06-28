@@ -1,5 +1,11 @@
 echo "common.sh entered..."
 
+# Following settings are only local to this file: common.sh.
+# Do not put any settings that is applicable to APIs/functions
+# script outside of this shell script.
+
+OPTION_EXIT_ON_ROCM_SOURCE_CHECKOUT=0
+
 ERROR_VERSION=300
 ERROR_ROCM_SRC_REPO_INIT=301
 ERROR_ROCM_SRC_REPO_SYNC=302
@@ -16,18 +22,34 @@ function print_double_bar() {
     echo ""
 }
 
+#   This function is also called by python code and parses its stdout, therefore
+#   Do not alter any output preceding with PY: string!
+
 function set_os_type() {
    OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
    echo "OS_NAME: $OS_NAME"
    case "$OS_NAME" in
    "Ubuntu")
       echo "Ubuntu is detected..."
+      echo "PY:PKG_EXEC=apt"
+      echo "PY:PKG_EXT=deb"
       PKG_EXEC=apt
       PKG_EXT=deb
       ln -s /usr/bin/python3  /usr/bin/python
       ;;
+   "Red Hat Enterprise Linux")
+      echo "CentOS is detected..."
+      echo "PY:PKG_EXEC=yum"
+      echo "PY:PKG_EXT=rpm"
+      PKG_EXEC=yum
+      PKG_EXT=rpm
+      ln -s /usr/bin/python3  /usr/bin/python
+      return 0
+      ;;
    "CentOS Stream")
       echo "CentOS is detected..."
+      echo "PY:PKG_EXEC=yum"
+      echo "PY:PKG_EXT=rpm"
       PKG_EXEC=yum
       PKG_EXT=rpm
       return 0
@@ -164,7 +186,11 @@ function rocm_source_dw() {
     pushd  $DIR_NAME
     mkdir -p ~/bin/
     echo "install repo..."
-    $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+    if [[ $PKG_EXEC=="yum" ]] ; then
+        $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+    else
+        $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+    fi
     $SUDO chmod a+x ~/bin/repo
     echo "repo init..."
     $SUDO ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
@@ -174,9 +200,12 @@ function rocm_source_dw() {
     fi
     echo "repo sync..."
     $SUDO ~/bin/repo sync
-    if [[ $? -ne 0 ]] ; then
+    if [[ $? -ne 0 ]] && [[ $OPTION_EXIT_ON_ROCM_SOURCE_CHECKOUT -ne 0 ]] ; then
         echo "Error: Unable to perform repo sync."
         return $ERROR_ROCM_SRC_REPO_SYNC
+    else
+        echo "Warning: Error occurred while performing repo sync. Continuing anyways..., Ctrl+c to terminate to inspect if necessary"
+        sleep 5
     fi
     echo "ROCm source is downloaded to $DIR_NAME"
     echo "push $DIR_NAME to get there..."

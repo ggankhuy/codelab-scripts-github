@@ -5,34 +5,13 @@ import os
 import subprocess
 #from matplotlib import pyplot as plt
 
-import networkx as nx
-
-DEBUG=1
-TEST_MODE=0
-DEBUG_L2=0
-components_built=[]
-graph = nx.DiGraph()
-
-# used by def recur_pred
-
-all_pred=[]
-indent=""
-depFile=None
-component=None
-build_llvm=""
-build_py=""
-build_cmake=""
-build_package=""
-build_fast=""
-
-rocmVersionMajor=""
-rocmVersionMinor=""
-
-# Enable directed aclyctic graph implementation of depdendencies wip.
-
-CONFIG_DAG_ENABLE=1 
+def printErr(msg):
+    os.system("clear")
+    print("Error: ")
+    print(msg)
 
 def dispHelp():
+    os.system("clear")
     print("----------build-rocm.py v1.0")
     print("Usage:")
     print("--help: display this help menu.")
@@ -63,6 +42,14 @@ if "--pyno" in sys_argv and "--py" in sys_argv:
 if "--cmakeno" in sys_argv and "--cmake" in sys_argv: 
     print("Can not have both --cmakeno and --cmake")
     exit(1)
+
+depFile=''
+build_py=''
+build_cmake=''
+build_llvm=''
+build_package=''
+build_fast=''
+component=None
 
 for i in sys.argv:
     print("Processing ", i)
@@ -118,9 +105,47 @@ if not depFile:
 else:
     print("dependency file: ", depFile)
 
+
+shell='bash'
+out = subprocess.call([shell, './sh/earlyinit.sh'])
+
+'''
+Commented out for now, sample code for setting variables from shell script/function execution
+out = os.popen('source ./sh/common.sh; set_os_type').read()
+print(out)
+for i in out.split('\n'):
+    print(i)
+    if re.search("PY:PKG_EXEC", i):
+        PKG_EXEC=i.split(':')[1].split('=')[1]
+    if re.search("PY:PKG_EXT", i):
+        PKG_EXT=i.split(':')[1].split('=')[1]
+print(PKG_EXEC)
+print(PKG_EXT)
+'''
+import networkx as nx
+
+DEBUG=1
+TEST_MODE=0
+DEBUG_L2=0
+components_built=[]
+graph = nx.DiGraph()
+
+# used by def recur_pred
+
+all_pred=[]
+indent=""
+
+rocmVersionMajor=""
+rocmVersionMinor=""
+
+# Enable directed aclyctic graph implementation of depdendencies wip.
+
+CONFIG_DAG_ENABLE=1 
+
 # determine version
 
-
+rocmVersionMajorInstalled=''
+rocmVersionMinorInstalled=''
 rocmVersionInstalled=os.popen("cat /opt/rocm/.info/version").read().strip().split('-')[0]
 
 if rocmVersionInstalled:
@@ -129,10 +154,8 @@ if rocmVersionInstalled:
 
 if not rocmVersionMajor:
     if not rocmVersionMajorInstalled:
-        print("ROCm is not installed.")
-        print("can not determine installed version from /opt/rocm/.info/version nor you specified the version to build")
-        print("Either you need to install specific ROCm version or specify in command line.")
-        exit(1)
+        printErr("ROCm is not installed, in which case you'd need to specify version from command line. See --help.")
+        quit()
     else:
         rocmVersionMajor=rocmVersionMajorInstalled
 
@@ -150,7 +173,6 @@ depFileContent=depFileHandle.readlines()
 # Set shell script based initializations here. 
 # 1. Set shell type.
 
-shell='sh'
 osname=os.popen("cat /etc/os-release | grep NAME").read().strip()
 
 LOG_DIR="/log/rocmbuild/"
@@ -240,12 +262,12 @@ finalList=[]
 if TEST_MODE==1:
     DAT_FILE="list-test.dat"
 else:
-    DAT_FILE="list-test.dat"
+    DAT_FILE="list.dat"
 
 if DEBUG:
     print("Reading ", DAT_FILE)
 
-listDatHandle=open("list-test.dat")
+listDatHandle=open(DAT_FILE)
 
 listDatContent=listDatHandle.readlines()
 if DEBUG:
