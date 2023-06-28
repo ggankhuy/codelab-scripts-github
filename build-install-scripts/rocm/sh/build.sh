@@ -84,7 +84,7 @@ set_os_type
 
 case "$PKG_EXEC" in
    "deb")
-        install_packages cmake chrpath libpci-dev
+        install_packages cmake chrpath libpci-dev half
       ;;
 
    "yum")

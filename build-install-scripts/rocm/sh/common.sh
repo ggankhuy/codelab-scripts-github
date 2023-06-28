@@ -1,3 +1,4 @@
+set -x
 echo "common.sh entered..."
 
 # Following settings are only local to this file: common.sh.
@@ -186,11 +187,20 @@ function rocm_source_dw() {
     pushd  $DIR_NAME
     mkdir -p ~/bin/
     echo "install repo..."
-    if [[ $PKG_EXEC=="yum" ]] ; then
+    echo "PKG_EXEC: $PKG_EXEC"
+
+    case "$PKG_EXEC" in
+    "yum")
         $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
-    else
+        ;;
+    "apt")
         $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
-    fi
+        ;;
+    *)
+      echo "Unsupported/unknown PKG installer: $PKG_EXEC, exiting..."
+      ;;
+    esac
+
     $SUDO chmod a+x ~/bin/repo
     echo "repo init..."
     $SUDO ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
