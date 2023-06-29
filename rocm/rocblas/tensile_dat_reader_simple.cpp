@@ -30,8 +30,8 @@ See under "msgpack controls a buffer"
 
 using namespace std;
 
-//namespace Tensile {
-//    namespace Serialization {
+namespace Tensile {
+    namespace Serialization {
         /*
         MessagePackInput createSubRef(msgpack::object otherObject)
         {
@@ -76,8 +76,8 @@ using namespace std;
             }
         }
 
-//    }
-//}
+    }
+}
         int main() {
             std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
             msgpack::object_handle result;
