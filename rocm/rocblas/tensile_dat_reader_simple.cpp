@@ -30,7 +30,9 @@ See under "msgpack controls a buffer"
 
 using namespace std;
 
-void recur_walk(msgpack::object & pObject, int level = 0) {
+void recur_walk(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result, int level = 0) {
+
+
     for(uint32_t i = 0; i < pObject.via.map.size; i++) {
         cout << "recur_walk entered: level=" << level << endl;
         if (level >= 5) {
@@ -49,7 +51,7 @@ void recur_walk(msgpack::object & pObject, int level = 0) {
             //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
             std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
             level += 1;
-            recur_walk(element.val, level);
+            //recur_walk(element.val, level);
             break;
         }
         case msgpack::type::object_type::POSITIVE_INTEGER:
@@ -60,8 +62,10 @@ void recur_walk(msgpack::object & pObject, int level = 0) {
             break;
         }
         default:
-        throw std::runtime_error("Unexpected map key type");
+            cout << "element.key.type: " << element.key.type << endl;
+            throw std::runtime_error("Unexpected map key type");
         }
+        result[key] = std::move(element.val);
     }
 }
 
@@ -88,7 +92,9 @@ int main() {
         cout << "in.gcount: " << in.gcount() << endl;
     } while(!finished_parsing && !in.fail());
     //Tensile::Serialization::MessagePackInput min(result.get());
-    msgpack::object obj1=result.get();
 
-    recur_walk(obj1, recur_level);
+    msgpack::object obj1=result.get();
+    std::unordered_map<std::string, msgpack::object> objectMap;
+
+    recur_walk(obj1, objectMap, recur_level);
 }
