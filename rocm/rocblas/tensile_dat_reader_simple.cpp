@@ -30,71 +30,112 @@ See under "msgpack controls a buffer"
 
 using namespace std;
 
-void recur_walk(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result, int level = 0) {
-
-
-    for(uint32_t i = 0; i < pObject.via.map.size; i++) {
-        cout << "recur_walk entered: level=" << level << endl;
-        if (level >= 5) {
-            cout << "Recursive limit reached." << endl;
-            return; 
-        }
-
-        auto& element = pObject.via.map.ptr[i];
-
-        std::string key;
-        switch(element.key.type)
+//namespace Tensile {
+//    namespace Serialization {
+        /*
+        MessagePackInput createSubRef(msgpack::object otherObject)
         {
-        case msgpack::type::object_type::STR:
-        {
-            element.key.convert(key);
-            //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
-            std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
-            level += 1;
-            //recur_walk(element.val, level);
-            break;
+            return MessagePackInput(otherObject, context);
+        }*/
+
+        void objectToMap(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result, int level = 0) {
+
+
+            for(uint32_t i = 0; i < pObject.via.map.size; i++) {
+                cout << "objectToMap entered: level=" << level << endl;
+                if (level >= 5) {
+                    cout << "Recursive limit reached." << endl;
+                    return; 
+                }
+
+                auto& element = pObject.via.map.ptr[i];
+
+                std::string key;
+                switch(element.key.type)
+                {
+                case msgpack::type::object_type::STR:
+                {
+                    element.key.convert(key);
+                    //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
+                    std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
+                    level += 1;
+                    break;
+                }
+                case msgpack::type::object_type::POSITIVE_INTEGER:
+                {
+                    auto iKey = element.key.as<uint32_t>();
+                    key       = std::to_string(iKey);
+                    std::cout << std::setw(100) << "  DBG: key set to: " << key << std::endl;
+                    break;
+                }
+                default:
+                    cout << "element.key.type: " << element.key.type << endl;
+                    throw std::runtime_error("Unexpected map key type");
+                }
+                result[key] = std::move(element.val);
+            }
         }
-        case msgpack::type::object_type::POSITIVE_INTEGER:
-        {
-            auto iKey = element.key.as<uint32_t>();
-            key       = std::to_string(iKey);
-            std::cout << std::setw(100) << "  DBG: key set to: " << key << std::endl;
-            break;
+
+//    }
+//}
+        int main() {
+            std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
+            msgpack::object_handle result;
+            std::ifstream in(filename, std::ios::in | std::ios::binary);
+            msgpack::unpacker unp;
+            bool              finished_parsing;
+            //constexpr size_t  buffer_size = 1 << 19;
+            constexpr size_t  buffer_size = 1 << (19+8);
+
+            std::string key = "key";
+            int counter = 0;
+            int recur_level = 1;
+            do
+            {
+                unp.reserve_buffer(buffer_size);
+                in.read(unp.buffer(), buffer_size);
+                unp.buffer_consumed(in.gcount());
+                finished_parsing = unp.next(result); // may throw msgpack::parse_error
+                counter += 1;
+                cout << counter << ".." << endl;
+                cout << "finished parsing? " << finished_parsing << endl;
+                cout << "in.gcount: " << in.gcount() << endl;
+            } while(!finished_parsing && !in.fail());
+//          MessagePackInput min(result.get());
+            msgpack::object obj1=result.get();
+
+            /*
+            std::unordered_map<std::string, msgpack::object> objectMap;
+            std::unordered_set<std::string>                  usedKeys;
+
+            objectToMap(obj1, objectMap, recur_level);
+            auto iterator = objectMap.find(key);
+            
+            if(iterator != objectMap.end())
+            {
+                auto&    value  = iterator->second;
+                MessagePackInput subRef = createSubRef(value);
+                //subRef.input(obj);
+                //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
+                if(Tensile::Debug::Instance().printDataInit())
+                    usedKeys.insert(key);
+            }
+            else
+            {
+                std::string msg = "Unknown key ";
+                msg += key;
+                msg += " (keys: ";
+                bool first = true;
+                for(auto const& pair : objectMap)
+                {
+                    if(!first)
+                        msg += ", ";
+                    msg += pair.first;
+                    first = false;
+                }
+                msg += ")";
+                //addError(msg);
+            }
+            */
+            return 0;
         }
-        default:
-            cout << "element.key.type: " << element.key.type << endl;
-            throw std::runtime_error("Unexpected map key type");
-        }
-        result[key] = std::move(element.val);
-    }
-}
-
-int main() {
-    std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
-    msgpack::object_handle result;
-    std::ifstream in(filename, std::ios::in | std::ios::binary);
-    msgpack::unpacker unp;
-    bool              finished_parsing;
-    //constexpr size_t  buffer_size = 1 << 19;
-    constexpr size_t  buffer_size = 1 << (19+8);
-
-    int counter = 0;
-    int recur_level = 1;
-    do
-    {
-        unp.reserve_buffer(buffer_size);
-        in.read(unp.buffer(), buffer_size);
-        unp.buffer_consumed(in.gcount());
-        finished_parsing = unp.next(result); // may throw msgpack::parse_error
-        counter += 1;
-        cout << counter << ".." << endl;
-        cout << "finished parsing? " << finished_parsing << endl;
-        cout << "in.gcount: " << in.gcount() << endl;
-    } while(!finished_parsing && !in.fail());
-    //Tensile::Serialization::MessagePackInput min(result.get());
-
-    msgpack::object obj1=result.get();
-    std::unordered_map<std::string, msgpack::object> objectMap;
-
-    recur_walk(obj1, objectMap, recur_level);
-}
