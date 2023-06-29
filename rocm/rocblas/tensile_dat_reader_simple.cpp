@@ -29,7 +29,6 @@ See under "msgpack controls a buffer"
 #include <Tensile/msgpack/Loading.hpp>
 
 using namespace std;
-
 namespace Tensile {
     namespace Serialization {
         /*
@@ -78,6 +77,9 @@ namespace Tensile {
 
     }
 }
+
+using namespace Tensile::Serialization;
+
         int main() {
             std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
             msgpack::object_handle result;
@@ -101,8 +103,8 @@ namespace Tensile {
                 cout << "finished parsing? " << finished_parsing << endl;
                 cout << "in.gcount: " << in.gcount() << endl;
             } while(!finished_parsing && !in.fail());
-//          MessagePackInput min(result.get());
-            msgpack::object obj1=result.get();
+            MessagePackInput min(result.get());
+            //msgpack::object obj1=result.get();
 
             /*
             std::unordered_map<std::string, msgpack::object> objectMap;
