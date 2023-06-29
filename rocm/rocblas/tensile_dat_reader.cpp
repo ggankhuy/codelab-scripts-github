@@ -28,7 +28,18 @@ See under "msgpack controls a buffer"
 #include <Tensile/msgpack/MessagePack.hpp>
 #include <Tensile/msgpack/Loading.hpp>
 
+#define USE_TENSILE_API_FULL 1
 using namespace std;
+
+#if USE_TENSILE_API_FULL == 0
+
+void* context = nullptr;
+
+Tensile::Serialization::MessagePackInput createSubRef(msgpack::object otherObject)
+{
+    return Tensile::Serialization::MessagePackInput (otherObject, context);
+    //return Tensile::Serialization::MessagePackInput (otherObject, );
+}
 
 void objectToMapLike(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result) {
     for(uint32_t i = 0; i < pObject.via.map.size; i++) {
@@ -56,6 +67,7 @@ void objectToMapLike(msgpack::object & pObject, std::unordered_map<std::string, 
         }
     }
 }
+#endif
 
 int main() {
     std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
@@ -65,6 +77,9 @@ int main() {
     bool              finished_parsing;
     //constexpr size_t  buffer_size = 1 << 19;
     constexpr size_t  buffer_size = 1 << (19+8);
+
+    std::unordered_map<std::string, msgpack::object> objectMap;
+    std::unordered_set<std::string>                  usedKeys;
 
     int counter = 0;
     do
@@ -78,11 +93,52 @@ int main() {
         cout << "finished parsing? " << finished_parsing << endl;
         cout << "in.gcount: " << in.gcount() << endl;
     } while(!finished_parsing && !in.fail());
-    //Tensile::Serialization::MessagePackInput min(result.get());
 
+    #if USE_TENSILE_API_FULL == 1
+    // template is problematic
+
+    //std::shared_ptr<MasterSolutionLibrary<MyProblem, MySolution>> rv;
+    std::shared_ptr<Tensile::MasterSolutionLibrary<Tensile::ContractionProblem>> rv;
+
+    //auto result = msgpack::unpack((const char*)data.data(), data.size());
+    Tensile::Serialization::MessagePackInput min(result.get());
+
+    Tensile::Serialization::PointerMappingTraits<Tensile::MasterContractionLibrary, \
+        Tensile::Serialization::MessagePackInput>::mapping(min, rv);
+
+    #else
+    
     msgpack::object obj1=result.get();
-    std::unordered_map<std::string, msgpack::object> objectMap;
 
     if(objectMap.empty())
         objectToMapLike(obj1, objectMap);
+    
+    auto iterator = objectMap.find("");
+
+    if(iterator != objectMap.end())
+    {
+        auto&    value  = iterator->second;
+        Tensile::Serialization::MessagePackInput  subRef = createSubRef(value);
+        subRef.input(obj1);
+        error.insert(error.end(), subRef.error.begin(), subRef.error.end());
+        usedKeys.insert(key);
+    }
+    else
+    {
+        std::string msg = "Unknown key ";
+        msg += key;
+        msg += " (keys: ";
+        bool first = true;
+        for(auto const& pair : objectMap)
+        {
+            if(!first)
+                msg += ", ";
+            msg += pair.first;
+            first = false;
+        }
+        msg += ")";
+        addError(msg);
+    }   
+    #endif
+    
 }
