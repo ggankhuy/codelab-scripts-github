@@ -5,21 +5,57 @@ code in this example apparently uses unpack option 2: msgpack controls buffer (o
 controls buffer is not seem to be the case here).
 See under "msgpack controls a buffer"
 */
-#include <msgpack.hpp>
-#include <iostream>
+
+// std c++ library. Note msgpack.hpp!
+
+#include <iostream> 
 #include <fstream>
-#include "hip/hip_runtime_api.h"
-#include "rocblas.h"
 #include <mutex>
 #include <shared_mutex>
 #include <iterator>
 #include <vector>
+
+#include <msgpack.hpp> // satisfied by: "apt install libmsgpack-dev -y"
+
+// rocm hip/rocblas header
+
+#include "hip/hip_runtime_api.h"
+#include "rocblas.h"
+
+// tensile library. 
 
 #include <Tensile/Tensile.hpp>
 #include <Tensile/msgpack/MessagePack.hpp>
 #include <Tensile/msgpack/Loading.hpp>
 
 using namespace std;
+
+void recur_walk(msgpack::object & pObject) {
+    for(uint32_t i = 0; i < pObject.via.map.size; i++) {
+        auto& element = pObject.via.map.ptr[i];
+
+        std::string key;
+        switch(element.key.type)
+        {
+        case msgpack::type::object_type::STR:
+        {
+            element.key.convert(key);
+            //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
+            std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
+            break;
+        }
+        case msgpack::type::object_type::POSITIVE_INTEGER:
+        {
+            auto iKey = element.key.as<uint32_t>();
+            key       = std::to_string(iKey);
+            std::cout << std::setw(100) << "  DBG: key set to: " << key << std::endl;
+            break;
+        }
+        default:
+        throw std::runtime_error("Unexpected map key type");
+        }
+    }
+}
 
 int main() {
     std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
@@ -44,28 +80,6 @@ int main() {
     } while(!finished_parsing && !in.fail());
     //Tensile::Serialization::MessagePackInput min(result.get());
     msgpack::object obj1=result.get();
-    for(uint32_t i = 0; i < obj1.via.map.size; i++) {
-        auto& element = obj1.via.map.ptr[i];
 
-                std::string key;
-                switch(element.key.type)
-                {
-                case msgpack::type::object_type::STR:
-                {
-                    element.key.convert(key);
-                    std::cout << "  DBG object_type::STR: " << element.val << std::endl;
-                    break;
-                }
-                case msgpack::type::object_type::POSITIVE_INTEGER:
-                {
-                    auto iKey = element.key.as<uint32_t>();
-                    key       = std::to_string(iKey);
-                    std::cout << "  DBG: key set to: " << key << std::endl;
-                    break;
-                }
-                default:
-                    throw std::runtime_error("Unexpected map key type");
-                }
-        
-    }
+    recur_walk(obj1);
 }
