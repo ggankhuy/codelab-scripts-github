@@ -14,6 +14,8 @@ See under "msgpack controls a buffer"
 #include <shared_mutex>
 #include <iterator>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 #include <msgpack.hpp> // satisfied by: "apt install libmsgpack-dev -y"
 
@@ -118,11 +120,19 @@ using namespace Tensile::Serialization;
             std::unordered_set<std::string>                  usedKeys;
 
             objectToMap(obj1, objectMap, recur_level);
+
+            for (const auto& [key, value] : objectMap) {
+                //cout << "objectMap: " << key << ", " << value  << endl;
+                cout << "objectMap: KEY: " << key << endl;
+                //cout << "objectMap: ";
+                std::this_thread::sleep_for(1000ms);
+            }
             auto iterator = objectMap.find(key);
             
             if(iterator != objectMap.end())
             {
                 auto&    value  = iterator->second;
+                //cout << "value: " << value << endl;
                 //MessagePackInput subRef = createSubRef(value);
                 //subRef.input(obj);
                 //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
@@ -144,6 +154,7 @@ using namespace Tensile::Serialization;
                 }
                 msg += ")";
                 //addError(msg);
+                cout << "Err: msg: " << msg << endl;
             }
             return 0;
         }
