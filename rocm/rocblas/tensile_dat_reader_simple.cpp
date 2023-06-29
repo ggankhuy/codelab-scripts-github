@@ -31,6 +31,7 @@ See under "msgpack controls a buffer"
 using namespace std;
 namespace Tensile {
     namespace Serialization {
+        
         /*
         MessagePackInput createSubRef(msgpack::object otherObject)
         {
@@ -103,10 +104,16 @@ using namespace Tensile::Serialization;
                 cout << "finished parsing? " << finished_parsing << endl;
                 cout << "in.gcount: " << in.gcount() << endl;
             } while(!finished_parsing && !in.fail());
-            MessagePackInput min(result.get());
-            //msgpack::object obj1=result.get();
 
-            /*
+            //std::shared_ptr<MasterSolutionLibrary<MyProblem, MySolution>> rv;
+
+            //MessagePackInput min(result.get());
+            /*PointerMappingTraits<Tensile::MasterContractionLibrary,
+                                                MessagePackInput>::mapping(min, rv);
+            */
+
+            msgpack::object obj1=result.get();
+
             std::unordered_map<std::string, msgpack::object> objectMap;
             std::unordered_set<std::string>                  usedKeys;
 
@@ -116,11 +123,11 @@ using namespace Tensile::Serialization;
             if(iterator != objectMap.end())
             {
                 auto&    value  = iterator->second;
-                MessagePackInput subRef = createSubRef(value);
+                //MessagePackInput subRef = createSubRef(value);
                 //subRef.input(obj);
                 //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
-                if(Tensile::Debug::Instance().printDataInit())
-                    usedKeys.insert(key);
+                //if(Tensile::Debug::Instance().printDataInit())
+                //    usedKeys.insert(key);
             }
             else
             {
@@ -138,6 +145,5 @@ using namespace Tensile::Serialization;
                 msg += ")";
                 //addError(msg);
             }
-            */
             return 0;
         }
