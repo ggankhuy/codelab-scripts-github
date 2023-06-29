@@ -30,7 +30,7 @@ See under "msgpack controls a buffer"
 
 using namespace std;
 
-void recur_walk(msgpack::object & pObject) {
+void objectToMapLike(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result) {
     for(uint32_t i = 0; i < pObject.via.map.size; i++) {
         auto& element = pObject.via.map.ptr[i];
 
@@ -79,7 +79,10 @@ int main() {
         cout << "in.gcount: " << in.gcount() << endl;
     } while(!finished_parsing && !in.fail());
     //Tensile::Serialization::MessagePackInput min(result.get());
-    msgpack::object obj1=result.get();
 
-    recur_walk(obj1);
+    msgpack::object obj1=result.get();
+    std::unordered_map<std::string, msgpack::object> objectMap;
+
+    if(objectMap.empty())
+        objectToMapLike(obj1, objectMap);
 }
