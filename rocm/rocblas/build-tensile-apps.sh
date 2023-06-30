@@ -4,20 +4,18 @@
 # Checkout using tensile_tag with later than 5.2 will break (i.e.5.4).
 # 
 FILENAME=tensile_dat_reader
-#FILENAME=tensile_dat_reader_simple
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/
 TENSILE_ROOT=/root/gg/git/Tensile
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile
 TENSILE_SRC_ROOT=$TENSILE_ROOT/Tensile/Source/lib/source/
-#Tensile/Source/lib/source/msgpack/MessagePack.cpp
-#Tensile/Source/lib/source/ContractionSolution.cpp
-#hipcc  -std=c++17 -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/  $FILENAME.cpp
-#hipcc  -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/ --offload-arch=gfx908 --save-temps -c $FILENAME.cpp
 
 for dbg in "" "-g"  ; do
     if [[ $dbg -eq "-g" ]]; then
         dbgsuffix="dbg"
     fi
+
+    # compile stage. 
+
     hipcc  -std=c++17 -I$TENSILE_ROOT/Tensile/Source/lib/include/  -c \
         $FILENAME.cpp \
         $TENSILE_SRC_ROOT/Tensile.cpp \
@@ -38,6 +36,8 @@ for dbg in "" "-g"  ; do
         $TENSILE_SRC_ROOT/ScalarValueTypes.cpp \
         $TENSILE_SRC_ROOT/TensorDescriptor.cpp
 
+    # linker stage.
+    
     hipcc \
         $FILENAME.o \
         Tensile.o  \

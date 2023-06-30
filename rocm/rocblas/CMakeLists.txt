@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 set(MAINFILE tensile_dat_reader)
 set(TENSILE_ROOT /root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile)
 set(TENSILE_SRC_ROOT ${TENSILE_ROOT}/Tensile/Source/lib/source)
-set(CXX_FLAGS -std=c++17 -I$TENSILE_ROOT/Tensile/Source/lib/include/  -c)
+add_compile_options(-std=c++17 -I${TENSILE_ROOT}/Tensile/Source/lib/include/ -c)
 project (${MAINFILE})
 
 # The version number.
@@ -47,4 +47,4 @@ else (DYN_BUILD)
   add_library(tensile1 STATIC ${LIBFILES})
 endif (DYN_BUILD)
 
-add_custom_command(OUTPUT output1 COMMAND hipcc *.o -shared -o libtensile1.so)
+#add_custom_command(OUTPUT output1 COMMAND hipcc *.o -shared -o libtensile1.so)
