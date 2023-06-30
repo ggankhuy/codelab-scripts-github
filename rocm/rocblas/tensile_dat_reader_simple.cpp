@@ -41,15 +41,14 @@ namespace Tensile {
         }*/
 
         void objectToMap(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result, int level = 0) {
-
+            cout << "objectToMap entered: level=" << level << endl;
+            if (level >= 5) {
+                cout << "Recursive limit reached." << endl;
+                return; 
+            }
 
             for(uint32_t i = 0; i < pObject.via.map.size; i++) {
-                cout << "objectToMap entered: level=" << level << endl;
-                if (level >= 5) {
-                    cout << "Recursive limit reached." << endl;
-                    return; 
-                }
-
+                cout << "i: " << i << endl;
                 auto& element = pObject.via.map.ptr[i];
 
                 std::string key;
@@ -92,7 +91,7 @@ using namespace Tensile::Serialization;
             //constexpr size_t  buffer_size = 1 << 19;
             constexpr size_t  buffer_size = 1 << (19+8);
 
-            std::string key = "key";
+            std::string key = "version";
             int counter = 0;
             int recur_level = 1;
             do
@@ -114,18 +113,18 @@ using namespace Tensile::Serialization;
                                                 MessagePackInput>::mapping(min, rv);
             */
 
-            msgpack::object obj1=result.get();
+            msgpack::object obj=result.get();
 
             std::unordered_map<std::string, msgpack::object> objectMap;
             std::unordered_set<std::string>                  usedKeys;
+            void* context = nullptr;
 
-            objectToMap(obj1, objectMap, recur_level);
+            objectToMap(obj, objectMap, recur_level);
 
             for (const auto& [key, value] : objectMap) {
                 //cout << "objectMap: " << key << ", " << value  << endl;
-                cout << "objectMap: KEY: " << key << endl;
+                cout << "objectMap: KEY: " << key << ", value: " << typeid(value).name() <<  endl;
                 //cout << "objectMap: ";
-                std::this_thread::sleep_for(1000ms);
             }
             auto iterator = objectMap.find(key);
             
@@ -133,6 +132,7 @@ using namespace Tensile::Serialization;
             {
                 auto&    value  = iterator->second;
                 //cout << "value: " << value << endl;
+                MessagePackInput subRef = MessagePackInput(value, context);
                 //MessagePackInput subRef = createSubRef(value);
                 //subRef.input(obj);
                 //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
