@@ -7,6 +7,7 @@ FILENAME=tensile_dat_reader
 FILENAME=tensile_dat_reader_simple
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/
 TENSILE_ROOT=/root/gg/git/Tensile
+TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile
 
 #hipcc  -std=c++17 -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/  $FILENAME.cpp
 #hipcc  -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/ --offload-arch=gfx908 --save-temps -c $FILENAME.cpp

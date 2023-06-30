@@ -106,7 +106,8 @@ using namespace Tensile::Serialization;
                 cout << "in.gcount: " << in.gcount() << endl;
             } while(!finished_parsing && !in.fail());
 
-            //std::shared_ptr<MasterSolutionLibrary<MyProblem, MySolution>> rv;
+            std::shared_ptr<Tensile::MasterSolutionLibrary<Tensile::ContractionProblem>> rv;
+            //std::shared_ptr<MasterSolutionLibrary<Tensile::ContractionProblem>> library;
 
             //MessagePackInput min(result.get());
             /*PointerMappingTraits<Tensile::MasterContractionLibrary,
