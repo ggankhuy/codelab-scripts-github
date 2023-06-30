@@ -4,7 +4,7 @@
 # Checkout using tensile_tag with later than 5.2 will break (i.e.5.4).
 # 
 FILENAME=tensile_dat_reader
-FILENAME=tensile_dat_reader_simple
+#FILENAME=tensile_dat_reader_simple
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/
 TENSILE_ROOT=/root/gg/git/Tensile
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile

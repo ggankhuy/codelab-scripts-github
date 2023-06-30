@@ -14,6 +14,8 @@ See under "msgpack controls a buffer"
 #include <shared_mutex>
 #include <iterator>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 #include <msgpack.hpp> // satisfied by: "apt install libmsgpack-dev -y"
 
@@ -28,24 +30,25 @@ See under "msgpack controls a buffer"
 #include <Tensile/msgpack/MessagePack.hpp>
 #include <Tensile/msgpack/Loading.hpp>
 
-#define USE_TENSILE_API_FULL 1
 using namespace std;
-
-void* context = nullptr;
-
-namespace Tensile
-{
-    namespace Serialization
-    {
-        #if USE_TENSILE_API_FULL == 0
-        Serialization::MessagePackInput createSubRef(msgpack::object otherObject)
+namespace Tensile {
+    namespace Serialization {
+        
+        /*
+        MessagePackInput createSubRef(msgpack::object otherObject)
         {
-            return Tensile::Serialization::MessagePackInput (otherObject, context);
-            //return Tensile::Serialization::MessagePackInput (otherObject, );
-        }
+            return MessagePackInput(otherObject, context);
+        }*/
 
-        void objectToMapLike(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result) {
+        void objectToMap(msgpack::object & pObject, std::unordered_map<std::string, msgpack::object>& result, int level = 0) {
+            cout << "objectToMap entered: level=" << level << endl;
+            if (level >= 5) {
+                cout << "Recursive limit reached." << endl;
+                return; 
+            }
+
             for(uint32_t i = 0; i < pObject.via.map.size; i++) {
+                cout << "i: " << i << endl;
                 auto& element = pObject.via.map.ptr[i];
 
                 std::string key;
@@ -53,24 +56,31 @@ namespace Tensile
                 {
                 case msgpack::type::object_type::STR:
                 {
-                element.key.convert(key);
-                //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
-                std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
-                break;
+                    element.key.convert(key);
+                    //std::cout << std::setw(100) << "  DBG object_type::STR: " << element.val << std::endl;
+                    std::cout << "  DBG object_type::STR, size(element.val):  " << sizeof(element.val) << std::endl;
+                    level += 1;
+                    break;
                 }
                 case msgpack::type::object_type::POSITIVE_INTEGER:
                 {
-                auto iKey = element.key.as<uint32_t>();
-                key       = std::to_string(iKey);
-                std::cout << std::setw(100) << "  DBG: key set to: " << key << std::endl;
-                break;
+                    auto iKey = element.key.as<uint32_t>();
+                    key       = std::to_string(iKey);
+                    std::cout << std::setw(100) << "  DBG: key set to: " << key << std::endl;
+                    break;
                 }
                 default:
-                throw std::runtime_error("Unexpected map key type");
+                    cout << "element.key.type: " << element.key.type << endl;
+                    throw std::runtime_error("Unexpected map key type");
                 }
+                result[key] = std::move(element.val);
             }
         }
-        #endif
+
+    }
+}
+
+using namespace Tensile::Serialization;
 
         int main() {
             std::string filename="/opt/rocm/lib/rocblas/library/TensileLibrary_gfx908.dat";
@@ -81,68 +91,69 @@ namespace Tensile
             //constexpr size_t  buffer_size = 1 << 19;
             constexpr size_t  buffer_size = 1 << (19+8);
 
-            std::unordered_map<std::string, msgpack::object> objectMap;
-            std::unordered_set<std::string>          usedKeys;
-
+            std::string key = "version";
             int counter = 0;
+            int recur_level = 1;
             do
             {
-            unp.reserve_buffer(buffer_size);
-            in.read(unp.buffer(), buffer_size);
-            unp.buffer_consumed(in.gcount());
-            finished_parsing = unp.next(result); // may throw msgpack::parse_error
-            counter += 1;
-            cout << counter << ".." << endl;
-            cout << "finished parsing? " << finished_parsing << endl;
-            cout << "in.gcount: " << in.gcount() << endl;
+                unp.reserve_buffer(buffer_size);
+                in.read(unp.buffer(), buffer_size);
+                unp.buffer_consumed(in.gcount());
+                finished_parsing = unp.next(result); // may throw msgpack::parse_error
+                counter += 1;
+                cout << counter << ".." << endl;
+                cout << "finished parsing? " << finished_parsing << endl;
+                cout << "in.gcount: " << in.gcount() << endl;
             } while(!finished_parsing && !in.fail());
 
-            #if USE_TENSILE_API_FULL == 1
-            // template is problematic
-
-            //std::shared_ptr<MasterSolutionLibrary<MyProblem, MySolution>> rv;
             std::shared_ptr<Tensile::MasterSolutionLibrary<Tensile::ContractionProblem>> rv;
-
-            //auto result = msgpack::unpack((const char*)data.data(), data.size());
             Tensile::Serialization::MessagePackInput min(result.get());
 
-            Tensile::Serialization::PointerMappingTraits<Tensile::MasterContractionLibrary, \
-            Tensile::Serialization::MessagePackInput>::mapping(min, rv);
+            Tensile::Serialization::PointerMappingTraits<Tensile::MasterContractionLibrary,
+                                                Tensile::Serialization::MessagePackInput>::mapping(min, rv);
 
-            #else
+            msgpack::object obj=result.get();
+
+            std::unordered_map<std::string, msgpack::object> objectMap;
+            std::unordered_set<std::string>                  usedKeys;
+            void* context = nullptr;
+
+            objectToMap(obj, objectMap, recur_level);
+
+            for (const auto& [key, value] : objectMap) {
+                //cout << "objectMap: " << key << ", " << value  << endl;
+                cout << "objectMap: KEY: " << key << ", value: " << typeid(value).name() <<  endl;
+                //cout << "objectMap: ";
+            }
+            auto iterator = objectMap.find(key);
             
-            msgpack::object obj1=result.get();
-
-            if(objectMap.empty())
-            objectToMapLike(obj1, objectMap);
-            
-            auto iterator = objectMap.find("");
-
             if(iterator != objectMap.end())
             {
-            auto&    value  = iterator->second;
-            Tensile::Serialization::MessagePackInput  subRef = createSubRef(value);
-            subRef.input(obj1);
-            error.insert(error.end(), subRef.error.begin(), subRef.error.end());
-            usedKeys.insert(key);
+                auto&    value  = iterator->second;
+                //cout << "value: " << value << endl;
+                MessagePackInput subRef = MessagePackInput(value, context);
+                //MessagePackInput subRef = createSubRef(value);
+                //subRef.input(obj);
+                //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
+                //if(Tensile::Debug::Instance().printDataInit())
+                //    usedKeys.insert(key);
             }
             else
             {
-            std::string msg = "Unknown key ";
-            msg += key;
-            msg += " (keys: ";
-            bool first = true;
-            for(auto const& pair : objectMap)
-            {
-                if(!first)
-                msg += ", ";
-                msg += pair.first;
-                first = false;
+                std::string msg = "Unknown key ";
+                msg += key;
+                msg += " (keys: ";
+                bool first = true;
+                for(auto const& pair : objectMap)
+                {
+                    if(!first)
+                        msg += ", ";
+                    msg += pair.first;
+                    first = false;
+                }
+                msg += ")";
+                //addError(msg);
+                cout << "Err: msg: " << msg << endl;
             }
-            msg += ")";
-            addError(msg);
-            #endif
             return 0;
-        } // main        
-    } // namespace serialization
-} // namespace tensile
+        }
