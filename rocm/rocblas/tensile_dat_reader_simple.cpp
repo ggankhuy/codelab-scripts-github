@@ -133,7 +133,7 @@ using namespace Tensile::Serialization;
             {
                 auto&    value  = iterator->second;
                 //cout << "value: " << value << endl;
-                //MessagePackInput subRef = MessagePackInput(value, context);
+                MessagePackInput subRef = MessagePackInput(value, context);
                 //MessagePackInput subRef = createSubRef(value);
                 //subRef.input(obj);
                 //error.insert(error.end(), subRef.error.begin(), subRef.error.end());
