@@ -107,12 +107,10 @@ using namespace Tensile::Serialization;
             } while(!finished_parsing && !in.fail());
 
             std::shared_ptr<Tensile::MasterSolutionLibrary<Tensile::ContractionProblem>> rv;
-            //std::shared_ptr<MasterSolutionLibrary<Tensile::ContractionProblem>> library;
+            Tensile::Serialization::MessagePackInput min(result.get());
 
-            //MessagePackInput min(result.get());
-            /*PointerMappingTraits<Tensile::MasterContractionLibrary,
-                                                MessagePackInput>::mapping(min, rv);
-            */
+            Tensile::Serialization::PointerMappingTraits<Tensile::MasterContractionLibrary,
+                                                Tensile::Serialization::MessagePackInput>::mapping(min, rv);
 
             msgpack::object obj=result.get();
 

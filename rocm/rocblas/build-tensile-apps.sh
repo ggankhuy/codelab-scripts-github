@@ -8,10 +8,54 @@ FILENAME=tensile_dat_reader_simple
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/
 TENSILE_ROOT=/root/gg/git/Tensile
 TENSILE_ROOT=/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile
-
+TENSILE_SRC_ROOT=$TENSILE_ROOT/Tensile/Source/lib/source/
+#Tensile/Source/lib/source/msgpack/MessagePack.cpp
+#Tensile/Source/lib/source/ContractionSolution.cpp
 #hipcc  -std=c++17 -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/  $FILENAME.cpp
 #hipcc  -I/root/gg/git/codelab-scripts/build-install-scripts/rocm/ROCm-5.2/Tensile/Tensile/Source/lib/include/ --offload-arch=gfx908 --save-temps -c $FILENAME.cpp
-hipcc  -std=c++17 -I$TENSILE_ROOT/Tensile/Source/lib/include/  -c $FILENAME.cpp $TENSILE_ROOT/Tensile/Source/lib/source/Tensile.cpp
-hipcc $FILENAME.o Tensile.o  -o /opt/rocm/lib/librocblas.so -o $FILENAME.out
-hipcc  -std=c++17 -g -I$TENSILE_ROOT/Tensile/Source/lib/include/  -c $FILENAME.cpp $TENSILE_ROOT/Tensile/Source/lib/source/Tensile.cpp
-hipcc $FILENAME.o Tensile.o  -o /opt/rocm/lib/librocblas.so -o $FILENAME.dbg.out
+
+for dbg in "" "-g"  ; do
+    if [[ $dbg -eq "-g" ]]; then
+        dbgsuffix="dbg"
+    fi
+    hipcc  -std=c++17 -I$TENSILE_ROOT/Tensile/Source/lib/include/  -c \
+        $FILENAME.cpp \
+        $TENSILE_SRC_ROOT/Tensile.cpp \
+        $TENSILE_SRC_ROOT/Debug.cpp \
+        $TENSILE_SRC_ROOT/msgpack/MessagePack.cpp \
+        $TENSILE_SRC_ROOT/ContractionSolution.cpp \
+        $TENSILE_SRC_ROOT/ContractionProblem.cpp \
+        $TENSILE_SRC_ROOT/TensorOps.cpp \
+        $TENSILE_SRC_ROOT/DataTypes.cpp \
+        $TENSILE_SRC_ROOT/AMDGPU.cpp  \
+        $TENSILE_SRC_ROOT/Utils.cpp  \
+        $TENSILE_SRC_ROOT/KernelArguments.cpp \
+        $TENSILE_SRC_ROOT/ArithmeticUnitTypes.cpp \
+        $TENSILE_SRC_ROOT/EmbeddedData.cpp \
+        $TENSILE_SRC_ROOT/EmbeddedLibrary.cpp \
+        $TENSILE_SRC_ROOT/KernelLanguageTypes.cpp \
+        $TENSILE_SRC_ROOT/PerformanceMetricTypes.cpp \
+        $TENSILE_SRC_ROOT/ScalarValueTypes.cpp \
+        $TENSILE_SRC_ROOT/TensorDescriptor.cpp
+
+    hipcc \
+        $FILENAME.o \
+        Tensile.o  \
+        Debug.o \
+        MessagePack.o \
+        ContractionSolution.o \
+        ContractionProblem.o \
+        TensorOps.o \
+        DataTypes.o \
+        Utils.o \
+        AMDGPU.o \
+        KernelArguments.o \
+        ArithmeticUnitTypes.o \
+        EmbeddedData.o \
+        EmbeddedLibrary.o \
+        KernelLanguageTypes.o \
+        PerformanceMetricTypes.o \
+        ScalarValueTypes.o \
+        TensorDescriptor.o \
+        -o /opt/rocm/lib/librocblas.so -o $FILENAME.$dbgsuffix.out
+done
