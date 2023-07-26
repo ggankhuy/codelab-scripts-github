@@ -87,7 +87,7 @@ case "$PKG_EXEC" in
         # vim-common: rocm5.5 rocr-runtime.
         # libnuma-dev: rocm5.5 roct-thunk-interface.
 
-        install_packages cmake chrpath libpci-dev half vim-common libnuma-dev
+        install_packages cmake chrpath libpci-dev half vim-common libnuma-dev pkg-config
       ;;
 
    "yum")
