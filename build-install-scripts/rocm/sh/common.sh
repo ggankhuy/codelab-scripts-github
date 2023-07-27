@@ -61,7 +61,9 @@ function set_os_type() {
       echo "PY:PKG_EXT=rpm"
       PKG_EXEC=zypper
       PKG_EXT=rpm
+      ln -s /usr/bin/python3  /usr/bin/python
       return 0
+      ;;
    *)
       echo "Unsupported O/S, exiting..."
       PKG_EXEC=""
@@ -74,9 +76,23 @@ function set_os_type() {
 function install_packages() {
     if [[ -z $PKG_EXEC  ]] ; then echo "PKG_EXEC is not defined. Call set_os_type first!" ; return 1 ; fi
     for i in $@; do
-        print_single_bar
         echo "installing $i..."
-        $PKG_EXEC install -y $i
+        case "$PKG_EXEC" in
+        "yum")
+            $PKG_EXEC install -y $i
+            ;;
+        "apt")
+            $PKG_EXEC install -y $i
+            ;;
+        "zypper")
+            $PKG_EXEC -n install $i
+            ;;
+        *)
+            echo "Unsupported/unknown PKG installer: $PKG_EXEC, exiting..."
+      ;;    
+    esac
+
+        print_single_bar
     done
 }
 
@@ -202,6 +218,9 @@ function rocm_source_dw() {
         ;;
     "apt")
         $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+        ;;
+    "zypper")
+        $SUDO $PKG_EXEC -n install curl && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
         ;;
     *)
       echo "Unsupported/unknown PKG installer: $PKG_EXEC, exiting..."
