@@ -55,6 +55,13 @@ function set_os_type() {
       PKG_EXT=rpm
       return 0
       ;;
+    "openSUSE Leap")
+      echo "OpenSUSE Leap is detected..."
+      echo "PY:PKG_EXEC=rpm"
+      echo "PY:PKG_EXT=rpm"
+      PKG_EXEC=zypper
+      PKG_EXT=rpm
+      return 0
    *)
       echo "Unsupported O/S, exiting..."
       PKG_EXEC=""
