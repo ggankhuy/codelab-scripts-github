@@ -93,6 +93,9 @@ case "$PKG_EXEC" in
    "yum")
         install_packages cmake libstdc++-devel libpci-devel gcc g++
       ;;
+   "yum")
+        install_packages cmake 
+      ;;
    *)
 esac
 
