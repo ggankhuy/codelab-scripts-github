@@ -1,6 +1,7 @@
 p1=$1
 SUDO=sudo
 CONFIG_VERSION=4.1
+DATE=`date +%Y%m%d-%H-%M-%S`
 HOME_DIR=`pwd`
 if [[ -z $p1 ]] ; then
     echo "Version not specified. Setting to default: $CONFIG_VERSION"
@@ -14,6 +15,7 @@ case "$OS_NAME" in
       echo "Ubuntu is detected..."
       ln -s /usr/bin/python3  /usr/bin/python
       PKG_EXEC=apt
+      ln -s /usr/bin/python3  /usr/bin/python
       ;;
    "CentOS Linux")
       echo "CentOS is detected..."
@@ -34,6 +36,10 @@ git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git config --global color.ui false
 DIR_NAME=$HOME_DIR/ROCm-$CONFIG_VERSION
+if [[ -d $DIR_NAME ]] ; then
+    echo "Directory $DIR_NAME exists, moving to $DUR_NAME-$DATE "
+    $SUDO mv $DIR_NAME $DIR_NAME-$DATE
+fi
 mkdir $DIR_NAME
 
 if [[ $? -ne 0 ]] ; then
