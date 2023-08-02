@@ -24,15 +24,24 @@ function install_python() {
 
     if [[ $? -ne 0 ]] ; then return 1 ; fi
 
-    CURR_VER=`python3 --version  | cut -d ' ' -f2`
+    if [[ `which python3` ]] ; then 
+        CURR_VER=`python3 --version  | cut -d ' ' -f2`
+    else
+        echo "Unable to find python3 path, assuming not installed..."
+    fi
 
-    #PYTHON_VER_MAJOR=3.9
-    #PYTHON_VER_MINOR=10
-
-    if [[ -z $1 ]] ; then echo "Need to specify python version." ; return 1; fi
-
+    if [[ -z $1 ]] ; then
+        echo "install_python: don't know what version to install."
+        return 
+    fi
     PYTHON_VER=$1
+
+    echo "Installing python version: $PYTHON_VER..."
+    sleep 3
+    #PYTHON_VER_MAJOR=3.10
+    #PYTHON_VER_MINOR=10
     #PYTHON_VER=$PYTHON_VER_MAJOR.$PYTHON_VER_MINOR
+
     PYTHON_FULL_NAME=Python-$PYTHON_VER
     PYTHON_TAR=$PYTHON_FULL_NAME.tgz
 
@@ -72,10 +81,10 @@ function install_python() {
     fi
     PATH_PYTHON_U=`which python$PYTHON_VER_MAJOR`
     echo "new path: $PATH_PYTHON_U"
-    rm -rf /usr/bin/python
+    mv /usr/bin/python /usr/bin/python.old
     echo ln -s $PATH_PYTHON_U /usr/bin/python
     ln -s $PATH_PYTHON_U /usr/bin/python
-    rm -rf /usr/bin/python3
+    mv /usr/bin/python3 /usr/bin/python3.old
     ln -s /usr/bin/python /usr/bin/python3
     cd ..
     return 0
