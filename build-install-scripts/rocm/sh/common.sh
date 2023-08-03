@@ -186,11 +186,28 @@ function rocm_source_dw() {
     pushd  $DIR_NAME
     mkdir -p ~/bin/
     echo "install repo..."
+<<<<<<< HEAD
     if [[ $PKG_EXEC=="yum" ]] ; then
         $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
     else
         $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
     fi
+=======
+
+   case "$PKG_EXEC" in
+   "yum")
+        $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+      ;;
+   "apt")
+        $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+      ;;
+   *)
+        echo "Unsupported or unknown package installer: $PKG_EXEC"
+        return $ERROR_ROCM_SRC_REPO_INIT
+      ;;
+    esac
+
+>>>>>>> master
     $SUDO chmod a+x ~/bin/repo
     echo "repo init..."
     $SUDO ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x

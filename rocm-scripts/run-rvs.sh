@@ -2,7 +2,7 @@
 DATE_FIXED=`date +%Y%m%d-%H-%M-%S`
 ROCM_ROOT=/opt/rocm-5.2.0
 RVS=$ROCM_ROOT/rvs/rvs
-RVS_CONFIG_ROOT=$ROCM_ROOT/rvs/conf/
+#RVS_CONFIG_ROOT=$ROCM_ROOT/rvs/conf/
 LOG_FOLDER_BASE=log/rvs/
 mkdir -p $LOG_FOLDER_BASE
 LOG_SUMMARY=$LOG_FOLDER_BASE/summary.log
@@ -11,6 +11,7 @@ CONF_PATH=$ROCM_ROOT/share/rocm-validation-suite/conf/
 CONF_PATH=$ROCM_ROOT/share/rocm-validation-suite/conf/
 AMDXIO_PATH=/root/gg/tools-cp/amdxio/MI250/AMDXIO
 echo "start" | sudo tee $LOG_SUMMARY
+echo "`hostname`" | sudo tee -a $LOG_SUMMARY
 if [[ ! -f $RVS ]] ; then
     echo "Unable to find rvs in $RVS."
     ls -l $RVS
@@ -20,9 +21,8 @@ fi
 echo "START..." >> $LOG_SUMMARY
 
 #for i in gst_single.conf pqt_single.conf pebb_single.conf babel.conf gpup_single.conf  ; do
-#for i in gst_single.conf pebb_single.conf babel.conf gpup_single.conf  ; do
-for i in pqt_single-2gpu.conf ; do
-    for j in {1..1} ; do
+for i in pqt_single_2_devices_manoj.conf  ; do
+    for j in {1..10} ; do
         FILE=$i-$j
         DATE=`date +%Y%m%d-%H-%M-%S`
 
