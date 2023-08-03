@@ -33,11 +33,19 @@ DEBUG=1
 SINGLE_BAR=`for i in {1..50}; do echo -n '-'; done`
 DOUBLE_BAR=`for i in {1..50}; do echo -n '='; done`
 DATE=`date +%Y%m%d-%H-%M-%S`
-CONFIG_PATH_PLAT_INFO=./ts/$DATE
+CONFIG_PATH_PLAT_INFO=`pwd`/ts/$DATE
 CONFIG_FILE_TAR=./ts/$DATE/$DATE-techsupport.tar
 CONFIG_FILE_PLAT_INFO=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-platform-info.log
 CONFIG_SUBDIR_HOST=host
 CONFIG_SUBDIR_GUEST=guest
+
+#   If set, copies the sysfiles, if unset, loops over and gather sys file content into CONFIG_FILE_SYSFILES_HOST
+
+CONFIG_SYS_FILE_COPY=1
+
+#   If set, limits gathering non-gpu information as possible.
+
+OPTION_LIMIT_NONGPU_LOG=1
 
 CONFIG_FILE_PARM_AMDGPU_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-amdgpu-host.log
 CONFIG_FILE_PARM_LIBGV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-parm-libgv-host.log
@@ -47,8 +55,17 @@ CONFIG_FILE_DMESG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmesg-ho
 CONFIG_FILE_SYSLOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-syslog-host.log
 CONFIG_FILE_KERN_LOG_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-host.log
 CONFIG_FILE_DMIDECODE_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-dmidecode-host.log
-CONIG_FILE_ROCMINFO_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-rocminfo-host.log
+CONFIG_FILE_ROCMINFO_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-rocminfo-host.log
 CONFIG_FILE_ROCMSMI_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-rocm-smi-host.log
+
+CONFIG_FILE_LSPCI_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-lspci-host.log
+CONFIG_FILE_LSPCI_T_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-lspci-t-host.log
+CONFIG_FILE_LSPCI_VVV_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-lspci-vvv-host.log
+CONFIG_FILE_LSPCI_VVVXXX_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-lspci-vvvxxx-host.log
+CONFIG_FILE_NUMA_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-numa-host.log
+
+CONFIG_FILE_SYSFILES_HOST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-sysfiles-host.log
+CONFIG_FILE_SYSFILES_HOST_DIR=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-sysfiles-host/
 
 CONFIG_FILE_PARM_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-parm-amdgpu-guest.log
 CONFIG_FILE_DMESG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmesg-guest-$p1.log
@@ -57,8 +74,16 @@ CONFIG_FILE_MODINFO_AMDGPU_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DA
 CONFIG_FILE_SYSLOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-syslog-guest.log
 CONFIG_FILE_KERN_LOG_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST/$DATE-kernlog-guest.log
 CONFIG_FILE_DMIDECODE_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-dmidecode-guest.log
-CONIG_FILE_ROCMINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-rocminfo-guest.log
+CONFIG_FILE_ROCMINFO_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-rocminfo-guest.log
 CONFIG_FILE_ROCMSMI_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-rocm-smi-guest.log
+
+CONFIG_FILE_SYSFILES_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-sysfiles-guest.log
+CONFIG_FILE_SYSFILES_GUEST_DIR=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-sysfiles-guest/
+
+CONFIG_FILE_LSPCI_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-lspci-guest.log
+CONFIG_FILE_LSPCI_T_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-lspci-t-guest.log
+CONFIG_FILE_LSPCI_VVV_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-lspci-vvv-guest.log
+CONFIG_FILE_LSPCI_VVVXXX_GUEST=$CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST/$DATE-lspci-vvvxxx-guest.log
 
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_GUEST
 mkdir -p $CONFIG_PATH_PLAT_INFO/$CONFIG_SUBDIR_HOST
@@ -71,7 +96,27 @@ if [[ $p1 == "--help" ]] ; then
 	exit 0
 fi
 
-apt install virt-what sshpass wcstools -y 
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo "OS_NAME: $OS_NAME"
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac
+
+$PKG_EXEC install tree virt-what sshpass wcstools numactl -y 
 if [[ $?  -ne 0 ]] ; then
 	echo "ERROR: Failed to install packages..."
 	exit 1
@@ -102,17 +147,96 @@ function ts_helper_full_logs() {
         echo "p1: $p1"
     fi
 
-    dmesg | tee $CONFIG_FILE_DMESG_HOST
+    # Gather dmesg.
+
+    if [[ $OPTION_LIMIT_NONGPU_LOG == 1 ]] ; then
+        dmesg | grep -i amdgpu | tee $CONFIG_FILE_DMESG_HOST
+    else
+        dmesg | tee $CONFIG_FILE_DMESG_HOST
+    fi
     #cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
 	#cat /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
-    dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
+
+    # Gather smbios information.
+
+    if [[ $OPTION_LIMIT_NONGPU_LOG == 1 ]] ; then
+        for i in 0 1 2 3 4 ; do
+            dmidecode -t $i | tee -a $CONFIG_FILE_DMIDECODE_HOST
+        done
+    else
+        dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
+    fi
+
+    # Gather pcie information.
+
+    lspci | tee -a $CONFIG_FILE_LSPCI_HOST
+    lspci -t | tee -a $CONFIG_FILE_LSPCI_T_HOST
+    lspci -vvv | tee -a $CONFIG_FILE_LSPCI_VVV_HOST
+    lspci -vvvxxx | tee -a $CONFIG_FILE_LSPCI_VVVXXX_HOST
+
+    # Gather numa info
+
+    numactl --hardware | tee $CONFIG_FILE_NUMA_HOST
+
+    # Gather amdgpu/kfd driver information.
 
     if [[ $p1 == "amdgpu" ]] ; then
         modinfo amdgpu | tee $CONFIG_FILE_MODINFO_AMDGPU_HOST
         for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_AMDGPU_HOST 
         rocminfo 2>&1 | tee $CONFIG_FILE_ROCMINFO_HOST
         rocm-smi --showall 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
+        rocm-smi --showtopo 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
+
+        # Gather sysfiles.
+
+        if [[ $CONFIG_SYS_FILE_COPY == 1 ]] ; then
+            if [[ -d /sys/devices/virtual/kfd/kfd/topology/nodes ]] ; then
+                pushd /sys/devices/virtual/kfd/kfd/topology/nodes
+                mkdir -p $CONFIG_FILE_SYSFILES_HOST_DIR
+                cp -vrP ./* $CONFIG_FILE_SYSFILES_HOST_DIR/
+                rm -rf $CONFIG_FILE_SYSFILES_HOST_DIR/*/caches
+                popd
+            else
+                echo "Warning: /sys/devices/virtual/kfd/kfd/topology/nodes does not exist, will not gather sys files. Is kfd driver loaded?"
+                sleep 3
+            fi
+        else
+            pushd /sys/devices/virtual/kfd/kfd/topology/nodes
+
+            echo -ne "" > $CONFIG_FILE_SYSFILES_HOST
+            for node in ./* ; do
+                cd $node
+                #echo "current dir: `pwd`"
+                #echo "current node: $node"
+                #ls -l 
+                for filename in gpu_id name properties; do
+                    echo "writing: `pwd`/$filename..."
+                    #sleep 1
+
+                    echo "-- `pwd`/$filename" | tee -a $CONFIG_FILE_SYSFILES_HOST
+                    cat `pwd`/$filename | tee -a $CONFIG_FILE_SYSFILES_HOST
+                done
+                cd ..
+                cd $node/io_links
+                for io_link in ./* ; do
+                    echo "-- `pwd`/properties" | tee -a $CONFIG_FILE_SYSFILES_HOST
+                    cat `pwd`/properties | tee -a $CONFIG_FILE_SYSFILES_HOST
+                done
+                cd ../..        
+    
+                cd $node/p2p_links
+                for p2p_link in ./* ; do
+                    echo "-- `pwd`/properties" | tee -a $CONFIG_FILE_SYSFILES_HOST
+                    cat `pwd`/properties | tee -a $CONFIG_FILE_SYSFILES_HOST
+                done
+                cd ../..
+            done            
+            popd    
+        fi
     elif [[ $p1 == "libgv" ]] ; then
+
+        # Gather libgv information and parameters.
+
         modinfo gim | tee $CONFIG_FILE_MODINFO_LIBGV_HOST
         for i in /sys/module/gim/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_LIBGV_HOST 
     elif [[ $p1 = "" ]] ; then
@@ -121,6 +245,7 @@ function ts_helper_full_logs() {
         echo "warning: Unknown parameter! "
     fi
 }
+
 function ts_helper_summary_logs() {
     local p1=$1
     if [[ $DEBUG ]] ; then
@@ -145,6 +270,7 @@ function ts_helper_summary_logs() {
 
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 	echo "O/S KERNEL: 	"`uname -r` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "current linux boot grub config: 	"`cat /proc/cmdline` | tee -a $CONFIG_FILE_PLAT_INFO
 
     if [[ $p1 == "amdgpu" ]] ; then
     	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
@@ -200,7 +326,7 @@ function ts_helper_guest_summary_logs() {
         echo "ts_guest entered, p1: $p1"
         echo "guest IP: $vmIp"
     fi
-	if [[ -z $vmIp ]] ; then
+	if [[ -z $/vmIp ]] ; then
         echo "Warning: Unable to determine guest O/S IP, will not gather guest logs."
 		echo "Use virsh to determine running VM-s indices."
     	return 1
@@ -229,9 +355,19 @@ function ts_helper_guest_summary_logs() {
 }
 
 function ts_helper_guest_full_logs() {
-	sshpass -p amd1234 ssh root@$vmIp 'dmesg' 2>&1 | tee -a $CONFIG_FILE_DMESG_GUEST
+    if [[ $OPTION_LIMIT_NONGPU_LOG == 1 ]] ; then
+    	sshpass -p amd1234 ssh root@$vmIp 'dmesg | grep amdgpu' 2>&1 | tee -a $CONFIG_FILE_DMESG_GUEST
+    else
+    	sshpass -p amd1234 ssh root@$vmIp 'dmesg' 2>&1 | tee -a $CONFIG_FILE_DMESG_GUEST
+    fi
     #cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_GUEST
 	#cat /var/log/kern.log | tee $CONFIG_FILE_KERN_GUEST
+
+    sshpass -p amd1234 ssh root@$vmIp 'lspci' 2>&1 | tee $CONFIG_FILE_LSPCI_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'lspci -t' 2>&1 | tee $CONFIG_FILE_LSPCI_T_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'lspci -vvv' 2>&1 | tee $CONFIG_FILE_LSPCI_VVV_GUEST
+    sshpass -p amd1234 ssh root@$vmIp 'lspci -vvvxxx' 2>&1 | tee $CONFIG_FILE_LSPCI_VVVXXX_GUEST
+
     sshpass -p amd1234 ssh root@$vmIp 'dmidecode' 2>&1 | tee $CONFIG_FILE_DMIDECODE_GUEST
     sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' 2>&1 | tee $CONFIG_FILE_MODINFO_AMDGPU_GUEST
     sshpass -p amd1234 ssh root@$vmIp 'for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done' 2>&1 | \
@@ -271,146 +407,7 @@ fi
 
 echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 echo LOG FILES: $CONFIG_PATH_PLAT_INFO:
-tar -cvf $CONFIG_FILE_TAR $CONFIG_PATH_PLAT_INFO
+#tar -cvf $CONFIG_FILE_TAR $CONFIG_PATH_PLAT_INFO
+tar -cvf $CONFIG_FILE_TAR ./ts/$DATE
 tree -fs $CONFIG_PATH_PLAT_INFO
 
-exit 0
-
-function host_guest_1()  {
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST BIOS VER: 	"`dmidecode -t 0  | grep Version` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST GCC VER: " `gcc --version | grep gcc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST G++ VER: " `g++ --version | grep g++` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST C++ VER: " `c++ --version | grep c++` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST CC VER: " `cc --version | grep cc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST HCC VER: " `hcc --version | grep hcc` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "CLANG VER: " `clang --version | grep clang` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VIRT. SW VER: " `virsh --version` | tee -a $CONFIG_FILE_PLAT_INFO
-	
-}
-
-function host_guest_2() {
-
-    # if on host. 
-
-	if [[ -z `virt-what` ]] ; then
-		dmesg | tee $CONFIG_FILE_DMESG_HOST
-		#cat /var/log/syslog | tee $CONFIG_FILE_SYSLOG_HOST
-		#cat  /var/log/kern.log | tee $CONFIG_FILE_KERN_LOG_HOST
-        dmidecode | tee $CONFIG_FILE_DMIDECODE_HOST
-        modinfo amdgpu | tee $CONFIG_FILE_MODINFO_AMDGPU_HOST
-        for i in /sys/module/amdgpu/parameters/* ; do echo -n $i: ; cat $i ; done 2>&1 | tee $CONFIG_FILE_PARM_AMDGPU_HOST 
-        rocminfo 2>&1 | tee $CONFIG_FILE_ROCMINFO_HOST
-        rocm-smi --showall 2>&1 | tee $CONFIG_FILE_ROCMSMI_HOST
-	else
-		sshpass -p amd1234 ssh root@$vmIp 'dmesg' >  $CONFIG_FILE_DMESG_GUEST
-		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/syslog' >  $CONFIG_FILE_SYSLOG_GUEST
-		sshpass -p amd1234 ssh root@$vmIp 'cat /var/log/kern.log' >  $CONFIG_FILE_KERNLOG_GUEST
-	fi
-}
-
-function do_inside_vm () {
-	echo do_inside_vm
-}
-
-if [[ -z `which virt-what` ]] ; then
-	echo "Failed to install virt-what..."
-	exit 1
-fi
-
-clear
-echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-
-# Set distribution specific commands here.
-DISTRO=`cat /etc/os-release | grep ^ID=  |  cut -d '=' -f2`
-if [[ -z $DISTRO ]] ; then
-	echo "Can not determine which distribution is."
-	exit 0
-fi
-
-if [[ $DISTRO == "ubuntu" ]] ; then
-	echo "Ubuntu distribution detected."
-elif [[ $DISTRO == "cent" ]] ; then
-	echo "CENTOS/REDHAT distribution detected."
-else
-	echo "Unknown distribution"
-	exit 0
-fi
-
-# -----------------------------------------
-# Get host information
-# -----------------------------------------
-
-if [[ -z `virt-what` ]] ; then
-    echo `hostname`
-	echo "HOST: " | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST IP:" | tee -a $CONFIG_FILE_PLAT_INFO
-	echo `ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST OS:          "`lsb_release --all | grep -i description` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST KERNEL: 	"`uname -r` | tee -a $CONFIG_FILE_PLAT_INFO
-
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "HOST GPU: " | tee -a $CONFIG_FILE_PLAT_INFO
-	cat /sys/bus/pci/drivers/gim/gpuinfo | egrep "Name|Bus" | tee -a $CONFIG_FILE_PLAT_INFO
-	cat /sys/bus/pci/drivers/gim/gpubios | tee -a $CONFIG_FILE_PLAT_INFO
-    echo "HOST GPUDRIVER:   "`lsmod | egrep "^amdkfd|^amdgpu"` | tee -a $CONFIG_FILE_PLAT_INFO
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-    echo "HOST AMDGPU:      "`modinfo amdgpu | egrep "^filename|^version"` | tee -a $CONFIG_FILE_PLAT_INFO
-    echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-    echo "HOST GIM:         "`modinfo gim | egrep "^filename|^version"` | tee -a $CONFIG_FILE_PLAT_INFO
-
-	host_guest_1
-
-	#  ssh to vm, vm number is specified in $1.
-	
-	if [[ -z $1 ]] ; then
-		echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-		echo "VM No. is not specified. "
-		echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-		vmpIp=""
-	else
-		vmIp=`virsh domifaddr $p1 | egrep "[0-9]+\.[0-9]+\." | tr -s ' ' | cut -d ' ' -f5 | cut -d '/' -f1`
-		if [[ -z $vmIp ]] ; then
-			echo "Use virsh to determine running VM-s indices."
-		exit 1
-		fi
-	fi
-	host_guest_2
-else
-	echo "ERROR: Please run from host..." 
-	exit 1
-fi
-
-# -----------------------------------------
-# Get guest information
-# -----------------------------------------
-
-echo $DOUBLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-echo "VM IP:" 		$vmIp| tee -a $CONFIG_FILE_PLAT_INFO
-
-if [[ -z $vmIp ]] ; then
-	echo "vmIp is empty. Either failed to get address or did not specify vm index."
-else
-
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VM OS: 		"`sshpass -p amd1234 ssh root@$vmIp 'lsb_release --all | grep -i description'`| tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VM KERNEL:	"`sshpass -p amd1234 ssh root@$vmIp 'uname -r'` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VM HOSTNAME: 	"`sshpass -p amd1234 ssh root@$vmIp 'hostname'` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	echo "VM GPUDRIVER INFO:"`sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu | egrep "^filename|^version"'` | tee -a $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	host_guest_2
-	sshpass -p amd1234 ssh root@$vmIp 'modinfo amdgpu' >  $CONFIG_FILE_MODINFO_AMDGPU_GUEST
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	sshpass -p amd1234 ssh root@$vmIp 'clinfo' >  $CONFIG_FILE_CLINFO_GUEST
-	echo "CLINFO VERSION:" `sshpass -p amd1234 ssh root@$vmIp 'clinfo -v'` | tee -a  $CONFIG_FILE_PLAT_INFO
-	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
-	host_guest_1
-fi
