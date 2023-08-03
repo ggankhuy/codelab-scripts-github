@@ -116,7 +116,7 @@ case "$OS_NAME" in
      ;;
 esac
 
-$PKG_EXEC install virt-what sshpass wcstools numactl -y 
+$PKG_EXEC install tree virt-what sshpass wcstools numactl -y 
 if [[ $?  -ne 0 ]] ; then
 	echo "ERROR: Failed to install packages..."
 	exit 1
@@ -270,6 +270,7 @@ function ts_helper_summary_logs() {
 
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 	echo "O/S KERNEL: 	"`uname -r` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "current linux boot grub config: 	"`cat /proc/cmdline` | tee -a $CONFIG_FILE_PLAT_INFO
 
     if [[ $p1 == "amdgpu" ]] ; then
     	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
