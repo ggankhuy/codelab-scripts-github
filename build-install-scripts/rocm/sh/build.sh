@@ -83,7 +83,7 @@ echo build.sh: PATH: $PATH
 set_os_type
 
 case "$PKG_EXEC" in
-   "deb")
+   "apt")
         install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make
       ;;
 
@@ -91,6 +91,8 @@ case "$PKG_EXEC" in
         install_packages cmake libstdc++-devel libpci-devel gcc g++
       ;;
    *)
+        echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
+    ;;    
 esac
 
 install_pip_libs CppHeaderParser
