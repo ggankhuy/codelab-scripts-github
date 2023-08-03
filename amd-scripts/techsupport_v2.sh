@@ -270,6 +270,7 @@ function ts_helper_summary_logs() {
 
 	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
 	echo "O/S KERNEL: 	"`uname -r` | tee -a $CONFIG_FILE_PLAT_INFO
+	echo "current linux boot grub config: 	"`cat /proc/cmdline` | tee -a $CONFIG_FILE_PLAT_INFO
 
     if [[ $p1 == "amdgpu" ]] ; then
     	echo $SINGLE_BAR | tee -a $CONFIG_FILE_PLAT_INFO
