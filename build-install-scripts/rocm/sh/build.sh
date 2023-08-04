@@ -91,6 +91,9 @@ case "$PKG_EXEC" in
    "yum")
         install_packages cmake libstdc++-devel libpci-devel gcc g++
       ;;
+   "yum")
+        install_packages cmake 
+      ;;
    *)
         echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
     ;;    
