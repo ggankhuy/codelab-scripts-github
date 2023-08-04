@@ -1,3 +1,4 @@
+#set -x
 echo "common.sh entered..."
 
 # Following settings are only local to this file: common.sh.
