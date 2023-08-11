@@ -52,20 +52,8 @@ if [[ ! -z $image ]] ; then
     fi
 
     if [[ $gpu == "amd" ]] || [[ $gpu == "rocm" ]] ; then
-        echo "amd selected, docker run command constructed: "
-        echo "sudo docker run -it \
-             --network=host \
-            --device=/dev/kfd \
-            --device=/dev/dri \
-            --group-add=video \
-            --ipc=host \
-            --cap-add=SYS_PTRACE \
-            --security-opt seccomp=unconfined \
-            -v vol-$name:/root/extdir \
-            -w /root/ \
-            --name=$name $image"
         sudo docker run -it \
-             --network=host \
+            --network=host \
             --device=/dev/kfd \
             --device=/dev/dri \
             --group-add=video \
@@ -74,11 +62,12 @@ if [[ ! -z $image ]] ; then
             --security-opt seccomp=unconfined \
             -v vol-$name:/root/extdir \
             -w /root/ \
+            --privileged \
             --name=$name $image 
     elif [[ $gpu == "nvidia" ]] || [[ $gpu == "cuda" ]] ; then
         echo "nvidia selected, docker run command constructed: "
         echo sudo docker run -it --gpus=all --runtime=nvidia --network=host --name=$name  -v vol-$name:/root/hostdir -w /root/ $image
-        sudo docker run -it --gpus=all --runtime=nvidia --network=host --name=$name  -v vol-$name:/root/hostdir -w /root/ $image
+        sudo docker run -it --gpus=all --runtime=nvidia --network=host --name=$name --privileged -v vol-$name:/root/hostdir -w /root/ $image
     else
         echo "Error: Unknown gpu specified: $gpu"
         exit 1
