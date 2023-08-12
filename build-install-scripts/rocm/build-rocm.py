@@ -105,12 +105,6 @@ if not depFile:
 else:
     print("dependency file: ", depFile)
 
-<<<<<<< HEAD
-# determine version
-
-
-=======
-
 shell='bash'
 out = subprocess.call([shell, './sh/earlyinit.sh'])
 

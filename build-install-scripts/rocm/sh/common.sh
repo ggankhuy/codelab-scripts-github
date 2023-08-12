@@ -1,3 +1,4 @@
+#set -x
 echo "common.sh entered..."
 
 # Following settings are only local to this file: common.sh.
@@ -50,9 +51,17 @@ function set_os_type() {
       echo "CentOS is detected..."
       echo "PY:PKG_EXEC=yum"
       echo "PY:PKG_EXT=rpm"
-
       PKG_EXEC=yum
       PKG_EXT=rpm
+      return 0
+      ;;
+    "openSUSE Leap")
+      echo "OpenSUSE Leap is detected..."
+      echo "PY:PKG_EXEC=rpm"
+      echo "PY:PKG_EXT=rpm"
+      PKG_EXEC=zypper
+      PKG_EXT=rpm
+      ln -s /usr/bin/python3  /usr/bin/python
       return 0
       ;;
    *)
@@ -67,9 +76,23 @@ function set_os_type() {
 function install_packages() {
     if [[ -z $PKG_EXEC  ]] ; then echo "PKG_EXEC is not defined. Call set_os_type first!" ; return 1 ; fi
     for i in $@; do
-        print_single_bar
         echo "installing $i..."
-        $PKG_EXEC install -y $i
+        case "$PKG_EXEC" in
+        "yum")
+            $PKG_EXEC install -y $i
+            ;;
+        "apt")
+            $PKG_EXEC install -y $i
+            ;;
+        "zypper")
+            $PKG_EXEC -n install $i
+            ;;
+        *)
+            echo "Unsupported/unknown PKG installer: $PKG_EXEC, exiting..."
+      ;;    
+    esac
+
+        print_single_bar
     done
 }
 
@@ -187,11 +210,22 @@ function rocm_source_dw() {
     pushd  $DIR_NAME
     mkdir -p ~/bin/
     echo "install repo..."
-    if [[ $PKG_EXEC=="yum" ]] ; then
+   case "$PKG_EXEC" in
+   "yum")
         $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
-    else
+      ;;
+   "apt")
         $SUDO $PKG_EXEC install curl -y && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
-    fi
+      ;;
+   "zypper")
+        $SUDO $PKG_EXEC -n install curl && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
+      ;;
+   *)
+        echo "Unsupported or unknown package installer: $PKG_EXEC"
+        return $ERROR_ROCM_SRC_REPO_INIT
+      ;;
+    esac
+
     $SUDO chmod a+x ~/bin/repo
     echo "repo init..."
     $SUDO ~/bin/repo init -u https://github.com/RadeonOpenCompute/ROCm.git -b roc-$CONFIG_VERSION.x
@@ -208,7 +242,6 @@ function rocm_source_dw() {
     else
         echo "Warning: Error occurred while performing repo sync. Continuing anyways..., Ctrl+c to terminate to inspect if necessary"
         sleep 5
-
     fi
     echo "ROCm source is downloaded to $DIR_NAME"
     echo "push $DIR_NAME to get there..."
