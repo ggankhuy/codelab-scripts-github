@@ -78,24 +78,25 @@ else
     echo "Prebuild stage is OK. continuing."
 fi
 
-<<<<<<< HEAD
-=======
 echo build.sh: PATH: $PATH
 
->>>>>>> master
 set_os_type
-install_packages python3-pip cmake chrpath 
-install_pip_libs CppHeaderParser networkx
-
+echo "PKG_EXEC: $PKG_EXEC"
 case "$PKG_EXEC" in
-   "deb")
-        install_packages cmake chrpath libpci-dev
+   "apt")
+        # vim-common: rocm5.5 rocr-runtime.
+        # libnuma-dev: rocm5.5 roct-thunk-interface.
+        install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
       ;;
-
    "yum")
         install_packages cmake libstdc++-devel libpci-devel gcc g++
       ;;
+   "yum")
+        install_packages cmake 
+      ;;
    *)
+        echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
+    ;;    
 esac
 
 install_pip_libs CppHeaderParser
@@ -105,8 +106,8 @@ function llvm() {
     build_entry $CURR_BUILD
     pushd $CURR_BUILD
     mkdir build ; cd build
-    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release"
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$MINOR_VERSION/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release"
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -477,12 +478,8 @@ function rocRAND() {
     #cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" .. 2>&1 | tee $LOG$
 
     hip_DIR="$ROCM_SRC_FOLDER/hipamd"
-    echo CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipamd" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-<<<<<<< HEAD
     CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-=======
     CXX=hipcc cmake -DBUILD_HIPRAND=OFF -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
->>>>>>> master
     make -j`nproc` install | tee $LOG_DIR/$CURR_BUILD.log
 #   f5 rocRAND
     build_exit $CURR_BIULD

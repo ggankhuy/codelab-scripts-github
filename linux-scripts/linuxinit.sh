@@ -23,6 +23,10 @@ case "$OS_NAME" in
       echo "CentOS is detected..."
       PKG_EXEC=yum
       ;;
+   "openSUSE Leap")
+      echo "openSUSE Leap..."
+      PKG_EXEC=rpm
+      ;;
    *)
      echo "Unsupported O/S, exiting..." ; exit 1
      ;;
