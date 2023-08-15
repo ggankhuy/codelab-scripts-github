@@ -1,3 +1,4 @@
+
 set -x 
 
 if [[ ! -d  omniperf ]] ; then
@@ -25,3 +26,7 @@ fi
 
 make install
 
+for i in pymongo astunparse tabulate dash ; do
+    echo  "Installing $i..."
+    pip3 install $i;
+done
