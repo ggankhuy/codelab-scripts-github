@@ -1,1 +1,6 @@
-for i in 1 2 3; do sudo hipcc ex-3.cpp ; sudo rocprof --hip-trace ./a.out ; sudo mkdir 3 ; sudo cp results.json 3/ ; done
+#for i in 1 2 3; do 
+for i in 3; do 
+    sudo hipcc ex-$i.cpp 
+    sudo rocprof --hip-trace ./a.out 
+    sudo mkdir $i 
+    sudo cp results.json $i/ ; done
