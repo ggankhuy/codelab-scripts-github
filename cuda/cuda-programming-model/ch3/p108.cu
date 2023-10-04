@@ -24,17 +24,17 @@ int main(int argc, char ** argv) {
     bool bresult = false;
 
     int size = 1<<24;
-    printf("array size: nx %d ny %d\n", nx, ny);
+    printf("array size: size %d\n", size);
 
     int blocksize = 512;
 
-    if (argv > 1 ) {
+    if (argc > 1 ) {
         blocksize = atoi(argv[1]);
     }
     
 
     dim3 block(blocksize, 1);
-    dim3 grid ((size+block.x-1)/block.x, 1)
+    dim3 grid ((size+block.x-1)/block.x, 1);
 
     printf("Grid %d block %d.\n", grid.x, block.x);
 
@@ -42,8 +42,8 @@ int main(int argc, char ** argv) {
 
     size_t bytes = size * sizeof(int);
 
-    int h_idata = (int*)malloc(bytes);
-    int h_odata = (int*)malloc(grid.x*sizeof(int));
+    int *h_idata = (int*)malloc(bytes);
+    int *h_odata = (int*)malloc(grid.x*sizeof(int));
     int * tmp  = (int*)malloc(bytes);
 
     // init data on host side.
@@ -75,23 +75,23 @@ int main(int argc, char ** argv) {
     warmup<<<grid, block>>>(d_idata, d_odata, size);
     cudaDeviceSynchronize();
 
-    iElapse = seconds() - iStart;
+    iElaps = seconds() - iStart;
 
     cudaMemcpy(h_odata, d_odata, grid.x*sizeof(int), cudaMemcpyDeviceToHost);
-    gpu_sum=0;
+    int gpu_sum=0;
 
-    for (int i = 0;i < grid.x, i++) { gpu_sum += h_odata[i]; }
+    for (int i = 0; i < grid.x; i++) { gpu_sum += h_odata[i]; }
     
-    print("gpu warmup elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
+    printf("gpu warmup elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
 
     // kern1l reduce Neighbored.
     cudaMemcpy(d_idata, h_idata, bytes, cudaMemcpyHostToDevice);
     cudaDeviceSynchronize();
     iStart = seconds();
-    reduceNeighbored<<<grid, block>>>(d_idata, d_odata, size);
+    reduceNeighboredLess<<<grid, block>>>(d_idata, d_odata, size);
     cudaDeviceSynchronize();
     iStart = seconds();
-    cudaMemcpyCopy(h_odata, d_odata, grid.x*sizeof(int), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_odata, d_odata, grid.x*sizeof(int), cudaMemcpyDeviceToHost);
     gpu_sum = 0;
     for (int i = 0; i < grid.x; i++ ) { gpu_sum += h_odata[i];}
     printf("gpu neighbored: elapsed %d ms gpu_sum: %d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);
@@ -99,7 +99,7 @@ int main(int argc, char ** argv) {
     cudaDeviceSynchronize();
     iElaps = seconds() - iStart;
 
-    cudaMemcpy(h_odata, d_odata, grid.x/8*sizeof(int), cudamemcpyDeviceToHost);
+    cudaMemcpy(h_odata, d_odata, grid.x/8*sizeof(int), cudaMemcpyDeviceToHost);
     gpu_sum = 0;
     for (int i = 0; i < grid.x/8; i++) { gpu_sum += h_odata[i];}
     printf("gpu Cmptnroll elapsed %d ms gpu_sum: $d <<<grid %d block %d>>>\n", iElaps, gpu_sum, grid.x, block.x);

@@ -1,0 +1,12 @@
+﻿page No,,porting result (compile and run),run result (RX 2070),Run result (MI100)
+33,p33_checkDimension.cpp,OK,,"It was not printing out dimension info for some reason, but it prints out when running with rocgdb"
+35,p35_defineGridBlock.cpp,OK,,OK
+45,p45_sumArraysOnGPU-timer.cpp,OK,,OK
+53,p53_p99_sumMatrixOnGPU-2D-grid-2D-block.cpp,OK,,"timer is, reporting non-zero milliseconds, Array compare do not match"
+84,p84_simpleDivergence.cpp,OK,,"Timers are reporting all 0, too fast?"
+108,p108_reduceInteger.cpp,OK,,"MI200: all timers are reporting 0, GPU may be too fast?"
+167,p167_readSegment.cpp,OK,,OK
+182,p182_transpose.cpp,OK,,OK with parameters i.e. (<exec_name> 0 32 32 4096 4096)
+220,p220_checkMemSquare.cpp,OK,,Output is all zero with <exec_name> 1
+233,p233_reduceInteger.cpp,OK,,Output of reduceGmem does not match CPU sum
+244,p244_transposeSmem.cpp,OK,,Segfaults with actual kernel call.

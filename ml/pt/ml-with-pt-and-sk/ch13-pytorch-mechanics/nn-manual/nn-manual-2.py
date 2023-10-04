@@ -1,0 +1,73 @@
+import torch
+import code
+cuda = torch.device('cuda')
+
+# Create weight and bias values.
+
+CONFIG_ENABLE_TEST=1
+FEATURE_SIZE=5
+SAMPLE_SIZE=3
+w=torch.rand(FEATURE_SIZE, requires_grad=True, device='cuda')
+b=torch.rand(FEATURE_SIZE, requires_grad=True, device='cuda')
+
+torch.manual_seed(1)
+
+# Create input(x), output (y, expected).
+# input(x) used for forward pass: z=w*x+b, z will be computed y rather than expected y. diff=(z-y)
+
+x_data=torch.rand([SAMPLE_SIZE,FEATURE_SIZE], device='cuda')
+y_data=torch.rand(FEATURE_SIZE, device='cuda')
+x_batch=x_data[0:2]
+
+#test1 and test2 no longer matches with loss.backward when two rows are taken as below.
+x=x_data[0:2]
+y=y_data
+
+for i in range(0, 2):
+    print("epochs: -------- ", i, " ---------")
+    for x in x_batch:
+        z=torch.add(torch.mul(w, x), b)
+        loss = (y-z).pow(2).sum()
+
+        loss.backward()
+        print("loss: ", loss)
+        print("w: ", w, type(w))
+        print("b: ", b, type(b))
+        print('dL/dw : ', w.grad, type(w.grad))
+        print('dL/db : ', b.grad, type(b.grad))
+
+        # verifying output of loss.backward...
+
+        print("verifying output of loss.backward...(compare with DL/DW)")
+
+        # test1=DL/Dw = DL/DZ * DZ/DW 
+        # 1. DL/DZ=D/DZ (y-z)**2 = D/DZ y**2-2yz+z**2 = -2y + 2z = 2(z-y)
+        # 2. DZ/DW = D/DW w * x + b = x.
+        # 3. DL/DW = DL/DZ * DZ/DW = 2(z-y)x = 2x(z-y)  = 2x(w*x+B)-y
+
+        # test2=DL/db = DL/DZ * DZ/Db
+        # 1a. same as 1.
+        # 2a.DW/DB = d/db w * x  + b = 1
+        # 3a. DL/Db = DL/DZ * DZ/Db = 2(z-y) * 1 = 2(z-y) = 2 (w * x + b) -y
+    
+        test1=2 * x * ((w*x+b)-y)
+        print("dL/dw    : ", w.grad)
+        print("test1    : ", test1)
+    
+        test2=2 * ((w*x + b) - y)
+        print("dL/db    : ", b.grad)
+        print("test2    : ", test2)
+
+        # update weights
+
+        w1 = w + w.grad
+        b1 = b + b.grad
+        w=w1.detach()
+        w.requires_grad=True
+        b=b1.detach()
+        b.requires_grad=True
+
+        print("new updated w1/b1: ")
+        print("w: ", w, type(w))
+        print("b: ", b, type(b))
+
