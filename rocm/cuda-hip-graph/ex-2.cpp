@@ -37,8 +37,8 @@ int main() {
     for(int istep=0; istep<NSTEP; istep++) {
         for(int ikrnl=0; ikrnl<NKERNEL; ikrnl++) {
             shortKernel<<<blocks, threads, 0, stream>>>(out_d, in_d);
-            hipStreamSynchronize(stream);
         }
+        hipStreamSynchronize(stream);
     }
     //end CPU wallclock time
 
