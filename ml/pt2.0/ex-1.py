@@ -1,3 +1,5 @@
+import torch 
+
 def foo(x, y):
     a = torch.sin(x)
     b = torch.cos(y)
