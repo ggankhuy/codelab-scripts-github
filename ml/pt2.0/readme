@@ -1,11 +1,14 @@
 https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html#basic-usage
 ex-1/2/3.py running OK.
 
-ex-4 not running:
+ex-4 runtime error resolved by putting location of ld.ldd in the PATH:, however second error 2) below still occurred
 
+
+1) 
 /usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py:90: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
   warnings.warn(
 ld.lld execute fail:
+
 Executable "/llvm/bin/ld.lld" doesn't exist!
 -1
 ld.lld execute fail:
@@ -13,4 +16,57 @@ Executable "/llvm/bin/ld.lld" doesn't exist!
 -1
 ld.lld execute fail:
 Executable "/llvm/bin/ld.lld" doesn't exist!
+
+2)
+ex4-demo-speedup.py
+eager: 1.8053740234375
+/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py:90: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/root/gg/git/codelab/gpu/ml/pt2.0/ex4-demo-speedup.py", line 50, in <module>
+    print("compile:", timed(lambda: evaluate_opt(model, inp))[1])
+  File "/root/gg/git/codelab/gpu/ml/pt2.0/ex4-demo-speedup.py", line 11, in timed
+    result = fn()
+  File "/root/gg/git/codelab/gpu/ml/pt2.0/ex4-demo-speedup.py", line 50, in <lambda>
+    print("compile:", timed(lambda: evaluate_opt(model, inp))[1])
+  File "/usr/local/lib/python3.10/dist-packages/torch/_dynamo/eval_frame.py", line 209, in _fn
+    return fn(*args, **kwargs)
+  File "/root/gg/git/codelab/gpu/ml/pt2.0/ex4-demo-speedup.py", line 35, in evaluate
+    def evaluate(mod, inp):
+  File "/usr/local/lib/python3.10/dist-packages/torch/_dynamo/eval_frame.py", line 209, in _fn
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 2836, in forward
+    return compiled_fn(full_args)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 1224, in g
+    return f(*args)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 2403, in debug_compiled_function
+    return compiled_function(*args)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 1900, in runtime_wrapper
+    all_outs = call_func_with_args(
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 1249, in call_func_with_args
+    out = normalize_as_list(f(args))
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 1224, in g
+    return f(*args)
+  File "/usr/local/lib/python3.10/dist-packages/torch/autograd/function.py", line 506, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 2168, in forward
+    fw_outs = call_func_with_args(
+  File "/usr/local/lib/python3.10/dist-packages/torch/_functorch/aot_autograd.py", line 1249, in call_func_with_args
+    out = normalize_as_list(f(args))
+  File "/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py", line 248, in run
+    return model(new_inputs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py", line 265, in run
+    compiled_fn = cudagraphify_impl(model, new_inputs, static_input_idxs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py", line 320, in cudagraphify_impl
+    model(list(static_inputs))
+  File "/tmp/torchinductor_root/v3/cv3tqxfyb5m7fmgu7txuqygovdxku5k4wdbqrn6jnynref7alyv2.py", line 3364, in call
+    triton__0.run(buf2, buf5, buf6, buf33, buf49, buf66, buf84, buf103, 1048576, grid=grid(1048576), stream=stream0)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_inductor/triton_ops/autotune.py", line 190, in run
+    result = launcher(
+  File "<string>", line 6, in launcher
+  File "/usr/local/lib/python3.10/dist-packages/triton/compiler.py", line 1944, in __getattribute__
+    self._init_handles()
+  File "/usr/local/lib/python3.10/dist-packages/triton/compiler.py", line 1930, in _init_handles
+    mod, func, n_regs, n_spills = hip_utils.load_binary(self.metadata["name"], self.asm["hsaco_path"], self.shared, device)
+SystemError: <built-in function load_binary> returned NULL without setting an exception
 
