@@ -4,7 +4,8 @@ ex-1/2/3.py running OK.
 ex-4/5 runtime error resolved by putting location of ld.ldd in the PATH:, however second error 2) below still occurred.
 Seeing hsaco related error, try on nvidia gpu!
 
-ex-6.py running ok.
+ex-7.py: causes crash (supposed to) but still different than tutorial, investigate
+ex-6/8.py running ok.
 
 1) 
 /usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py:90: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
