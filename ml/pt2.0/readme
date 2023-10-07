@@ -1,7 +1,8 @@
 https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html#basic-usage
 ex-1/2/3.py running OK.
 
-ex-4 runtime error resolved by putting location of ld.ldd in the PATH:, however second error 2) below still occurred
+ex-4 runtime error resolved by putting location of ld.ldd in the PATH:, however second error 2) below still occurred.
+Seeing hsaco related error, try on nvidia gpu!
 
 
 1) 
