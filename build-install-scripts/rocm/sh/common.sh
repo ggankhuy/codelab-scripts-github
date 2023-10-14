@@ -210,7 +210,6 @@ function rocm_source_dw() {
     pushd  $DIR_NAME
     mkdir -p ~/bin/
     echo "install repo..."
-
    case "$PKG_EXEC" in
    "yum")
         $SUDO $PKG_EXEC install curl -y --allowerasing && $SUDO curl https://storage.googleapis.com/git-repo-downloads/repo | $SUDO tee ~/bin/repo
@@ -236,6 +235,7 @@ function rocm_source_dw() {
     fi
     echo "repo sync..."
     $SUDO ~/bin/repo sync
+
     if [[ $? -ne 0 ]] && [[ $OPTION_EXIT_ON_ROCM_SOURCE_CHECKOUT -ne 0 ]] ; then
         echo "Error: Unable to perform repo sync."
         return $ERROR_ROCM_SRC_REPO_SYNC
