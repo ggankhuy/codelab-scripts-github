@@ -105,7 +105,6 @@ if not depFile:
 else:
     print("dependency file: ", depFile)
 
-
 shell='bash'
 out = subprocess.call([shell, './sh/earlyinit.sh'])
 
