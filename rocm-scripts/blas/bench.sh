@@ -3,9 +3,9 @@ ROCBLAS_BENCH=./release/clients/staging/rocblas-bench
 HIPBLASLT_BENCH=./release/hipblaslt-install/bin/hipblaslt-bench
 
 BENCH=$ROCBLAS_BENCH
-#BENCH=$HIPBLASLT_BENCH
+BENCH=$HIPBLASLT_BENCH
 bench="rocblas"
-#bench="hipblas-lt"
+bench="hipblas-lt"
 
 #GPU=MI100
 GPU=MI250
@@ -14,7 +14,7 @@ LOG_DIR=./log/$GPU
 mkdir -p $LOG_DIR
 
 for type in f32_r f16_r bf16_r ; do
-    for size in 4096 8192 ; do
+    for size in 512 1024 2048 4096 8192 ; do
         case "$BENCH" in
             $ROCBLAS_BENCH)
                 size_params_val="-m $size -n $size -k $size"
@@ -24,9 +24,9 @@ for type in f32_r f16_r bf16_r ; do
                 transposeB_param="--transposeB"
                 ;;
             $HIPBLASLT_BENCH)
-                size_params="-m $size -n $size -k $size"
-                type_params="-r $type"
-                calc_params=""
+                size_params_val="-m $size -n $size -k $size"
+                type_params_val="-r $type"
+                calc_params_val=""
                 transposeA_param="--transA"
                 transposeB_param="--transB"
                 ;;
