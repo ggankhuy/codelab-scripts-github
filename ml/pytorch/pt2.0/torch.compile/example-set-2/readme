@@ -1,3 +1,7 @@
 enhanced examples here for the purposes of experiment:
 https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html#basic-usage
 
+
+tmp resources:
+
+https://stackoverflow.com/questions/1938048/high-precision-clock-in-python
