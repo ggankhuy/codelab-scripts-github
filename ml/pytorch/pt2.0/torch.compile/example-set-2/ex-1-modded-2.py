@@ -1,11 +1,12 @@
 import torch
 import time
 
-def foo(x, y):
+@torch.compile
+def opt_foo2(x, y):
     a = torch.sin(x)
     b = torch.cos(y)
     return a + b
-opt_foo1 = torch.compile(foo, mode="reduce-overhead")
+print(opt_foo2(torch.randn(10, 10), torch.randn(10, 10)))
 
 for i in range(0,5):
     t1_foo = time.time_ns()
@@ -15,6 +16,6 @@ for i in range(0,5):
 
 for i in range(0,5):
     t1_foo1 = time.time_ns()
-    opt_foo1(torch.randn(10, 10), torch.randn(10, 10))
+    opt_foo2(torch.randn(10, 10), torch.randn(10, 10))
     t2_foo1 = time.time_ns()
     print("time: optimized:     ", t2_foo1-t1_foo1)
