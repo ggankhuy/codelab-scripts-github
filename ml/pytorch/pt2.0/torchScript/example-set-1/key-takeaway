@@ -1,0 +1,9 @@
+torch.jit.trace() - will create trace. 
+torch.jit.script() - will do an analysis of code and will create torchScript.
+IR (intermediate representation) = graph
+print(torch.jit.trace(<module>/<function>).graph) - will print graph (less useful, low level)
+print(torch.jit.trace(<module>/<function>).code) - will print graph (will print torchScript code)
+
+torch.jit.trace().save('<filename>.pt') - will save the IR/graph in pt format.
+torch.jit.load('<filename>.pt') - will load the previously saved pt format.
+
