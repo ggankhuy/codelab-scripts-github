@@ -66,7 +66,7 @@ int main (void) {
     
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
 
-    void roctxMark("GG: kernel launch");
+    roctxMark("GG: kernel launch");
     roctxRangePush("GG: kernel launch - start");
     //roctracer_start();
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
