@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include "hip/hip_runtime.h"
 #include <roctracer_ext.h>
-
-
+#include <roctx.h>
 
 // 1. if N is set to up to 1024, then sum is OK.
 // 2. Set N past the 1024 which is past No. of threads per blocks, and then all iterations of sum results in 
@@ -66,8 +65,12 @@ int main (void) {
 	// thread count: 128
     
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
+
+    void roctxMark("GG: kernel launch");
+    roctxRangePush("GG: kernel launch - start");
     //roctracer_start();
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
+    roctxRangePop();
     //roctracer_stop();
     hipLaunchKernelGGL(add, blocks, threadsPerBlock, 0, 0, dev_a, dev_b, dev_c);
     //add<<<blocks, threadsPerBlock>>>(dev_a, dev_b, dev_c);
