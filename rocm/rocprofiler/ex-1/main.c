@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <roctracer_ext.h>
+#include <roctracer/roctracer_ext.h>
 
 int main() 
 {
