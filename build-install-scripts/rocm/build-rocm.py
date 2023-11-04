@@ -6,7 +6,7 @@ import subprocess
 #from matplotlib import pyplot as plt
 
 def printErr(msg):
-    os.system("clear")
+    #os.system("clear")
     print("Error: ")
     print(msg)
 
@@ -25,6 +25,7 @@ def dispHelp():
     print("--py: Force build and install python.")
     print("--cmake: Force build and install cmake.")
     print("--package: Build packages whenever possible.")
+    print("--path: non-standard location other than default /opt/rocm")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
@@ -50,6 +51,8 @@ build_llvm=''
 build_package=''
 build_fast=''
 component=None
+rocmVersionMajor=""
+rocmVersionMinor=""
 
 for i in sys.argv:
     print("Processing ", i)
@@ -80,6 +83,9 @@ for i in sys.argv:
 
         if re.search("--verminor", i):
             rocmVersionMinor=i.split('=')[1].strip()
+
+        if re.search("--path", i):
+            install_path=i.split('=')[1].strip()
     
         if re.search("--llvmno",i):
             build_llvm="--llvmno"
@@ -133,9 +139,6 @@ graph = nx.DiGraph()
 
 all_pred=[]
 indent=""
-
-rocmVersionMajor=""
-rocmVersionMinor=""
 
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
@@ -355,11 +358,11 @@ for j in finalList:
         if counter == 0:
             out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                     build_fast, build_package, build_llvm, build_py, build_cmake, \
-                    'vermajor=' + str(rocmVersionMajor), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                    'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         else:
                 out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                 build_fast, build_package, '--llvmno', build_py, build_cmake, \
-                'vermajor=' + str(rocmVersionMajor), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         print("out: ", out)
 
         if out != 0:

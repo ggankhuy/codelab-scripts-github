@@ -37,3 +37,4 @@ roctracer
 ROCgdb
 rocm-cmake
 half
+clr

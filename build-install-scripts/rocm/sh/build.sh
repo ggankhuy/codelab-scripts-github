@@ -1,4 +1,4 @@
-#set -x
+set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
@@ -9,6 +9,7 @@ CONFIG_BUILD_PY=0
 CONFIG_BUILD_FAST=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_TEST_MODE=0
+CONFIG_INSTALL_PATH=""
 
 for var in "$@"
 do
@@ -30,6 +31,11 @@ do
     if [[ $var == *"vermajor"* ]] ; then
         echo "processing var: $var"
         vermajor=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ $var == *"--path"* ]] ; then
+        echo "processing var: $var"
+        CONFIG_INSTALL_PATH=`echo $var | cut -d '=' -f2`
     fi
 
     if [[ $var == "--llvmno" ]] ; then
@@ -106,8 +112,14 @@ function llvm() {
     build_entry $CURR_BUILD
     pushd $CURR_BUILD
     mkdir build ; cd build
-    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release"
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    CONFIG_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        echo "Installing llvm into non-standard location: $CONFIG_INSTALL_PATH..."
+        sleep 10
+        CONFIG_INSTALL_PREFIX=$CONFIG_INSTALL_PATH/llvm
+    fi
+    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release"
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -198,15 +210,23 @@ function COMGR() {
 
     CURR_BUILD=ROCm-CompilerSupport
     build_entry $CURR_BUILD
-        LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
+    LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
     DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs
     COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
     mkdir -p "$DEVICE_LIBS/build"
     pushd "$DEVICE_LIBS/build"
     pwd
-    echo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
+
+    CONFIG_INSTALL_PREFIX="/opt/rocm"
+
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        CONFIG_INSTALL_PREFIX="$CONFIG_INSTALL_PATH"
+        echo "Installing clr into non-standard location: $CONFIG_INSTALL_PREFIX..."
+        sleep 3
+    fi
+
+    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
     make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
@@ -359,6 +379,37 @@ function hipAMD() {
     build_exit $CURR_BIULD
 }
 
+function clr() {
+    CURR_BUILD=clr
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build ; cd build
+
+    CONFIG_INSTALL_PREFIX="/opt/rocm"
+
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        CONFIG_INSTALL_PREFIX="$CONFIG_INSTALL_PATH"
+        echo "Installing clr into non-standard location: $CONFIG_INSTALL_PREFIX..."
+        sleep 3
+    fi
+
+    pushd ../..
+    export HIPAMD_DIR="$(readlink -f hipamd)"
+    export HIP_DIR="$(readlink -f hip)"
+    export ROCCLR_DIR="$(readlink -f ROCclr)"
+    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
+    echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
+    popd
+
+    CXX=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ cmake .. \
+        -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX \
+        -DCLR_BUILD_HIP=ON \
+        -DHIP_COMMON_DIR=$ROCM_SRC_FOLDER/HIP \
+        -DROCCLR_PATH=$ROCM_SRC_FOLDER/clr/rocclr \
+        -DHIPCC_BIN_DIR=$ROCM_SRC_FOLDER/HIPCC/bin
+    make -j`nproc`    
+    build_exit $CURR_BIULD
+}
 
 function f1() {
     i=$1
@@ -494,10 +545,18 @@ function f5() {
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     # this no longer working.
 
+    CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
+
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        CONFIG_INSTALL_PREFIX="--prefix=$CONFIG_INSTALL_PATH"
+        echo "Installing rccl into non-standard location: $CONFIG_INSTALL_PREFIX..."
+        sleep 3
+    fi
+    
     if [[ $CURR_BUILD == "rocRAND" ]] ; then
-        ./install -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     else
-        ./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install.sh -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.

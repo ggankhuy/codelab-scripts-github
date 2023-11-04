@@ -12,3 +12,4 @@ hipSPARSE: rocSPARSE
 rocSPARSE: rocPRIM
 rocALUTION: hipAMD rocBLAS rocRAND
 rocRAND: hipAMD
+clr: COMGR
