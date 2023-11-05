@@ -104,7 +104,7 @@ if [[ CONFIG_BYPASS_PACKAGES_INSTALL==1  ]] ; then
             install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
           ;;
        "yum")
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel
           ;;
        "yum")
             install_packages cmake 
