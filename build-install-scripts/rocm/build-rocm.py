@@ -26,6 +26,7 @@ def dispHelp():
     print("--cmake: Force build and install cmake.")
     print("--package: Build packages whenever possible.")
     print("--path: non-standard location other than default /opt/rocm")
+    print("--nopkg: bypass linux and pip packages installation")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
@@ -53,6 +54,7 @@ build_fast=''
 component=None
 rocmVersionMajor=""
 rocmVersionMinor=""
+nopkg=""
 
 for i in sys.argv:
     print("Processing ", i)
@@ -92,6 +94,9 @@ for i in sys.argv:
 
         if re.search("--package",i):
             build_package="--package"
+
+        if re.search("--nopkg",i):
+            nopkg="--nopkg"
 
         if re.search("--fast",i):
             build_fast="--fast"
@@ -358,11 +363,13 @@ for j in finalList:
         if counter == 0:
             out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                     build_fast, build_package, build_llvm, build_py, build_cmake, \
-                    'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                    'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
+                    nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         else:
                 out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                 build_fast, build_package, '--llvmno', build_py, build_cmake, \
-                'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
+                nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         print("out: ", out)
 
         if out != 0:
