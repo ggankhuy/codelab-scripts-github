@@ -393,8 +393,6 @@ function clr() {
     cd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build ; cd build
 
-    CONFIG_INSTALL_PREFIX="/opt/rocm"
-
     pushd ../..
     export HIPAMD_DIR="$(readlink -f hipamd)"
     export HIP_DIR="$(readlink -f hip)"
@@ -404,7 +402,7 @@ function clr() {
     popd
 
     HIP_CLANG_PATH=$CONFIG_INSTALL_PREFIX/llvm/bin CXX=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ cmake .. \
-        -CMAKE_CXX_COMPILER=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ \
+        -DCMAKE_CXX_COMPILER=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ \
         -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX \
         -DClang_DIR=$CONFIG_INSTALL_PREFIX/llvm/lib/cmake/clang/ \
         -DCLR_BUILD_HIP=ON \
