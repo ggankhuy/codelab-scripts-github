@@ -10,6 +10,7 @@ CONFIG_BUILD_FAST=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_TEST_MODE=0
 CONFIG_INSTALL_PATH=""
+CONFIG_BYPASS_PACKAGES_INSTALL=0
 
 for var in "$@"
 do
@@ -93,7 +94,8 @@ echo build.sh: PATH: $PATH
 
 set_os_type
 
-if [[ -z CONFIG_BYPASS_PACKAGES_INSTALL ]] ; then
+if [[ CONFIG_BYPASS_PACKAGES_INSTALL==1  ]] ; then
+    echo "Installing packages..."
     echo "PKG_EXEC: $PKG_EXEC"
     case "$PKG_EXEC" in
        "apt")
@@ -111,7 +113,9 @@ if [[ -z CONFIG_BYPASS_PACKAGES_INSTALL ]] ; then
             echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
         ;;    
     esac
-        install_pip_libs CppHeaderParser
+    install_pip_libs CppHeaderParser
+else
+    echo "Bypass installing packages..."
 fi
 
 CONFIG_INSTALL_PREFIX="/opt/rocm"

@@ -55,6 +55,7 @@ component=None
 rocmVersionMajor=""
 rocmVersionMinor=""
 nopkg=""
+install_path=""
 
 for i in sys.argv:
     print("Processing ", i)
