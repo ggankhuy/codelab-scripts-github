@@ -86,7 +86,7 @@ case "$PKG_EXEC" in
    "apt")
         # vim-common: rocm5.5 rocr-runtime.
         # libnuma-dev: rocm5.5 roct-thunk-interface.
-        install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
+        install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config libX11-devel
       ;;
    "yum")
         install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common
