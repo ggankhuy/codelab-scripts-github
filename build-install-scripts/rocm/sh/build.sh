@@ -94,8 +94,12 @@ echo build.sh: PATH: $PATH
 
 set_os_type
 
-if [[ CONFIG_BYPASS_PACKAGES_INSTALL==1  ]] ; then
+if [[ CONFIG_BYPASS_PACKAGES_INSTALL -eq 1 ]] ; then
+    echo "Bypass installing packages..."
+    sleep 10
+else
     echo "Installing packages..."
+    sleep 10
     echo "PKG_EXEC: $PKG_EXEC"
     case "$PKG_EXEC" in
        "apt")
@@ -114,8 +118,6 @@ if [[ CONFIG_BYPASS_PACKAGES_INSTALL==1  ]] ; then
         ;;    
     esac
     install_pip_libs CppHeaderParser
-else
-    echo "Bypass installing packages..."
 fi
 
 CONFIG_INSTALL_PREFIX="/opt/rocm"
