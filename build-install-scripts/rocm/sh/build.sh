@@ -96,10 +96,8 @@ set_os_type
 
 if [[ CONFIG_BYPASS_PACKAGES_INSTALL -eq 1 ]] ; then
     echo "Bypass installing packages..."
-    sleep 10
 else
     echo "Installing packages..."
-    sleep 10
     echo "PKG_EXEC: $PKG_EXEC"
     case "$PKG_EXEC" in
        "apt")
