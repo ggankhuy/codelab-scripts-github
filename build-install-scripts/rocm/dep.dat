@@ -12,3 +12,5 @@ hipSPARSE: rocSPARSE
 rocSPARSE: rocPRIM
 rocALUTION: hipAMD rocBLAS rocRAND
 rocRAND: hipAMD
+clr: COMGR ROCR-Runtime
+ROCR-Runtime: ROCT-Thunk-Interface

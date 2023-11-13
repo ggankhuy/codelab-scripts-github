@@ -1,4 +1,4 @@
-#set -x
+set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
@@ -9,6 +9,8 @@ CONFIG_BUILD_PY=0
 CONFIG_BUILD_FAST=0
 CONFIG_BUILD_PACKAGE=0
 CONFIG_TEST_MODE=0
+CONFIG_INSTALL_PATH=""
+CONFIG_BYPASS_PACKAGES_INSTALL=0
 
 for var in "$@"
 do
@@ -30,6 +32,11 @@ do
     if [[ $var == *"vermajor"* ]] ; then
         echo "processing var: $var"
         vermajor=`echo $var | cut -d '=' -f2`
+    fi
+
+    if [[ $var == *"--path"* ]] ; then
+        echo "processing var: $var"
+        CONFIG_INSTALL_PATH=`echo $var | cut -d '=' -f2`
     fi
 
     if [[ $var == "--llvmno" ]] ; then
@@ -62,6 +69,11 @@ do
         CONFIG_BUILD_PACKAGE=1
     fi
 
+    if [[ $var == "--nopkg" ]] ; then
+        echo "Will create package whenever possible."
+        CONFIG_BYPASS_PACKAGES_INSTALL=1
+    fi
+
     if [[ $var == *"--testmode"* ]] ; then
         echo "Will perform test mode only."
         CONFIG_TEST_MODE=`echo $var | cut -d '=' -f2`
@@ -81,33 +93,53 @@ fi
 echo build.sh: PATH: $PATH
 
 set_os_type
-echo "PKG_EXEC: $PKG_EXEC"
-case "$PKG_EXEC" in
-   "apt")
-        # vim-common: rocm5.5 rocr-runtime.
-        # libnuma-dev: rocm5.5 roct-thunk-interface.
-        install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
-      ;;
-   "yum")
-        install_packages cmake libstdc++-devel libpci-devel gcc g++
-      ;;
-   "yum")
-        install_packages cmake 
-      ;;
-   *)
-        echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
-    ;;    
-esac
 
-install_pip_libs CppHeaderParser
+if [[ CONFIG_BYPASS_PACKAGES_INSTALL -eq 1 ]] ; then
+    echo "Bypass installing packages..."
+else
+    echo "Installing packages..."
+    echo "PKG_EXEC: $PKG_EXEC"
+    case "$PKG_EXEC" in
+       "apt")
+            # vim-common: rocm5.5 rocr-runtime.
+            # libnuma-dev: rocm5.5 roct-thunk-interface.
+            install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
+          ;;
+       "yum")
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel
+          ;;
+       "yum")
+            install_packages cmake 
+          ;;
+       *)
+            echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
+        ;;    
+    esac
+    install_pip_libs CppHeaderParser
+fi
+
+CONFIG_INSTALL_PREFIX="/opt/rocm"
+
+if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+    CONFIG_INSTALL_PREFIX="$CONFIG_INSTALL_PATH"
+    echo "Installing clr into non-standard location: $CONFIG_INSTALL_PREFIX..."
+    sleep 1
+fi
+
 
 function llvm() {
     CURR_BUILD=llvm-project
     build_entry $CURR_BUILD
     pushd $CURR_BUILD
     mkdir build ; cd build
-    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release"
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    CONFIG_INSTALL_PREFIX_LLVM=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        echo "Installing llvm into non-standard location: $CONFIG_INSTALL_PATH..."
+        sleep 10
+        CONFIG_INSTALL_PREFIX_LLVM=$CONFIG_INSTALL_PATH/llvm
+    fi
+    echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM -DCMAKE_BUILD_TYPE=Release"
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -125,7 +157,7 @@ function f3 () {
     #pushd $CURR_BUILD
     pushd $COMP_OLD
     mkdir build; cd build
-    cmake -DCMAKE_PREFIX_PATH=/opt/rocm -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -198,15 +230,15 @@ function COMGR() {
 
     CURR_BUILD=ROCm-CompilerSupport
     build_entry $CURR_BUILD
-        LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
+    LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
     DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs
     COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
 
     mkdir -p "$DEVICE_LIBS/build"
     pushd "$DEVICE_LIBS/build"
     pwd
-    echo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
+
+    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
     make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     popd
@@ -359,6 +391,31 @@ function hipAMD() {
     build_exit $CURR_BIULD
 }
 
+function clr() {
+    CURR_BUILD=clr
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build ; cd build
+
+    pushd ../..
+    export HIPAMD_DIR="$(readlink -f hipamd)"
+    export HIP_DIR="$(readlink -f hip)"
+    export ROCCLR_DIR="$(readlink -f ROCclr)"
+    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
+    echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
+    popd
+
+    HIP_CLANG_PATH=$CONFIG_INSTALL_PREFIX/llvm/bin CXX=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ cmake .. \
+        -DCMAKE_CXX_COMPILER=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ \
+        -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX \
+        -DClang_DIR=$CONFIG_INSTALL_PREFIX/llvm/lib/cmake/clang/ \
+        -DCLR_BUILD_HIP=ON \
+        -DHIP_COMMON_DIR=$ROCM_SRC_FOLDER/HIP \
+        -DROCCLR_PATH=$ROCM_SRC_FOLDER/clr/rocclr \
+        -DHIPCC_BIN_DIR=$ROCM_SRC_FOLDER/HIPCC/bin 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    make -j`nproc`  | tee -a $LOG_DIR/$CURR_BUILD.log
+    build_exit $CURR_BIULD 
+}
 
 function f1() {
     i=$1
@@ -494,10 +551,12 @@ function f5() {
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     # this no longer working.
 
+    CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
+
     if [[ $CURR_BUILD == "rocRAND" ]] ; then
-        ./install -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     else
-        ./install.sh -idt $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install.sh -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
@@ -582,7 +641,7 @@ function ROCR_Runtime() {
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i/src
     mkdir build; cd build
-    cmake -DIMAGE_SUPPORT=OFF .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DIMAGE_SUPPORT=OFF .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
