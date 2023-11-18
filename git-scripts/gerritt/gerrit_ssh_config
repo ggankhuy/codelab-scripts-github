@@ -9,7 +9,8 @@ Host gerrit*
     Port 29418
  
 Host gerritgit
-    HostName sclgit.amd.com
+#   HostName sclgit.amd.com
+    HostName ssh://gerritgitmaster/
  
 Host gerritgitmaster
     HostName gerrit-git.amd.com
