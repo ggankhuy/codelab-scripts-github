@@ -1,3 +1,4 @@
+set -x 
 SSH_CONFIG=~/.ssh/config
 GIT_CONFIG=~/.gitconfig
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -15,7 +16,7 @@ fi
 cp gerritt/gerrit_git_config $GIT_CONFIG
 
 echo "generating 4k size ssk key, keep pressing without inputting any password or passphrase..."
-ssh-keygen -b 4096
-echo "paste it into http://gerrit-git.amd.com/settings/"
-cat ~/.ssh/id_rsa.pub
-
+#ssh-keygen -b 4096
+ssh-keygen -t ed25519 -C 'ggankhuy@amd.com'
+cat ~/.ssh/id_ed25519.pub
+chmod 0600 ~/.ssh/config
