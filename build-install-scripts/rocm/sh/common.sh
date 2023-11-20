@@ -13,14 +13,18 @@ ERROR_ROCM_SRC_REPO_SYNC=302
 
 function print_single_bar() {
     local i
+    set +x
     for i in {1..50} ; do echo -ne "-" ; done
     echo ""
+    set -x
 }
 
 function print_double_bar() {
     local i
+    set +x
     for i in {1..50} ; do echo -ne "=" ; done
     echo ""
+    set -x
 }
 
 #   This function is also called by python code and parses its stdout, therefore
@@ -75,6 +79,7 @@ function set_os_type() {
 
 function install_packages() {
     if [[ -z $PKG_EXEC  ]] ; then echo "PKG_EXEC is not defined. Call set_os_type first!" ; return 1 ; fi
+
     for i in $@; do
         echo "installing $i..."
         case "$PKG_EXEC" in
@@ -102,7 +107,6 @@ function install_pip_libs() {
         echo "installing $i..."
         pip3 install $i
     done
-    
 }
 function install_python() {
     #Python defs.
@@ -159,6 +163,7 @@ function build_entry () {
     L_CURR_BUILD=$1
     print_double_bar | tee -a $LOG_SUMMARY
     echo "Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
+    sleep 3
     print_double_bar
 }
 
