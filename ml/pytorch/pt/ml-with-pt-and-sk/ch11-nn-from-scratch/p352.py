@@ -1,5 +1,5 @@
 #from neuralnet import NeuralNetMLP
-import neuralnet
+#import neuralnet
 import numpy as np
 from sklearn.datasets import fetch_openml
 import matplotlib.pyplot as plt
