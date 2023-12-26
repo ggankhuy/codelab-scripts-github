@@ -1,0 +1,26 @@
+/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py:135: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
+  warnings.warn(
+eager eval time 0: 1.84366943359375
+eager eval time 1: 0.0290977840423584
+eager eval time 2: 0.02616594123840332
+eager eval time 3: 0.026134262084960936
+eager eval time 4: 0.026066099166870117
+eager eval time 5: 0.026088020324707032
+eager eval time 6: 0.02601314163208008
+eager eval time 7: 0.026155864715576172
+eager eval time 8: 0.02608498191833496
+eager eval time 9: 0.026041784286499024
+~~~~~~~~~~
+compile eval time 0: 78.7353359375
+compile eval time 1: 0.7951235961914063
+compile eval time 2: 0.011172650337219238
+compile eval time 3: 0.011641450881958008
+compile eval time 4: 0.011511368751525879
+compile eval time 5: 0.011648810386657715
+compile eval time 6: 0.011683210372924805
+compile eval time 7: 0.011589289665222168
+compile eval time 8: 0.01153441047668457
+compile eval time 9: 0.011759849548339843
+~~~~~~~~~~
+(eval) eager median: 0.026111141204833984, compile median: 0.011645130634307862, speedup: 2.2422368649010798x
+~~~~~~~~~~

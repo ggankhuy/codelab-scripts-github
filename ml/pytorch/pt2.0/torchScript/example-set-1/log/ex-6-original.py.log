@@ -1,0 +1,16 @@
+/root/gg/git/codelab/gpu/ml/pytorch/pt2.0/torchScript/example-set-1/./ex-6-original.py:10: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if x.sum() > 0:
+def forward(self,
+    argument_1: Tensor) -> NoneType:
+  return None
+
+def forward(self,
+    x: Tensor,
+    h: Tensor) -> Tuple[Tensor, Tensor]:
+  dg = self.dg
+  linear = self.linear
+  _0 = (linear).forward(x, )
+  _1 = (dg).forward(_0, )
+  _2 = torch.tanh(torch.add(_0, h))
+  return (_2, _2)
+

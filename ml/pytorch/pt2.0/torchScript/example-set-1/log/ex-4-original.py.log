@@ -1,0 +1,9 @@
+MyCell(
+  (dg): MyDecisionGate()
+  (linear): Linear(in_features=4, out_features=4, bias=True)
+)
+(tensor([[0.0924, 0.0337, 0.5435, 0.9191],
+        [0.4884, 0.6277, 0.6944, 0.6613],
+        [0.5180, 0.5015, 0.8218, 0.8684]], grad_fn=<TanhBackward0>), tensor([[0.0924, 0.0337, 0.5435, 0.9191],
+        [0.4884, 0.6277, 0.6944, 0.6613],
+        [0.5180, 0.5015, 0.8218, 0.8684]], grad_fn=<TanhBackward0>))

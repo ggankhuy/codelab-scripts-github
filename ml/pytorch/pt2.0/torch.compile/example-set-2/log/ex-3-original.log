@@ -1,0 +1,5 @@
+python3 ex-3-original.py
+eager: 26.067568359375
+/usr/local/lib/python3.10/dist-packages/torch/_inductor/compile_fx.py:135: UserWarning: TensorFloat32 tensor cores for float32 matrix multiplication available but not enabled. Consider setting `torch.set_float32_matmul_precision('high')` for better performance.
+  warnings.warn(
+compile: 106.417234375

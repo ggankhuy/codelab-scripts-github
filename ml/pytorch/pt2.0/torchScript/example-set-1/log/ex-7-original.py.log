@@ -1,0 +1,17 @@
+def forward(self,
+    x: Tensor) -> Tensor:
+  if bool(torch.gt(torch.sum(x), 0)):
+    _0 = x
+  else:
+    _0 = torch.neg(x)
+  return _0
+
+def forward(self,
+    x: Tensor,
+    h: Tensor) -> Tuple[Tensor, Tensor]:
+  dg = self.dg
+  linear = self.linear
+  _0 = torch.add((dg).forward((linear).forward(x, ), ), h)
+  new_h = torch.tanh(_0)
+  return (new_h, new_h)
+
