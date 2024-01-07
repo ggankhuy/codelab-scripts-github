@@ -1,0 +1,3 @@
+[submodule "cuda/fork-cudalibrarysamples"]
+	path = cuda/fork-cudalibrarysamples
+	url = https://gitlab.com/forked-projects1405239/fork-cudalibrarysamples.git
