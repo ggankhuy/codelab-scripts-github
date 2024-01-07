@@ -20,7 +20,7 @@ ALL_LDFLAGS += $(addprefix -Xlinker ,$(LDFLAGS))
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 LIBRARIES += -lcublas
-FILENAME=cublas-example1
+#FILENAME=cublas-example
 FILENAME=rnn_example
 # Target rules
 all: build
