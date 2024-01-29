@@ -66,8 +66,9 @@ if [[ ! -z $image ]] ; then
             --name=$name $image 
     elif [[ $gpu == "nvidia" ]] || [[ $gpu == "cuda" ]] ; then
         echo "nvidia selected, docker run command constructed: "
-        echo sudo docker run -it --gpus=all --runtime=nvidia --network=host --name=$name  -v vol-$name:/root/hostdir -w /root/ $image
-        sudo docker run -it --gpus=all --runtime=nvidia --network=host --name=$name --privileged -v vol-$name:/root/hostdir -w /root/ $image
+        #echo sudo docker run -it --gpus all --runtime=nvidia --network=host --name=$name  -v vol-$name:/root/extdir -w /root/ $image
+        echo sudo docker run -it --device /dev/nvidia0 --device /dev/nvidiactl --device /dev/nvidia-uvm  --network=host --name=$name --privileged -v vol-$name:/root/extdir -w /root/ $image
+        sudo docker run -it --device /dev/nvidia0 --device /dev/nvidiactl --device /dev/nvidia-uvm  --network=host --name=$name --privileged -v vol-$name:/root/extdir -w /root/ $image
     else
         echo "Error: Unknown gpu specified: $gpu"
         exit 1
