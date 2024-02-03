@@ -41,6 +41,26 @@ fi
 
 #ret=`sudo docker container list --all | grep $name | cut -d '=' -f5`
 
+OS_NAME=`cat /etc/os-release  | grep ^NAME=  | tr -s ' ' | cut -d '"' -f2`
+echo "OS_NAME: $OS_NAME"
+case "$OS_NAME" in
+   "Ubuntu")
+      echo "Ubuntu is detected..."
+      PKG_EXEC=apt
+      ;;
+   "CentOS Linux")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
+   "CentOS Stream")
+      echo "CentOS is detected..."
+      PKG_EXEC=yum
+      ;;
+   *)
+     echo "Unsupported O/S, exiting..." ; exit 1
+     ;;
+esac
+
 if [[ ! -z $image ]] ; then
     echo "Image is specified, therefore will attempt to create container..."
 
@@ -66,7 +86,23 @@ if [[ ! -z $image ]] ; then
             --name=$name $image 
     elif [[ $gpu == "nvidia" ]] || [[ $gpu == "cuda" ]] ; then
         echo "nvidia selected, docker run command constructed: "
-        sudo docker run -it --runtime=nvidia --gpus all --name=$name ubuntu
+
+        # setup nvidia docker support 
+
+        curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+            sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+        sudo yum-config-manager --enable nvidia-container-toolkit-experimental
+        sudo yum install -y nvidia-container-toolkit
+        sudo nvidia-ctk runtime configure --runtime=docker
+        sudo systemctl restart docker
+        sudo docker run -it \
+            --network=host \
+            -v vol-$name:/root/extdir \
+            -w /root/ \
+            --privileged \
+            --runtime=nvidia \
+            --gpus all \
+            --name=$name $image
     else
         echo "Error: Unknown gpu specified: $gpu"
         exit 1
