@@ -1,3 +1,6 @@
 [submodule "cuda/fork-cudalibrarysamples"]
 	path = cuda/fork-cudalibrarysamples
 	url = https://gitlab.com/forked-projects1405239/fork-cudalibrarysamples.git
+[submodule "cuda/tensor-core/fork-nvidia-code-samples"]
+	path = cuda/tensor-core/fork-nvidia-code-samples
+	url = https://gitlab.com/forked-projects1405239/fork-nvidia-code-samples.git
