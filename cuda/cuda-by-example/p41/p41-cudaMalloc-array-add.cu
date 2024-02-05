@@ -31,7 +31,14 @@ int main (void) {
 	cudaMemcpy(dev_a, a, N * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(dev_b, b, N * sizeof(int), cudaMemcpyHostToDevice);
 
-	add<<<N,1>>> (dev_a, dev_b, dev_c);
+    // generates kernel.N.1.log
+	//add<<<N,1>>> (dev_a, dev_b, dev_c);
+
+    // generates kernel.N.512.log
+	//add<<<N,512>>> (dev_a, dev_b, dev_c);
+
+    // generates kernel.N.1024.log
+	add<<<N,1024>>> (dev_a, dev_b, dev_c);
 
 	cudaMemcpy(c, dev_c, N * sizeof(int), cudaMemcpyDeviceToHost);
 
