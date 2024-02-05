@@ -4,7 +4,7 @@ echo "set tabsize 4" | sudo tee /root/.nanorc
 echo "set tabstospaces " | sudo tee -a /root/.nanorc
 
 echo "$user home nanorc: "
-sudo cat ~/.nanorc
+cat ~/.nanorc
 echo "root home nanorc: "
 sudo cat /root/.nanorc
 
@@ -33,8 +33,8 @@ case "$OS_NAME" in
 esac
 
 sudo $PKG_EXEC install git -y
-sudo git config --global credential.helper store
-sudo git config --global user.email "you@example.com"
-sudo git config --global user.name "Your Name"
-sudo cat ~/.gitconfig | sudo tee /root/.gitconfig
+git config --global credential.helper store
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+cat ~/.gitconfig | sudo tee /root/.gitconfig
 
