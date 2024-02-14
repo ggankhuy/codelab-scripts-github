@@ -4,3 +4,6 @@
 [submodule "cuda/tensor-core/fork-nvidia-code-samples"]
 	path = cuda/tensor-core/fork-nvidia-code-samples
 	url = https://gitlab.com/forked-projects1405239/fork-nvidia-code-samples.git
+[submodule "ml/tf/tf-from-scratch/1/former"]
+	path = ml/tf/tf-from-scratch/1/former
+	url = https://github.com/pbloem/former
