@@ -5,8 +5,27 @@ import torch.utils.data as data
 import math
 import copy
 
+from functools import wraps
+from datetime import datetime
+m = nn.Softmax(dim=1)
+
+CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_GPU=1
+DEBUG=0
+def print_fcn_name(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(f'{dt_string}: {func.__name__} entered...')
+        result = func(*args, **kwargs)
+        return result
+
+    return wrapper
+
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_model, num_heads):
+        print("MultiHeadAttention.init: d_model: ", d_model, "num_heads: ", num_heads)
         super(MultiHeadAttention, self).__init__()
         # Ensure that the model dimension (d_model) is divisible by the number of heads
         assert d_model % num_heads == 0, "d_model must be divisible by num_heads"
@@ -24,6 +43,7 @@ class MultiHeadAttention(nn.Module):
         
     def scaled_dot_product_attention(self, Q, K, V, mask=None):
         # Calculate attention scores
+        breakpoint()
         attn_scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
         
         # Apply mask if provided (useful for preventing attention to certain parts like padding)
@@ -38,20 +58,30 @@ class MultiHeadAttention(nn.Module):
         return output
         
     def split_heads(self, x):
+        breakpoint()
         # Reshape the input to have num_heads for multi-head attention
         batch_size, seq_length, d_model = x.size()
         return x.view(batch_size, seq_length, self.num_heads, self.d_k).transpose(1, 2)
         
     def combine_heads(self, x):
+        breakpoint()
         # Combine the multiple heads back to original shape
         batch_size, _, seq_length, d_k = x.size()
         return x.transpose(1, 2).contiguous().view(batch_size, seq_length, self.d_model)
-        
+
+    @print_fcn_name        
     def forward(self, Q, K, V, mask=None):
+        breakpoint()
         # Apply linear transformations and split heads
-        Q = self.split_heads(self.W_q(Q))
-        K = self.split_heads(self.W_k(K))
-        V = self.split_heads(self.W_v(V))
+        #Q = self.split_heads(self.W_q(Q))
+        Q_interim = self.W_q(Q)
+        Q = self.split_heads(Q_interim)
+        #K = self.split_heads(self.W_k(K))
+        K_interim = self.W_k(K)
+        K = self.split_heads(K_interim)
+        #V = self.split_heads(self.W_v(V))
+        V_interim = self.W_v(V)
+        V = self.split_heads(V_interim)
         
         # Perform scaled dot-product attention
         attn_output = self.scaled_dot_product_attention(Q, K, V, mask)
@@ -96,6 +126,7 @@ class EncoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, x, mask):
+        breakpoint()
         attn_output = self.self_attn(x, x, x, mask)
         x = self.norm1(x + self.dropout(attn_output))
         ff_output = self.feed_forward(x)
@@ -114,6 +145,7 @@ class DecoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, x, enc_output, src_mask, tgt_mask):
+        breakpoint()
         attn_output = self.self_attn(x, x, x, tgt_mask)
         x = self.norm1(x + self.dropout(attn_output))
         attn_output = self.cross_attn(x, enc_output, enc_output, src_mask)
@@ -143,7 +175,9 @@ class Transformer(nn.Module):
         tgt_mask = tgt_mask & nopeak_mask
         return src_mask, tgt_mask
 
+    @print_fcn_name        
     def forward(self, src, tgt):
+        breakpoint()
         src_mask, tgt_mask = self.generate_mask(src, tgt)
         src_embedded = self.dropout(self.positional_encoding(self.encoder_embedding(src)))
         tgt_embedded = self.dropout(self.positional_encoding(self.decoder_embedding(tgt)))
@@ -173,3 +207,33 @@ transformer = Transformer(src_vocab_size, tgt_vocab_size, d_model, num_heads, nu
 # Generate random sample data
 src_data = torch.randint(1, src_vocab_size, (64, max_seq_length))  # (batch_size, seq_length)
 tgt_data = torch.randint(1, tgt_vocab_size, (64, max_seq_length))  # (batch_size, seq_length)
+
+
+criterion = nn.CrossEntropyLoss(ignore_index=0)
+optimizer = optim.Adam(transformer.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
+
+# train.
+
+transformer.train()
+
+for epoch in range(100):
+    optimizer.zero_grad()
+    output = transformer(src_data, tgt_data[:, :-1])
+    loss = criterion(output.contiguous().view(-1, tgt_vocab_size), tgt_data[:, 1:].contiguous().view(-1))
+    loss.backward()
+    optimizer.step()
+    print(f"Epoch: {epoch+1}, Loss: {loss.item()}")
+
+# eval.
+
+transformer.eval()
+
+# Generate random sample validation data
+val_src_data = torch.randint(1, src_vocab_size, (64, max_seq_length))  # (batch_size, seq_length)
+val_tgt_data = torch.randint(1, tgt_vocab_size, (64, max_seq_length))  # (batch_size, seq_length)
+
+with torch.no_grad():
+
+    val_output = transformer(val_src_data, val_tgt_data[:, :-1])
+    val_loss = criterion(val_output.contiguous().view(-1, tgt_vocab_size), val_tgt_data[:, 1:].contiguous().view(-1))
+    print(f"Validation Loss: {val_loss.item()}")
