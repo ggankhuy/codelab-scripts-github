@@ -9,9 +9,12 @@ from functools import wraps
 from datetime import datetime
 m = nn.Softmax(dim=1)
 
-CONFIG_ENABLE_PLOT=0
-CONFIG_ENABLE_GPU=1
+CONFIG_ENABLE_DBG_BP_INIT=0
+CONFIG_ENABLE_DBG_BP_RUNTIME=0
+CONFIG_ENABLE_DBG_PT_INIT=1
+CONFIG_ENABLE_DBG_PT_RUNTIME=1
 DEBUG=0
+
 def print_fcn_name(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -25,7 +28,10 @@ def print_fcn_name(func):
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_model, num_heads):
-        print("MultiHeadAttention.init: d_model: ", d_model, "num_heads: ", num_heads)
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("MultiHeadAttention.init: d_model: ", d_model, "num_heads: ", num_heads)
         super(MultiHeadAttention, self).__init__()
         # Ensure that the model dimension (d_model) is divisible by the number of heads
         assert d_model % num_heads == 0, "d_model must be divisible by num_heads"
@@ -43,7 +49,8 @@ class MultiHeadAttention(nn.Module):
         
     def scaled_dot_product_attention(self, Q, K, V, mask=None):
         # Calculate attention scores
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         attn_scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
         
         # Apply mask if provided (useful for preventing attention to certain parts like padding)
@@ -58,20 +65,23 @@ class MultiHeadAttention(nn.Module):
         return output
         
     def split_heads(self, x):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         # Reshape the input to have num_heads for multi-head attention
         batch_size, seq_length, d_model = x.size()
         return x.view(batch_size, seq_length, self.num_heads, self.d_k).transpose(1, 2)
         
     def combine_heads(self, x):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         # Combine the multiple heads back to original shape
         batch_size, _, seq_length, d_k = x.size()
         return x.transpose(1, 2).contiguous().view(batch_size, seq_length, self.d_model)
 
     @print_fcn_name        
     def forward(self, Q, K, V, mask=None):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         # Apply linear transformations and split heads
         #Q = self.split_heads(self.W_q(Q))
         Q_interim = self.W_q(Q)
@@ -92,6 +102,10 @@ class MultiHeadAttention(nn.Module):
 
 class PositionWiseFeedForward(nn.Module):
     def __init__(self, d_model, d_ff):
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("PositionWiseFeedForward.init: d_model: ", d_model, "d_ff: ", d_ff)
         super(PositionWiseFeedForward, self).__init__()
         self.fc1 = nn.Linear(d_model, d_ff)
         self.fc2 = nn.Linear(d_ff, d_model)
@@ -102,6 +116,10 @@ class PositionWiseFeedForward(nn.Module):
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, max_seq_length):
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("PositionalEncoding.init: d_model: ", d_model, "max_seq_length: ", max_seq_length)
         super(PositionalEncoding, self).__init__()
         
         pe = torch.zeros(max_seq_length, d_model)
@@ -118,6 +136,10 @@ class PositionalEncoding(nn.Module):
 
 class EncoderLayer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout):
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("EncoderLayer.init: d_model: ", d_model, "num_heads: ", num_heads, "d_ff: ", d_ff, ", dropout: ", dropout)
         super(EncoderLayer, self).__init__()
         self.self_attn = MultiHeadAttention(d_model, num_heads)
         self.feed_forward = PositionWiseFeedForward(d_model, d_ff)
@@ -126,7 +148,8 @@ class EncoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, x, mask):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         attn_output = self.self_attn(x, x, x, mask)
         x = self.norm1(x + self.dropout(attn_output))
         ff_output = self.feed_forward(x)
@@ -135,6 +158,10 @@ class EncoderLayer(nn.Module):
 
 class DecoderLayer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout):
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("EncoderLayer.init: d_model: ", d_model, "num_heads: ", num_heads, "d_ff: ", d_ff, ", dropout: ", dropout)
         super(DecoderLayer, self).__init__()
         self.self_attn = MultiHeadAttention(d_model, num_heads)
         self.cross_attn = MultiHeadAttention(d_model, num_heads)
@@ -145,7 +172,8 @@ class DecoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, x, enc_output, src_mask, tgt_mask):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         attn_output = self.self_attn(x, x, x, tgt_mask)
         x = self.norm1(x + self.dropout(attn_output))
         attn_output = self.cross_attn(x, enc_output, enc_output, src_mask)
@@ -156,6 +184,11 @@ class DecoderLayer(nn.Module):
 
 class Transformer(nn.Module):
     def __init__(self, src_vocab_size, tgt_vocab_size, d_model, num_heads, num_layers, d_ff, max_seq_length, dropout):
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
+        if CONFIG_ENABLE_DBG_PT_INIT:
+            print("Transformer.init: src/tgt_vocab_size: ", src_vocab_size, "/", tgt_vocab_size, ", d_model: ", d_model, ", num_heads: ", num_heads, "num_layers: ", num_layers, ", d_ff: ", d_ff, \
+            ", max_seq_length: ", max_seq_length, ", dropout: ", dropout)
         super(Transformer, self).__init__()
         self.encoder_embedding = nn.Embedding(src_vocab_size, d_model)
         self.decoder_embedding = nn.Embedding(tgt_vocab_size, d_model)
@@ -175,9 +208,10 @@ class Transformer(nn.Module):
         tgt_mask = tgt_mask & nopeak_mask
         return src_mask, tgt_mask
 
-    @print_fcn_name        
+#   @print_fcn_name        
     def forward(self, src, tgt):
-        breakpoint()
+        if CONFIG_ENABLE_DBG_BP_RUNTIME:
+            breakpoint()
         src_mask, tgt_mask = self.generate_mask(src, tgt)
         src_embedded = self.dropout(self.positional_encoding(self.encoder_embedding(src)))
         tgt_embedded = self.dropout(self.positional_encoding(self.decoder_embedding(tgt)))
