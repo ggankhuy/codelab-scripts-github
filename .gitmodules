@@ -7,3 +7,6 @@
 [submodule "ml/tf/tf-from-scratch/1/former"]
 	path = ml/tf/tf-from-scratch/1/former
 	url = https://github.com/pbloem/former
+[submodule "ml/tf/tf-from-scratch/3/PyTorchStepByStep"]
+	path = ml/tf/tf-from-scratch/3/PyTorchStepByStep
+	url = https://github.com/dvgodoy/PyTorchStepByStep.git
