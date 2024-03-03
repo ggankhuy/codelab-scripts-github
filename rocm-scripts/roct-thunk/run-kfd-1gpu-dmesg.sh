@@ -7,7 +7,9 @@ SINGLE_LINE="----------------------------------------------------"
 DEBUG=0
 TEST_MODE=0
 LOG_SUMMARY=$LOG_FOLDER/summary.log
+LOG_SUMMARY_CSV=$LOG_FOLDER/summary.csv
 echo -ne "" > $LOG_SUMMARY
+echo -ne "" > $LOG_SUMMARY_CSV
 #t1=$SECONDS
 
 for i in {2..3} ; do
@@ -24,13 +26,15 @@ for i in {2..3} ; do
         dmesg --clear
         LOG_FOLDER_CURR=$LOG_FOLDER/gpu$i
         mkdir -p $LOG_FOLDER_CURR
-        LOG_FILE=$LOG_FOLDER_CURR/$counter-$testgroup$line.test.log
-        LOG_FILE_DMESG=$LOG_FOLDER_CURR/$counter-$testgroup$line.dmesg.log
+        LOG_FILE=$LOG_FOLDER_CURR/$counter.$testgroup$line.test.log
+        LOG_FILE_DMESG=$LOG_FOLDER_CURR/$counter.$testgroup$line.dmesg.log
         echo $LOG_FILE | grep '\.\.'
         if [[ $? -eq 0 ]] ; then
             echo "setting testgroup to : $line"
             testgroup=$line            
         else
+            LOG_FILE=$LOG_FOLDER_CURR/$counter.$testgroup$line.test.log
+            LOG_FILE_DMESG=$LOG_FOLDER_CURR/$counter.$testgroup$line.dmesg.log
             echo LOG_FILE: $LOG_FILE
             echo LOG_FILE_DMESG: $LOG_FILE_DMESG
             bypass_flag=0
@@ -68,9 +72,12 @@ for i in {2..3} ; do
                 dmesg | tee $LOG_FILE_DMESG
                 t2=$SECONDS
                 sudo echo "$SINGLE_LINE" | sudo tee -a $LOG_SUMMARY
-                sudo echo "$line:" | sudo tee -a $LOG_SUMMARY
-                 egrep -rn "PASSED|FAILED" $LOG_FILE | sudo tee -a $LOG_SUMMARY
-                echo "duration: $((t2-t1)) seconds" | sudo tee -a $LOG_SUMMARY
+                sudo echo "$testgroup.$line:" | sudo tee -a $LOG_SUMMARY
+                egrep -rn "PASSED|FAILED" $LOG_FILE | sudo tee -a $LOG_SUMMARY
+
+                sudo echo -ne "$testgroup,$line," | sudo tee -a $LOG_SUMMARY_CSV
+                echo -ne "$((t2-t1))," | sudo tee -a $LOG_SUMMARY_CSV
+                egrep -rn "PASSED|FAILED" $LOG_FILE | awk '{ print $2 }' | sudo tee -a $LOG_SUMMARY_CSV
             fi
         fi
         counter=$((counter+1))
