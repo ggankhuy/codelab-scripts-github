@@ -1,3 +1,4 @@
+set -x
 KFD_SCRIPT=/usr/local/bin/run_kfdtest.sh
 KFD=/usr/local/bin/kfdtest
 DATE=`date +%Y%m%d-%H-%M-%S`
@@ -77,7 +78,7 @@ for i in {2..3} ; do
 
                 sudo echo -ne "$testgroup,$line," | sudo tee -a $LOG_SUMMARY_CSV
                 echo -ne "$((t2-t1))," | sudo tee -a $LOG_SUMMARY_CSV
-                egrep -rn "PASSED|FAILED" $LOG_FILE | awk '{ print $2 }' | sudo tee -a $LOG_SUMMARY_CSV
+                egrep -rn "PASSED|FAILED" $LOG_FILE | head -1 | awk '{ print $2 }' | sudo tee -a $LOG_SUMMARY_CSV
             fi
         fi
         counter=$((counter+1))
