@@ -3,10 +3,11 @@ KFD=/usr/local/bin/kfdtest
 DATE=`date +%Y%m%d-%H-%M-%S`
 LOG_FOLDER=log/kfd/log-kfd-$DATE
 mkdir $LOG_FOLDER -p
+SINGLE_LINE="----------------------------------------------------"
 DEBUG=0
 TEST_MODE=0
-#LOG_SUMMARY=$LOG_FOLDER/summary.log
-#echo -ne "" > $LOG_SUMMARY
+LOG_SUMMARY=$LOG_FOLDER/summary.log
+echo -ne "" > $LOG_SUMMARY
 #t1=$SECONDS
 
 for i in {2..3} ; do
@@ -18,6 +19,7 @@ for i in {2..3} ; do
     do
         echo "------------------"
         echo test No: $counter. line: $line
+        t1=$SECONDS
         line=`echo $line | xargs`
         dmesg --clear
         LOG_FOLDER_CURR=$LOG_FOLDER/gpu$i
@@ -58,11 +60,17 @@ for i in {2..3} ; do
                 echo "test command:"
                 echo "$KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE"
                 sleep 1
+                t1=$SECONDS
                 if [[ $TEST_MODE == 0 ]] ; then
                     echo "Launching test..."
                     $KFD --gtest_filter=$testgroup$line 2>&1 | tee $LOG_FILE
                 fi
                 dmesg | tee $LOG_FILE_DMESG
+                t2=$SECONDS
+                sudo echo "$SINGLE_LINE" | sudo tee -a $LOG_SUMMARY
+                sudo echo "$line:" | sudo tee -a $LOG_SUMMARY
+                 egrep -rn "PASSED|FAILED" $LOG_FILE | sudo tee -a $LOG_SUMMARY
+                echo "duration: $((t2-t1)) seconds" | sudo tee -a $LOG_SUMMARY
             fi
         fi
         counter=$((counter+1))
