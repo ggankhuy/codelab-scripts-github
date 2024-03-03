@@ -1,4 +1,4 @@
-set -x
+#set -x
 KFD_SCRIPT=/usr/local/bin/run_kfdtest.sh
 KFD=/usr/local/bin/kfdtest
 DATE=`date +%Y%m%d-%H-%M-%S`
