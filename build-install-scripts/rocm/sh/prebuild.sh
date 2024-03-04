@@ -29,6 +29,7 @@ ERROR_CODE_VERSION=102
 
 LOG_DIR=/log/rocmbuild/
 LOG_SUMMARY=$LOG_DIR/build-summary.log
+LOG_SUMMARY_CSV=$LOG_DIR/build-summary.csv
 LOG_SUMMARY_L2=$LOG_DIR/build-summary-L2.log
 mkdir $LOG_DIR -p
 
