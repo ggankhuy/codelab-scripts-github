@@ -189,6 +189,7 @@ LOG_SUMMARY_L2=LOG_DIR + "/build-summary-l2.log"
 LOG_SUMMARY_CSV=LOG_DIR + "/build-summary.csv"
 os.popen("rm -rf " + str(LOG_DIR)).read()
 os.popen("echo -ne '' | tee " + str(LOG_SUMMARY))
+os.popen("echo -ne 'init' | tee " + str(LOG_SUMMARY_CSV))
 os.popen("echo -ne '' | tee " + str(LOG_SUMMARY_L2))
 
 if re.search("ubuntu", osname, re.I):
