@@ -163,13 +163,19 @@ function build_entry () {
     L_CURR_BUILD=$1
     print_double_bar | tee -a $LOG_SUMMARY
     echo "Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
+    echo -ne "$L_CURR_BUILD," | tee -a $LOG_SUMMARY_CSV
     sleep 3
     print_double_bar
 }
 
 function build_exit() {
     t2=$SECONDS
+    L_BUILD_ENTRY=$1
+    L_BUILD_RESULT=$2
+    if [[ -z $L_BUILD_RESULT  ]] ; then L_BUILD_RESULT="UNKNOWN" ; fi
     echo "Build took $((t2-t1)) seconds" 2>&1 | tee -a $LOG_SUMMARY
+    echo -ne "$((t2-t1))," | tee -a $LOG_SUMMARY_CSV
+    echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV
 }
 
 function setup_root_rocm_softlink () {
