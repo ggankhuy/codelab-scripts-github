@@ -1,4 +1,5 @@
 set +x
+sudo systemctl start docker
 
 DEFAULT_GPU="amd"
 
