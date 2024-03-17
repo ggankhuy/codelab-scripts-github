@@ -1,5 +1,6 @@
 set +x
-sudo systemctl start docker
+sudo modprobe amdgpu && sudo systemctl start docker
+if [[ $? -ne 0 ]] ; then echo "either driver failed to load or docker service failed to start. Check logs" ; exit 1 ;  fi
 
 DEFAULT_GPU="amd"
 
