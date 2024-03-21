@@ -5,8 +5,8 @@
 if [[ -z $1 ]] ; then
     echo "Usage: "
     echo "$0 --ga --version=6.0 / use ga version of rocm version 6.0"
-    echo "$0 --int --mainline --build=13435 --rocm=6.1 --amdgpu=1720120 / use internal version of rocm"
-    echo "$0 --int --branch --build=91 --version=6.0 / use internal version of rocm"
+    echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
+    echo "$0 --int --branch --rocm-build=91 --rocm-version=6.0 / use internal version of rocm"
 
     exit 0
 fi
@@ -27,8 +27,8 @@ do
     if [[ $var == *"--int"* ]]  ; then
         p_int=1
     fi
-    if [[ $var == *"--version="* ]]  ; then
-        p_version=`echo $var | cut -d '=' -f2`
+    if [[ $var == *"--rocm-ver="* ]]  ; then
+        p_rocm_version=`echo $var | cut -d '=' -f2`
     fi
     if [[ $var == *"--mainline"* ]]  ; then
         p_mainline=1
@@ -36,16 +36,16 @@ do
     if [[ $var == *"--branch"* ]]  ; then
         p_branch=1
     fi
-    if [[ $var == *"--build="* ]]  ; then
-        p_build=`echo $var | cut -d '=' -f2`
+    if [[ $var == *"--rocm-build="* ]]  ; then
+        p_rocm_build=`echo $var | cut -d '=' -f2`
     fi
-    if [[ $var == *"--amdgpu="* ]]  ; then
-        p_amdgpu=`echo $var | cut -d '=' -f2`
+    if [[ $var == *"--amdgpu-build="* ]]  ; then
+        p_amdgpu_build=`echo $var | cut -d '=' -f2`
     fi
 done
 
-rocm_ver=$p_version
-rocm_build_no=$p_build
+rocm_ver=$p_rocm_version
+rocm_build_no=$p_rocm_build
 rhel_ver=9.2
 
 if [[ ! -z $p_ga ]] ; then
@@ -53,8 +53,8 @@ if [[ ! -z $p_ga ]] ; then
 fi
 
 if [[ ! -z $p_int ]] ; then
-    #url="http://mkmartifactory.amd.com/artifactory/amdgpu-rpm-local/rhel/$rhel_ver/builds/$p_amdgpu/x86_64/a/"
-    url="http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/amdgpu-install-internal-$rocm_ver_9-1.noarch.rpm"
+    #url="http://mkmartifactory.amd.com/artifactory/amdgpu-rpm-local/rhel/$rhel_ver/builds/$p_amdgpu_build/x86_64/a/"
+    url='http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/amdgpu-install-internal-$rocm_ver_9-1.noarch.rpm'
 fi
 
 pushd ~/extdir/gg/wget 
@@ -68,7 +68,7 @@ echo "$rhel_ver" > /etc/dnf/vars/amdgpudistro
 if [[ ! -z $p_int ]] ; then
     if [[ ! -z $p_mainline ]] ;  then
 	echo ""
-        #amdgpu-repo --amdgpu-build=$p_amdgpu --rocm-build=compute-rocm-dkms-no-npi-hipclang/$rocm_build_no
+        #amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-dkms-no-npi-hipclang/$rocm_build_no
         #url="http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-rhel-9.x/compute-rocm-dkms-no-npi-hipclang-$rocm_build_no/"
     fi
     if [[ ! -z $p_branch ]] ; then 
