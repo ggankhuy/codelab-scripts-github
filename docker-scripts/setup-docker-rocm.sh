@@ -1,6 +1,9 @@
 # Use this script to install ROCm onto Centos 9 stream docker container.
 # Currently only RHEL9.2 version is supported.
 # All other configuration will likely to cause fail or unpredictable result.
+# Parameter conflicts are not checked. Usage menu has most 3 commont usage: ga, internal mainline, internal release along with 
+# combination of parameters needed. Any other combination of parameters are currently untested and could fail or cause unpredictable
+# result.
 
 if [[ -z $1 ]] ; then
     echo "Usage: "
