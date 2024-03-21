@@ -4,9 +4,9 @@
 
 if [[ -z $1 ]] ; then
     echo "Usage: "
-    echo "$0 --ga --version=6.0 / use ga version of rocm version 6.0"
+    echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
     echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
-    echo "$0 --int --branch --rocm-build=91 --rocm-version=6.0 / use internal version of rocm"
+    echo "$0 --int --branch --rocm-build=91 --rocm-ver=6.0 / use internal version of rocm"
 
     exit 0
 fi
