@@ -60,6 +60,9 @@ if [[ ! -z $p_int ]] ; then
     url='http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/amdgpu-install-internal-$rocm_ver_9-1.noarch.rpm'
 fi
 
+yum remove rocm amdgpu -y   
+amdgpu-install --uninstall -y
+
 pushd ~/extdir/gg/wget 
 wget --mirror -L -np -nH -c -nv --cut-dirs=6 -A "*.rpm" -P ./ $url
 #yum install ./amdgpu-install*.rpm -y
