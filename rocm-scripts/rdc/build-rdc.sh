@@ -11,7 +11,10 @@ cd build
 rm -rf ./*
 
 # default installation location is /opt/rocm, specify with -DROCM_DIR or -DCMAKE_INSTALL_PREFIX
+CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" ..
 
 #cmake -B build -DGRPC_ROOT="$GRPC_ROOT" -DBUILD_RVS=ON ..
-cmake  -DGRPC_ROOT="$GRPC_ROOT" -DBUILD_STANDALONE=off -DBUILD_RVS=ON .. && make -j $(nproc) install
+#cmake  -DGRPC_ROOT="$GRPC_ROOT" -DBUILD_STANDALONE=off -DBUILD_RVS=Off .. 
+
+if [[ -z $? ]] ; then make -j $(nproc) install ; fi
 popd
