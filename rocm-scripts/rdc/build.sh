@@ -1,6 +1,10 @@
+set -x 
+#centos : gcrp part working.
+#ubuntu: in test.
+apt install doxygen  libcap-dev
 
-git clone -b v1.61.0 https://github.com/grpc/grpc --depth=1 --shallow-submodules --recurse-submodules
-cd grpc
+#git clone -b v1.61.0 https://github.com/grpc/grpc --depth=1 --shallow-submodules --recurse-submodules
+pushd  grpc
 export GRPC_ROOT=/opt/grpc
 cmake -B build \
     -DgRPC_INSTALL=ON \
@@ -12,11 +16,12 @@ cmake -B build \
 make -C build -j $(nproc)
 sudo make -C build install
 echo "$GRPC_ROOT" | sudo tee /etc/ld.so.conf.d/grpc.conf
-
+popd
 git clone https://github.com/ROCm/rdc
-cd rdc
+pushd rdc
 mkdir -p build
 # default installation location is /opt/rocm, specify with -DROCM_DIR or -DCMAKE_INSTALL_PREFIX
 cmake -B build -DGRPC_ROOT="$GRPC_ROOT"
 make -C build -j $(nproc)
 make -C build install
+popd
