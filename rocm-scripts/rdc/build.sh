@@ -6,10 +6,10 @@ OPTION_CLEAN_BUILD=0
 set -x 
 #centos : gcrp part working.
 #ubuntu: in test.
-apt install doxygen  libcap-dev
 
 apt install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl
-apt install -y libyaml-cpp-dev libabsl-dev
+apt install -y libyaml-cpp-dev libabsl-dev doxygen libcap-dev
+apt install rocm-validation-suite -y
 
 export GRPC_ROOT=/opt/grpc
 export GRPC_PROTOC_ROOT=/opt/grpc
@@ -45,7 +45,7 @@ cd build
 if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; then rm -rf build ; fi
 
 CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ \
-cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON ..
+cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON -DCMAKE_PREFIX_PATH=/opt/rocm-6.1.0-13435/lib/cmake/rvs/ ..
 
 # other build cmake generator param options:
 #-DGRPC_ROOT="$GRPC_PROTOC_ROOT" ..
