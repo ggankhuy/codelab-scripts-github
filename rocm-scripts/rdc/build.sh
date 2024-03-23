@@ -20,7 +20,7 @@ fi
 
 pushd  grpc
 
-if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; rm -rf build ; fi
+if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; then rm -rf build ; fi
 
 cmake -B build \
     -DgRPC_INSTALL=ON \
@@ -42,7 +42,7 @@ pwd
 mkdir -p build
 cd build
 
-if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; rm -rf build ; fi
+if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; then rm -rf build ; fi
 
 CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ \
 cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON ..
