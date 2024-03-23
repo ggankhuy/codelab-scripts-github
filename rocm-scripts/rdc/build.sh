@@ -1,6 +1,8 @@
 # this script just combines build-rdc.sh and build-grpc.sh in this same folder.
 # those 2 can be removed once this one known to work.
 
+OPTION_CLEAN_BUILD=0
+
 set -x 
 #centos : gcrp part working.
 #ubuntu: in test.
@@ -17,7 +19,9 @@ if [[ ! -d grpc ]] ; then
 fi
 
 pushd  grpc
-rm -rf build
+
+if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; rm -rf build ; fi
+
 cmake -B build \
     -DgRPC_INSTALL=ON \
     -DgRPC_BUILD_TESTS=ON \
@@ -37,7 +41,8 @@ pushd rdc
 pwd
 mkdir -p build
 cd build
-rm -rf ./*
+
+if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; rm -rf build ; fi
 
 CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ \
 cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON ..
