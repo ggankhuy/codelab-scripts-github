@@ -1,7 +1,8 @@
 # this script just combines build-rdc.sh and build-grpc.sh in this same folder.
 # those 2 can be removed once this one known to work.
 
-OPTION_CLEAN_BUILD=0
+OPTION_CLEAN_BUILD_GRPC=0
+OPTION_CLEAN_BUILD_RDC=1
 
 set -x 
 #centos : gcrp part working.
@@ -20,7 +21,7 @@ fi
 
 pushd  grpc
 
-if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; then rm -rf build ; fi
+if [[ $OPTION_CLEAN_BUILD_GRPC -eq 1 ]] ; then rm -rf build ; fi
 
 cmake -B build \
     -DgRPC_INSTALL=ON \
@@ -28,7 +29,9 @@ cmake -B build \
     -DBUILD_SHARED_LIBS=ON \
     -DCMAKE_INSTALL_PREFIX="$GRPC_ROOT" \
     -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_PREFIX=/opt/rocm/rdc \
     -DCMAKE_BUILD_TYPE=Release
+
 make -C build -j $(nproc)
 sudo make -C build install
 echo "$GRPC_ROOT" | sudo tee /etc/ld.so.conf.d/grpc.conf
@@ -42,7 +45,7 @@ pwd
 mkdir -p build
 cd build
 
-if [[ $OPTION_CLEAN_BUILD -eq 1 ]] ; then rm -rf build ; fi
+if [[ $OPTION_CLEAN_BUILD_RDC -eq 1 ]] ; then rm -rf build ; fi
 
 CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ \
 cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON -DCMAKE_PREFIX_PATH=/opt/rocm-6.1.0-13435/lib/cmake/rvs/ ..
