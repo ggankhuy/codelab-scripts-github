@@ -54,7 +54,7 @@ cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON -DCMAK
 #-DGRPC_ROOT="$GRPC_PROTOC_ROOT" ..
 #-DBUILD_STANDALONE=off 
 
-make -j$(nproc)
+make -j$(nproc) install
 
 RDC_LIB_DIR=/opt/rocm/rdc/lib
 GRPC_LIB_DIR=/opt/grpc/lib
