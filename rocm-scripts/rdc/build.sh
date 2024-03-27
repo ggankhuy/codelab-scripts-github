@@ -37,6 +37,9 @@ sudo make -C build install
 echo "$GRPC_ROOT" | sudo tee /etc/ld.so.conf.d/grpc.conf
 popd
 
+echo "==============="
+echo "Building rdc..."
+
 if [[ ! -z rdc ]] ; then
     git clone https://github.com/ROCm/rdc
 fi
@@ -48,7 +51,12 @@ cd build
 if [[ $OPTION_CLEAN_BUILD_RDC -eq 1 ]] ; then rm -rf build ; fi
 
 CMAKE_PREFIX_PATH=/root/extdir/gg/git/codelab-scripts/rocm-scripts/rdc/grpc/build/third_party/protobuf/cmake/protobuf/ \
-cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" -DBUILD_RVS=ON -DCMAKE_PREFIX_PATH=/opt/rocm-6.1.0-13435/lib/cmake/rvs/ ..
+cmake \
+    -DROCM_DIR=/opt/rocm \
+    -DGRPC_ROOT="$GRPC_PROTOC_ROOT" \
+    -DBUILD_RVS=ON \
+    -DCPACK_GENERATOR=DEB \
+    -DCMAKE_PREFIX_PATH=/opt/rocm/lib/cmake/rvs/ ..
 
 # other build cmake generator param options:
 #-DGRPC_ROOT="$GRPC_PROTOC_ROOT" ..
