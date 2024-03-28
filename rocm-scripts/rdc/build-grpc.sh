@@ -1,9 +1,11 @@
 set -x 
+OPTION_CLEAN_BUILD_GRPC=0
+
+if [[ $OPTION_CLEAN_BUILD_GRPC -eq 1 ]] ; then rm -rf build ; fi
+
 #centos : gcrp part working.
 #ubuntu: in test.
-apt install doxygen  libcap-dev
-build_grpc=0
-build_rdc=1
+apt install doxygen  libcap-dev -y
 
 if [[ ! -d grpc ]] ; then 
     git clone -b v1.61.0 https://github.com/grpc/grpc --depth=1 --shallow-submodules --recurse-submodules
