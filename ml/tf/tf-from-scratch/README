@@ -1,0 +1,7 @@
+possible study materials:
+*  https://github.com/pbloem/former -> https://peterbloem.nl/blog/transformers -> poorly maintained, does not run: python experiments/classify.py
+***+  https://www.datacamp.com/tutorial/building-a-transformer-with-py-torch
+***  https://towardsdatascience.com/build-your-own-transformer-from-scratch-using-pytorch-84c850470dcb
+***  https://medium.com/@hhpatil001/transformers-from-scratch-in-simple-python-part-i-b290760c1040 (incomplete, 2nd part pending).
+
+
