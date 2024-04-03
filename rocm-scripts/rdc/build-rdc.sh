@@ -2,7 +2,7 @@ set -x
 
 OPTION_BUILD_RVS_SUPPORT=1
 OPTION_CLEAN_BUILD_RDC=1
-OPTION_CREATE_PKG=1
+OPTION_CREATE_PKG=0
 GRPC_PROTOC_ROOT=/opt/grpc
 
 apt install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl
