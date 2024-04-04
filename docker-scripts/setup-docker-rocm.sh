@@ -18,6 +18,7 @@ dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled
 cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
 set -x 
+DKMS=1
 
 for var in "$@"
 do
@@ -59,10 +60,17 @@ if [[ ! -z $p_int ]] ; then
     url='http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/amdgpu-install-internal-$rocm_ver_9-1.noarch.rpm'
 fi
 
-for i in rocm amdgpu ; do yum repository-packages $i remove -y ; done
+for i in rocm amdgpu ; do 
+    yum repository-packages $i remove -y ; 
+    rm -rf /etc/yum.repos.d/$i*.repo
+done
 # this apparently not working, try using above.
 #yum remove rocm amdgpu -y   
 amdgpu-install --uninstall -y
+
+for i in amdgpu-install amdgpu-install-internal ; do 
+    yum remove $i -y
+done
 
 mkdir -p /$USER/extdir/gg/wget
 pushd /$USER/extdir/gg/wget 
@@ -87,8 +95,11 @@ if [[ ! -z $p_int ]] ; then
     fi
 fi
 
-amdgpu-install --usecase=rocm --no-dkms -y
-
+if [[ $DKMS == 1 ]] ; then 
+    amdgpu-install --usecase=rocm -y
+else
+    amdgpu-install --usecase=rocm --no-dkms -y
+fi
 
 
 
