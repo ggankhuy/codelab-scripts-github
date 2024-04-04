@@ -4,25 +4,31 @@
 # Parameter conflicts are not checked. Usage menu has most 3 commont usage: ga, internal mainline, internal release along with 
 # combination of parameters needed. Any other combination of parameters are currently untested and could fail or cause unpredictable
 # result.
-if [[ -z $1 ]] ; then
+set -x
+DKMS=1
+
+function dispHelp() {
     echo "Usage: "
     echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
     echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
     echo "$0 --int --branch --rocm-build=91 --rocm-ver=6.0 / use internal version of rocm"
-
     exit 0
+}
+
+if [[ -z $1 ]] ; then
+    dispHelp
 fi
 
 yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
 dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
 cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
-set -x 
-DKMS=1
-
 for var in "$@"
 do
     echo var: $var
+    if [[ $var == "--help=" ]]  ; then
+        dispHelp
+    fi
 
     if [[ $var == *"--ga"* ]]  ; then
         p_ga=1
@@ -74,6 +80,7 @@ done
 
 mkdir -p /$USER/extdir/gg/wget
 pushd /$USER/extdir/gg/wget 
+rm -rf ./amdgpu-install*
 wget --mirror -L -np -nH -c -nv --cut-dirs=6 -A "*.rpm" -P ./ $url
 #yum install ./amdgpu-install*.rpm -y
 amdgpu_installer_rpm_path=`find . -name "amdgpu-install*" | head -1`
