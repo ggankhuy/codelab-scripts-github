@@ -4,7 +4,6 @@
 # Parameter conflicts are not checked. Usage menu has most 3 commont usage: ga, internal mainline, internal release along with 
 # combination of parameters needed. Any other combination of parameters are currently untested and could fail or cause unpredictable
 # result.
-
 if [[ -z $1 ]] ; then
     echo "Usage: "
     echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
@@ -16,7 +15,7 @@ fi
 
 yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
 dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
-cd ~/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> ~/.bashrc
+cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
 set -x 
 
@@ -60,13 +59,17 @@ if [[ ! -z $p_int ]] ; then
     url='http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/amdgpu-install-internal-$rocm_ver_9-1.noarch.rpm'
 fi
 
-yum remove rocm amdgpu -y   
+for i in rocm amdgpu ; do yum repository-packages $i remove -y ; done
+# this apparently not working, try using above.
+#yum remove rocm amdgpu -y   
 amdgpu-install --uninstall -y
 
-pushd ~/extdir/gg/wget 
+mkdir -p /$USER/extdir/gg/wget
+pushd /$USER/extdir/gg/wget 
 wget --mirror -L -np -nH -c -nv --cut-dirs=6 -A "*.rpm" -P ./ $url
 #yum install ./amdgpu-install*.rpm -y
 amdgpu_installer_rpm_path=`find . -name "amdgpu-install*" | head -1`
+#if [[ ! -z $? ]] ; then exit 1; fi
 yum install $amdgpu_installer_rpm_path  -y
 popd
 echo "$rhel_ver" > /etc/dnf/vars/amdgpudistro
