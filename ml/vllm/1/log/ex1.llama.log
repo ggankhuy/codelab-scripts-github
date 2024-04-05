@@ -1,0 +1,58 @@
+Traceback (most recent call last):
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/meta-llama/Llama-2-70b-hf/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/transformers/utils/hub.py", line 389, in cached_file
+    resolved_file = hf_hub_download(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 286, in hf_raise_for_status
+    raise GatedRepoError(message, response) from e
+huggingface_hub.utils._errors.GatedRepoError: 401 Client Error. (Request ID: Root=1-66101f04-2f32e6586bc22b9874c66765;b895b677-871c-4193-9c4f-71e15c4a4b0f)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-70b-hf/resolve/main/config.json.
+Repo model meta-llama/Llama-2-70b-hf is gated. You must be authenticated to access it.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/git/codelab/gpu/ml/vllm/1/ex1.py", line 11, in <module>
+    llm=LLM(model="meta-llama/Llama-2-70b-hf")
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/vllm-0.2.4+rocm573-py3.10-linux-x86_64.egg/vllm/entrypoints/llm.py", line 93, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(engine_args)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/vllm-0.2.4+rocm573-py3.10-linux-x86_64.egg/vllm/engine/llm_engine.py", line 240, in from_engine_args
+    engine_configs = engine_args.create_engine_configs()
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/vllm-0.2.4+rocm573-py3.10-linux-x86_64.egg/vllm/engine/arg_utils.py", line 198, in create_engine_configs
+    model_config = ModelConfig(self.model, self.tokenizer,
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/vllm-0.2.4+rocm573-py3.10-linux-x86_64.egg/vllm/config.py", line 91, in __init__
+    self.hf_config = get_config(self.model, trust_remote_code, revision)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/vllm-0.2.4+rocm573-py3.10-linux-x86_64.egg/vllm/transformers_utils/config.py", line 23, in get_config
+    config = AutoConfig.from_pretrained(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1082, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/transformers/configuration_utils.py", line 644, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/transformers/configuration_utils.py", line 699, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/opt/conda/envs/py_3.10/lib/python3.10/site-packages/transformers/utils/hub.py", line 404, in cached_file
+    raise EnvironmentError(
+OSError: You are trying to access a gated repo.
+Make sure to request access at https://huggingface.co/meta-llama/Llama-2-70b-hf and pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`.
