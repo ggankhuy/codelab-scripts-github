@@ -5,6 +5,7 @@
 # combination of parameters needed. Any other combination of parameters are currently untested and could fail or cause unpredictable
 # result.
 
+
 printHelp() {
     echo "Usage: parameters:"
     echo "Note that currently there is not compatility check between different parameters. It is up to user to provide"
@@ -29,23 +30,7 @@ printHelp() {
 if [[ -z $1 ]] ; then
     printHelp
 fi
-
-function dispHelp() {
-    echo "Usage: "
-    echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
-    echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
-    echo "$0 --int --branch --rocm-build=91 --rocm-ver=6.0 / use internal version of rocm"
-    exit 0
-}
-
-if [[ -z $1 ]] ; then
-    dispHelp
-fi
-
-yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
-dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
-cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
-
+set -x 
 for var in "$@"
 do
     echo var: $var
@@ -78,12 +63,16 @@ do
     if [[ $var == *"--amdgpu-build="* ]]  ; then
         p_amdgpu_build=`echo $var | cut -d '=' -f2`
     fi
-    if [[ $var == *"--dkms-no="* ]]  ; then
-        p_dkms="--dkms-no"
+    if [[ $var == *"--no-dkms"* ]]  ; then
+        p_dkms="--no-dkms"
     fi
 done
 
 set -x 
+
+yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
+dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
+cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
 rhel_ver=9.2
 
