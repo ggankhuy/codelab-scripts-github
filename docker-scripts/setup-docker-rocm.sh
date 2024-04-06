@@ -104,7 +104,7 @@ amdgpu_file_name=$amdgpu_file_name"_9-1.noarch.rpm"
 
 echo "rocmversion: $rocmversion"
 if [[ ! -z $p_ga ]] ; then
-    url_amdgpu="http://repo.radeon.com/amdgpu-install/$((rocmversion))/rhel/$rhel_ver/"
+    url_amdgpu="http://repo.radeon.com/amdgpu-install/$rocmversion/rhel/$rhel_ver/"
     wget --mirror -L -np -nH -c -nv --cut-dirs=6 -A "*.rpm" -P ./ $url_amdgpu
 fi
 if [[ ! -z $p_int ]] ; then
