@@ -30,7 +30,7 @@ printHelp() {
 if [[ -z $1 ]] ; then
     printHelp
 fi
-set -x 
+
 for var in "$@"
 do
     echo var: $var
@@ -128,7 +128,7 @@ if [[ ! -z $p_int ]] ; then
         amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-dkms-no-npi-hipclang/$p_rocm_build
     fi
     if [[ ! -z $p_branch ]] ; then 
-        amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-rel-$rocm_ver/$p_rocm_build
+        amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-rel-$rocmversion/$p_rocm_build
     fi
 fi 
 
