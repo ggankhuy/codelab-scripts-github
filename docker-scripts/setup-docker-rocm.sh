@@ -30,56 +30,55 @@ printHelp() {
 if [[ -z $1 ]] ; then
     printHelp
 fi
-
+set -x
 for var in "$@"
 do
     echo var: $var
-    if [[ $var == "--help=" ]]  ; then
-        dispHelp
-    fi
 
-    if [[ $var == "--help" ]]  ; then
-        printHelp
-        exit 0 
-    fi
-    if [[ $var == *"--ga"* ]]  ; then
-        p_ga=1
-    fi
-    if [[ $var == *"--int"* ]]  ; then
-        p_int=1
-    fi
-    if [[ $var == *"--rocm-ver="* ]]  ; then
-        rocmversion=`echo $var | cut -d '=' -f2`
-    fi
-    if [[ $var == *"--mainline"* ]]  ; then
-        p_mainline=1
-    fi
-    if [[ $var == *"--release"* ]]  ; then
-        p_branch=1
-    fi
-    if [[ $var == *"--rocm-build="* ]]  ; then
-        p_rocm_build=`echo $var | cut -d '=' -f2`
-    fi
-    if [[ $var == *"--amdgpu-build="* ]]  ; then
-        p_amdgpu_build=`echo $var | cut -d '=' -f2`
-    fi
-    if [[ $var == *"--no-dkms"* ]]  ; then
-        p_dkms="--no-dkms"
-    fi
+    case "$var" in 
+        "--help")
+            dispHelp
+            ;;
+        *--ga*)
+            p_ga=1
+            ;;
+        *--int*)
+            p_int=1
+            ;;
+        *--rocm-ver=*)
+            rocmversion=`echo $var | awk -F'=' '{print $2}'`
+            ;;
+        *--mainline*)
+            p_mainline=1
+            ;;
+        *--release*)
+            p_release=1
+            ;;
+        *--rocm-build=*)
+            p_rocm_build=`echo $var | awk -F'=' '{print $2}'`
+
+            ;;
+        *--amdgpu-build=*)
+            p_amdgpu_build=`echo $var | awk -F'=' '{print $2}'`
+            ;;
+        *--no-dkms*)
+            p_dkms="--no-dkms"        
+            ;;
+        *)
+            echo "Unknown parameter: $var. Exiting..."
+            exit 1
+            ;;
+    esac
 done
 
 set -x 
+if [[ -z $USER ]] ; then USER=root ; fi
 
 yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
 dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
 cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
 rhel_ver=9.2
-
-if [[ -z $USER ]] ; then USER=root ; fi
-yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
-dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
-cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
 
 for i in rocm amdgpu ; do 
     yum repository-packages $i remove -y ; #if installed through online repository.
@@ -99,15 +98,15 @@ pushd /$USER/extdir/gg/wget
 
 rm -rf amdgpu-install*
 
-amdgpu_file_name="amdgpu-install-internal-$rocmversion"
-amdgpu_file_name=$amdgpu_file_name"_9-1.noarch.rpm"
-
 echo "rocmversion: $rocmversion"
 if [[ ! -z $p_ga ]] ; then
     url_amdgpu="http://repo.radeon.com/amdgpu-install/$rocmversion/rhel/$rhel_ver/"
     wget --mirror -L -np -nH -c -nv --cut-dirs=6 -A "*.rpm" -P ./ $url_amdgpu
 fi
+
 if [[ ! -z $p_int ]] ; then
+    amdgpu_file_name="amdgpu-install-internal-$rocmversion"
+    amdgpu_file_name=$amdgpu_file_name"_9-1.noarch.rpm"
     url_amdgpu="http://artifactory-cdn.amd.com/artifactory/list/amdgpu-rpm/rhel/$amdgpu_file_name"
     wget $url_amdgpu
 fi
@@ -127,17 +126,12 @@ if [[ ! -z $p_int ]] ; then
         url="http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-rhel-9.x/compute-rocm-dkms-no-npi-hipclang-$p_rocm_build/"
         amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-dkms-no-npi-hipclang/$p_rocm_build
     fi
-    if [[ ! -z $p_branch ]] ; then 
+    if [[ ! -z $p_release ]] ; then 
         amdgpu-repo --amdgpu-build=$p_amdgpu_build --rocm-build=compute-rocm-rel-$rocmversion/$p_rocm_build
     fi
 fi 
 
 amdgpu-install --usecase=rocm $p_dkms -y
-
-
-
-
-
 
 
 
