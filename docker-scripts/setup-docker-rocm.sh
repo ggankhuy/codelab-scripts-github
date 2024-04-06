@@ -7,6 +7,7 @@
 
 
 printHelp() {
+    set +x
     echo "Usage: parameters:"
     echo "Note that currently there is not compatility check between different parameters. It is up to user to provide"
     echo "right combination of parameters. Using wrong combination or incompatible parameters are untested and will have "
@@ -24,7 +25,6 @@ printHelp() {
     echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
     echo "$0 --int --release --rocm-build=91 --rocm-ver=6.0 / use internal version of rocm"
     exit 0
-
 }
 
 if [[ -z $1 ]] ; then
@@ -37,7 +37,7 @@ do
 
     case "$var" in 
         "--help")
-            dispHelp
+            printHelp
             ;;
         *--ga*)
             p_ga=1
