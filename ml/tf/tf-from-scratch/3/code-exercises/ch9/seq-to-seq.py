@@ -10,4 +10,4 @@ from torch.utils.data import DataLoader, Dataset,  random_split, TensorDataset
 import sys
 sys.path.append('..')
 from data_generation.square_sequences import generate_sequences
-#from step
+from stepbystep.v4 import StepByStep
