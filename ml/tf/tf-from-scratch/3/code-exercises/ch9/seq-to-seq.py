@@ -6,8 +6,10 @@ import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset,  random_split, TensorDataset
-
 import sys
 sys.path.append('..')
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
+from plots.chapter8 import plot_data
+points, directions = generate_sequences(256,  seed=13)
+fig = plot_data(points, directions, n_rows=1)
