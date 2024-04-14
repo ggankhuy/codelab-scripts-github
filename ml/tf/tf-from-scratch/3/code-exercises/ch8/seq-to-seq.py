@@ -19,10 +19,14 @@ from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 points, directions = generate_sequences(256,  seed=13)
 
-n_features=2
+n_features=5
 hidden_dim=2
 
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 rnn_state=rnn_cell.state_dict()
 print(rnn_state)
+
+# rnn_state: 
+# - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
+# - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
