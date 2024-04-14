@@ -64,10 +64,54 @@ print(torch.tanh(adding))
 print("Output of RNN cell from library:")
 print(rnn_cell(X[0:1]))
 
-    
-    
+
+#p114.
+# X.shape[0] = [4,2]
+
+print("running rnn_cell on X[0]:")
+hidden = torch.zeros(1, hidden_dim)
+for i in range(X.shape[0]):
+    out = rnn_cell(X[i:i+1], hidden)
+    print(out)
+    hidden=out
+
+print("creating nn.RNN equivalent of above")    
+n_features=2
+hidden_dim=2
+torch.manual_seed(19)
+rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
+print(rnn.state_dict())
+
+# p119
+
+# RNN input shape (default):    LNF= length, batch, features
+# RNN input shape (batch1st):   NLF= batch, length, features
+# RNN input shape (packaed seq): (later)
+
+# Simple RNN init hidden state:     1NH => len=1, batch, hidden_dim
+# stacked RNN                       (no. of layers, batch, hidden_dim)
+# bidir RNN                         (2 * no. of layers, batch, hidden_dim)
+
+# output 
+# Simple RNN output shape (default):    LNH=length, batch, hidden_dim
+# batch first                           NLH
+# bidir RNN                             L,N,2*H
 
 
+# input -> output
+# (default):        LNF => LNH  matmul([L,N,F][L,N,H])?
+# (batch1st):       NLF => NLH  matmul([N,L,F][N,L,H])?
 
+print("computing first 3 data points: 3,4,2...")
+batch = torch.as_tensor(points[:3]).float()
+print(batch.shape)
+# 3,4,2 => batch, sequence, features
 
+permuted_batch=batch.permute(1,0,2)
+print(permuted_batch)
+# 4,3,2
 
+torch.manual_seed(19)
+rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
+out,final_hidden=rnn(permuted_batch)
+print(out.shape, final_hidden.shape)
