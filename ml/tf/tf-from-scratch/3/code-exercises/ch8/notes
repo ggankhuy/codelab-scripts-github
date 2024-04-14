@@ -1,0 +1,14 @@
+RNN CELL:
+
+t[h] = Whh * t[h-1] + b[hh] -> 
+output of hidden state/transformer hidden state = 
+weight of hidden layer * prev hidden state + bias of hidden layer. 
+
+t[x] = Wih * x[t] + b[ih] ->
+output of input layer/transformed input state = 
+weigth of input layer * input data + bias of input layer.
+
+h[t] = tanh ( t[x] + t[h] ) ->
+output of current iteration/updated hidden state = 
+activation layer ( hidden state output + input layer output)
+

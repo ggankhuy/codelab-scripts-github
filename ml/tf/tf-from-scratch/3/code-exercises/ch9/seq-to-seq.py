@@ -1,3 +1,9 @@
+# data format
+# points, direction 
+# points=256,4,2, direction256.
+# points=[number of samples, four corners, coordinates]
+# directions=[directions: 0 or 1]
+
 import copy 
 import numpy as np
 
