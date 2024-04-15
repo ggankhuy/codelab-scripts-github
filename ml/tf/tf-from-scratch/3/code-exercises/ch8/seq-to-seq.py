@@ -14,6 +14,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset,  random_split, TensorDataset
 import sys
 sys.path.append('..')
+from common.settings import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
@@ -25,8 +26,8 @@ points, directions = generate_sequences(256,  seed=13)
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
 
-n_features=2
-hidden_dim=2
+#n_features=2
+#hidden_dim=2
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 rnn_state=rnn_cell.state_dict()
@@ -76,8 +77,7 @@ for i in range(X.shape[0]):
     hidden=out
 
 print("creating nn.RNN equivalent of above")    
-n_features=2
-hidden_dim=2
+
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
 print(rnn.state_dict())
@@ -104,14 +104,18 @@ print(rnn.state_dict())
 
 print("computing first 3 data points: 3,4,2...")
 batch = torch.as_tensor(points[:3]).float()
-print(batch.shape)
+print("batch.shape: \n", batch.shape)
 # 3,4,2 => batch, sequence, features
 
 permuted_batch=batch.permute(1,0,2)
-print(permuted_batch)
+print("pernuted_batch: \n", permuted_batch)
 # 4,3,2
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
 out,final_hidden=rnn(permuted_batch)
-print(out.shape, final_hidden.shape)
+print("out:\n", out.shape, out)
+print("final_hidden:\n", final_hidden.shape, final_hidden)
+
+batch_hidden=final_hidden.permute(1,0,2)
+print("batch_hidden:\n", batch_hidden.shape, batch_hidden)
