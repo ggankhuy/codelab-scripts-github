@@ -31,27 +31,41 @@ points, directions = generate_sequences(256,  seed=13)
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 rnn_state=rnn_cell.state_dict()
-print(rnn_state)
+printDbg(rnn_state)
 
 # Lets do above RNNcell manually. However we are copying the values of weigts, bias initialized values
 # so that output can be compared for sanity check!
 
 class RNNCell:
-    __init__(RNNCell_src: nn.RNNCEll)
+    def __init__(rnn_cell_src: nn.RNNCell, n_features:int, hidden_dim:int):
+        self.linear_input=nn.Linear(n_features, hidden_dim)
+        self.linear_hidden=nn.Linear(hidden_dim, hidden_dim)
+        rnn_state=rnn_cell_src.state_dict()
 
-linear_input=nn.Linear(n_features, hidden_dim)
-linear_hidden=nn.Linear(hidden_dim, hidden_dim)
+        #linear_input=nn.Linear(n_features, hidden_dim)
+        #linear_hidden=nn.Linear(hidden_dim, hidden_dim)
 
-with torch.no_grad():
-    linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
-    linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
-    linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
-    linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
+        with torch.no_grad():
+            self.linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
+            self.linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
+            self.linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
+            self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
-initial_hidden=torch.zeros(1, hidden_dim)
-print(initial_hidden)
-th=linear_hidden(initial_hidden)
-print(th)
+        self.initial_hidden=torch.zeros(1, hidden_dim)
+        printDbg(initial_hidden)
+        self.th=linear_hidden(initial_hidden)
+        printDbg(th)
+        self.tx=0
+        self.th=0
+        self.final_hidden=0
+
+    def forward(x):
+        self.tx=self.linear_input(x)
+        adding=self.th+self.tx
+        printDbg(adding)
+        self.final_hidden=torch.tanh(adding)
+
+exit(0)
 
 X=torch.as_tensor(points[0]).float()
 print(X)
