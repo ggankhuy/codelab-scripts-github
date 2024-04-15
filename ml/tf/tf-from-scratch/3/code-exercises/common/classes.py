@@ -8,7 +8,7 @@ import torch.nn as nn
 
 sys.path.append('.')
 from common.settings import *
-CONFIG_USE_NN_LINEAR=1
+CONFIG_USE_NN_LINEAR=0
 
 class Linear:
     def printFcn(func):
@@ -40,17 +40,8 @@ class Linear:
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
         printDbg("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
-        if CONFIG_USE_NN_LINEAR: 
-            '''
-            linear_input=nn.Linear(n_features, hidden_dim)
-            linear_hidden=nn.Linear(hidden_dim, hidden_dim)
 
-            with torch.no_grad():
-                linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
-                linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
-                linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
-                linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
-            '''
+        if CONFIG_USE_NN_LINEAR: 
             self.tx=0
             self.th=0
             self.final_hidden=0
@@ -73,6 +64,12 @@ class RNNCell:
 
             self.linear_input=Linear(input_size, hidden_size)
             self.linear_hidden=Linear(hidden_size, hidden_size)
+
+            with torch.no_grad():
+                self.linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
+                self.linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
+                self.linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
+                self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
             # hidden is for rnn, remember! we are inside rnn class not linear class.
 
