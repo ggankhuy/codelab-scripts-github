@@ -1,3 +1,14 @@
+import copy
+import numpy as np
+import sys
+
+import torch
+import torch.optim as optim
+import torch.nn as nn
+
+sys.path.append('.')
+from common.settings import *
+
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
         self.linear_input=nn.Linear(input_size, hidden_size)
