@@ -36,14 +36,16 @@ printDbg(rnn_state)
 # Lets do above RNNcell manually. However we are copying the values of weigts, bias initialized values
 # so that output can be compared for sanity check!
 
-class RNNCell:
-    def __init__(rnn_cell_src: nn.RNNCell, n_features:int, hidden_dim:int):
-        self.linear_input=nn.Linear(n_features, hidden_dim)
-        self.linear_hidden=nn.Linear(hidden_dim, hidden_dim)
-        rnn_state=rnn_cell_src.state_dict()
+class Shark:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
-        #linear_input=nn.Linear(n_features, hidden_dim)
-        #linear_hidden=nn.Linear(hidden_dim, hidden_dim)
+class RNNCell:
+    def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
+        self.linear_input=nn.Linear(input_size, hidden_size)
+        self.linear_hidden=nn.Linear(hidden_size, hidden_size)
+        rnn_state=rnn_cell_src.state_dict()
 
         with torch.no_grad():
             self.linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
@@ -51,24 +53,27 @@ class RNNCell:
             self.linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
             self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
-        self.initial_hidden=torch.zeros(1, hidden_dim)
-        printDbg(initial_hidden)
-        self.th=linear_hidden(initial_hidden)
-        printDbg(th)
+        self.initial_hidden=torch.zeros(1, hidden_size)
+        printDbg(self.initial_hidden)
+        self.th=self.linear_hidden(self.initial_hidden)
+        printDbg(self.th)
         self.tx=0
         self.th=0
         self.final_hidden=0
 
-    def forward(x):
+    def forward(self, x):
         self.tx=self.linear_input(x)
         adding=self.th+self.tx
         printDbg(adding)
         self.final_hidden=torch.tanh(adding)
 
-exit(0)
-
 X=torch.as_tensor(points[0]).float()
 print(X)
+
+rnn_cell_manual=RNNCell(rnn_cell_src=rnn_cell, input_size=n_features, hidden_size=hidden_dim)
+print(rnn_cell_manual.forward(X[0:1]))
+
+exit(0)
 
 tx=linear_input(X[0:1])
 print(tx)
@@ -81,7 +86,6 @@ print(torch.tanh(adding))
 
 print("Output of RNN cell from library:")
 print(rnn_cell(X[0:1]))
-
 
 #p114.
 # X.shape[0] = [4,2]
