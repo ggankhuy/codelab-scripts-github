@@ -22,7 +22,6 @@ from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 points, directions = generate_sequences(256,  seed=13)
 
-
 # create rnn_cell.
 # rnn_state: 
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
@@ -33,7 +32,10 @@ points, directions = generate_sequences(256,  seed=13)
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 rnn_state=rnn_cell.state_dict()
-printDbg(rnn_state)
+
+printDbg("nn.RNNCell (library):")
+for k, v in rnn_state.items():
+    printDbg(k, np.array(v).shape, "\n", v)
 
 # Lets do above RNNcell manually. However we are copying the values of weigts, bias initialized values
 # so that output can be compared for sanity check!
@@ -42,7 +44,17 @@ X=torch.as_tensor(points[0]).float()
 print(X)
 
 rnn_cell_manual=RNNCell(rnn_cell_src=rnn_cell, input_size=n_features, hidden_size=hidden_dim)
-print(rnn_cell_manual.forward(X[0:1]))
+
+printDbg("nn.RNNCell (manual):")
+
+r1=rnn_cell_manual(X[0:1])
+print("Output of our manually written RNN cell:")
+print("r1: ", r1)
+
+r2=rnn_cell(X[0:1])
+print("Output of RNN cell from library:")
+print("r2: ", r2)
+
 
 exit(0)
 
@@ -54,9 +66,6 @@ print(adding)
 
 print("Output of our manually written RNN cell:")
 print(torch.tanh(adding)) 
-
-print("Output of RNN cell from library:")
-print(rnn_cell(X[0:1]))
 
 #p114.
 # X.shape[0] = [4,2]
