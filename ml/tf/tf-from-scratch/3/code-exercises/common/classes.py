@@ -56,27 +56,27 @@ class RNNCell:
                 self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
             self.initial_hidden=torch.zeros(1, hidden_size)
-            printDbg("self.initial_hidden: ", self.initial_hidden)
+            #printDbg("self.initial_hidden: ", self.initial_hidden)
             self.th=self.linear_hidden(self.initial_hidden)
-            printDbg("self.th", self.th)
+            printDbg("RNNCell.__init__: self.th computed to: ", self.th)
         else:
-            rnn_state=rnn_cell_src.state_dict()
-
+            rnn_state_src=rnn_cell_src.state_dict()
+            printDbg("rnn_state_src: \n", rnn_state_src)
             self.linear_input=Linear(input_size, hidden_size)
             self.linear_hidden=Linear(hidden_size, hidden_size)
 
             with torch.no_grad():
-                self.linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
-                self.linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
-                self.linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
-                self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
+                self.linear_input.weight=nn.Parameter(rnn_state_src['weight_ih'])
+                self.linear_input.bias=nn.Parameter(rnn_state_src['bias_ih'])
+                self.linear_hidden.weight=nn.Parameter(rnn_state_src['weight_hh'])
+                self.linear_hidden.bias=nn.Parameter(rnn_state_src['bias_hh'])
 
             # hidden is for rnn, remember! we are inside rnn class not linear class.
 
             self.initial_hidden=torch.zeros(1, hidden_size)
-            printDbg("self.initial_hidden: ", self.initial_hidden)
+            #printDbg("self.initial_hidden: ", self.initial_hidden)
             self.th=self.linear_hidden(self.initial_hidden)
-            printDbg("self.th", self.th)
+            printDbg("RNNCell.__init__: self.th computed to: ", self.th)
 
     def __call__(self, x):
         return self.forward(x)
@@ -84,7 +84,7 @@ class RNNCell:
     def forward(self, x):
         printDbg("RNNCell.forward entered(x=" + str(x))
         self.tx=self.linear_input(x)
-        printDbg("RNNCell.foward: self.th: ", self.th)
+        printDbg("RNNCell.forward: self.tx computed to: ", self.tx)
         adding=self.th+self.tx
         printDbg(adding)
         self.final_hidden=torch.tanh(adding)
