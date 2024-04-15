@@ -25,15 +25,20 @@ class Linear:
         return self.forward(X)
 
     def forward(self, X):
-        printDbg("Linear.forward entered(X=" + str(X))
-        out = torch.matmul(X, self.weight)
+        #printDbg("Linear.forward entered(X=" + str(X))
+
+        # Something wrong with this?? but not sure why. with nn.linear results are ok but with 
+        # Linear (this) below matmul for tx mismatch. The reason tx match because initial hidden state tensor is 0
+        # and end value is just bias value: 0+bias=bias.
+        out = torch.matmul(self.weight, X)
+        #out = torch.matmul(X, self.weight)
         out += self.bias
 
         '''
         if not out:
             print("Error: out is None!!!")
         '''
-        printDbg("returning out: \n", out)
+        #printDbg("returning out: \n", out)
         return out
         
 
