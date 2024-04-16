@@ -8,7 +8,6 @@ import torch.nn as nn
 
 sys.path.append('.')
 from common.settings import *
-CONFIG_USE_NN_LINEAR=0
 
 class Linear:
     def printFcn(func):
@@ -25,63 +24,27 @@ class Linear:
         return self.forward(X)
 
     def forward(self, X):
-        #printDbg("Linear.forward entered(X=" + str(X))
-
-        # Something wrong with this?? but not sure why. with nn.linear results are ok but with 
-        # Linear (this) below matmul for tx mismatch. The reason tx match because initial hidden state tensor is 0
-        # and end value is just bias value: 0+bias=bias.
-        out = torch.matmul(X, self.weight.T)
-        #out = torch.matmul(X, self.weight)
-        out += self.bias
-
-        '''
-        if not out:
-            print("Error: out is None!!!")
-        '''
-        #printDbg("returning out: \n", out)
-        return out
-        
+        return  torch.matmul(X, self.weight.T) + self.bias
 
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
         printDbg("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
+        rnn_state_src=rnn_cell_src.state_dict()
+        printDbg("rnn_state_src: \n", rnn_state_src)
+        self.linear_input=Linear(input_size, hidden_size)
+        self.linear_hidden=Linear(hidden_size, hidden_size)
 
-        if CONFIG_USE_NN_LINEAR: 
-            self.tx=0
-            self.th=0
-            self.final_hidden=0
-            self.linear_input=nn.Linear(input_size, hidden_size)
-            self.linear_hidden=nn.Linear(hidden_size, hidden_size)
-            rnn_state=rnn_cell_src.state_dict()
+        with torch.no_grad():
+            self.linear_input.weight=nn.Parameter(rnn_state_src['weight_ih'])
+            self.linear_input.bias=nn.Parameter(rnn_state_src['bias_ih'])
+            self.linear_hidden.weight=nn.Parameter(rnn_state_src['weight_hh'])
+            self.linear_hidden.bias=nn.Parameter(rnn_state_src['bias_hh'])
 
-            with torch.no_grad():
-                self.linear_input.weight=nn.Parameter(rnn_state['weight_ih'])
-                self.linear_input.bias=nn.Parameter(rnn_state['bias_ih'])
-                self.linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
-                self.linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
+        # hidden is for rnn, remember! we are inside rnn class not linear class.
 
-            self.initial_hidden=torch.zeros(1, hidden_size)
-            #printDbg("self.initial_hidden: ", self.initial_hidden)
-            self.th=self.linear_hidden(self.initial_hidden)
-            printDbg("RNNCell.__init__: self.th computed to: ", self.th)
-        else:
-            rnn_state_src=rnn_cell_src.state_dict()
-            printDbg("rnn_state_src: \n", rnn_state_src)
-            self.linear_input=Linear(input_size, hidden_size)
-            self.linear_hidden=Linear(hidden_size, hidden_size)
-
-            with torch.no_grad():
-                self.linear_input.weight=nn.Parameter(rnn_state_src['weight_ih'])
-                self.linear_input.bias=nn.Parameter(rnn_state_src['bias_ih'])
-                self.linear_hidden.weight=nn.Parameter(rnn_state_src['weight_hh'])
-                self.linear_hidden.bias=nn.Parameter(rnn_state_src['bias_hh'])
-
-            # hidden is for rnn, remember! we are inside rnn class not linear class.
-
-            self.initial_hidden=torch.zeros(1, hidden_size)
-            #printDbg("self.initial_hidden: ", self.initial_hidden)
-            self.th=self.linear_hidden(self.initial_hidden)
-            printDbg("RNNCell.__init__: self.th computed to: ", self.th)
+        self.initial_hidden=torch.zeros(1, hidden_size)
+        self.th=self.linear_hidden(self.initial_hidden)
+        printDbg("RNNCell.__init__: self.th computed to: ", self.th)
 
     def __call__(self, x):
         return self.forward(x)
