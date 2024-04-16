@@ -27,6 +27,7 @@ points, directions = generate_sequences(256,  seed=13)
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
 
+'''
 #n_features=2
 #hidden_dim=2
 torch.manual_seed(19)
@@ -57,17 +58,9 @@ print("r2: ", r2)
 
 
 exit(0)
+'''
 
-tx=linear_input(X[0:1])
-print(tx)
-
-adding=th+tx
-print(adding)
-
-print("Output of our manually written RNN cell:")
-print(torch.tanh(adding)) 
-
-#p114.
+#p115.
 # X.shape[0] = [4,2]
 
 print("running rnn_cell on X[0]:")
