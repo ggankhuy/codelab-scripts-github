@@ -30,7 +30,7 @@ class Linear:
         # Something wrong with this?? but not sure why. with nn.linear results are ok but with 
         # Linear (this) below matmul for tx mismatch. The reason tx match because initial hidden state tensor is 0
         # and end value is just bias value: 0+bias=bias.
-        out = torch.matmul(self.weight, X)
+        out = torch.matmul(X, self.weight.T)
         #out = torch.matmul(X, self.weight)
         out += self.bias
 
