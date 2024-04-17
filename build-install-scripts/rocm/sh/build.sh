@@ -1,4 +1,4 @@
-#set -x
+set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
@@ -15,69 +15,73 @@ CONFIG_BYPASS_PACKAGES_INSTALL=0
 for var in "$@"
 do
     echo var: $var
-    if [[ $var == *"comp="* ]]  ; then
-        comp=`echo $var | cut -d '=' -f2`
-        COMP=$comp
-        COMP_OLD=$comp
-        echo COMP old: $COMP
-        COMP=$(echo $COMP | sed "s/-/_/g")
-        echo COMP new: $COMP
-    fi
+    case "$var" in
+        *comp=*)
+            comp=`echo $var | cut -d '=' -f2`
+            COMP=$comp
+            COMP_OLD=$comp
+            echo COMP old: $COMP
+            COMP=$(echo $COMP | sed "s/-/_/g")
+            echo COMP new: $COMP
+            ;;
 
-    if [[ $var == *"verminor="* ]]  ; then
-        echo "processing var: $var"
-        verminor=`echo $var | cut -d '=' -f2`
-    fi
+        *verminor=*)
+            echo "processing var: $var"
+            verminor=`echo $var | awk -F'=' '{print $2}'`
+            ;;
 
-    if [[ $var == *"vermajor"* ]] ; then
-        echo "processing var: $var"
-        vermajor=`echo $var | cut -d '=' -f2`
-    fi
+        *vermajor=*)
+            echo "processing var: $var"
+            vermajor=`echo $var | awk -F'=' '{print $2}'`
+            ;;
 
-    if [[ $var == *"--path"* ]] ; then
-        echo "processing var: $var"
-        CONFIG_INSTALL_PATH=`echo $var | cut -d '=' -f2`
-    fi
+        *--path=*)
+            echo "processing var: $var"
+            CONFIG_INSTALL_PATH=`echo $var | cut -d '=' -f2`
+            ;;
 
-    if [[ $var == "--llvmno" ]] ; then
-        echo "Will bypass llvm build."
-        CONFIG_BUILD_LLVM=0
-    fi
+        *--llvmno*)
+            echo "Will bypass llvm build."
+            CONFIG_BUILD_LLVM=0
+            ;;
 
-    if [[ $var == "--cmakeno" ]] ; then
-        echo "Will bypass cmake build."
-        CONFIG_BUILD_CMAKE=0
-    fi
+        *--cmakeno*)
+            echo "Will bypass cmake build."
+            CONFIG_BUILD_CMAKE=0
+            ;;
 
-    if [[ $var == "--cmake" ]] ; then
-        echo "Will force cmake build."
-        CONFIG_BUILD_CMAKE=1
-    fi
+        *--cmake*)
+            echo "Will force cmake build."
+            CONFIG_BUILD_CMAKE=1
+            ;;
 
-    if [[ $var == "--pyno" ]] ; then
-        echo "Will bypass python build."
-        CONFIG_BUILD_PY=0
-    fi
+        *--pyno*)
+            echo "Will bypass python build."
+            CONFIG_BUILD_PY=0
+            ;;
 
-    if [[ $var == "--fast" ]] ; then
-        echo "Will speed up build whenever possible."
-        CONFIG_BUILD_FAST=1
-    fi
+        *--fast*)
+            echo "Will speed up build whenever possible."
+            CONFIG_BUILD_FAST=1
+            ;;
 
-    if [[ $var == "--package" ]] ; then
-        echo "Will create package whenever possible."
-        CONFIG_BUILD_PACKAGE=1
-    fi
-
-    if [[ $var == "--nopkg" ]] ; then
-        echo "Will create package whenever possible."
-        CONFIG_BYPASS_PACKAGES_INSTALL=1
-    fi
-
-    if [[ $var == *"--testmode"* ]] ; then
-        echo "Will perform test mode only."
-        CONFIG_TEST_MODE=`echo $var | cut -d '=' -f2`
-    fi
+        *--package*)
+            echo "Will create package whenever possible."
+            CONFIG_BUILD_PACKAGE=1
+            ;;
+        *--nopkg*)
+            echo "Will create package whenever possible."
+            CONFIG_BYPASS_PACKAGES_INSTALL=1
+            ;;
+        *--testmode*)
+            echo "Will perform test mode only."
+            CONFIG_TEST_MODE=`echo $var | cut -d '=' -f2`
+            ;;
+        *)
+            #echo "Unknown cmdline parameter: $var" ; exit 1
+            echo "Warning: Unknown cmdline parameter: $var"
+    esac
+        
 done
 
 source sh/common.sh 
