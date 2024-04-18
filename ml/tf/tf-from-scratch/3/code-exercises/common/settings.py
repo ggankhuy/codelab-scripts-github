@@ -1,7 +1,7 @@
 n_features=2
 hidden_dim=2
 
-debug=0
+debug=1
 def printDbg(*argv):
     if debug:
         print("DBG:", end=" ")
@@ -10,10 +10,14 @@ def printDbg(*argv):
 
         print("\n")
 def printFnc(func):
+    print("printFnc: func: ", func)
     def inner(*args):
         #print("printFcn.inner() entered")
-        print("func: ", func.__name__)
-        for i in args:
-            print("arg: ", i)
+        print("func: ", func.__name__, end= ' ')
+        print("args: ", end=' ')
+        for i in args[1:]:
+            print(i, end=' ')
+        print("\n")
+        return func(*args)
     return inner
 

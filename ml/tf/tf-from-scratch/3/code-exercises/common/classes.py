@@ -9,37 +9,21 @@ import torch.nn as nn
 sys.path.append('.')
 from common.settings import *
 
-def log_methods(cls):
-    for name, value in vars(cls).items():
-        if callable(value):
-            setattr(cls, name, log_method(value))
-
-def log_method(func):
-    def wrapper(*args, **kwargs):
-        print(f"Calling method: {func.__name__}")
-        return func(*args, **kwargs)
-    return wrapper
-
-#@log_methods
 class Linear:
-    def printFcn(func):
-        def inner(func, *argv):
-            print(func, type(func))
-        return inner
-
     @printFnc
     def __init__(self, input_size:int, hidden_size:int):
         self.input_size=input_size
         self.ihddn_dim=hidden_size
         self.weight=torch.zeros([input_size, hidden_size], requires_grad=True)
         self.bias=torch.zeros(hidden_size)
+    @printFnc
     def __call__(self, X):
         return self.forward(X)
 
+    @printFnc
     def forward(self, X):
         return  torch.matmul(X, self.weight.T) + self.bias
 
-#@log_methods
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
         printDbg("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
