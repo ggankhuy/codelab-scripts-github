@@ -31,6 +31,9 @@ points, directions = generate_sequences(256,  seed=13)
 #hidden_dim=2
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
+if rnn_cell == None:
+    print("rnn_cell is None.")
+    quit(1)
 rnn_state=rnn_cell.state_dict()
 
 printDbg("nn.RNNCell (library):")
@@ -43,7 +46,11 @@ for k, v in rnn_state.items():
 X=torch.as_tensor(points[0]).float()
 print(X)
 
-rnn_cell_manual=RNNCell(rnn_cell_src=rnn_cell, input_size=n_features, hidden_size=hidden_dim)
+rnn_cell_manual=\
+    RNNCell(\
+    rnn_cell_src=rnn_cell, \
+    input_size=n_features, \
+    hidden_size=hidden_dim)
 
 printDbg("nn.RNNCell (manual):")
 
