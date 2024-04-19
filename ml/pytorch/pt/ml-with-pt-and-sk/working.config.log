@@ -1,0 +1,6 @@
+
+pytorch-triton-rocm       3.0.0+0a22a91d04
+torch                     2.4.0.dev20240411+rocm6.0
+torchaudio                2.2.0.dev20240411+rocm6.0
+torchvision               0.19.0.dev20240411+rocm6.0
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
