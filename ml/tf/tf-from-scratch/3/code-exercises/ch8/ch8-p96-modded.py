@@ -27,8 +27,6 @@ points, directions = generate_sequences(256,  seed=13)
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
 
-#n_features=2
-#hidden_dim=2
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 if rnn_cell == None:
@@ -45,6 +43,7 @@ for k, v in rnn_state.items():
 
 X=torch.as_tensor(points[0]).float()
 print(X)
+print("X.shape: ", np.array(X).shape)
 
 rnn_cell_manual=\
     RNNCell(\
