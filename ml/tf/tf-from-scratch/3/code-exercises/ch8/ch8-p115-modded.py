@@ -55,3 +55,30 @@ batch_hidden=final_hidden.permute(1,0,2)
 print("batch_hidden:\n", batch_hidden.shape)
 
 
+print("BATCH first...")
+
+print("computing first 3 data points: 3,4,2...")
+batch = torch.as_tensor(points[:3]).float()
+print("batch.shape: \n", batch.shape)
+
+# [3,4,2] = [batch, length, feature] to [4,3,2] = [Length, batch, feature]
+#permuted_batch=batch.permute(1,0,2)
+print("pernuted_batch: \n", permuted_batch.shape)
+
+torch.manual_seed(19)
+rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
+
+out, final_hidden=rnn(permuted_batch)
+print("out:\n", out.shape)
+print("out, final_hidden:\n", out.shape, final_hidden.shape)
+
+#batch_hidden=final_hidden.permute(1,0,2)
+print("batch_hidden:\n", batch_hidden.shape)
+
+
+
+
+
+
+
+
