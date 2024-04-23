@@ -46,14 +46,25 @@ print("pernuted_batch: \n", permuted_batch.shape)
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
+rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 
 out, final_hidden=rnn(permuted_batch)
-print("out:\n", out.shape)
+print("out:\n", out, out.shape)
 print("out, final_hidden:\n", out.shape, final_hidden.shape)
 
 batch_hidden=final_hidden.permute(1,0,2)
 print("batch_hidden:\n", batch_hidden.shape)
+rnn_cell_manual=\
+    RNNCell(\
+    rnn_cell_src=rnn_cell, \
+    input_size=n_features, \
+    hidden_size=hidden_dim)
 
+printDbg("nn.RNNCell (manual):")
+out_manual=rnn_cell_manual(permuted_batch)
+print("Output of our manually written RNN cell:")
+print("out_manual: ", out_manual, out_manual.shape)
+#print("final_hidden_manual: ", final_hidden_manual.shape)
 
 print("BATCH first...")
 
