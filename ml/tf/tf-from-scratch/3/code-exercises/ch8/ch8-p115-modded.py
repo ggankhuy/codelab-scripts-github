@@ -49,7 +49,7 @@ rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
 
 out, final_hidden=rnn(permuted_batch)
 print("out:\n", out.shape)
-print("final_hidden:\n", final_hidden.shape)
+print("out, final_hidden:\n", out.shape, final_hidden.shape)
 
 batch_hidden=final_hidden.permute(1,0,2)
 print("batch_hidden:\n", batch_hidden.shape)
