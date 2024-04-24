@@ -37,23 +37,23 @@ points, directions = generate_sequences(256,  seed=13)
 # (batch1st):       NLF => NLH  matmul([N,L,F][N,L,H])?
 
 print("computing first 3 data points: 3,4,2...")
+print("1. permuted data, using nn.RNN")
 batch = torch.as_tensor(points[:3]).float()
 print("batch.shape: \n", batch.shape)
-
-# [3,4,2] = [batch, length, feature] to [4,3,2] = [Length, batch, feature]
 permuted_batch=batch.permute(1,0,2)
-print("pernuted_batch: \n", permuted_batch.shape)
+print("permuted_batch: \n", permuted_batch.shape)
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
 
 out, final_hidden=rnn(permuted_batch)
-print("out:\n", out, out.shape)
-print("out, final_hidden:\n", out.shape, final_hidden.shape)
+print("out, final_hidden shapes: ", out.shape, final_hidden.shape)
+print("out, final_hidden:\n", out, "\n", final_hidden)
 
 batch_hidden=final_hidden.permute(1,0,2)
-print("batch_hidden:\n", batch_hidden.shape)
+print("batch_hidden (permuted back): ", batch_hidden.shape)
 
+print("2. permuted data, using manual RNN implementation")
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 rnn_cell_manual=\
@@ -62,12 +62,11 @@ rnn_cell_manual=\
     input_size=n_features, \
     hidden_size=hidden_dim)
 
-printDbg("nn.RNNCell (manual):")
 out_manual=rnn_cell_manual(permuted_batch)
-print("Output of our manually written RNN cell:")
-print("out_manual: ", out_manual, out_manual.shape)
-#print("final_hidden_manual: ", final_hidden_manual.shape)
+print("out_manual: \n", out_manual)
+print("out_manual.shape: ", out_manual.shape)
 
+quit(0)
 print("BATCH first...")
 
 print("computing first 3 data points: 3,4,2...")
