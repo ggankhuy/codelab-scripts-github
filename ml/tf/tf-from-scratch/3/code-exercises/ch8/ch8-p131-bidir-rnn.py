@@ -24,3 +24,10 @@ for k, v in state.items():
     printDbg("k/v:", k, v)
 
 
+rnn_forward=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
+rnn_reverse=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
+
+rnn_forward.load_state_dict(dict(list(state.items())[:4]))
+rnn_reverse.load_state_dict(dict([(k[:-8], v) \
+    for k, v in list(state.items()) [4:]]
+))
