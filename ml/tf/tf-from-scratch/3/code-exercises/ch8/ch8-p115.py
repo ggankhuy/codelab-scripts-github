@@ -53,29 +53,13 @@ print("out, final_hidden:\n", out, "\n", final_hidden)
 batch_hidden=final_hidden.permute(1,0,2)
 print("batch_hidden (permuted back): ", batch_hidden.shape)
 
-print("2. permuted data, using manual RNN implementation")
-torch.manual_seed(19)
-rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
-rnn_cell_manual=\
-    RNNCell(\
-    rnn_cell_src=rnn_cell, \
-    input_size=n_features, \
-    hidden_size=hidden_dim)
-
-out_manual=rnn_cell_manual(permuted_batch)
-print("out_manual: \n", out_manual)
-print("out_manual.shape: ", out_manual.shape)
-
-quit(0)
 print("BATCH first...")
-
 print("computing first 3 data points: 3,4,2...")
 batch = torch.as_tensor(points[:3]).float()
 print("batch.shape: \n", batch.shape)
 
 # [3,4,2] = [batch, length, feature] to [4,3,2] = [Length, batch, feature]
 #permuted_batch=batch.permute(1,0,2)
-print("pernuted_batch: \n", permuted_batch.shape)
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
@@ -86,10 +70,6 @@ print("out, final_hidden:\n", out.shape, final_hidden.shape)
 
 #batch_hidden=final_hidden.permute(1,0,2)
 print("batch_hidden:\n", batch_hidden.shape)
-
-
-
-
 
 
 
