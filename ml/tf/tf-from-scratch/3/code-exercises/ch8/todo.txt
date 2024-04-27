@@ -1,0 +1,2 @@
+- compare rnn with that of similar network without recursion, attempt to describe.
+- analyze input 254,4,2.
