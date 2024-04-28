@@ -1,10 +1,10 @@
 n_features=2
-hidden_dim=2
+hidden_dim=5
 
-debug=1
+debug=0
 debug_class=0
 def printDbg(*argv):
-    if debug or dbg_override:
+    if debug:
         print("DBG:", end=" ")
         for arg in argv:
            print(arg, end=" ")
