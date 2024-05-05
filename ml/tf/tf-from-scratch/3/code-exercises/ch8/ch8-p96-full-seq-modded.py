@@ -53,6 +53,14 @@ rnn_cell_manual=\
 
 printDbg("nn.RNNCell (manual):")
 
+hidden=torch.zeros(1, hidden_dim)
+for i in range(X.shape[0]):
+    print("iter: ", i)
+    out = rnn_cell_manual(X[i:i+1])
+    print(out, out.shape)
+    hidden = out
+
+'''
 r1=rnn_cell_manual(X[0:1])
 print("Output of our manually written RNN cell:")
 print("r1: ", r1)
@@ -60,4 +68,4 @@ print("r1: ", r1)
 r2=rnn_cell(X[0:1])
 print("Output of RNN cell from library:")
 print("r2: ", r2)
-
+'''
