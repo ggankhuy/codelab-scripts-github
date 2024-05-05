@@ -1,5 +1,7 @@
+import inspect
+
 n_features=2
-hidden_dim=2
+hidden_dim=5
 
 debug=1
 debug_class=0
@@ -8,8 +10,15 @@ def printDbg(*argv):
         print("DBG:", end=" ")
         for arg in argv:
            print(arg, end=" ")
-
         print("\n")
+
+def printTensor(pT, pTname = None):
+    print('--------------------------------')
+    print(pTname, ": ", type(pT))
+    print(pT.shape)
+    print(pT)
+    print('--------------------------------')
+
 def printFnc(func):
     print("printFnc: func: ", func)
     def inner(*args):
