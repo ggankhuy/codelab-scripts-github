@@ -40,22 +40,17 @@ def printTensor(pVarName, pGlobals=None):
         g=pGlobals
     else:
         g=globals()
-    print("globals: ")
+
+    # for debug purpose only.
     #for i in g:
     #    print(i)
-    #print(namestr(pVarName, globals()))
+
+    print('--------------------------------')
     print(namestr(pVarName, g))
     print('--------------------------------')
-
-'''
-@printFnc
-def printTensor(pVarName):
-    print('--------------------------------')
-    #custom_variable_name = get_variable_name(pVarName, locals())
-    #print(custom_variable_name, ": ")
     print(namestr(pVarName, globals()))
     print(pVarName, ": ", type(pVarName))
     print(pVarName.shape)
     print(pVarName)
     print('--------------------------------')
-'''
+
