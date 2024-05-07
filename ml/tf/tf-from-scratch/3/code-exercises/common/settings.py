@@ -12,13 +12,6 @@ def printDbg(*argv):
            print(arg, end=" ")
         print("\n")
 
-def printTensor(pT, pTname = None):
-    print('--------------------------------')
-    print(pTname, ": ", type(pT))
-    print(pT.shape)
-    print(pT)
-    print('--------------------------------')
-
 def printFnc(func):
     print("printFnc: func: ", func)
     def inner(*args):
@@ -32,3 +25,37 @@ def printFnc(func):
         return func(*args)
     return inner
 
+def get_variable_name(obj, namespace):
+    print("get_variable_name: namespace.items(): ", namespace.items())
+    return [name for name, value in namespace.items() if value is obj][0]
+
+@printFnc
+def namestr(obj, namespace):
+    return [name for name in namespace if namespace[name] is obj]
+
+def printTensor(pVarName, pGlobals=None):
+    print('--------------------------------')
+    g=None
+    if pGlobals:
+        g=pGlobals
+    else:
+        g=globals()
+    print("globals: ")
+    #for i in g:
+    #    print(i)
+    #print(namestr(pVarName, globals()))
+    print(namestr(pVarName, g))
+    print('--------------------------------')
+
+'''
+@printFnc
+def printTensor(pVarName):
+    print('--------------------------------')
+    #custom_variable_name = get_variable_name(pVarName, locals())
+    #print(custom_variable_name, ": ")
+    print(namestr(pVarName, globals()))
+    print(pVarName, ": ", type(pVarName))
+    print(pVarName.shape)
+    print(pVarName)
+    print('--------------------------------')
+'''
