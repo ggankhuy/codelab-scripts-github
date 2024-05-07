@@ -34,7 +34,6 @@ def namestr(obj, namespace):
     return [name for name in namespace if namespace[name] is obj]
 
 def printTensor(pVarName, pGlobals=None):
-    print('--------------------------------')
     g=None
     if pGlobals:
         g=pGlobals
@@ -46,10 +45,7 @@ def printTensor(pVarName, pGlobals=None):
     #    print(i)
 
     print('--------------------------------')
-    print(namestr(pVarName, g))
-    print('--------------------------------')
-    print(namestr(pVarName, globals()))
-    print(pVarName, ": ", type(pVarName))
+    print(namestr(pVarName,g), ": ", type(pVarName))
     print(pVarName.shape)
     print(pVarName)
     print('--------------------------------')

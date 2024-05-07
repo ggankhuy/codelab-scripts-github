@@ -34,13 +34,13 @@ rnn_reverse.load_state_dict(dict([(k[:-8], v) \
 
 x=torch.as_tensor(points[0:1]).float()
 x_rev=torch.flip(x,dims=[1])
-#printDbg("x_rev:", x_rev, "\n", x_rev.shape)
 printTensor(x_rev, globals())
 quit(0)
 
 out, h = rnn_forward(x)
 out_rev, h_rev = rnn_reverse(x_rev)
 out_rev_back = torch.flip(out_rev, dims=[1])
+
 printDbg("cat([out, out_rev_back]): \n", torch.cat([out, out_rev_back], dim=2))
 printDbg("cat([out,out_rev_back]: \n", torch.cat([h, h_rev]))
 
