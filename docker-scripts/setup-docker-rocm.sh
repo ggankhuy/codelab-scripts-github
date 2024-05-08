@@ -20,6 +20,7 @@ printHelp() {
     echo "--release: use release branch for internal build." 
     echo "--amdgpu-build: amdgpu build number."
     echo "--no-dkms: bypass dkms installation."
+    echo "--no-install: skip whole installation, only do prereq steps"
     echo "Usage: examples"
     echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
     echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
@@ -38,6 +39,9 @@ do
     case "$var" in 
         "--help")
             printHelp
+            ;;
+        *--no-install*)
+            p_no_install=1
             ;;
         *--ga*)
             p_ga=1
@@ -77,6 +81,8 @@ if [[ -z $USER ]] ; then USER=root ; fi
 yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
 dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
 cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
+
+if [[ $p_no_install == 1 ]] ; then  exit 0 ; fi
 
 rhel_ver=9.2
 
