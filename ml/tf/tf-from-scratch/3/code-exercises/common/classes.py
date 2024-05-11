@@ -56,3 +56,43 @@ class RNNCell:
         self.final_hidden=torch.tanh(adding)
         printDbg("RNNCell.forward: returning self.final_hidden: ", self.final_hidden)
         return self.final_hidden
+
+class SquareModel(nn.Module):
+    def __init__(self, n_features, hidden_dim, n_outputs):
+        super(SquareModel, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.n_features = n_features
+        self.n_outputs = n_outputs
+        self.hidden = None
+
+        # Simple RNN
+
+        self.basic_rnn = nn.RNN(self.n_features, self.hidden_dim, batch_first = True)
+    
+        # classifier to produce as many logits as outputs
+
+        self.classifiers = nn.Linear(self.hidden_dim, self.n_outputs)
+
+    def forward(X):
+        # X is batch first (N,L,F)
+        # output is (N,L,H)
+        # final hidden state is (1,N,H)
+        
+        batch_first_output, self.hidden = self.basic_rnn(X)
+        
+        # only last item in sequence (N,1,H)
+
+        last_output = batch_first_output[:, -1]
+         
+        # classifier will output (N,1,n_outputs)
+
+        out = self.classifier(last_output)
+
+        # final outputs is (N, n_outputs)
+        return out.view(-1, self.n_outputs)
+        
+
+
+ 
+
+
