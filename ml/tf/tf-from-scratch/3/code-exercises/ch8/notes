@@ -12,3 +12,5 @@ h[t] = tanh ( t[x] + t[h] ) ->
 output of current iteration/updated hidden state = 
 activation layer ( hidden state output + input layer output)
 
+5.11.2024
+decided to skip bidir rnn completion. may visit later.
