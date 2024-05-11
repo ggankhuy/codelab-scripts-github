@@ -14,6 +14,7 @@ from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 
+CONFIG_PLOT=0
 points, directions = generate_sequences(256,  seed=13)
 test_points, test_directions = generate_sequences(seed=19)
 train_data = TensorDataset(torch.as_tensor(points).float(),torch.as_tensor(directions).view(-1,1).float())
@@ -25,4 +26,17 @@ torch.manual_seed(21)
 model=SquareModel(n_features=n_features, hidden_dim=hidden_dim, n_outputs=1)
 loss = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.01)
+
+sbs_rnn=StepByStep(model, loss, optimizer)
+sbs_rnn.set_loaders(train_loader, test_loader)
+sbs_rnn.train(100)
+
+if CONFIG_PLOT:
+    fig=sbs_rnn.plot_losses()
+    StepByStep.loader_apply(test_loader, sbs_rnn.correct)
+
+
+state=model.basic_rnn.state_dict()
+state['weight_ih_l0'], state['bias_ih_l0']
+    
 

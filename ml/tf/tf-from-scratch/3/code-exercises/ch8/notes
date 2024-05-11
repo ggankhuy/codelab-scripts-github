@@ -14,3 +14,4 @@ activation layer ( hidden state output + input layer output)
 
 5.11.2024
 decided to skip bidir rnn completion. may visit later.
+deciding to skip gru cell p149
