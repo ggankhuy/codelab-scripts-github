@@ -66,7 +66,10 @@ do
             p_amdgpu_build=`echo $var | awk -F'=' '{print $2}'`
             ;;
         *--no-dkms*)
-            p_dkms="--no-dkms"        
+            p_dkms="--no-dkms"
+            ;;
+        *--root)
+            p_root=1
             ;;
         *)
             echo "Unknown parameter: $var. Exiting..."
@@ -76,11 +79,17 @@ do
 done
 
 set -x 
-if [[ -z $USER ]] ; then USER=root ; fi
+if [[ $p_root ]] && [[ -z $USER ]] ; then 
+    USER=$SUDO_USER
+    HOME=/home/$USER
+else
+    USER=/root
+    HOME=/root
+fi
 
 yum update -y ; yum install cmake git tree nano wget g++ python3-pip sudo -y
 dnf install epel-release epel-next-release -y ; dnf config-manager --set-enabled crb ; dnf install epel-release epel-next-release -y
-cd /$USER/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$USER/.bashrc
+cd /$HOME/extdir ; mkdir gg; cd gg ; mkdir git log wget back transit ; cd git ; echo "cd `pwd`" >> /$HOME/.bashrc
 
 if [[ $p_no_install == 1 ]] ; then  exit 0 ; fi
 
@@ -99,8 +108,8 @@ for i in amdgpu-install amdgpu-install-internal ; do
     yum remove $i -y
 done
 
-mkdir -p /$USER/extdir/gg/wget
-pushd /$USER/extdir/gg/wget 
+mkdir -p /$HOME/extdir/gg/wget
+pushd /$HOME/extdir/gg/wget 
 
 rm -rf amdgpu-install*
 
