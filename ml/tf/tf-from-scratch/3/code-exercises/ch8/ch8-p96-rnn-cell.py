@@ -1,3 +1,6 @@
+# ch8-p96 rnn_cell implementation with minimum modification (mod only includes extra
+# print statements similar mods)
+
 # data format
 # points, direction 
 # points=256,4,2, direction256.
@@ -16,6 +19,7 @@ import sys
 sys.path.append('..')
 
 from common.settings import *
+from common.settings_modded import *
 from common.classes import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
@@ -26,6 +30,10 @@ points, directions = generate_sequences(256,  seed=13)
 # rnn_state: 
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
+
+print("Import setings:")
+printDbg("hidden_dim: ", hidden_dim)
+printDbg("n_features: ", n_features)
 
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
@@ -46,22 +54,27 @@ with torch.no_grad():
     linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
 initial_hidden=torch.zeros(1, hidden_dim)
-printDbg("initial_hidden: ", initial_hidden)
+printTensor(initial_hidden, globals())
 
 th=linear_hidden(initial_hidden)
-printDbg("th: ", th)
+printTensor(th, globals())
 
 X=torch.as_tensor(points[0]).float()
-printDbg("X: ", X)
+printTensor(X, globals())
 
 tx=linear_input(X[0:1])
-printDbg("tx: ", tx)
+printTensor(tx, globals())
 
 adding=th+tx
-print("adding: ", adding)
-print("torch.tanh(adding): ", torch.tanh(adding))
+printTensor(adding, globals())
+printDbg("Adding after torch.tanh()")
+adding=torch.tanh(adding)
+printTensor(adding, globals())
 
-print("rnn_cell(X[0:1]): ", rnn_cell(X[0:1]))
-
+X_01=X[0:1]
+printDbg("X[0:1]: ")
+printTensor(X_01, globals())
+rnn_cell_output=rnn_cell(X[0:1])
+printTensor(rnn_cell_output, globals())
 
 

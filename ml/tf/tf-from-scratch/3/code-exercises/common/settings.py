@@ -5,6 +5,7 @@ hidden_dim=2
 
 debug=1
 debug_class=0
+
 def printDbg(*argv):
     if debug:
         print("DBG:", end=" ")
