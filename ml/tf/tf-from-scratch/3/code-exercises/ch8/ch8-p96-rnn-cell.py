@@ -19,7 +19,6 @@ import sys
 sys.path.append('..')
 
 from common.settings import *
-from common.settings_modded import *
 from common.classes import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep

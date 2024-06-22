@@ -1,10 +1,11 @@
 import inspect
 
 n_features=2
-hidden_dim=2
+hidden_dim=5
 
 debug=1
 debug_class=0
+CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
 
 def printDbg(*argv):
     if debug:
@@ -46,8 +47,12 @@ def printTensor(pVarName, pGlobals=None):
     #    print(i)
 
     print('--------------------------------')
-    print(namestr(pVarName,g), ": ", type(pVarName))
-    print(pVarName.shape)
-    print(pVarName)
+    if not CONFIG_PRINT_TENSOR_SHAPE_ONLY: 
+        print(namestr(pVarName,g), ": ", type(pVarName))
+        print(pVarName.shape)
+        print(pVarName)
+    else:
+        print(namestr(pVarName,g), ": ", type(pVarName), pVarName.shape)
+
     print('--------------------------------')
 
