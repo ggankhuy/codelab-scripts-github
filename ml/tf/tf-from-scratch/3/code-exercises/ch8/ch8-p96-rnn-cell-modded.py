@@ -26,18 +26,22 @@ points, directions = generate_sequences(256,  seed=13)
 # rnn_state: 
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
-
 torch.manual_seed(19)
 rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 if rnn_cell == None:
     print("rnn_cell is None.")
-    quit(1)
+#    quit(1)
 rnn_state=rnn_cell.state_dict()
 
-printDbg("nn.RNNCell (library):")
+printDbg("1) nn.RNNCell (library):")
 for k, v in rnn_state.items():
     printDbg(k, np.array(v).shape, "\n", v)
 
+for  param in rnn_cell.parameters():
+    printDbg(param)
+    printDbg(np.array(param.grad).shape)
+
+quit(0)
 # Lets do above RNNcell manually. However we are copying the values of weigts, bias initialized values
 # so that output can be compared for sanity check!
 
@@ -61,3 +65,7 @@ r2=rnn_cell(X[0:1])
 print("Output of RNN cell from library:")
 print("r2: ", r2)
 
+
+printDbg("1) nn.RNNCell (library):")
+for k, v in rnn_state.items():
+    printDbg(k, np.array(v).shape, "\n", v)

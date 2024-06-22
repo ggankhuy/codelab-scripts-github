@@ -3,7 +3,7 @@ import inspect
 n_features=2
 hidden_dim=5
 
-debug=0
+debug=1
 debug_class=0
 def printDbg(*argv):
     if debug:
