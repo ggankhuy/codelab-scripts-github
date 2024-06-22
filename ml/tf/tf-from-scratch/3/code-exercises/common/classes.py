@@ -10,17 +10,17 @@ sys.path.append('.')
 from common.settings import *
 
 class Linear:
-    @printFnc
+#   @printFnc
     def __init__(self, input_size:int, hidden_size:int):
         self.input_size=input_size
         self.ihddn_dim=hidden_size
         self.weight=torch.zeros([input_size, hidden_size], requires_grad=True)
         self.bias=torch.zeros(hidden_size)
-    @printFnc
+#   @printFnc
     def __call__(self, X):
         return self.forward(X)
 
-    @printFnc
+#   @printFnc
     def forward(self, X):
         return  torch.matmul(X, self.weight.T) + self.bias
 
