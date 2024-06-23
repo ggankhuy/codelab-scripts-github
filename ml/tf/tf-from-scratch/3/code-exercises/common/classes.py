@@ -24,11 +24,16 @@ class Linear:
     def forward(self, X):
         return  torch.matmul(X, self.weight.T) + self.bias
 
+debug_rnn_cell=0
+def printDbgRnnCell(*argv):
+    if debug_rnn_cell:
+        printDbg(argv)
+
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
-        printDbg("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
+        printDbgRnnCell("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
         rnn_state_src=rnn_cell_src.state_dict()
-        printDbg("rnn_state_src: \n", rnn_state_src)
+        printDbgRnnCell("rnn_state_src: \n", rnn_state_src)
         self.linear_input=Linear(input_size, hidden_size)
         self.linear_hidden=Linear(hidden_size, hidden_size)
 
@@ -42,19 +47,19 @@ class RNNCell:
 
         self.initial_hidden=torch.zeros(1, hidden_size)
         self.th=self.linear_hidden(self.initial_hidden)
-        printDbg("RNNCell.__init__: self.th computed to: ", self.th)
+        printDbgRnnCell("RNNCell.__init__: self.th computed to: ", self.th)
 
     def __call__(self, x):
         return self.forward(x)
 
     def forward(self, x):
-        printDbg("RNNCell.forward entered(x=" + str(x))
+        printDbgRnnCell("RNNCell.forward entered(x=" + str(x))
         self.tx=self.linear_input(x)
-        printDbg("RNNCell.forward: self.tx computed to: ", self.tx)
+        printDbgRnnCell("RNNCell.forward: self.tx computed to: ", self.tx)
         adding=self.th+self.tx
-        printDbg(adding)
+        printDbgRnnCell(adding)
         self.final_hidden=torch.tanh(adding)
-        printDbg("RNNCell.forward: returning self.final_hidden: ", self.final_hidden)
+        printDbgRnnCell("RNNCell.forward: returning self.final_hidden: ", self.final_hidden)
         return self.final_hidden
 
 class SquareModel(nn.Module):

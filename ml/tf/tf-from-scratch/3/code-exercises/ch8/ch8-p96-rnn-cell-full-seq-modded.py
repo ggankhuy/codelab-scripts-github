@@ -55,17 +55,13 @@ printDbg("nn.RNNCell (manual):")
 
 hidden=torch.zeros(1, hidden_dim)
 for i in range(X.shape[0]):
-    print("iter: ", i)
-    out = rnn_cell_manual(X[i:i+1])
-    print(out, out.shape)
-    hidden = out
+    printDbg("iter: ", i)
+    out = rnn_cell(X[i:i+1])
+    out_manual = rnn_cell_manual(X[i:i+1])
+    printTensor(out,globals(), "full")
+    printTensor(out_manual,globals(), "full")
+    final_hidden = out
+    final_hidden_manual = out_manual
 
-'''
-r1=rnn_cell_manual(X[0:1])
-print("Output of our manually written RNN cell:")
-print("r1: ", r1)
-
-r2=rnn_cell(X[0:1])
-print("Output of RNN cell from library:")
-print("r2: ", r2)
-'''
+printTensor(final_hidden, globals())
+printTensor(final_hidden_manual, globals())
