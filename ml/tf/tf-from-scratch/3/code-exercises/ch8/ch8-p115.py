@@ -38,39 +38,35 @@ points, directions = generate_sequences(256,  seed=13)
 
 print("computing first 3 data points: 3,4,2...")
 print("1. permuted data, using nn.RNN")
+
 batch = torch.as_tensor(points[:3]).float()
-print("batch.shape: \n", batch.shape)
+
+printTensor(batch, globals())
 permuted_batch=batch.permute(1,0,2)
-print("permuted_batch: \n", permuted_batch.shape)
+printTensor(permuted_batch, globals())
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim)
 
 out, final_hidden=rnn(permuted_batch)
-print("out, final_hidden shapes: ", out.shape, final_hidden.shape)
-print("out, final_hidden:\n", out, "\n", final_hidden)
+
+printTensor(out, globals())
+printTensor(final_hidden, globals())
 
 batch_hidden=final_hidden.permute(1,0,2)
-print("batch_hidden (permuted back): ", batch_hidden.shape)
+
+printTensor(batch_hidden, globals(), "full")
 
 print("BATCH first...")
 print("computing first 3 data points: 3,4,2...")
-batch = torch.as_tensor(points[:3]).float()
-print("batch.shape: \n", batch.shape)
+printTensor(batch, globals())
 
 # [3,4,2] = [batch, length, feature] to [4,3,2] = [Length, batch, feature]
 #permuted_batch=batch.permute(1,0,2)
 
 torch.manual_seed(19)
 rnn=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
-
-out, final_hidden=rnn(permuted_batch)
-print("out:\n", out.shape)
-print("out, final_hidden:\n", out.shape, final_hidden.shape)
-
-#batch_hidden=final_hidden.permute(1,0,2)
-print("batch_hidden:\n", batch_hidden.shape)
-
-
-
+out, final_hidden=rnn(batch)
+printTensor(out, globals())
+printTensor(final_hidden, globals(), "full")
 
