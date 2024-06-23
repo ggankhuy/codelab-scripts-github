@@ -43,6 +43,7 @@ if rnn_cell == None:
 
 rnn_state=rnn_cell.state_dict()
 
+'''
 linear_input=nn.Linear(n_features, hidden_dim)
 linear_hidden=nn.Linear(hidden_dim, hidden_dim)
 
@@ -52,28 +53,31 @@ with torch.no_grad():
     linear_hidden.weight=nn.Parameter(rnn_state['weight_hh'])
     linear_hidden.bias=nn.Parameter(rnn_state['bias_hh'])
 
+
 initial_hidden=torch.zeros(1, hidden_dim)
 printTensor(initial_hidden, globals())
 
 th=linear_hidden(initial_hidden)
 printTensor(th, globals())
+'''
 
 X=torch.as_tensor(points[0]).float()
 printTensor(X, globals())
 
+'''
 tx=linear_input(X[0:1])
 printTensor(tx, globals())
-
 adding=th+tx
 printTensor(adding, globals())
 printDbg("Adding after torch.tanh()")
 adding=torch.tanh(adding)
 printTensor(adding, globals())
+'''
 
-X_01=X[0:1]
-printDbg("X[0:1]: ")
-printTensor(X_01, globals())
-rnn_cell_output=rnn_cell(X[0:1])
+x0=X[0:1]
+printDbg("x[0]: ")
+printTensor(x0, globals())
+rnn_cell_output=rnn_cell(x0)
 printTensor(rnn_cell_output, globals())
 
 
