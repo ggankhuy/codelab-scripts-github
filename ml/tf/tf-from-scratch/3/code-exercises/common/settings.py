@@ -5,7 +5,6 @@ hidden_dim=5
 
 debug=1
 debug_class=0
-CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
 
 def printDbg(*argv):
     if debug:
@@ -35,7 +34,8 @@ def get_variable_name(obj, namespace):
 def namestr(obj, namespace):
     return [name for name in namespace if namespace[name] is obj]
 
-def printTensor(pVarName, pGlobals=None):
+def printTensor(pVarName, pGlobals=None, pOverride=None):
+    CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
     g=None
     if pGlobals:
         g=pGlobals
@@ -47,6 +47,12 @@ def printTensor(pVarName, pGlobals=None):
     #    print(i)
 
     print('--------------------------------')
+    if pOverride == "full":
+        CONFIG_PRINT_TENSOR_SHAPE_ONLY=0
+    elif pOverride == "brief":
+        CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
+    else:
+        pass
     if not CONFIG_PRINT_TENSOR_SHAPE_ONLY: 
         print(namestr(pVarName,g), ": ", type(pVarName))
         print(pVarName.shape)
