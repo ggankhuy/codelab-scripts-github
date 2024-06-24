@@ -60,7 +60,7 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
     else:
         pass
     if not CONFIG_PRINT_TENSOR_SHAPE_ONLY: 
-        print(namestr(varName,g), ": ", type(varName))
+        print(namestr(pVarName,g), ": ", type(varName))
         print(varName.shape)
         print(varName)
     else:
