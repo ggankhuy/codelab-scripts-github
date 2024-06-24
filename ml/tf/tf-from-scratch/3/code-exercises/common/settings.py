@@ -49,7 +49,8 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
 
     varName=pVarName
 
-    if type(pVarName==list):
+
+    if type(pVarName)==list:
         varName=numpy.array(pVarName)
 
     print('--------------------------------')
@@ -64,7 +65,7 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
         print(varName.shape)
         print(varName)
     else:
-        print(namestr(varName,g), ": ", type(varName), varName.shape)
+        print(namestr(pVarName,g), ": ", type(varName), varName.shape)
 
     print('--------------------------------')
 
