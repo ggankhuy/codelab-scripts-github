@@ -1,7 +1,8 @@
 import inspect
+import numpy
 
 n_features=2
-hidden_dim=5
+hidden_dim=2
 
 debug=1
 debug_class=0
@@ -46,6 +47,11 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
     #for i in g:
     #    print(i)
 
+    varName=pVarName
+
+    if type(pVarName==list):
+        varName=numpy.array(pVarName)
+
     print('--------------------------------')
     if pOverride == "full":
         CONFIG_PRINT_TENSOR_SHAPE_ONLY=0
@@ -54,11 +60,11 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
     else:
         pass
     if not CONFIG_PRINT_TENSOR_SHAPE_ONLY: 
-        print(namestr(pVarName,g), ": ", type(pVarName))
-        print(pVarName.shape)
-        print(pVarName)
+        print(namestr(varName,g), ": ", type(varName))
+        print(varName.shape)
+        print(varName)
     else:
-        print(namestr(pVarName,g), ": ", type(pVarName), pVarName.shape)
+        print(namestr(varName,g), ": ", type(varName), varName.shape)
 
     print('--------------------------------')
 

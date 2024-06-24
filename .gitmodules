@@ -10,3 +10,6 @@
 [submodule "ml/tf/tf-from-scratch/3/PyTorchStepByStep"]
 	path = ml/tf/tf-from-scratch/3/PyTorchStepByStep
 	url = https://github.com/dvgodoy/PyTorchStepByStep.git
+[submodule "ml/tf/tf-from-scratch/3/code-exercises/PyTorchStepByStep"]
+	path = ml/tf/tf-from-scratch/3/code-exercises/PyTorchStepByStep
+	url = https://github.com/dvgodoy/PyTorchStepByStep
