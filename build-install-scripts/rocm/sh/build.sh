@@ -400,6 +400,23 @@ function clr() {
     CURR_BUILD=clr
     build_entry $CURR_BUILD
     cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build
+    pushd build
+    if [[ ! -d "../../HIP" ]] ; then echo "Fail: Unable to find DHIP_COMMON_DIR: ../../HIP:" >> $LOG_SUMMARY ; fi
+    cmake .. -DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=../../HIP
+    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+    build_exit $CURR_BIULD
+    
+}
+function clr_old() {
+    CURR_BUILD=clr
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build ; cd build
 
     pushd ../..
