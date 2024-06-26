@@ -27,7 +27,6 @@ test_points, test_directions = generate_sequences(seed=19)
 
 printTensor(points, globals())
 printTensor(test_points, globals())
-quit(0)
 
 train_data = TensorDataset(torch.as_tensor(points).float(),torch.as_tensor(directions).view(-1,1).float())
 test_data = TensorDataset(torch.as_tensor(test_points).float(), torch.as_tensor(test_directions).view(-1,1).float())

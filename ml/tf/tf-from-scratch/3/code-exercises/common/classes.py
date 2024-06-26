@@ -76,7 +76,7 @@ class SquareModel(nn.Module):
     
         # classifier to produce as many logits as outputs
 
-        self.classifiers = nn.Linear(self.hidden_dim, self.n_outputs)
+        self.classifier = nn.Linear(self.hidden_dim, self.n_outputs)
 
     def forward(self, X):
         # X is batch first (N,L,F)
