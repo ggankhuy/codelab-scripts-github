@@ -78,10 +78,11 @@ class SquareModel(nn.Module):
 
         self.classifiers = nn.Linear(self.hidden_dim, self.n_outputs)
 
-    def forward(X):
+    def forward(self, X):
         # X is batch first (N,L,F)
         # output is (N,L,H)
         # final hidden state is (1,N,H)
+
         
         batch_first_output, self.hidden = self.basic_rnn(X)
         
