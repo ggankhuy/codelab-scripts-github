@@ -15,3 +15,10 @@ activation layer ( hidden state output + input layer output)
 5.11.2024
 decided to skip bidir rnn completion. may visit later.
 deciding to skip gru cell p149
+
+
+sbs_rnn=StepByStep(model, loss, optimizer)
+sbs_rnn.set_loaders(train_loader, test_loader)
+sbs_rnn.train(100)
+
+
