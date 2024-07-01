@@ -25,6 +25,9 @@ from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 points, directions = generate_sequences(256,  seed=13)
 
+printTensor(points, globals(), "brief")
+printTensor(directions, globals(), "brief")
+
 # create rnn_cell.
 # rnn_state: 
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
