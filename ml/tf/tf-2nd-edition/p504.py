@@ -12,7 +12,7 @@ print(tf.__version__)
 print(keras.__version__)
 DEBUG=0
 
-CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_PLOT=1
 CONFIG_SAVE_MODEL=0
 
 DEBUG=0
@@ -52,12 +52,10 @@ print("X_valid, y_valid shape: ", X_valid.shape, y_valid.shape)
 print("X_test, y_test shape:   ", X_test.shape, y_test.shape)
 
 if CONFIG_ENABLE_PLOT:
-    '''
     fig, ax = plt.subplots()
     ax.plot(series)
 
     plt.show()
-    '''
 
 y_pred = X_valid[:, -1]
 print("y_pred shape: ", y_pred.shape)
