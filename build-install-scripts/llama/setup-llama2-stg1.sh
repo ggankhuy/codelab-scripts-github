@@ -3,7 +3,9 @@
 
 # changing the actual instalaltion folder to /home/miniconda3 because centos by default alloc-s 
 # only 70gb during installation.
+
 set -x 
+yum install sudo tree git wget -y
 MINICONDA_SRC_DIR=/home/miniconda3
 MINICONDA_DIR=/$HOME/miniconda3
 LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
