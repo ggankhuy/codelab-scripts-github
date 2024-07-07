@@ -76,26 +76,26 @@ popd
 
 pushd $LLAMA_PREREQ_PKGS
 
-if [[ $SOFT_LINK == 1 ]] ; then
-    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        ln -s \
-        $CONDA_PREFIX/lib//$i.so.2 \
-        $CONDA_PREFIX/lib//$i.so.1
-    done
-else
-    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        rm -rf $CONDA_PREFIX/lib//$i.so.1
-        cp \
-        $CONDA_PREFIX/lib//$i.so.2 \
-        $CONDA_PREFIX/lib//$i.so.1
-    done
-fi
+#if [[ $SOFT_LINK == 1 ]] ; then
+#    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
+#        ln -s \
+#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.2 \
+#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
+#    done
+#else
+#    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
+#        rm -rf $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
+#        cp \
+#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.2 \
+#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
+#    done
+#fi
 
 chmod 755 *sh
 echo "Use following cmd to run:"
-echo 'LD_LIBRARY_PATH=$CONDA_PREFIX//lib:$CONDA_PREFIX/lib/:$MAGMA_HOME/lib ./run_llama2_70b.sh'
+echo 'LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 popd
 
-echo "$CONDA_PREFIX/lib/" | tee /etc/ld.so.conf.d/mkl.conf
+echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
