@@ -28,7 +28,7 @@ ln -s $MINICONDA_SRC_DIR /$HOME/
 # setup CONDA_ENV_NAME
 
 CONDA_ENV_NAME="llama2"
-CONDA_ENV_NAME="llama2-test-1"
+CONDA_ENV_NAME="llama2-test-2"
 export CONDA_ENV_NAME=$CONDA_ENV_NAME
 
 if [[ -z `cat ~/.bashrc | egrep "export.*CONDA_ENV_NAME"` ]] ; then

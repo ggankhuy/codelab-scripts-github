@@ -56,9 +56,8 @@ if [[ -z `cat $BASHRC | grep "export.*MAGMA_HOME"` ]] ; then
 fi
 
 if [[  -z `cat $BASHRC | grep "export.*MKLROOT"` ]] ; then
-    echo "export MKLROOT=$CONDA_PREFIX/lib/" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-    #echo "export MKLROOT=$CONDA_PREFIX/envs/$CONDA_ENV_NAME" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-    export MKLROOT=$CONDA_PREFIX/envs/$CONDA_ENV_NAME
+    echo "export MKLROOT=$CONDA_PREFIX/" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
+    export MKLROOT=$CONDA_PREFIX
 fi
 
 if [[ -z `cat $BASHRC | grep "export.*ROCM_PATH"` ]] ; then
@@ -94,7 +93,7 @@ fi
 
 chmod 755 *sh
 echo "Use following cmd to run:"
-echo 'LD_LIBRARY_PATH=$CONDA_PREFIX/envs/$CONDA_ENV_NAME/lib:$CONDA_PREFIX/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
+echo 'LD_LIBRARY_PATH=$CONDA_PREFIX//lib:$CONDA_PREFIX/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 popd
 
 echo "$CONDA_PREFIX/pkgs/mkl-2023.1.0-h213fc3f_46344/lib" | tee /etc/ld.so.conf.d/mkl.conf
