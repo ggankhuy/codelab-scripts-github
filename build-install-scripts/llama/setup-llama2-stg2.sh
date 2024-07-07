@@ -9,7 +9,7 @@ MINICONDA_DIR=/$HOME/miniconda3
 LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
 CONDA=/$HOME/miniconda3/bin/conda
 for i in gfortran libomp; do 
-    yum install $i -y ; 
+    sudo yum install $i -y ; 
 done
 CONDA_ENV_NAME="llama2"
 SOFT_LINK=0
