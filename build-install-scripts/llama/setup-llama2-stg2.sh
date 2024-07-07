@@ -42,12 +42,15 @@ mkdir log
 bash install.sh 2>&1 | sudo tee log/install.log
 popd
 
+sudo ln -s `sudo find /opt -name clang++` /usr/bin/
+if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
+
 git clone https://bitbucket.org/icl/magma.git
 pushd magma
 
 BASHRC=~/.bashrc
 BASHRC_EXPORT=./export.md
-ROCM_PATH=/opt/rocm-6.2.0-13611
+ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
 if [[ -z `cat $BASHRC | grep "export.*MAGMA_HOME"` ]] ; then
