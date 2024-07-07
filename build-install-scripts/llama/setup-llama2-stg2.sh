@@ -96,6 +96,6 @@ echo "Use following cmd to run:"
 echo 'LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 popd
 
-echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | tee /etc/ld.so.conf.d/mkl.conf
-echo "$MAGMA_HOME/lib" | tee /etc/ld.so.conf.d/magma.conf
+echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | sudo tee /etc/ld.so.conf.d/mkl.conf
+echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
