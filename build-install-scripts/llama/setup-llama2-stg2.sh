@@ -5,13 +5,11 @@
 # only 70gb during installation.
 set -x 
 MINICONDA_SRC_DIR=/home/miniconda3
-MINICONDA_DIR=/$HOME/miniconda3
 LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
 CONDA=/$HOME/miniconda3/bin/conda
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
-CONDA_ENV_NAME="llama2"
 SOFT_LINK=0
 
 if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]] ; then 
