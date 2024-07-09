@@ -2,13 +2,13 @@ set -x
 
 OPTION_BUILD_RVS_SUPPORT=1
 OPTION_CLEAN_BUILD_RDC=1
-OPTION_CREATE_PKG=0
+OPTION_CREATE_PKG=1
 GRPC_PROTOC_ROOT=/opt/grpc
 
 apt install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl
 apt install -y libyaml-cpp-dev libabsl-dev
 
-CMAKE_PARAMS="-DROCM_DIR=/opt/rocm -DGRPC_ROOT=$GRPC_PROTOC_ROOT -DCMAKE_INSTALL_PREFIX=/opt/rocm" 
+CMAKE_PARAMS="-DROCM_DIR=/opt/rocm -DGRPC_ROOT=$GRPC_PROTOC_ROOT -DCMAKE_INSTALL_PREFIX=/opt/rocm -DBUILD_RVS=on" 
 
 if [[ $OPTION_CREATE_PKG == 1 ]] ;          then CMAKE_PARAMS="$CMAKE_PARAMS -DCPACK_GENERATOR=DEB" ; fi
 if [[ $OPTION_BUILD_RVS_SUPPORT == 1 ]] ;   then apt install rocm-validation-suite -y ; CMAKE_PARAMS="$CMAKE_PARAMS -DBUILD_RVS=ON" ; fi
@@ -30,8 +30,8 @@ cmake $CMAKE_PARAMS ..
 #cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="$GRPC_PROTOC_ROOT" ..
 #cmake  -DGRPC_ROOT="$GRPC_ROOT" -DBUILD_STANDALONE=off -DBUILD_RVS=Off .. 
 
-#if [[ -z $? ]] ; then make -j $(nproc) install ; fi
-make -j$(nproc) install package
+#if [[ -z $? ]] ; then make -j $(nproc) install else ; exit 1; fi
+make -j $(nproc)
 popd
 
 RDC_LIB_DIR=/opt/rocm/rdc/lib
