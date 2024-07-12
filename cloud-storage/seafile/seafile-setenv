@@ -1,0 +1,26 @@
+#!/bin/bash
+set -x
+date | sudo tee -a /home/guyen/tmp.log
+echo "GG: seafile-setenv.sh entered..." | sudo tee /dev/kmsg
+date | sudo tee -a /home/guyen/tmp.log
+dev=`sudo fdisk -l | grep -i 6F7B2461-9114-49F4-9ACA-E3D9EC309120 -A 5 | grep /dev/sd | tee ~/extdir/gg/log/tmp.log | awk {'print $1 '}`
+echo "GG: device to mount: $dev" | sudo tee /dev/kmsg
+if [[ ! -z $dev ]] ; then
+    if [[ `mount | grep "/mnt/seafile"` ]] || [[ `mount | grep $dev` ]] ; then
+        echo "GG: $dev is already mounted or /mnt/seafile is already mounted" | sudo tee /dev/kmsg
+        mount | grep sd
+    else 
+        sudo mount $dev /mnt/seafile
+        if [[ -z $? ]] ; then
+            echo "GG: $dev is mounnted" |  sudo tee /dev/kmsg
+        else
+            echo "GG: error mounting $dev"
+        fi
+    fi
+else
+    echo "GG: Error: dev is NULL, unable to find device for UUID: 6F7B2461-9114-49F4-9ACA-E3D9EC309120" |  sudo tee /dev/kmsg
+fi
+sudo systemctl start docker
+for i in seafile seafile-mysql seafile-memcached; do
+    sudo docker container start $i
+done
