@@ -107,7 +107,7 @@ else
        "apt")
             # vim-common: rocm5.5 rocr-runtime.
             # libnuma-dev: rocm5.5 roct-thunk-interface.
-            install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config
+            install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config rpm
           ;;
        "yum")
             install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel
@@ -397,6 +397,24 @@ function hipAMD() {
 }
 
 function clr() {
+    set -x
+    CURR_BUILD=clr
+    build_entry $CURR_BUILD
+    cd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build
+    pushd build
+    if [[ ! -d "../../HIP" ]] ; then echo "Fail: Unable to find DHIP_COMMON_DIR: ../../HIP:" >> $LOG_SUMMARY ; fi
+    cmake .. -DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=../../HIP
+    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    popd
+    build_exit $CURR_BIULD
+    set +x
+}
+function clr_old() {
     CURR_BUILD=clr
     build_entry $CURR_BUILD
     cd $ROCM_SRC_FOLDER/$CURR_BUILD
