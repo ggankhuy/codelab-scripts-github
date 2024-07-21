@@ -54,6 +54,8 @@ printTensor(X, globals())
 
 for i in range(X.shape[0]):
     printDbg("iter: ", i)
+    xin=X[i:i+1]
+    printTensor(xin, globals())
     out = rnn_cell(X[i:i+1])
     printTensor(out,globals())
     final_hidden = out

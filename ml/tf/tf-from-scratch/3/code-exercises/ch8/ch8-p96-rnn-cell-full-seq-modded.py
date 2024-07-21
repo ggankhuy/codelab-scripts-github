@@ -56,6 +56,7 @@ printDbg("nn.RNNCell (manual):")
 hidden=torch.zeros(1, hidden_dim)
 for i in range(X.shape[0]):
     printDbg("iter: ", i)
+    printTensor(i, globals(), "full")
     out = rnn_cell(X[i:i+1])
     out_manual = rnn_cell_manual(X[i:i+1])
     printTensor(out,globals(), "full")
