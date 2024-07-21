@@ -90,7 +90,7 @@ def getGlobalsClass(pObj):
     return d1
 
 def printTensor(pVar, pGlobals=None, pOverride=None):
-    DEBUG=1
+    DEBUG=0
     if DEBUG:
         print("printTensor entered...")
 

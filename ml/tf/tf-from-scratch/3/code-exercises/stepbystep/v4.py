@@ -435,13 +435,13 @@ class StepByStep(object):
                 printDbg(argv)
 
         printDbgCorrect("correct(self,x,y,threshol=.5) entered...")
-        printTensor(x, globals())
-        printTensor(y, globals())
+        printTensor(x, locals())
+        printTensor(y, locals())
 
         self.model.eval()
         yhat = self.model(x.to(self.device))
 
-        printTensor(yhat, globals())
+        printTensor(yhat, locals())
 
         y = y.to(self.device)
         self.model.train()
@@ -450,8 +450,8 @@ class StepByStep(object):
         # (only 1, if it is binary)
         n_samples, n_dims = yhat.shape
 
-        printTensor(n_samples, globals())
-        printTensor(n_dims, globals())
+        printTensor(n_samples, locals())
+        printTensor(n_dims, locals())
 
         if n_dims > 1:        
             # In a multiclass classification, the biggest logit
@@ -472,7 +472,7 @@ class StepByStep(object):
             else:
                 predicted = (torch.sigmoid(yhat) > threshold).long()
 
-        printTensor(predicted, globals())
+        printTensor(predicted, locals())
 
         # How many samples got classified correctly for each class
         result = []
@@ -482,7 +482,7 @@ class StepByStep(object):
             result.append((n_correct, n_class))
 
         printDbgCorrect("returning: ")
-        printTensor(result, globals())
+        printTensor(result, locals())
 
         return torch.tensor(result)
     
@@ -506,7 +506,7 @@ class StepByStep(object):
 
         results = torch.stack(results, axis=0)
         printDbgLoaderApply("after torch.stack")
-        printTensor(results,globals())
+        printTensor(results,locals())
 
         if reduce == 'sum':
             results = results.sum(axis=0)
@@ -514,9 +514,9 @@ class StepByStep(object):
         elif reduce == 'mean':
             results = results.float().mean(axis=0)
             printDbgLoaderApply("resuls.float().mean(axis=0)")
-        printTensor(results,globals())
+        printTensor(results,locals())
         printDbgLoaderApply("Returning:")
-        printTensor(results,globals())
+        printTensor(results,locals())
         return results
 
     @staticmethod
