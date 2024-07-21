@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import sys
 import random
+import matplotlib.pyplot as plt
 
 from torch.utils.data import DataLoader, Dataset,  random_split, TensorDataset
 from torch.optim.lr_scheduler import LambdaLR
@@ -21,6 +22,7 @@ from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 
 CONFIG_USE_SBS=1
+CONFIG_ENABLE_PLOT=1
 
 print("Import setings:")
 printDbg("hidden_dim: ", hidden_dim)
@@ -61,8 +63,9 @@ if CONFIG_USE_SBS:
 else:
     pass 
 
-if CONFIG_PLOT:
+if CONFIG_ENABLE_PLOT:
     fig=sbs_rnn.plot_losses()
+    plt.show()
     StepByStep.loader_apply(test_loader, sbs_rnn.correct)
 
 state=model.basic_rnn.state_dict()

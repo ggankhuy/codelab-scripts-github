@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import datetime
 import torch
@@ -9,6 +10,11 @@ from copy import deepcopy
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.transforms import Normalize
 from torch.optim.lr_scheduler import LambdaLR
+
+
+sys.path.append('..')
+
+from common.settings import *
 
 plt.style.use('fivethirtyeight')
 
@@ -173,10 +179,25 @@ class StepByStep(object):
             pass
         
     def train(self, n_epochs, seed=42):
+        DEBUG=1    
+
+        def printDbgTrain(*argv):
+            if DEBUG:
+                printDbg(argv)
+
+        '''
+        def printTensor(pVarName, pGlobals=None, pOverride=None):
+            if DEBUG:
+                printTensor(pVarName, pGlobals, pOverride)
+        '''
+
         # To ensure reproducibility of the training process
         self.set_seed(seed)
 
+                
+
         for epoch in range(n_epochs):
+            printDbgTrain("epoch No: ", epoch)
             # Keeps track of the numbers of epochs
             # by updating the corresponding attribute
             self.total_epochs += 1
@@ -184,14 +205,18 @@ class StepByStep(object):
             # inner loop
             # Performs training using mini-batches
             loss = self._mini_batch(validation=False)
-            self.losses.append(loss)
 
+            printTensor(loss, globals())
+            self.losses.append(loss)
+            printTensor(self.losses, globals())
             # VALIDATION
             # no gradients in validation!
             with torch.no_grad():
                 # Performs evaluation using mini-batches
                 val_loss = self._mini_batch(validation=True)
+                printTensor(val_loss, globals())
                 self.val_losses.append(val_loss)
+                printTensor(self.val_losses, globals())
 
             self._epoch_schedulers(val_loss)
                         

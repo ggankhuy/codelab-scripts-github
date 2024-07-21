@@ -69,6 +69,8 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
     elif pOverride == "shape":
         CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
         CONFIG_PRINT_TENSOR_BRIEF=0
+    elif pOverride == None:
+        pass
     else:
         print("Warning: unknown pOverride value while it is not None(default): ", pOverride)
         pass
