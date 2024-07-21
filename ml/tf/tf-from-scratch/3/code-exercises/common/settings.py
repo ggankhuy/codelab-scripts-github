@@ -59,6 +59,9 @@ def printTensor(pVarName, pGlobals=None, pOverride=None):
     if type(pVarName)==list:
         varName=numpy.array(pVarName)
 
+    if type(pVarName)==int:
+        varName=numpy.array([pVarName])
+
     print('--------------------------------')
     if pOverride == "full":
         CONFIG_PRINT_TENSOR_SHAPE_ONLY=0

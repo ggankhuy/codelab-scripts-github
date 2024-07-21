@@ -1,0 +1,439 @@
+/home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:38: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:276.)
+  train_data = TensorDataset(torch.as_tensor(points).float(),torch.as_tensor(directions).view(-1,1).float())
+PuTTY X11 proxy: unable to connect to forwarded X server: Network error: Connection refused
+/home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:68: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+printFnc: func:  <function namestr at 0x7fc4d84e59d0>
+Import setings:
+DBG: hidden_dim:  2 
+
+DBG: n_features:  2 
+
+--------------------------------
+['points'] :  <class 'numpy.ndarray'> (256, 4, 2)
+--------------------------------
+--------------------------------
+['test_points'] :  <class 'numpy.ndarray'> (128, 4, 2)
+--------------------------------
+DBG: ('epoch No: ', 0) 
+
+DBG: ('epoch No: ', 1) 
+
+DBG: ('epoch No: ', 2) 
+
+DBG: ('epoch No: ', 3) 
+
+DBG: ('epoch No: ', 4) 
+
+DBG: ('epoch No: ', 5) 
+
+DBG: ('epoch No: ', 6) 
+
+DBG: ('epoch No: ', 7) 
+
+DBG: ('epoch No: ', 8) 
+
+DBG: ('epoch No: ', 9) 
+
+DBG: ('epoch No: ', 10) 
+
+DBG: ('epoch No: ', 11) 
+
+DBG: ('epoch No: ', 12) 
+
+DBG: ('epoch No: ', 13) 
+
+DBG: ('epoch No: ', 14) 
+
+DBG: ('epoch No: ', 15) 
+
+DBG: ('epoch No: ', 16) 
+
+DBG: ('epoch No: ', 17) 
+
+DBG: ('epoch No: ', 18) 
+
+DBG: ('epoch No: ', 19) 
+
+DBG: ('epoch No: ', 20) 
+
+DBG: ('epoch No: ', 21) 
+
+DBG: ('epoch No: ', 22) 
+
+DBG: ('epoch No: ', 23) 
+
+DBG: ('epoch No: ', 24) 
+
+DBG: ('epoch No: ', 25) 
+
+DBG: ('epoch No: ', 26) 
+
+DBG: ('epoch No: ', 27) 
+
+DBG: ('epoch No: ', 28) 
+
+DBG: ('epoch No: ', 29) 
+
+DBG: ('epoch No: ', 30) 
+
+DBG: ('epoch No: ', 31) 
+
+DBG: ('epoch No: ', 32) 
+
+DBG: ('epoch No: ', 33) 
+
+DBG: ('epoch No: ', 34) 
+
+DBG: ('epoch No: ', 35) 
+
+DBG: ('epoch No: ', 36) 
+
+DBG: ('epoch No: ', 37) 
+
+DBG: ('epoch No: ', 38) 
+
+DBG: ('epoch No: ', 39) 
+
+DBG: ('epoch No: ', 40) 
+
+DBG: ('epoch No: ', 41) 
+
+DBG: ('epoch No: ', 42) 
+
+DBG: ('epoch No: ', 43) 
+
+DBG: ('epoch No: ', 44) 
+
+DBG: ('epoch No: ', 45) 
+
+DBG: ('epoch No: ', 46) 
+
+DBG: ('epoch No: ', 47) 
+
+DBG: ('epoch No: ', 48) 
+
+DBG: ('epoch No: ', 49) 
+
+DBG: ('epoch No: ', 50) 
+
+DBG: ('epoch No: ', 51) 
+
+DBG: ('epoch No: ', 52) 
+
+DBG: ('epoch No: ', 53) 
+
+DBG: ('epoch No: ', 54) 
+
+DBG: ('epoch No: ', 55) 
+
+DBG: ('epoch No: ', 56) 
+
+DBG: ('epoch No: ', 57) 
+
+DBG: ('epoch No: ', 58) 
+
+DBG: ('epoch No: ', 59) 
+
+DBG: ('epoch No: ', 60) 
+
+DBG: ('epoch No: ', 61) 
+
+DBG: ('epoch No: ', 62) 
+
+DBG: ('epoch No: ', 63) 
+
+DBG: ('epoch No: ', 64) 
+
+DBG: ('epoch No: ', 65) 
+
+DBG: ('epoch No: ', 66) 
+
+DBG: ('epoch No: ', 67) 
+
+DBG: ('epoch No: ', 68) 
+
+DBG: ('epoch No: ', 69) 
+
+DBG: ('epoch No: ', 70) 
+
+DBG: ('epoch No: ', 71) 
+
+DBG: ('epoch No: ', 72) 
+
+DBG: ('epoch No: ', 73) 
+
+DBG: ('epoch No: ', 74) 
+
+DBG: ('epoch No: ', 75) 
+
+DBG: ('epoch No: ', 76) 
+
+DBG: ('epoch No: ', 77) 
+
+DBG: ('epoch No: ', 78) 
+
+DBG: ('epoch No: ', 79) 
+
+DBG: ('epoch No: ', 80) 
+
+DBG: ('epoch No: ', 81) 
+
+DBG: ('epoch No: ', 82) 
+
+DBG: ('epoch No: ', 83) 
+
+DBG: ('epoch No: ', 84) 
+
+DBG: ('epoch No: ', 85) 
+
+DBG: ('epoch No: ', 86) 
+
+DBG: ('epoch No: ', 87) 
+
+DBG: ('epoch No: ', 88) 
+
+DBG: ('epoch No: ', 89) 
+
+DBG: ('epoch No: ', 90) 
+
+DBG: ('epoch No: ', 91) 
+
+DBG: ('epoch No: ', 92) 
+
+DBG: ('epoch No: ', 93) 
+
+DBG: ('epoch No: ', 94) 
+
+DBG: ('epoch No: ', 95) 
+
+DBG: ('epoch No: ', 96) 
+
+DBG: ('epoch No: ', 97) 
+
+DBG: ('epoch No: ', 98) 
+
+DBG: ('epoch No: ', 99) 
+
+tensor([[-0.0829, -4.0286],
+        [-1.9044, -0.8202]], device='cuda:0') tensor([1.1137, 0.8638], device='cuda:0')
+DBG: ("loader_apply(loader, func, reduce='sum') entered...",) 
+
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+DBG: ('correct(self,x,y,threshol=.5) entered...',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 4, 2])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+['debug'] :  <class 'numpy.ndarray'> (1,)
+--------------------------------
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([16, 1])
+--------------------------------
+DBG: ('returning: ',) 
+
+--------------------------------
+[] :  <class 'numpy.ndarray'> (2, 2)
+--------------------------------
+--------------------------------
+[] :  <class 'numpy.ndarray'> (8, 2, 2)
+--------------------------------
+DBG: ('after torch.stack',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([8, 2, 2])
+--------------------------------
+DBG: ('after results.sum',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+--------------------------------
+DBG: ('Returning:',) 
+
+--------------------------------
+[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+--------------------------------

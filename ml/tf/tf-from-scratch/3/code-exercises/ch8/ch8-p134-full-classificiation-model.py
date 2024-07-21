@@ -66,9 +66,8 @@ else:
 if CONFIG_ENABLE_PLOT:
     fig=sbs_rnn.plot_losses()
     plt.show()
-    StepByStep.loader_apply(test_loader, sbs_rnn.correct)
 
 state=model.basic_rnn.state_dict()
 print(state['weight_ih_l0'], state['bias_ih_l0'])
-    
 
+StepByStep.loader_apply(test_loader, sbs_rnn.correct)

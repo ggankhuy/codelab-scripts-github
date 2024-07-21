@@ -194,8 +194,6 @@ class StepByStep(object):
         # To ensure reproducibility of the training process
         self.set_seed(seed)
 
-                
-
         for epoch in range(n_epochs):
             printDbgTrain("epoch No: ", epoch)
             # Keeps track of the numbers of epochs
@@ -206,17 +204,17 @@ class StepByStep(object):
             # Performs training using mini-batches
             loss = self._mini_batch(validation=False)
 
-            printTensor(loss, globals())
+            #printTensor(loss, globals())
             self.losses.append(loss)
-            printTensor(self.losses, globals())
+            #printTensor(self.losses, globals())
             # VALIDATION
             # no gradients in validation!
             with torch.no_grad():
                 # Performs evaluation using mini-batches
                 val_loss = self._mini_batch(validation=True)
-                printTensor(val_loss, globals())
+                #printTensor(val_loss, globals())
                 self.val_losses.append(val_loss)
-                printTensor(self.val_losses, globals())
+                #printTensor(self.val_losses, globals())
 
             self._epoch_schedulers(val_loss)
                         
@@ -430,14 +428,31 @@ class StepByStep(object):
         return fig
 
     def correct(self, x, y, threshold=.5):
+        DEBUG=1
+
+        def printDbgCorrect(*argv):
+            if DEBUG:
+                printDbg(argv)
+
+        printDbgCorrect("correct(self,x,y,threshol=.5) entered...")
+        printTensor(x, globals())
+        printTensor(y, globals())
+
         self.model.eval()
         yhat = self.model(x.to(self.device))
+
+        printTensor(yhat, globals())
+
         y = y.to(self.device)
         self.model.train()
 
         # We get the size of the batch and the number of classes 
         # (only 1, if it is binary)
         n_samples, n_dims = yhat.shape
+
+        printTensor(n_samples, globals())
+        printTensor(n_dims, globals())
+
         if n_dims > 1:        
             # In a multiclass classification, the biggest logit
             # always wins, so we don't bother getting probabilities
@@ -457,24 +472,47 @@ class StepByStep(object):
             else:
                 predicted = (torch.sigmoid(yhat) > threshold).long()
 
+        printTensor(predicted, globals())
+
         # How many samples got classified correctly for each class
         result = []
         for c in range(n_dims):
             n_class = (y == c).sum().item()
             n_correct = (predicted[y == c] == c).sum().item()
             result.append((n_correct, n_class))
+
+        printDbgCorrect("returning: ")
+        printTensor(result, globals())
+
         return torch.tensor(result)
     
     @staticmethod
     def loader_apply(loader, func, reduce='sum'):
+        DEBUG=1
+
+        def printDbgLoaderApply(*argv):
+            if DEBUG:
+                printDbg(argv)
+
+        printDbgLoaderApply("loader_apply(loader, func, reduce='sum') entered...")
+        #printTensor(loader, globals())
+
         results = [func(x, y) for i, (x, y) in enumerate(loader)]
+        printTensor(results,globals())
+
         results = torch.stack(results, axis=0)
+        printDbgLoaderApply("after torch.stack")
+        printTensor(results,globals())
 
         if reduce == 'sum':
             results = results.sum(axis=0)
+            printDbgLoaderApply("after results.sum")
         elif reduce == 'mean':
             results = results.float().mean(axis=0)
-
+            printDbgLoaderApply("resuls.float().mean(axis=0)")
+        printTensor(results,globals())
+        printDbgLoaderApply("Returning:")
+        printTensor(results,globals())
         return results
 
     @staticmethod
