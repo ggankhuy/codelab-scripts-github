@@ -33,36 +33,83 @@ def get_variable_name(obj, namespace):
 
 @printFnc
 def namestr(obj, namespace):
-    print("namestr entered...")
-    print("obj: ", obj, type(obj))
-    print("namespace: ", type(namespace))
+    DEBUG=0
+
+    if DEBUG:
+        print("namestr entered...")
+        print("obj: ", obj, type(obj))
+        print("namespace: ", type(namespace))
 
     if type(namespace) == dict:
-        for key in namespace.keys():
-            print(" - ", key, ": ", namespace[key])
+
+        if DEBUG:
+            for key in namespace.keys():
+                print(" - ", key, ": ", namespace[key])
         return [name for name in namespace if namespace[name] is obj]
     else:
+        # This will not work, only dict type work. Keeping herr just in case or delete after a while.
+
         for i in namespace:
-            print("id(obj): ", id(obj), obj)
-            print(" - ", i, id(i))
+            if DEBUG:
+                print("id(obj): ", id(obj), obj)
+                print(" - ", i, id(i))
             if  getattr(i) == obj:
                 return i
 
+'''
+Because it is impossible to get class member names using globals() call when using printTensor(<varName>, globals)
+when it is called within a class to print member name, getGlobalsClass() will be substituted for globals() class
+which returns the same dict object as globals().
+so when used inside a class, use following calling to get the same result as regular variable:
+printTensor(<class_member_var>, getGlobalsClass(<class_instance>)
+
+i.e.
+class m:
+    n = 1
+    def printClassMember(self):
+        printTensor(m, getGlobalsClass(self)
+
+m1=m()
+m1=printClassMember()
+'''
+
+def getGlobalsClass(pObj):
+    DEBUG=0
+
+    if DEBUG:
+        print("getGlobalClass entered...")
+    d1={}
+    for i in dir(pObj):
+        d1[i] = getattr(pObj,i)
+
+    if DEBUG:
+        print("returning: ", type(d1))
+        for i in d1.keys():
+            print (" -- ", i, d1[i])
+
+    return d1
+
 def printTensor(pVar, pGlobals=None, pOverride=None):
-    print("printTensor entered...")
+    DEBUG=1
+    if DEBUG:
+        print("printTensor entered...")
+
     CONFIG_PRINT_TENSOR_SHAPE_ONLY=1
     CONFIG_PRINT_TENSOR_BRIEF=0
     CONFIG_PRINT_TENSOR_BRIEF_DIM1=4
     CONFIG_PRINT_TENSOR_BRIEF_DIM2=3
     CONFIG_PRINT_TENSOR_BRIEF_DIM3=1
-    DEBUG=1
 
     g=None
     if pGlobals:
-        print("globals: OK")
+        if DEBUG:
+            print("globals: OK")
+            for i in pGlobals.keys():
+                print(" - ", i, pGlobals[i])
         g=pGlobals
     else:
-        print("globals: None.")
+        if DEBUG:
+            print("globals: None.")
         g=globals()
     # for debug purpose only.
     #for i in g:

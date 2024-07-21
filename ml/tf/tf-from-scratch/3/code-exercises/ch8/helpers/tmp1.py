@@ -3,9 +3,12 @@ import torch
 x=torch.as_tensor([[1,2],[3,4]])
 import sys
 sys.path.append('../..')
-
+DEBUG=0
 from common.settings import *
 from common.classes import *
+sys.path.append('modules')
+from  module1 import *
+
 class tmp1:
     tmp1_x = 10
     tmp1_y = [0,1,2,3]
@@ -19,13 +22,18 @@ class tmp1:
         printTensor(self.tmp1_y, getGlobalsClass(self))
 
 def getGlobalsClass(pObj):
-    print("getGlobalClass entered...")
+    DEBUG=0
+
+    if DEBUG:
+        print("getGlobalClass entered...")
     d1={}
     for i in dir(pObj):
         d1[i] = getattr(pObj,i)
-    print("returning: ", type(d1))
-    for i in d1.keys():
-        print (" -- ", i, d1[i])
+
+    if DEBUG:
+        print("returning: ", type(d1))
+        for i in d1.keys():
+            print (" -- ", i, d1[i])
 
     return d1
     
@@ -51,4 +59,6 @@ tmp1_inst.tmp1_fn1()
 # printTensorLocal(x)->nameStr() ok
 # printTensorLocal(x)->nameStrLocal() ok
 # printTensor(x)->nameStr() fail
+
+f1()
 

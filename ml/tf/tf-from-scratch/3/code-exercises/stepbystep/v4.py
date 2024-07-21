@@ -204,17 +204,17 @@ class StepByStep(object):
             # Performs training using mini-batches
             loss = self._mini_batch(validation=False)
 
-            #printTensor(loss, globals())
+            #printTensor(loss, getGlobalsClass(self))
             self.losses.append(loss)
-            #printTensor(self.losses, globals())
+            #printTensor(self.losses, getGlobalsClass(self))
             # VALIDATION
             # no gradients in validation!
             with torch.no_grad():
                 # Performs evaluation using mini-batches
                 val_loss = self._mini_batch(validation=True)
-                #printTensor(val_loss, globals())
+                #printTensor(val_loss, getGlobalsClass(self))
                 self.val_losses.append(val_loss)
-                #printTensor(self.val_losses, globals())
+                #printTensor(self.val_losses, getGlobalsClass(self))
 
             self._epoch_schedulers(val_loss)
                         
@@ -495,10 +495,10 @@ class StepByStep(object):
                 printDbg(argv)
 
         printDbgLoaderApply("loader_apply(loader, func, reduce='sum') entered...")
-        #printTensor(loader, globals())
+        #printTensor(loader, getGlobalsClass(self))
 
         results = [func(x, y) for i, (x, y) in enumerate(loader)]
-        printTensor(results,globals())
+        printTensor(results)
 
         results = torch.stack(results, axis=0)
         printDbgLoaderApply("after torch.stack")
