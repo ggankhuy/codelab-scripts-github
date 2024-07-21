@@ -18,6 +18,7 @@ from common.classes import *
 from data_generation.square_sequences import generate_sequences
 
 from stepbystep.v4 import StepByStep
+from stepbystep.v4 import *
 
 from plots.chapter8 import plot_data
 

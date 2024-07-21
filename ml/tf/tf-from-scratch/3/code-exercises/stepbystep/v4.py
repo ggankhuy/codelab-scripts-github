@@ -498,7 +498,11 @@ class StepByStep(object):
         #printTensor(loader, getGlobalsClass(self))
 
         results = [func(x, y) for i, (x, y) in enumerate(loader)]
-        printTensor(results)
+        print("locals(): ")
+        for i in locals():
+            print(" : ", i)
+
+        printTensor(results, locals())
 
         results = torch.stack(results, axis=0)
         printDbgLoaderApply("after torch.stack")
