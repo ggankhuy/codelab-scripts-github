@@ -57,7 +57,7 @@ print(X)
 printTensor(X, globals())
 
 if CONFIG_ENABLE_PLOT:
-    fig, axs = plt.subplots(4)
+    fig, axs = plt.subplots(2,2)
     hidden_acc=[]
     fig.suptitle('hidden states during iterations.')
 for i in range(X.shape[0]):
@@ -78,8 +78,8 @@ for i in range(X.shape[0]):
     if CONFIG_ENABLE_PLOT:
         hidden_acc+=hidden
         print("subplot indices: ", int(i/2), i%2)
-        axs[i].set_xlim([-1, 1])
-        axs[i].set_ylim([-1, 1])
+        axs[int(i/2), i%2].set_xlim([-1, 1])
+        axs[int(i/2), i%2].set_ylim([-1, 1])
         #axs[i].plot(hidden, marker=8)
 
 if CONFIG_ENABLE_PLOT:
