@@ -80,7 +80,7 @@ for i in range(X.shape[0]):
         print("subplot indices: ", int(i/2), i%2)
         axs[int(i/2), i%2].set_xlim([-1, 1])
         axs[int(i/2), i%2].set_ylim([-1, 1])
-        #axs[i].plot(hidden, marker=8)
+        axs[int(i/2), i%2].plot(hidden.detach().numpy(), marker=8)
 
 if CONFIG_ENABLE_PLOT:
     plt.show()
