@@ -54,11 +54,11 @@ class RNNCell:
 
     def forward(self, x):
         printDbgRnnCell("RNNCell.forward entered(x=" + str(x))
-        self.tx=self.linear_input(x)
+        self.tx = self.linear_input(x)
         printDbgRnnCell("RNNCell.forward: self.tx computed to: ", self.tx)
-        adding=self.th+self.tx
+        adding = self.th+self.tx
         printDbgRnnCell(adding)
-        self.final_hidden=torch.tanh(adding)
+        self.final_hidden = torch.tanh(adding)
         printDbgRnnCell("RNNCell.forward: returning self.final_hidden: ", self.final_hidden)
         return self.final_hidden
 
