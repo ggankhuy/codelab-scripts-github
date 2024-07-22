@@ -61,12 +61,19 @@ printDbg("nn.RNNCell (manual):")
 hidden=torch.zeros(1, hidden_dim)
 
 if CONFIG_ENABLE_PLOT:
-    fig, axs = plt.subplots(2,2)
+    fig, axs = plt.subplots(4,4)
+    #col1 : hidden (before iteration)
+    #col2 : input (tx)
+    #col3 : adding (th+tx)
+    #col4 : hidden (after iteration applied activation layer)
     hidden_acc=[]
     fig.suptitle('hidden states during iterations.')
 
 for i in range(X.shape[0]):
     printDbg("iter: ", i)
+
+    x_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][0], 2)
+    y_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][1], 2)
 
     out = rnn_cell(X[i:i+1])
     out_manual = rnn_cell_manual(X[i:i+1])
@@ -79,18 +86,34 @@ for i in range(X.shape[0]):
 
     if CONFIG_ENABLE_PLOT:
         hidden_acc+=hidden
-        print("subplot indices: ", int(i/2), i%2)
-        axs[int(i/2), i%2].set_xlim([-1, 1])
-        axs[int(i/2), i%2].set_ylim([-1, 1])
+        axs[int(i/2), i%2].set_xlim([-3, 3])
+        axs[int(i/2), i%2].set_ylim([-3, 3])
+
+        x_tx=round(rnn_cell_manual.tx.detach().numpy()[0][0], 2)
+        y_tx=round(rnn_cell_manual.tx.detach().numpy()[0][1], 2)
+
+        x_adding=round(rnn_cell_manual.adding.detach().numpy()[0][0], 2)
+        y_adding=round(rnn_cell_manual.adding.detach().numpy()[0][1], 2)
+
+        x_hidden=round(hidden_manual.detach().numpy()[0][0], 2)
+        y_hidden=round(hidden_manual.detach().numpy()[0][1], 2)
+
+        axs[int(i), 0].plot(x_hidden_prev,y_hidden_prev, marker='o')
+        axs[int(i), 0].text(x_hidden_prev+0.1,y_hidden_prev+0.1, '({:2.2}, {:2.2})'.format(x_hidden_prev, y_hidden_prev))
+
+        axs[int(i), 1].plot(x_tx,y_tx, marker='*')
+        axs[int(i), 1].text(x_tx+0.1,y_tx+0.1, '({:2.2}, {:2.2})'.format(x_tx, y_tx))
+
+        axs[int(i), 2].plot(x_adding,y_adding, marker='D')
+        axs[int(i), 2].text(x_adding+0.1,y_adding+0.1, '({:2.2}, {:2.2})'.format(x_adding, y_adding))
+
+        axs[int(i), 3].plot(x_hidden,y_hidden, marker='s')
+        axs[int(i), 3].text(x_hidden+0.1,y_hidden+0.1, '({:2.2}, {:2.2})'.format(x_hidden, y_hidden))
 
         if DEBUG:
+            print("subplot indices: ", int(i/2), i%2)
             print("hidden.detach().numpy()[0]: ", hidden.detach().numpy()[0])
-
-        x=round(hidden.detach().numpy()[0][0], 2)
-        y=round(hidden.detach().numpy()[0][1], 2)
-        print("x/y: ", x,y)
-        axs[int(i/2), i%2].plot(x,y, marker=8)
-        axs[int(i/2), i%2].text(x,y+0.5, '({:2.2}, {:2.2})'.format(x, y))
+            print("x/y: ", x,y)
 
 final_hidden=hidden
 final_hidden_manual=hidden_manual

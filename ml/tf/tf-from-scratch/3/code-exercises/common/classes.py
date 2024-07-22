@@ -16,13 +16,15 @@ class Linear:
         self.ihddn_dim=hidden_size
         self.weight=torch.zeros([input_size, hidden_size], requires_grad=True)
         self.bias=torch.zeros(hidden_size)
+        self.hidden=0
 #   @printFnc
     def __call__(self, X):
         return self.forward(X)
 
 #   @printFnc
     def forward(self, X):
-        return  torch.matmul(X, self.weight.T) + self.bias
+        self.hidden = torch.matmul(X, self.weight.T) + self.bias
+        return self.hidden
 
 debug_rnn_cell=0
 def printDbgRnnCell(*argv):
@@ -36,6 +38,7 @@ class RNNCell:
         printDbgRnnCell("rnn_state_src: \n", rnn_state_src)
         self.linear_input=Linear(input_size, hidden_size)
         self.linear_hidden=Linear(hidden_size, hidden_size)
+        self.adding=0
 
         with torch.no_grad():
             self.linear_input.weight=nn.Parameter(rnn_state_src['weight_ih'])
@@ -56,9 +59,9 @@ class RNNCell:
         printDbgRnnCell("RNNCell.forward entered(x=" + str(x))
         self.tx = self.linear_input(x)
         printDbgRnnCell("RNNCell.forward: self.tx computed to: ", self.tx)
-        adding = self.th+self.tx
-        printDbgRnnCell(adding)
-        self.final_hidden = torch.tanh(adding)
+        self.adding = self.th+self.tx
+        printDbgRnnCell(self.adding)
+        self.final_hidden = torch.tanh(self.adding)
         printDbgRnnCell("RNNCell.forward: returning self.final_hidden: ", self.final_hidden)
         return self.final_hidden
 
