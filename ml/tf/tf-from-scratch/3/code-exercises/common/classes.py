@@ -10,13 +10,16 @@ sys.path.append('.')
 from common.settings import *
 
 class Linear:
-#   @printFnc
+    @printFnc
     def __init__(self, input_size:int, hidden_size:int):
         self.input_size=input_size
-        self.ihddn_dim=hidden_size
+        self.hidden_dim=hidden_size
         self.weight=torch.zeros([input_size, hidden_size], requires_grad=True)
         self.bias=torch.zeros(hidden_size)
-        self.hidden=0
+
+        # this is not necessary but only for plotting.
+
+        self.hidden=torch.zeros(hidden_size)
 #   @printFnc
     def __call__(self, X):
         return self.forward(X)
@@ -34,8 +37,11 @@ def printDbgRnnCell(*argv):
 class RNNCell:
     def __init__(self, rnn_cell_src: nn.RNNCell, input_size:int, hidden_size:int):
         printDbgRnnCell("RNNCell.__init__ entered: input_size, hidden_size: ", input_size, hidden_size)
+
         rnn_state_src=rnn_cell_src.state_dict()
+
         printDbgRnnCell("rnn_state_src: \n", rnn_state_src)
+
         self.linear_input=Linear(input_size, hidden_size)
         self.linear_hidden=Linear(hidden_size, hidden_size)
         self.adding=0

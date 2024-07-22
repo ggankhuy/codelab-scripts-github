@@ -72,8 +72,13 @@ if CONFIG_ENABLE_PLOT:
 for i in range(X.shape[0]):
     printDbg("iter: ", i)
 
-    x_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][0], 2)
-    y_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][1], 2)
+    #x_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][0], 2)
+    #y_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][1], 2)
+    x_hidden_prev=hidden.detach().numpy()[0][0]
+    y_hidden_prev=hidden.detach().numpy()[0][1]
+
+    printTensor(x_hidden_prev, globals(), "full")
+    printTensor(y_hidden_prev, globals(), "full")
 
     out = rnn_cell(X[i:i+1], hidden)
     out_manual = rnn_cell_manual(X[i:i+1], hidden)
