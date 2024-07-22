@@ -86,8 +86,12 @@ for i in range(X.shape[0]):
 
     if CONFIG_ENABLE_PLOT:
         hidden_acc+=hidden
-        axs[int(i/2), i%2].set_xlim([-3, 3])
-        axs[int(i/2), i%2].set_ylim([-3, 3])
+
+        subplot_titles=['hidden (prev)','tx','tx+th','hidden(curr)']
+        for col in range(0, 4):
+            axs[i, col].set_xlim([-3, 3])
+            axs[i, col].set_ylim([-3, 3])
+            axs[i, col].title.set_text(subplot_titles[col])
 
         x_tx=round(rnn_cell_manual.tx.detach().numpy()[0][0], 2)
         y_tx=round(rnn_cell_manual.tx.detach().numpy()[0][1], 2)

@@ -52,12 +52,13 @@ class RNNCell:
         self.th=self.linear_hidden(self.initial_hidden)
         printDbgRnnCell("RNNCell.__init__: self.th computed to: ", self.th)
 
-    def __call__(self, x):
-        return self.forward(x)
+    def __call__(self, x, hidden):
+        return self.forward(x, hidden)
 
-    def forward(self, x):
+    def forward(self, x, hidden):
         printDbgRnnCell("RNNCell.forward entered(x=" + str(x))
         self.tx = self.linear_input(x)
+        self.th = self.linear_hidden(hidden)
         printDbgRnnCell("RNNCell.forward: self.tx computed to: ", self.tx)
         self.adding = self.th+self.tx
         printDbgRnnCell(self.adding)
