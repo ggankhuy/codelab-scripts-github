@@ -20,8 +20,12 @@ from common.classes import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
+import matplotlib.pyplot as plt
+
 points, directions = generate_sequences(256,  seed=13)
 
+DEBUG=0
+CONFIG_ENABLE_PLOT=1
 # create rnn_cell.
 # rnn_state: 
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
@@ -52,12 +56,40 @@ X=torch.as_tensor(points[0]).float()
 print(X)
 printTensor(X, globals())
 
+if CONFIG_ENABLE_PLOT:
+    fig, axs = plt.subplots(4)
+    hidden_acc=[]
+    fig.suptitle('hidden states during iterations.')
 for i in range(X.shape[0]):
     printDbg("iter: ", i)
     xin=X[i:i+1]
-    printTensor(xin, globals())
-    out = rnn_cell(X[i:i+1])
-    printTensor(out,globals())
-    final_hidden = out
 
-printTensor(final_hidden, globals())
+    if DEBUG:
+        printTensor(xin, globals())
+
+    out = rnn_cell(X[i:i+1], hidden)
+
+    if DEBUG:
+        printTensor(out,globals())
+
+    hidden = out
+    printTensor(hidden, globals(), "full")
+    
+    if CONFIG_ENABLE_PLOT:
+        hidden_acc+=hidden
+        print("subplot indices: ", int(i/2), i%2)
+        axs[i].set_xlim([-1, 1])
+        axs[i].set_ylim([-1, 1])
+        #axs[i].plot(hidden, marker=8)
+
+if CONFIG_ENABLE_PLOT:
+    plt.show()
+
+final_hidden = out
+
+printTensor(final_hidden, globals(), "full")
+print("manual print:")
+print(final_hidden[0][0])
+print(final_hidden[0][1])
+final_hidden_list=final_hidden[0][:]
+print(final_hidden_list)
