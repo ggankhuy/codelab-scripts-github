@@ -89,6 +89,18 @@ def getGlobalsClass(pObj):
 
     return d1
 
+#   Prints tensor values in a uniform format
+#   Usage example:
+#   In order to display the variable name (precedes the value) the pGlobals variable used.
+#   if it is called from __main__ function from python, use following calling convention:
+#   1) printTensor(<var_name>, globals()), where globals will pass the dictionary object containing
+#   current symbol table.
+#   If used within a module other than __main__, use locals() call instead:
+#   2) printTensor(<var_name>, locals()), where similar dictionaries will be passed from local module scope.
+#   If used to call from class member function to print class member variables, use following function calls:
+#   3) printTensor(<var_name>, getGlobalClass()) where getGlobalClass will build dictionary from symbols within a 
+#   class scope. 
+
 def printTensor(pVar, pGlobals=None, pOverride=None):
     DEBUG=0
     if DEBUG:

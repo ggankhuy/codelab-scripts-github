@@ -75,8 +75,8 @@ for i in range(X.shape[0]):
     x_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][0], 2)
     y_hidden_prev=round(rnn_cell_manual.linear_hidden.hidden.detach().numpy()[0][1], 2)
 
-    out = rnn_cell(X[i:i+1])
-    out_manual = rnn_cell_manual(X[i:i+1])
+    out = rnn_cell(X[i:i+1], hidden)
+    out_manual = rnn_cell_manual(X[i:i+1], hidden)
 
     printTensor(out,globals(), "full")
     printTensor(out_manual,globals(), "full")
