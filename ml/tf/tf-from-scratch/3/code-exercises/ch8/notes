@@ -40,7 +40,7 @@ sbs_rnn.train(100)
                                 #inside perform_val_step_fn
                                 self.model.eval()
 
-
+loader_apply(test_loader, sbs_rnn.correct)
 
 
 

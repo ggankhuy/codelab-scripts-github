@@ -428,20 +428,22 @@ class StepByStep(object):
         return fig
 
     def correct(self, x, y, threshold=.5):
-        DEBUG=1
+        DEBUG=0
 
         def printDbgCorrect(*argv):
             if DEBUG:
                 printDbg(argv)
 
         printDbgCorrect("correct(self,x,y,threshol=.5) entered...")
-        printTensor(x, locals())
-        printTensor(y, locals())
+        if DEBUG:
+            printTensor(x, locals())
+            printTensor(y, locals())
 
         self.model.eval()
         yhat = self.model(x.to(self.device))
 
-        printTensor(yhat, locals())
+        if DEBUG:
+            printTensor(yhat, locals())
 
         y = y.to(self.device)
         self.model.train()
@@ -450,8 +452,9 @@ class StepByStep(object):
         # (only 1, if it is binary)
         n_samples, n_dims = yhat.shape
 
-        printTensor(n_samples, locals())
-        printTensor(n_dims, locals())
+        if DEBUG:
+            printTensor(n_samples, locals())
+            printTensor(n_dims, locals())
 
         if n_dims > 1:        
             # In a multiclass classification, the biggest logit
@@ -472,7 +475,8 @@ class StepByStep(object):
             else:
                 predicted = (torch.sigmoid(yhat) > threshold).long()
 
-        printTensor(predicted, locals())
+        if DEBUG:
+            printTensor(predicted, locals())
 
         # How many samples got classified correctly for each class
         result = []
@@ -482,7 +486,9 @@ class StepByStep(object):
             result.append((n_correct, n_class))
 
         printDbgCorrect("returning: ")
-        printTensor(result, locals())
+
+        if DEBUG:
+            printTensor(result, locals())
 
         return torch.tensor(result)
     
@@ -498,15 +504,19 @@ class StepByStep(object):
         #printTensor(loader, getGlobalsClass(self))
 
         results = [func(x, y) for i, (x, y) in enumerate(loader)]
-        print("locals(): ")
-        for i in locals():
-            print(" : ", i)
 
-        printTensor(results, locals())
+        if DEBUG and 0:
+            print("locals(): ")
+            for i in locals():
+                print(" : ", i)
+
+        if DEBUG:
+            printTensor(results, locals())
 
         results = torch.stack(results, axis=0)
         printDbgLoaderApply("after torch.stack")
-        printTensor(results,locals())
+        if DEBUG:
+            printTensor(results,locals())
 
         if reduce == 'sum':
             results = results.sum(axis=0)
@@ -514,9 +524,15 @@ class StepByStep(object):
         elif reduce == 'mean':
             results = results.float().mean(axis=0)
             printDbgLoaderApply("resuls.float().mean(axis=0)")
-        printTensor(results,locals())
+
+        if DEBUG:
+            printTensor(results,locals())
+
         printDbgLoaderApply("Returning:")
-        printTensor(results,locals())
+
+        if DEBUG:
+            printTensor(results,locals())
+
         return results
 
     @staticmethod
