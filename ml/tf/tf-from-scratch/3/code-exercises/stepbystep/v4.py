@@ -428,13 +428,14 @@ class StepByStep(object):
         return fig
 
     def correct(self, x, y, threshold=.5):
-        DEBUG=0
+        DEBUG=1
 
         def printDbgCorrect(*argv):
             if DEBUG:
                 printDbg(argv)
 
         printDbgCorrect("correct(self,x,y,threshol=.5) entered...")
+
         if DEBUG:
             printTensor(x, locals())
             printTensor(y, locals())
@@ -453,8 +454,8 @@ class StepByStep(object):
         n_samples, n_dims = yhat.shape
 
         if DEBUG:
-            printTensor(n_samples, locals())
-            printTensor(n_dims, locals())
+            printTensor(n_samples, locals(), "full")
+            printTensor(n_dims, locals(), "full")
 
         if n_dims > 1:        
             # In a multiclass classification, the biggest logit
@@ -488,7 +489,7 @@ class StepByStep(object):
         printDbgCorrect("returning: ")
 
         if DEBUG:
-            printTensor(result, locals())
+            printTensor(torch.tensor(result), locals())
 
         return torch.tensor(result)
     
@@ -500,11 +501,9 @@ class StepByStep(object):
             if DEBUG:
                 printDbg(argv)
 
+        printDbgLoaderApply("loader_apply(loader, func, reduce='sum') entered...")
         printDbgLoaderApply("function entry parameters:")
         printTensor(loader, globals())
-
-        printDbgLoaderApply("loader_apply(loader, func, reduce='sum') entered...")
-        #printTensor(loader, getGlobalsClass(self))
 
         results = [func(x, y) for i, (x, y) in enumerate(loader)]
 
