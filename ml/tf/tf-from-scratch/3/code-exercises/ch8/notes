@@ -1,3 +1,4 @@
+
 RNN CELL:
 
 t[h] = Whh * t[h-1] + b[hh] -> 
@@ -40,8 +41,15 @@ sbs_rnn.train(100)
                                 #inside perform_val_step_fn
                                 self.model.eval()
 
-loader_apply(test_loader, sbs_rnn.correct)
+loader_apply(test_loader, sbs_rnn.correct) where test_loader=[128,[[4,2],[1]]]
+    for each batch in test_loader, call correct(x,y) where x=[16,4,2] and y=[16] therefore iteratest 128/16=8 times.    
+    y=hat compute => [16,1]=[16]
+    compute predicted => [16,1]
+    returns
 
+
+
+    
 
 
 

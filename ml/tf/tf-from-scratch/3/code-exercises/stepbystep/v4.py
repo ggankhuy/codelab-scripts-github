@@ -482,14 +482,17 @@ class StepByStep(object):
         # How many samples got classified correctly for each class
         result = []
         for c in range(n_dims):
+            print("c: ", c)
             n_class = (y == c).sum().item()
             n_correct = (predicted[y == c] == c).sum().item()
+            printTensor(n_class, locals(), "full")
+            printTensor(n_correct, locals(), "full")
             result.append((n_correct, n_class))
 
         printDbgCorrect("returning: ")
 
         if DEBUG:
-            printTensor(torch.tensor(result), locals())
+            printTensor(result, locals(), "full")
 
         return torch.tensor(result)
     

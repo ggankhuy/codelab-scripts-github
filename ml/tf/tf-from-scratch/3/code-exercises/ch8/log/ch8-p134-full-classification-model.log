@@ -3,8 +3,8 @@
 PuTTY X11 proxy: unable to connect to forwarded X server: Network error: Connection refused
 /home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:71: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   plt.show()
-printFnc: func:  <function namestr at 0x7f6f0b869b80>
-printFnc: func:  <function Linear.__init__ at 0x7f6f0b869ee0>
+printFnc: func:  <function namestr at 0x7faf10669b80>
+printFnc: func:  <function Linear.__init__ at 0x7faf10669ee0>
 Import setings:
 DBG: hidden_dim:  2 
 
@@ -255,10 +255,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[6]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[6]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[10]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[10]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[ 6  6]
+ [10 10]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -284,10 +309,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[5]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[5]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[11]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[11]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[ 5  5]
+ [11 11]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -313,10 +363,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[4]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[4]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[12]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[12]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[ 4  4]
+ [12 12]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -342,10 +417,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[7]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[7]
+--------------------------------
+c:  1
+--------------------------------
+['n_class'] :  <class 'int'>
+(1,)
+[9]
+--------------------------------
+--------------------------------
+['n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[7 7]
+ [8 9]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -371,10 +471,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[8 8]
+ [8 8]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -400,10 +525,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[8 8]
+ [8 8]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -429,10 +579,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class'] :  <class 'int'>
+(1,)
+[6]
+--------------------------------
+--------------------------------
+['n_correct'] :  <class 'int'>
+(1,)
+[5]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[10]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[10]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[ 5  6]
+ [10 10]]
 --------------------------------
 DBG: ('correct(self,x,y,threshol=.5) entered...',) 
 
@@ -458,10 +633,35 @@ DBG: ('correct(self,x,y,threshol=.5) entered...',)
 --------------------------------
 ['predicted'] :  <class 'torch.Tensor'> torch.Size([16, 1])
 --------------------------------
+c:  0
+--------------------------------
+['n_class'] :  <class 'int'>
+(1,)
+[9]
+--------------------------------
+--------------------------------
+['n_correct'] :  <class 'int'>
+(1,)
+[8]
+--------------------------------
+c:  1
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[7]
+--------------------------------
+--------------------------------
+['n_class', 'n_correct'] :  <class 'int'>
+(1,)
+[7]
+--------------------------------
 DBG: ('returning: ',) 
 
 --------------------------------
-[] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['result'] :  <class 'list'>
+(2, 2)
+[[8 9]
+ [7 7]]
 --------------------------------
 --------------------------------
 ['results'] :  <class 'list'> (8, 2, 2)
@@ -482,5 +682,8 @@ DBG: ('Returning:',)
 ['results'] :  <class 'torch.Tensor'> torch.Size([2, 2])
 --------------------------------
 --------------------------------
-['output'] :  <class 'torch.Tensor'> torch.Size([2, 2])
+['output'] :  <class 'torch.Tensor'>
+torch.Size([2, 2])
+tensor([[51, 53],
+        [74, 75]])
 --------------------------------
