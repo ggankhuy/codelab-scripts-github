@@ -9,7 +9,7 @@ yum install sudo tree git wget -y
 
 #setup  MINICONDA_SRC_DIR
 
-MINICONDA_SRC_DIR=/home/miniconda3
+MINICONDA_SRC_DIR=/$HOME/miniconda3_src
 export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
 if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
@@ -17,7 +17,7 @@ if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
 fi
 
 LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
-CONDA=/$HOME/miniconda3/bin/conda
+CONDA=/$MINICONDA_SRC_DIR/bin/conda
 
 mkdir -p $MINICONDA_SRC_DIR
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
