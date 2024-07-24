@@ -42,6 +42,8 @@ test_data = TensorDataset(torch.as_tensor(test_points).float(), torch.as_tensor(
 train_loader = DataLoader(train_data, batch_size=16, shuffle=True)
 test_loader = DataLoader(test_data,  batch_size=16)
 
+printTensor(train_loader, globals())
+printTensor(test_loader, globals())
 '''
 printTensor(train_data.data.numpy(), globals())
 printTensor(test_data.data.numpy(), globals())
@@ -71,4 +73,5 @@ if CONFIG_ENABLE_PLOT:
 state=model.basic_rnn.state_dict()
 print(state['weight_ih_l0'], state['bias_ih_l0'])
 
-StepByStep.loader_apply(test_loader, sbs_rnn.correct)
+output=StepByStep.loader_apply(test_loader, sbs_rnn.correct)
+printTensor(output, globals())

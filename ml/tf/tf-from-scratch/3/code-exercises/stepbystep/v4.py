@@ -500,6 +500,9 @@ class StepByStep(object):
             if DEBUG:
                 printDbg(argv)
 
+        printDbgLoaderApply("function entry parameters:")
+        printTensor(loader, globals())
+
         printDbgLoaderApply("loader_apply(loader, func, reduce='sum') entered...")
         #printTensor(loader, getGlobalsClass(self))
 

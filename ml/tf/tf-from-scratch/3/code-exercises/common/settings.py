@@ -1,5 +1,6 @@
 import inspect
 import numpy
+import torch
 
 n_features=2
 hidden_dim=2
@@ -130,6 +131,15 @@ def printTensor(pVar, pGlobals=None, pOverride=None):
     lVar=pVar
     lVarName=None
 
+    if type(pVar)==torch.utils.data.dataloader.DataLoader:
+        dim1=len(pVar.dataset)
+        dim2_0=numpy.array((pVar.dataset)[0][0]).shape
+        dim2_1=numpy.array((pVar.dataset)[0][1]).shape
+
+        # force shape only
+
+        pOverride="shape"
+
     if type(pVar)==list:
         lVar=numpy.array(pVar)
 
@@ -156,9 +166,14 @@ def printTensor(pVar, pGlobals=None, pOverride=None):
         pass
 
     if CONFIG_PRINT_TENSOR_SHAPE_ONLY: 
-        print(lVarName, ": ", type(lVar), lVar.shape)
+
+        # special care for dataloader
+        if type(pVar)==torch.utils.data.dataloader.DataLoader:
+            print(lVarName, ": ", type(pVar), ", [", dim1, ", [", dim2_0, ", ", dim2_1, "]]")
+        else:
+            print(lVarName, ": ", type(pVar), lVar.shape)
     elif CONFIG_PRINT_TENSOR_BRIEF:
-        print(lVarName, ": ", type(lVar), lVar.shape)
+        print(lVarName, ": ", type(pVar), lVar.shape)
         pLenDim1 = min(len(lVar), CONFIG_PRINT_TENSOR_BRIEF_DIM1)
         pLenDim2 = None
         pLenDim3 = None
@@ -188,7 +203,7 @@ def printTensor(pVar, pGlobals=None, pOverride=None):
             print(lVar[0:pLenDim1])
 
     else:
-        print(lVarName, ": ", type(lVar))
+        print(lVarName, ": ", type(pVar))
         print(lVar.shape)
         print(lVar)
 
