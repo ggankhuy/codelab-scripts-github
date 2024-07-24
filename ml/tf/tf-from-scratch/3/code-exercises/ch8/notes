@@ -45,9 +45,19 @@ loader_apply(test_loader, sbs_rnn.correct) where test_loader=[128,[[4,2],[1]]]
     for each batch in test_loader, call correct(x,y) where x=[16,4,2] and y=[16] therefore iteratest 128/16=8 times.    
     y=hat compute => [16,1]=[16]
     compute predicted => [16,1]
-    returns
+    since n_dims=1 from yhat=[n_samples,n_dim], binary classification=> ndim+=1.
+    results is [2,2]  where
+    [[amount of sample for class=0][amount of correct prediction for class=0]\
+    [amount of sample for class=1][amount of correct prediction for class=1]]    
 
+    therefore accuracy would be:
+    amount of correct pred for class 0 + 1 / amount of sanple for clas 0 + 1
+    
+    For sample output:
+    tensor([[51, 53],
+        [74, 75]])
 
+    (51+74)/(53+75)=97.65%
 
     
 
