@@ -5,6 +5,36 @@
 # only 70gb during installation.
 
 set -x 
+
+function usage()  {
+    clear
+    echo "$0 --env_name"
+    echo "$0 --pkg_name [without file extension tar.gz]"
+}
+
+for var in "$@"
+do
+    echo var: $var
+    case "$var" in
+        *--help*)
+            usage
+            exit 0
+            ;;
+        *--env_name=*)
+            p_env_name=`echo $var | awk -F '=' '{print $2}'`
+            echo "env_name from cmdline: $p_env_name" 
+            ;;
+        *--pkg_name=*)
+            p_pkg_name=`echo $var | awk -F '=' '{print $2}'`
+            echo "pkg_name from cmdline: $p_pkg_name" 
+            ;;
+        *)
+            echo "Unknown cmdline parameter: $var"
+            usage
+            exit 1
+            ;;
+    esac
+done
 yum install sudo tree git wget -y
 
 #setup  MINICONDA_SRC_DIR
@@ -16,7 +46,16 @@ if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
     echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | sudo tee -a ~/.bashrc
 fi
 
-LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
+if [[ -z $p_pkg_name ]] ; then
+    echo "package name is not specified from cmdline. Using default:"
+    echo "20240502_quanta_llamav2"
+    LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
+else
+    LLAMA_PREREQ_PKGS=$p_pkg_name
+fi
+
+echo "package name is set to: $LLAMA_PREREQ_PKGS"
+
 CONDA=/$HOME/miniconda3/bin/conda
 
 mkdir -p $MINICONDA_SRC_DIR
@@ -30,7 +69,16 @@ ln -s $MINICONDA_SRC_DIR /$HOME/
 # setup CONDA_ENV_NAME
 
 CONDA_ENV_NAME="llama2"
-CONDA_ENV_NAME="llama2-test-8"
+
+if [[ -z $p_env_name ]] ; then
+    echo "conda env_name is not specified from cmdline. Using default env_name:"
+    echo "CONDA_ENV_NAME"
+else
+    CONDA_ENV_NAME=$p_env_name
+fi
+
+echo "CONDA_ENV_NAME is set to $CONDA_ENV_NAME"
+
 export CONDA_ENV_NAME=$CONDA_ENV_NAME
 
 if [[ -z `cat ~/.bashrc | egrep "export.*CONDA_ENV_NAME"` ]] ; then
