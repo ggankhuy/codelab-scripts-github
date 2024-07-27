@@ -1,9 +1,22 @@
 set -x
 
 function usage() {
-    echo "$0 --help : to display this help."
-    echo "$0 --init-script=<path_to_init_script> --name=<services_name>"
-    echo "Example: $i --init-script=/usr/bin/my.sh --name=myserv : will setup myserv that will execute my.sh during boot"
+    set +x
+    echo "$0    --help : to display this help."
+    echo "$0    --init-script=path_to_init_script"
+    echo "      --name=<services_name>"
+    echo "      --type=<type of startup startup script/exec used in startup service>"
+    echo "      value for --type: "
+    echo "      sh or shell for shell script"
+    echo "      py, pyt or python for python"
+    echo "      py3, pyt3 or python3 for python3 to specify python3 explicitly"
+    echo "      --desc=<description of startup script/service>"
+    echo "Example: $0 \
+        --init-script=/usr/bin/my.sh \
+        --name=myserv \
+        --type=shell \
+        --desc='mystartup script' : \
+        will setup myserv that will execute my.sh during boot"
 }
     
 for var in "$@"
@@ -14,16 +27,16 @@ do
             usage
             exit 0
             ;;
-        *--type=*)
-            p_type=`echo $var | awk -F '=' '{print $2}'`
-            ;;
         *--init-script=*)
             p_script=`echo $var | awk -F '=' '{print $2}'`
             ;;
         *--name=*)
             p_name=`echo $var | awk -F '=' '{print $2}'`
             ;;
-        *--decs=*)
+        *--type=*)
+            p_type=`echo $var | awk -F '=' '{print $2}'`
+            ;;
+        *--desc=*)
             p_desc=`echo $var | awk -F '=' '{print $2}'`
             ;;
         *)
@@ -45,12 +58,11 @@ if [[ ! -f $PATH_PATH3 ]] ; then
     PYTHON_PATH3=`which python3`
 fi
 
-if [[ z -f $BASH_PATH ]]; then
+if [[ ! -f $BASH_PATH ]] ; then
     BASH_PATH=`which bash`
 fi
 
 case "$p_type" in
-    sh)
     shell)
         if [[ -z $BASH_PATH ]] ; then
             echo "bash is not found. Unable to set shebang at the beginning. Services initialization therefore likely fail although setup would correctly"
@@ -58,8 +70,6 @@ case "$p_type" in
             SHEBANG="#!/$BASH_PATH"
         fi
         ;;
-    py)
-    pyt)
     python)
         if [[ -z $PYTHON_PATH ]] ; then
             echo "python path is not found. Unable to set shebang at the beginning. Services initialization therefore likely fail although setup would correctly"
@@ -68,8 +78,6 @@ case "$p_type" in
         fi
         ;;
 
-    py3)
-    pyt3)
     python3)
         if [[ -z $PYTHON3_PATH ]] ; then
             echo "python3 path: is not found. Unable to set shebang at the beginning. Services initialization therefore likely fail although setup would correctly"
@@ -85,7 +93,6 @@ case "$p_type" in
 esac
 
 if [[ -z $p_script ]] || [[ -z $p_name ]] ; then
-    clear
     echo "Both of --init-script and --name must be specified and mandatory."
     usage 
     exit 1
@@ -93,6 +100,10 @@ fi
 
 SERVICES_PATH=/etc/systemd/system/multi-user.target.wants/$p_name.service
 
+if [[ -f $SERVICES_PATH ]] ; then
+    echo "Service already exists: $SERVICE_PATH"
+    exit 1
+fi
 if [[ -z $p_desc ]] ; then
     echo "Description of the startup service was not specified. It is strongly encouraged to do so!"
     echo "After setup, you can add in following file:  /$SERVICES_PATH"
