@@ -89,8 +89,8 @@ $CONDA create --name  $CONDA_ENV_NAME python==3.9 -y
 $CONDA init
 
 if [[ -z `cat ~/.bashrc | egrep "export.*env_name"` ]] ; then
-    echo "export env_name=$CONDA_ENV_NAME" | tee ~/.bashrc
+    echo "export env_name=$CONDA_ENV_NAME" | tee -a ~/.bashrc
 fi
 
-echo "conda activate $CONDA_ENV_NAME" >> ~/.bashrc
+echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
 
