@@ -19,6 +19,7 @@ function set_os_type() {
     esac
 }
 function install_python() {
+    set -x
     #Python defs.
     set_os_type
 
@@ -68,7 +69,12 @@ function install_python() {
         exit 1
     fi
     ./configure --enable-optimizations
+    if [[ $? -ne 0 ]] ; then echo "configure fail..." ; exit 1 ; fi
+
     sudo make -j`nproc` install
+    if [[ $? -ne 0 ]] ; then echo "configure fail..." ; exit 1 ;fi
+    sudo make  install
+    if [[ $? -ne 0 ]] ; then echo "configure fail..." ; exit 1 ;fi
 
     echo "Testing the installation..."
     python$PYTHON_VER_MAJOR --version

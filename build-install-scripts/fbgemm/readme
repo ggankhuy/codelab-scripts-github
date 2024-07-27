@@ -1,0 +1,11 @@
+This is based on this documentation.
+https://pytorch.org/FBGEMM/fbgemm_gpu-development/BuildInstructions.html
+WIP, build would easily break or unclear if it works at all.
+
+# prereq: conda installed and environment is activated so that part is skipped.
+# llvm setup is skipped.
+# rocm installation path is skipped.
+
+
+
+
