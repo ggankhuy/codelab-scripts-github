@@ -104,15 +104,29 @@ if [[ -f $SERVICES_PATH ]] ; then
     echo "Service already exists: $SERVICE_PATH"
     exit 1
 fi
+
 if [[ -z $p_desc ]] ; then
     echo "Description of the startup service was not specified. It is strongly encouraged to do so!"
     echo "After setup, you can add in following file:  /$SERVICES_PATH"
 fi
 
-sed -i '1s/^/$SHEBANG\n/' $p_script
-cat template.service | sudo tee -a /etc/systemd/system/multi-user.target.wants/$p_name.service
+echo "$SHEBANG" | sudo tee tmp.shebang
+cat $p_script | sudo tee tmp.script
+
+cat tmp.shebang | sudo tee $p_script
+cat tmp.script | sudo tee -a $p_script
+
+cat template.service | sudo tee $SERVICES_PATH
+chmod 755 $p_script
+cp $script /usr/bin/
+mv tmp.script $p_script
+rm -rf tmp.*
 sudo sed -i "/ExecStart/c \ \ExecStart = $p_script" $SERVICES_PATH
 
 if [[ $p_desc ]] ; then
     sudo sed -i "/Description/c \ \Description = $p_desc" $SERVICES_PATH
 fi
+sudo systemctl enable $p_name.service
+sudo systemctl start $p_name.service
+sudo systemctl status $p_name.service
+
