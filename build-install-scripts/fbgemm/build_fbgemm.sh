@@ -3,6 +3,7 @@ set -x
 CONFIG_INSTALL_PYTHON=0
 CONFIG_INSTALL_TORCH=1
 CONFIG_INSTALL_LLVM=0
+CONFIG_INSTALL_TRITON=1
 
 env_name=`echo $CONDA_DEFAULT_ENV | awk "{print $2}"`
 pwd=`pwd`
@@ -161,6 +162,7 @@ export python_plat_name="win_${ARCH}"
 
 CONFIG_FBGEMM_BUILD_VARIANT=genai
 CONFIG_FBGEMM_BUILD_VARIANT=rocm
+
 case $CONFIG_FBGEMM_BUILD_VARIANT in 
     genai)
        package_variant=genai
@@ -185,6 +187,7 @@ esac
 #modified genai variant (if defined) for rocm, if it works.
 
 export ROCM_PATH=/opt/rocm/
+export PYTORCH_ROCM_ARCH=$(${ROCM_PATH}/bin/rocminfo | grep -o -m 1 'gfx.*')
 
 if [[ -z $ROCM_PATH ]] ; then
     echo "rocm path is not found in $ROCM_PATH"
