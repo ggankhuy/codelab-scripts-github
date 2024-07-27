@@ -1,8 +1,7 @@
-
-#set -x
+set -x
 
 CONFIG_INSTALL_PYTHON=0
-CONFIG_INSTALL_TORCH=0
+CONFIG_INSTALL_TORCH=1
 CONFIG_INSTALL_LLVM=0
 
 env_name=`echo $CONDA_DEFAULT_ENV | awk "{print $2}"`
@@ -49,7 +48,7 @@ fi # install python
 conda run pip install --upgrade pip
 conda run python -m pip install pyOpenSSL>22.1.0
 
-for i in hipify-clang miopen-hip miopen-hip-dev; do
+for i in hipify-clang miopen-hip miopen-hip-devel; do
     yum install $i -y
 done
 
@@ -83,7 +82,13 @@ conda_prefix=$(conda run -n ${env_name} printenv CONDA_PREFIX)
 conda env config vars set -n ${env_name} LD_LIBRARY_PATH="${ld_library_path}:${conda_prefix}/lib"
 
 # Set NVCC_PREPEND_FLAGS in the Conda environment for Clang to work correctly as the host compiler
-conda env config vars set -n ${env_name} NVCC_PREPEND_FLAGS=\"-std=c++20 -Xcompiler -std=c++20 -Xcompiler -stdlib=libstdc++ -ccbin ${clangxx_path} -allow-unsupported-compiler\"
+## GG: this step is broken:
+#usage: conda [-h] [-v] [--no-plugins] [-V] COMMAND ...
+#conda: error: unrecognized arguments: -Xcompiler -std=c++20 -Xcompiler -stdlib=libstdc++ -ccbin -allow-unsupported-compiler"
+#(fbgemm) [root@localhost fbgemm]# nano -w build_fbgemm.sh
+#commenting out for now.
+
+#conda env config vars set -n ${env_name} NVCC_PREPEND_FLAGS=\"-std=c++20 -Xcompiler -std=c++20 -Xcompiler -stdlib=libstdc++ -ccbin ${clangxx_path} -allow-unsupported-compiler\"
 
 #compiler synliks
 
@@ -129,7 +134,8 @@ if [[ $CONFIG_INSTALL_TRITON -eq 1 ]] ; then
 fi
 
 FBGEMM_VERSION=v0.8.0
-git clone --recursive -b ${FBGEMM_VERSION} https://github.com/pytorch/FBGEMM.git fbgemm_${FBGEMM_VERSION}
+#v0.8.0-release
+git clone --recursive -b ${FBGEMM_VERSION}-release https://github.com/pytorch/FBGEMM.git fbgemm_${FBGEMM_VERSION}
 pushd fbgemm_${FBGEMM_VERSION}/fbgemm_gpu
 pip install -r requirements.txt
 python setup.py clean
