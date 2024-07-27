@@ -1,0 +1,9 @@
+[Unit]
+Description = description
+After = network.target
+
+[Service]
+ExecStart = /root/root.sh
+
+[Install]
+WantedBy = multi-user.target
