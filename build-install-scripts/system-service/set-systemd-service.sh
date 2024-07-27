@@ -46,6 +46,8 @@ do
             ;;
     esac
 done
+
+systemctl stop firewalld.service
 PYTHON_PATH=/usr/bin/python
 PYTHON3_PATH=/usr/bin/python3
 BASH_PATH=/bin/bash
@@ -98,7 +100,9 @@ if [[ -z $p_script ]] || [[ -z $p_name ]] ; then
     exit 1
 fi
 
-SERVICES_PATH=/etc/systemd/system/multi-user.target.wants/$p_name.service
+SERVICES_PATH_SOFT=/etc/systemd/system/multi-user.target.wants/$p_name.service
+SERVICES_PATH=/usr/lib/systemd/system/$p_name.service
+sudo ln -s $SERVICE_PATH_SOFT $SERVICE_PATH
 
 if [[ -f $SERVICES_PATH ]] ; then
     echo "Service already exists: $SERVICE_PATH"
@@ -118,10 +122,15 @@ cat tmp.script | sudo tee -a $p_script
 
 cat template.service | sudo tee $SERVICES_PATH
 chmod 755 $p_script
-cp $script /usr/bin/
+filename=`basename $p_script`
+
+if [[ -f /usr/bin/$filename ]] ; then echo "/usr/bin/$filename already exist" ; exit 1 ; fi
+
+cp $p_script /usr/bin/$filename
 mv tmp.script $p_script
 rm -rf tmp.*
-sudo sed -i "/ExecStart/c \ \ExecStart = $p_script" $SERVICES_PATH
+p_script_new=/usr/bin/$filename
+sudo sed -i "/ExecStart/c \ \ExecStart = $p_script_new" $SERVICES_PATH
 
 if [[ $p_desc ]] ; then
     sudo sed -i "/Description/c \ \Description = $p_desc" $SERVICES_PATH
