@@ -463,6 +463,7 @@ class StepByStep(object):
 
             # This is PyTorch's version of argmax, 
             # but it returns a tuple: (max value, index of max value)
+            printDbgCorrect("_, predicted = torch.max(yhat, 1")
             _, predicted = torch.max(yhat, 1)
         else:
             n_dims += 1
@@ -473,8 +474,10 @@ class StepByStep(object):
                 predicted = (yhat > threshold).long()
             # or something else (logits), which we need to convert
             # using a sigmoid
+                printDbgCorrect("predicted = (yhat > threshold).long()")
             else:
                 predicted = (torch.sigmoid(yhat) > threshold).long()
+                printDbgCorrect("predicted = (torch.sigmoid(yhat) > threshold).long()")
 
         if DEBUG:
             printTensor(predicted, locals())
