@@ -5,13 +5,12 @@
 # only 70gb during installation.
 set -x 
 
-LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
 SOFT_LINK=0
 
-if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]] ; then 
+if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then 
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
     exit 1
 fi
