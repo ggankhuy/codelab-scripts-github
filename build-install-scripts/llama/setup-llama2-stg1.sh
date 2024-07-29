@@ -61,7 +61,7 @@ fi
 
 echo "package name is set to: $LLAMA_PREREQ_PKGS"
 
-CONDA=/$HOME/miniconda3/bin/conda
+CONDA=/$MINICONDA_SRC_DIR/miniconda3/bin/conda
 
 mkdir -p $MINICONDA_SRC_DIR
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
