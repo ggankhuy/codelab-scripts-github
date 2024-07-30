@@ -55,7 +55,7 @@ else
 fi
 
 export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
+if [[ -z `cat ~/.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
     echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
 fi
 
