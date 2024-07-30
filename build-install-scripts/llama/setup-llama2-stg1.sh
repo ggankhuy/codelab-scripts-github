@@ -54,6 +54,11 @@ else
     LLAMA_PREREQ_PKGS=$p_pkg_name
 fi
 
+if [[ ! -f ./$LLAMA_PREREQ_PKGS.tar ]] ; then
+    echo "Package file $LLAMA_PREREQ_PKGS.tar does not exist in current folder."
+    exit 1
+fi
+
 export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
 if [[ -z `cat ~/.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
     echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
