@@ -48,7 +48,7 @@ fi
 
 if [[ -z $p_pkg_name ]] ; then
     echo "package name is not specified from cmdline. Using default:"
-    echo "20240502_quanta_llamav2"
+    echo "20240719_quanta_llama2_rocm_6.2.0-8"
     LLAMA_PREREQ_PKGS=20240719_quanta_llama2_rocm_6.2.0-8
 else
     LLAMA_PREREQ_PKGS=$p_pkg_name
