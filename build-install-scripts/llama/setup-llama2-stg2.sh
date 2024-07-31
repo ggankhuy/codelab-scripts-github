@@ -8,7 +8,7 @@ set -x
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
-SOFT_LINK=0
+SOFT_LINK=1
 
 if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then 
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
@@ -75,20 +75,20 @@ popd
 
 pushd $LLAMA_PREREQ_PKGS
 
-#if [[ $SOFT_LINK == 1 ]] ; then
-#    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-#        ln -s \
-#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.2 \
-#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
-#    done
-#else
-#    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-#        rm -rf $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
-#        cp \
-#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.2 \
-#        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/$i.so.1
-#    done
-#fi
+if [[ $SOFT_LINK == 1 ]] ; then
+    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
+        ln -s \
+        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.2 \
+        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+    done
+else
+    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
+        rm -rf $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+        cp \
+        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.2 \
+        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+    done
+fi
 
 if [[ -z $CONDA_PREFIX ]] ; then
     echo "Error CONDA_PREFIX is empy. Paths are likely not valid"
