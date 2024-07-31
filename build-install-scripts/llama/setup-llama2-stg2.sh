@@ -108,3 +108,4 @@ ls -l /etc/ld.so.conf.d/
 if [[ -z `cat $BASHRC | grep "export.*LD_LIBRARY_PATH.*/mkl-2023.1.0-h213fc3f_46344"` ]] ; then
     echo "export LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
 fi
+

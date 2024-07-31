@@ -79,6 +79,22 @@ rm -rf ./miniconda.sh
 
 ln -s $MINICONDA_SRC_DIR /$HOME/
 
+
+# set up ulimit
+LIMIT="/etc/security/limits.conf"
+SEARCH_STRING="* soft nofile 1048576"
+SEARCH_STRING_2="* hard nofile 1048576"
+SEARCH_STRING_3="* soft memlock unlimited"
+SEARCH_STRING_4="* hard memlock unlimited"
+
+if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
+  sed -i '/# End of file/i \
+  * soft nofile 1048576\n\
+  * hard nofile 1048576\n\
+  * soft memlock unlimited\n\
+  * hard memlock unlimited' "$LIMIT"
+fi
+
 # setup CONDA_ENV_NAME
 
 CONDA_ENV_NAME="llama2"
@@ -106,4 +122,5 @@ if [[ -z `cat ~/.bashrc | egrep "export.*env_name"` ]] ; then
 fi
 
 echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
+
 
