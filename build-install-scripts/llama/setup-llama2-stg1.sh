@@ -3,6 +3,20 @@
 
 # changing the actual instalaltion folder to /home/miniconda3 because centos by default alloc-s 
 # only 70gb during installation.
+# stage1 part will only setup conda environment, nothing specific to llama2 setup except if user specifies
+# set the conda environment name using --env_name parameter.
+# --pkg_name parameter. 
+# for more info on usage, use --help.
+# 
+# Issues:
+# It is not recommended to use this script to maintain multiple conda environment as each setup will 
+# defined many env variables in user's bashrc which will confuse and it is not intelligent yet to handle
+# multiple environment. 
+# Instead if you need creating new conda environment removing all traces of existing one:
+# conda env list to display existing conda environment, and remove old one:
+# conda env remove -p <path>.
+# delete all related parameters from ~/.bashrc.
+
 
 set -x 
 
