@@ -16,16 +16,6 @@ if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then
 fi
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
-torchwhl=`find . -name 'rocm_torch*.tar'`
-    dirname="torch"
-    echo $dirname
-    mkdir $dirname ; pushd $dirname
-    ln -s ../$torchwhl .
-    tar -xvf ./$torchwhl
-    pip3 install ./*.whl
-    popd
- 
-    echo $torchwhl
     for i in *tar ; do 
         dirname=`echo $i | awk '{print $1}' FS=. `
         mkdir $dirname ; pushd $dirname
