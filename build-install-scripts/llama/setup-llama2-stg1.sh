@@ -3,6 +3,20 @@
 
 # changing the actual instalaltion folder to /home/miniconda3 because centos by default alloc-s 
 # only 70gb during installation.
+# stage1 part will only setup conda environment, nothing specific to llama2 setup except if user specifies
+# set the conda environment name using --env_name parameter.
+# --pkg_name parameter. 
+# for more info on usage, use --help.
+# 
+# Issues:
+# It is not recommended to use this script to maintain multiple conda environment as each setup will 
+# defined many env variables in user's bashrc which will confuse and it is not intelligent yet to handle
+# multiple environment. 
+# Instead if you need creating new conda environment removing all traces of existing one:
+# conda env list to display existing conda environment, and remove old one:
+# conda env remove -p <path>.
+# delete all related parameters from ~/.bashrc.
+
 
 set -x 
 
@@ -46,25 +60,14 @@ if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
     echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | sudo tee -a ~/.bashrc
 fi
 
-if [[ -z $p_pkg_name ]] ; then
-    echo "package name is not specified from cmdline. Using default:"
-    echo "20240719_quanta_llama2_rocm_6.2.0-8"
-    LLAMA_PREREQ_PKGS=20240719_quanta_llama2_rocm_6.2.0-8
-else
+if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
+    export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
+    if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
+        echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
+    fi
+    echo "package name is set to: $LLAMA_PREREQ_PKGS"
 fi
-
-if [[ ! -f ./$LLAMA_PREREQ_PKGS.tar ]] ; then
-    echo "Package file $LLAMA_PREREQ_PKGS.tar does not exist in current folder."
-    exit 1
-fi
-
-export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-if [[ -z `cat ~/.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
-    echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
-fi
-
-echo "package name is set to: $LLAMA_PREREQ_PKGS"
 
 CONDA=/$MINICONDA_SRC_DIR/bin/conda
 
