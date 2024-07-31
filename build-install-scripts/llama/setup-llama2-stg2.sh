@@ -16,6 +16,16 @@ if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then
 fi
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
+torchwhl=`find . -name 'rocm_torch*.tar'`
+    dirname="torch"
+    echo $dirname
+    mkdir $dirname ; pushd $dirname
+    ln -s ../$torchwhl .
+    tar -xvf ./$torchwhl
+    pip3 install ./*.whl
+    popd
+ 
+    echo $torchwhl
     for i in *tar ; do 
         dirname=`echo $i | awk '{print $1}' FS=. `
         mkdir $dirname ; pushd $dirname
@@ -108,3 +118,4 @@ ls -l /etc/ld.so.conf.d/
 if [[ -z `cat $BASHRC | grep "export.*LD_LIBRARY_PATH.*/mkl-2023.1.0-h213fc3f_46344"` ]] ; then
     echo "export LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
 fi
+

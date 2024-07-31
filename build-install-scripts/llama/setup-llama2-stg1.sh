@@ -49,7 +49,7 @@ fi
 if [[ -z $p_pkg_name ]] ; then
     echo "package name is not specified from cmdline. Using default:"
     echo "20240502_quanta_llamav2"
-    LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
+    LLAMA_PREREQ_PKGS=20240719_quanta_llama2_rocm_6.2.0-8
 else
     LLAMA_PREREQ_PKGS=$p_pkg_name
 fi
@@ -75,6 +75,22 @@ bash ./miniconda.sh -b -u -p /$MINICONDA_SRC_DIR
 rm -rf ./miniconda.sh
 
 ln -s $MINICONDA_SRC_DIR /$HOME/
+
+
+# set up ulimit
+LIMIT="/etc/security/limits.conf"
+SEARCH_STRING="* soft nofile 1048576"
+SEARCH_STRING_2="* hard nofile 1048576"
+SEARCH_STRING_3="* soft memlock unlimited"
+SEARCH_STRING_4="* hard memlock unlimited"
+
+if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
+  sed -i '/# End of file/i \
+  * soft nofile 1048576\n\
+  * hard nofile 1048576\n\
+  * soft memlock unlimited\n\
+  * hard memlock unlimited' "$LIMIT"
+fi
 
 # setup CONDA_ENV_NAME
 
@@ -103,4 +119,5 @@ if [[ -z `cat ~/.bashrc | egrep "export.*env_name"` ]] ; then
 fi
 
 echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
+
 
