@@ -88,7 +88,7 @@ SEARCH_STRING_3="* soft memlock unlimited"
 SEARCH_STRING_4="* hard memlock unlimited"
 
 if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
-  sed -i '/# End of file/i \
+  sudo sed -i '/# End of file/i \
   * soft nofile 1048576\n\
   * hard nofile 1048576\n\
   * soft memlock unlimited\n\
