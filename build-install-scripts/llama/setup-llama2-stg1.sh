@@ -46,20 +46,15 @@ if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
     echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | sudo tee -a ~/.bashrc
 fi
 
-if [[ -z $p_pkg_name ]] ; then
-    echo "package name is not specified from cmdline. Using default:"
-    echo "20240502_quanta_llamav2"
-    LLAMA_PREREQ_PKGS=20240502_quanta_llamav2
-else
+if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
+    export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
+    if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
+        echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
+    fi
+    echo "package name is set to: $LLAMA_PREREQ_PKGS"
 fi
 
-export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
-    echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
-fi
-
-echo "package name is set to: $LLAMA_PREREQ_PKGS"
 
 CONDA=/$HOME/miniconda3/bin/conda
 
