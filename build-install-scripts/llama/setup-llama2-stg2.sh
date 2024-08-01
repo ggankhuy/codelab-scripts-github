@@ -8,7 +8,23 @@ set -x
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
+
 SOFT_LINK=1
+
+# set up ulimit
+LIMIT="/etc/security/limits.conf"
+SEARCH_STRING="* soft nofile 1048576"
+SEARCH_STRING_2="* hard nofile 1048576"
+SEARCH_STRING_3="* soft memlock unlimited"
+SEARCH_STRING_4="* hard memlock unlimited"
+
+if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
+  sudo sed -i '/# End of file/i \
+  * soft nofile 1048576\n\
+  * hard nofile 1048576\n\
+  * soft memlock unlimited\n\
+  * hard memlock unlimited' "$LIMIT"
+fi
 
 if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then 
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
