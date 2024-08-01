@@ -7,7 +7,8 @@ set -x
 # Check ROCm version
 rocm_ver=$(cat /opt/rocm/.info/version)
 
-if [[ "${rocm_ver:0:5}" == "6.2.0" || ${rocm_ver:0:5} == "6.1.0" ]]; then
+if [[ "${rocm_ver:0:5}" == "6.3.0" || "${rocm_ver:0:5}" == "6.2.0" || ${rocm_ver:0:5} == "6.1.0" ]]; then
+    # latest available is 6.1
     nightly_torch="https://download.pytorch.org/whl/nightly/rocm6.1"
 else
     nightly_torch="https://download.pytorch.org/whl/nightly/rocm6.0"
@@ -33,4 +34,11 @@ export MAX_JOBS='nproc' && gpu_arch="$(/opt/rocm/bin/rocminfo | grep -o -m 1 'gf
 popd
 popd
 
+
+## If wish to run UVM test
+# cd test
+# export FBGEMM_TEST_WITH_ROCM=1
+# export HIP_LAUNCH_BLOCKING=1
+# export HSA_XNACK=1
+# python -m pytest -v -rsx -s -W ignore::pytest.PytestCollectionWarning uvm/uvm_test.py
 
