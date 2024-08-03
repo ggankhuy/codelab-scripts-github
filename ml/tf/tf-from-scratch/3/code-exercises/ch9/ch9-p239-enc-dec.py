@@ -53,10 +53,10 @@ target_len=2
 
 for i in range(target_len):
     print("------ loop: ", i, "------")
-    #printTensor(decoder.hidden, globals())
+    printTensor(decoder.hidden, getGlobalsClass(decoder), "full")
     out=decoder(inputs)
-    printTensor(out, globals(), "full")
     inputs = out
+    printTensor(out, globals(), "full")
 
 
 
