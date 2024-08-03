@@ -55,7 +55,7 @@ printTensor(inputs, globals())
 
 #   Only use for a case: CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM
 
-teacher_forcing_prob=0.5
+teacher_enforcing_prob=0.5
 target_len=2
 
 
@@ -67,7 +67,7 @@ for i in range(target_len):
 
     if CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_NONE:
         inputs = out
-    elif: CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_ALWAYS:
+    elif CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_ALWAYS:
         inputs = target_seq[:, i:i+1]
     elif CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM:
         if torch.rand(1) >= teacher_enforcing_prob:
