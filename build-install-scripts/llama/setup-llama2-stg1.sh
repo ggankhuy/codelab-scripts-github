@@ -56,9 +56,9 @@ yum install sudo tree git wget -y
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
 export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
-if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
-    echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | sudo tee -a ~/.bashrc
-fi
+sed -i --expression "s@export.*MINICONDA_SRC_DIR.*@export MINICONDA_SRC_DIR=${MINICONDA_SRC_DIR}@g" ~/.bashrc
+
+exit 0
 
 if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
