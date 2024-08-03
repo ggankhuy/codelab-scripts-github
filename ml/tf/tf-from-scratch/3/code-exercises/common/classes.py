@@ -130,9 +130,9 @@ class Decoder(nn.Module):
         
     def init_hidden(self, hidden_seq):
         # We only need the final hidden state
-        hidden_final = hidden_seq[:, -1:] # N, 1, H
+        hidden_final = hidden_seq[:, -1:] # N, 1, H = length, last of batch, features [4,1,2]
         # But we need to make it sequence-first
-        self.hidden = hidden_final.permute(1, 0, 2) # 1, N, H                      
+        self.hidden = hidden_final.permute(1, 0, 2) # 1, N, H = last of barch, length, features=> [1,4,2]
         
     def forward(self, X):
         # X is N, 1, F

@@ -39,10 +39,10 @@ points, directions = generate_sequences(256,  seed=13)
 print("computing first 3 data points: 3,4,2...")
 print("1. permuted data, using nn.RNN")
 
-batch = torch.as_tensor(points[:3]).float()
+batch = torch.as_tensor(points[:3]).float() # [N,L,F - batch, lrngth, features]
 
 printTensor(batch, globals())
-permuted_batch=batch.permute(1,0,2)
+permuted_batch=batch.permute(1,0,2) # [L, N, F - length, batch, features]
 printTensor(permuted_batch, globals())
 
 torch.manual_seed(19)
