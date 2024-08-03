@@ -18,7 +18,12 @@ from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 points, directions = generate_sequences(256,  seed=13)
+import matplotlib.pyplot as plt
+
 fig = plot_data(points, directions, n_rows=1)
+plt.show()
+
+quit(0)
 
 class Encoder(nn.Module):
     def __init__(self, n_features, hidden_dim):

@@ -67,6 +67,8 @@ class StepByStep(object):
         self.train_step_fn = self._make_train_step_fn()
         # Creates the val_step function for our model and loss
         self.val_step_fn = self._make_val_step_fn()
+
+        self.yhat_acc=[]
         
     def to(self, device):
         # This method allows the user to specify a different device
@@ -442,6 +444,7 @@ class StepByStep(object):
 
         self.model.eval()
         yhat = self.model(x.to(self.device))
+        self.yhat_acc.extend(np.squeeze(yhat.detach().cpu()))
 
         if DEBUG:
             printTensor(yhat, locals())
@@ -482,16 +485,21 @@ class StepByStep(object):
         # How many samples got classified correctly for each class
         result = []
         for c in range(n_dims):
-            print("c: ", c)
+
+            if DEBUG:
+                print("c: ", c)
+
             n_class = (y == c).sum().item()
             n_correct = (predicted[y == c] == c).sum().item()
-            printTensor(n_class, locals(), "full")
-            printTensor(n_correct, locals(), "full")
+
+            if DEBUG:
+                printTensor(n_class, locals(), "full")
+                printTensor(n_correct, locals(), "full")
+
             result.append((n_correct, n_class))
 
-        printDbgCorrect("returning: ")
-
         if DEBUG:
+            printDbgCorrect("returning: ")
             printTensor(result, locals(), "full")
 
         return torch.tensor(result)

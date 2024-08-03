@@ -23,7 +23,9 @@ from stepbystep.v4 import *
 from plots.chapter8 import plot_data
 
 CONFIG_USE_SBS=1
-CONFIG_ENABLE_PLOT=1
+CONFIG_ENABLE_PLOT_LOSS=1
+CONFIG_ENABLE_PLOT_PRED=1
+CONFIG_COMPUTE_ACCURACY=1
 
 print("Import setings:")
 printDbg("hidden_dim: ", hidden_dim)
@@ -66,12 +68,29 @@ if CONFIG_USE_SBS:
 else:
     pass 
 
-if CONFIG_ENABLE_PLOT:
+if CONFIG_ENABLE_PLOT_LOSS:
     fig=sbs_rnn.plot_losses()
     plt.show()
 
-state=model.basic_rnn.state_dict()
-print(state['weight_ih_l0'], state['bias_ih_l0'])
+if CONFIG_COMPUTE_ACCURACY:
+    state=model.basic_rnn.state_dict()
+    print(state['weight_ih_l0'], state['bias_ih_l0'])
 
-output=StepByStep.loader_apply(test_loader, sbs_rnn.correct)
-printTensor(output, globals(), "full")
+    output=StepByStep.loader_apply(test_loader, sbs_rnn.correct)
+    printTensor(output, globals(), "full")
+
+if CONFIG_ENABLE_PLOT_PRED:
+    print(type(sbs_rnn.yhat_acc))
+    print(numpy.array(sbs_rnn.yhat_acc).shape)
+    print(numpy.array(sbs_rnn.yhat_acc)[0:10])
+
+    '''
+    fig, axs = plt.subplots(2,2)
+    hidden_acc=[]
+    fig.suptitle('predicted data coordinates.')
+
+    axs[int(0,0].set_xlim([-10, 10])
+    axs[int(0,0].set_ylim([-10, 10])
+    axs[int(0,0].plot(sbs_rnn.yhat_acc, marker=8)
+    axs[int(0,0].text(x,y+0.5, '({:2.2}, {:2.2})'.format(x, y))
+    '''

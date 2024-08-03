@@ -1,10 +1,7 @@
-/home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:39: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:276.)
+/home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:41: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:276.)
   train_data = TensorDataset(torch.as_tensor(points).float(),torch.as_tensor(directions).view(-1,1).float())
-PuTTY X11 proxy: unable to connect to forwarded X server: Network error: Connection refused
-/home/guyen/extdir/gg/git/codelab/gpu/ml/tf/tf-from-scratch/3/code-exercises/ch8/ch8-p134-full-classificiation-model.py:71: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
-  plt.show()
-printFnc: func:  <function namestr at 0x7faf10669b80>
-printFnc: func:  <function Linear.__init__ at 0x7faf10669ee0>
+printFnc: func:  <function namestr at 0x7f1ad2d27af0>
+printFnc: func:  <function Linear.__init__ at 0x7f1ad2d27e50>
 Import setings:
 DBG: hidden_dim:  2 
 
@@ -687,3 +684,7 @@ torch.Size([2, 2])
 tensor([[51, 53],
         [74, 75]])
 --------------------------------
+<class 'list'>
+(128,)
+[ 2.2718515 -5.331523   2.2689147  6.5199766  2.524042   5.718259
+  2.4716437 -5.2971344 -3.601601   7.0751076]
