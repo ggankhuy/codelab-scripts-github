@@ -1,0 +1,7 @@
+ch9-p227-enc-dec.py: points to remember:
+    - initial hidden state of decode is the encoder's final state.
+    - before, in ch8, we only used final hidden state to predict classification output (logits) 
+      but now we run output of every of cell (or iteration) through a linear layer
+      to convert each hidden state into predicted coordinates.
+    - the predicted coordinates are then used for input of the 2nd step (x2)
+
