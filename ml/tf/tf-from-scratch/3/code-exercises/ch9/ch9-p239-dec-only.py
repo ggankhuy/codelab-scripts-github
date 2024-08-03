@@ -36,9 +36,19 @@ source_seq = full_seq[:, :2] # first two corners
 target_seq = full_seq[:, 2:] # last two corners
 
 torch.manual_seed(21)
-encoder = Encoder(n_features=2, hidden_dim=2)
-hidden_seq = encoder(source_seq) # output is N, L, F
-printTensor(hidden_seq, globals(), "full")
-hidden_final = hidden_seq[:, -1:]   # takes last hidden state
 
-printTensor(hidden_final, globals(), "full")
+decoder = Decoder(n_features=2, hidden_dim=2)
+
+decode.init_hidden(hidden_seq)
+intputs = source.seq[:, -1, :]
+
+target_len=2
+
+for i in range(target_len):
+    printTensor(decoder.hidden, globals())
+    out=decoder(inputs)
+    print(out, globals())
+    inputs = out
+
+
+
