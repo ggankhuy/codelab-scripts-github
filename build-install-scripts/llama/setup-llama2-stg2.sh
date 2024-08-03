@@ -80,9 +80,9 @@ ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
 
-sed -i --expression "s@export.*MAGMA_HOME@export MAGMA_HOME=$PWD@g" ~/.bashrc
-sed -i --expression "s@export.*MKLROOT@export MKLROOT=$CONDA_PREFIX/@g" ~/.bashrc
-sed -i --expression "s@export.*ROCM_PATH@export ROCM_PATH=$ROCM_PATH@g" ~/.bashrc
+sed -i --expression "s@export.*MAGMA_HOME.*@export MAGMA_HOME=$PWD@g" ~/.bashrc
+sed -i --expression "s@export.*MKLROOT.*@export MKLROOT=$CONDA_PREFIX/@g" ~/.bashrc
+sed -i --expression "s@export.*ROCM_PATH.*@export ROCM_PATH=$ROCM_PATH@g" ~/.bashrc
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
