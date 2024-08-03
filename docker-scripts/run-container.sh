@@ -1,5 +1,4 @@
 set +x
-sudo modprobe amdgpu && sudo systemctl start docker
 if [[ $? -ne 0 ]] ; then echo "either driver failed to load or docker service failed to start. Check logs" ; exit 1 ;  fi
 
 DEFAULT_GPU="amd"
@@ -53,9 +52,12 @@ if [[ ! -z $image ]] ; then
     if [[ -z $gpu ]] ; then
         echo "Gpu has not been specified, will default to $DEFAULT_GPU..."
         gpu=$DEFAULT_GPU
+        sudo modprobe amdgpu && sudo systemctl start docker
+
     fi
 
     if [[ $gpu == "amd" ]] || [[ $gpu == "rocm" ]] ; then
+        sudo modprobe amdgpu && sudo systemctl start docker
         sudo docker run -it \
             --network=host \
             --device=/dev/kfd \
@@ -69,6 +71,7 @@ if [[ ! -z $image ]] ; then
             --privileged \
             --name=$name $image 
     elif [[ $gpu == "nvidia" ]] || [[ $gpu == "cuda" ]] ; then
+        sudo systemctl start docker
         echo "nvidia selected, docker run command constructed: "
 
         # setup nvidia docker support 
