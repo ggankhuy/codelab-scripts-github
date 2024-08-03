@@ -25,6 +25,7 @@ points, directions = generate_sequences(256,  seed=13)
 import matplotlib.pyplot as plt
 
 CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_TEACHER_ENFORCING=1 #p240
 
 if CONFIG_ENABLE_PLOT:
     fig = plot_data(points, directions, n_rows=1)
@@ -55,8 +56,11 @@ for i in range(target_len):
     print("------ loop: ", i, "------")
     printTensor(decoder.hidden, getGlobalsClass(decoder), "full")
     out=decoder(inputs)
-    inputs = out
     printTensor(out, globals(), "full")
+    if CONFIG_ENABLE_TEACHER_ENFORCING:
+        inputs = target_seq[:, i:i+1]
+    else:
+        inputs = out
 
 
 
