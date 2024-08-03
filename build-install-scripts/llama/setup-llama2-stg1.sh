@@ -58,14 +58,10 @@ export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
 sed -i --expression "s@export.*MINICONDA_SRC_DIR.*@export MINICONDA_SRC_DIR=${MINICONDA_SRC_DIR}@g" ~/.bashrc
 
-exit 0
-
 if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
     export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-    if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
-        echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
-    fi
+    sed -i --expression "s@export LLAMA_PREREQ_PKGS@export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS@g" ~/.bashrc
     echo "package name is set to: $LLAMA_PREREQ_PKGS"
 fi
 
@@ -91,19 +87,16 @@ else
 fi
 
 echo "CONDA_ENV_NAME is set to $CONDA_ENV_NAME"
-
 export CONDA_ENV_NAME=$CONDA_ENV_NAME
 
-if [[ -z `cat ~/.bashrc | egrep "export.*CONDA_ENV_NAME"` ]] ; then
-    echo "export CONDA_ENV_NAME=$CONDA_ENV_NAME" | tee -a ~/.bashrc
-fi
+sed -i --expression "s@export CONDA_ENV_NAME.*@export CONDA_ENV_NAME=${CONDA_ENV_NAME}@g" ~/.bashrc
 
 $CONDA create --name  $CONDA_ENV_NAME python==3.9 -y
 $CONDA init
 
-if [[ -z `cat ~/.bashrc | egrep "export.*env_name"` ]] ; then
-    echo "export env_name=$CONDA_ENV_NAME" | tee -a ~/.bashrc
-fi
+sed -i "s/export env_name.*/export env_name=${p_env_name}/g" ~/.bashrc
+
+sed -i 's/conda activate.*//g' ~/.bashrc
 
 echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
 
