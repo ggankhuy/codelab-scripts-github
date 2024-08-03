@@ -25,7 +25,10 @@ points, directions = generate_sequences(256,  seed=13)
 import matplotlib.pyplot as plt
 
 CONFIG_ENABLE_PLOT=0
-CONFIG_ENABLE_TEACHER_ENFORCING=1 #p240
+CONFIG_ENABLE_TEACHER_ENFORCING_NONE=0 #241
+CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM=1 #241
+CONFIG_ENABLE_TEACHER_ENFORCING_ALWAYS=2 #241
+CONFIG_ENABLE_TEACHER_ENFORCING=CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM
 
 if CONFIG_ENABLE_PLOT:
     fig = plot_data(points, directions, n_rows=1)
@@ -50,17 +53,30 @@ inputs = source_seq[:, -1:]
 
 printTensor(inputs, globals())
 
+#   Only use for a case: CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM
+
+teacher_forcing_prob=0.5
 target_len=2
+
 
 for i in range(target_len):
     print("------ loop: ", i, "------")
     printTensor(decoder.hidden, getGlobalsClass(decoder), "full")
     out=decoder(inputs)
     printTensor(out, globals(), "full")
-    if CONFIG_ENABLE_TEACHER_ENFORCING:
-        inputs = target_seq[:, i:i+1]
-    else:
+
+    if CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_NONE:
         inputs = out
+    elif: CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_ALWAYS:
+        inputs = target_seq[:, i:i+1]
+    elif CONFIG_ENABLE_TEACHER_ENFORCING==CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM:
+        if torch.rand(1) >= teacher_enforcing_prob:
+            inputs = target_seq[:, i:i+1]
+        else:
+            inputs = out
+    else:
+        print("Error unknown value for CONFIG_ENABLE_TEACHER_ENFORCING: ", CONFIG_ENABLE_TEACHER_ENFORCING)
+        quit(1)
 
 
 
