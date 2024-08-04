@@ -21,13 +21,44 @@ from common.classes import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
-points, directions = generate_sequences(256,  seed=13)
 import matplotlib.pyplot as plt
 
+points, directions = generate_sequences(256,  seed=13)
+
+printTensor(points, globals(), "brief")
+printTensor(directions, globals(), "brief")
+
+full_train=torch.as_tensor(points).float()
+target_train=full_train[:, 2:] # all rectangles, along with last two corners, along with coords
+
+printTensor(full_train, globals(), "brief")
+printTensor(target_train, globals(), "brief")
+
+test_points, test_directions = generate_sequences(seed=19)
+
+printTensor(test_points, globals())
+printTensor(test_directions, globals())
+
+full_test = torch.as_tensor(test_points).float()
+source_test = full_test[:, :2]
+target_test = full_test[:, 2:]
+
+printTensor(source_test, globals())
+printTensor(target_test, globals())
+
+train_data = TensorDataset(full_train, target_train)
+test_data = TensorDataset(source_test, target_test)
+
+#printTensor(train_data, globals())
+
+generator = torch.Generator()
+train_loader = DataLoader(train_data, batch_size=16, shuffle=True, generator=generator)
+test_loader = DataLoader(test_data, batch_size=16)
+
+printTensor(train_loader, globals())
+printTensor(test_loader, globals())
+
 CONFIG_ENABLE_PLOT=0
-
-full_seq = torch.tensor([[-1, -1], [-1, 1], [1, 1], [1, -1]]).float().view(1, 4, 2) # starting from LOWER LEFT ,CCW.
-
 
 CONFIG_ENABLE_TEACHER_ENFORCING_NONE=0 #241
 CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM=1 #241
@@ -38,28 +69,18 @@ if CONFIG_ENABLE_PLOT:
     fig = plot_data(points, directions, n_rows=1)
     plt.show()
 
-
-source_seq = full_seq[:, :2] # first two corners
-target_seq = full_seq[:, 2:] # last two corners
-
 # create encoder 
 
-torch.manual_seed(21)
+torch.manual_seed(23)
 encoder = Encoder(n_features=2, hidden_dim=2)
-
-# creaet decoder
-
-torch.manual_seed(21)
 decoder = Decoder(n_features=2, hidden_dim=2)
+model=EncoderDecoder(encoder, decoder, input_len=2, target_len=2, teacher_forcing_prob=0.5)
+loss=nn.MSELoss()
+optimizer=optim.Adam(model.parameters(), lr=0.01)
 
-torch.manual_seed(21)
-encdec=EncoderDecoder(encoder, decoder, input_len=2, target_len=2, teacher_forcing_prob=0.5)
+sbs_seq=StepByStep(model, loss, optimizer)
+sbs_seq.set_loaders(train_loader, test_loader)
+sbs_seq.train(100)
 
-encdec.train()
-outputs=encdec(full_seq)
-printTensor(outputs, globals(), "full")
-
-encdec.eval()
-outputs_from_src_seq=encdec(source_seq)
-printTensor(outputs_from_src_seq, globals(), "full")
-
+fig=sbs_seq.plot_losses()
+plt.show()
