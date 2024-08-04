@@ -21,6 +21,7 @@ from common.classes import *
 from data_generation.square_sequences import generate_sequences
 from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
+from plots.chapter9 import sequence_pred
 import matplotlib.pyplot as plt
 
 points, directions = generate_sequences(256,  seed=13)
@@ -58,7 +59,7 @@ test_loader = DataLoader(test_data, batch_size=16)
 printTensor(train_loader, globals())
 printTensor(test_loader, globals())
 
-CONFIG_ENABLE_PLOT=0
+CONFIG_ENABLE_PLOT=1
 
 CONFIG_ENABLE_TEACHER_ENFORCING_NONE=0 #241
 CONFIG_ENABLE_TEACHER_ENFORCING_RANDOM=1 #241
@@ -82,5 +83,10 @@ sbs_seq=StepByStep(model, loss, optimizer)
 sbs_seq.set_loaders(train_loader, test_loader)
 sbs_seq.train(100)
 
-fig=sbs_seq.plot_losses()
-plt.show()
+if CONFIG_ENABLE_PLOT:
+    fig=sbs_seq.plot_losses()
+    plt.show()
+
+    fig=sequence_pred(sbs_seq, full_test, test_directions)
+    plt.show()
+
