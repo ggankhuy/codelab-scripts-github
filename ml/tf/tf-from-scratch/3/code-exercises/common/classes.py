@@ -143,3 +143,76 @@ class Decoder(nn.Module):
         
         # N, 1, F
         return out.view(-1, 1, self.n_features) 
+
+class EncoderDecoder(nn.Module):
+    def __init__(self, encoder, decoder, input_len, target_len, teacher_forcing_prob=0.5):
+        super().__init__()
+        self.encoder = encoder
+        self.decoder = decoder
+        self.input_len = input_len
+        self.target_len = target_len
+        self.teacher_forcing_prob = teacher_forcing_prob
+        self.outputs = None
+
+    def init_outputs(self, batch_size):
+        device = next(self.parameters()).device
+        
+        # N, L (target), F
+
+        self.outputs= torch.zeros(batch_size, self.target_len, self.encoder.n_features).to(device)
+
+    def store_output(self, i, out):
+        # stores the output.
+
+        self.outputs[:, i:i+1,:] = out
+
+    def forward(self, X):
+
+        # splits the data into source and target sequences
+        # target seq will be empty in testing mode.
+
+        source_seq = X[:, :self.input_len, :]
+        target_seq = X[:, self.input_len:, :]
+        self.init_outputs(X.shape[0])
+
+        #Encode expects N,L,F
+
+        hidden_seq = self.encoder(source_seq)
+        
+        #Output is N,L,H
+
+        self.decoder.init_hidden(hidden_seq)
+
+        # Last inputs of the encoder is also first input of decoder
+
+        dec_inputs = source_seq[:, -1:, :]
+
+        # Generates many of outputs as target_len
+
+        for i in range(0, self.target_len):
+            # output of decoder is 1, L, F
+
+            out = self.decoder(dec_inputs)
+            self.store_output(i, out)
+ 
+        prob = self.teacher_forcing_prob
+
+        # In evaluation / test the target sequence is unknown, so 
+        # we can not use teacher enforcing if not self.training
+
+        if not self.training:
+            prob = 0
+
+        # if it is teacher forcing 
+
+        if torch.rand(1) <= prob:
+            # takes the actual element
+
+            dec_inputs = target_seq[:, i:i+1, :]
+        else:
+            # otherwise uses last predicte output
+
+            dec_inputs = out
+
+        return self.outputs
+
