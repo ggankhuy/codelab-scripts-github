@@ -42,19 +42,21 @@ if CONFIG_ENABLE_PLOT:
 source_seq = full_seq[:, :2] # first two corners
 target_seq = full_seq[:, 2:] # last two corners
 
-torch.manual_seed(21)
-
 # create encoder 
 
+torch.manual_seed(21)
 encoder = Encoder(n_features=2, hidden_dim=2)
 
 # creaet decoder
 
+torch.manual_seed(21)
 decoder = Decoder(n_features=2, hidden_dim=2)
 
+torch.manual_seed(21)
 encdec=EncoderDecoder(encoder, decoder, input_len=2, target_len=2, teacher_forcing_prob=0.5)
+
 encdec.train()
-outputs=encdec.forward(full_seq)
+outputs=encdec(full_seq)
 printTensor(outputs, globals(), "full")
 
 encdec.eval()
