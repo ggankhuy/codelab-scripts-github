@@ -1,7 +1,26 @@
-ch9-p227-enc-dec.py: points to remember:
+ch9-p227-enc.py: points to remember:
     - initial hidden state of decode is the encoder's final state.
     - before, in ch8, we only used final hidden state to predict classification output (logits) 
       but now we run output of every of cell (or iteration) through a linear layer
       to convert each hidden state into predicted coordinates.
     - the predicted coordinates are then used for input of the 2nd step (x2)
 
+ch9-p239-enc-dec.py:
+
+full_seq=1 rectangle: 4 corners, each 2 coordinates. [1,4,2]
+source_seq= 1st two corners of a rectangle in full_seq [1,2,2]
+target_seq= last two corners of a rectangle in full_seq [1,2,2]
+
+inputs=last corner of source sequence (to be fed into decoder) [1,1,2]
+
+
+source_seq is fed into encoder and produces hidden_seq.
+hidden_seq ->   [1,2,2] same shape as source_seq
+hidden_final is last last of hidden_seq 
+hidden_final -> [1,1,2]
+
+ch9-p247-enc-dec.py (continues from ch9-p239-enc-dec.py above:
+
+during loop (size of target_seq times)
+    inputs [1,1,2] is fed into decoder and generates out [1,1,2] #inputs match, output does not match that of book.
+    inputs is updated with output 
