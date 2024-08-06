@@ -48,11 +48,9 @@ torch.manual_seed(21)
 encoder = Encoder(n_features=2, hidden_dim=2)
 
 # creaet decoder
-
 torch.manual_seed(21)
 decoder = Decoder(n_features=2, hidden_dim=2)
 
-torch.manual_seed(21)
 encdec=EncoderDecoder(encoder, decoder, input_len=2, target_len=2, teacher_forcing_prob=0.5)
 
 encdec.train()

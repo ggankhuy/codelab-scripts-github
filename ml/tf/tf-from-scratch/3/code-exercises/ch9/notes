@@ -24,3 +24,23 @@ ch9-p247-enc-dec.py (continues from ch9-p239-enc-dec.py above:
 during loop (size of target_seq times)
     inputs [1,1,2] is fed into decoder and generates out [1,1,2] #inputs match, output does not match that of book.
     inputs is updated with output 
+
+attention topic (p252)
+    -   p253: if the decoder is allowed to choose which hidden states from the encoder it will use to generate each output
+        it means it can choose which English word it will use to generate each translated word.
+    -   p245: in other words, we can say that the decoder is paying attention to different elements in the source sequence. 
+        That is the attention mechanism in a nutshell.
+
+    -   encoder's hidden states = values (V)
+    -   - value X attention score = alignment vector, sum(allignment vectors) = weighted average of hidden states = context vector
+    -   - attention scores: based on matching decoder's hidden state (h2) to every hidden state of the decoder (h0 and h1). 
+    -   -   -   Good match : high scores or vice versa.
+ 
+    -   p258: 
+    -   encoder's hidden states = key (K)
+    -   decoder's hidden states = query (Q) 
+    -   encoder;s hidden states are therefore both values and keys until we go into "affine transformations" of hidden state so 
+        that, K and V will have different states. 
+   
+ch9-p<xxx>-attention.py
+
