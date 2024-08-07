@@ -83,7 +83,8 @@ ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
 
-export_bashrc_delim_alt MAGMA_HOME  $MAGMA_HOME
+PWD=`pwd`
+export_bashrc_delim_alt MAGMA_HOME $PWD
 export_bashrc MKLROOT $CONDA_PREFIX
 export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
 
