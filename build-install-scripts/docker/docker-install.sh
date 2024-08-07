@@ -60,5 +60,35 @@ case "$OS_NAME" in
 esac
 
 sudo systemctl start docker
+
+retry=0
+RETRY_MAX=3
+TMOUT=N
+while true; do
+    read -t 10 -p "Login using docker account? Or press Y to login using docker account or N to skip." yn
+    case $DOCKER_USER in
+        Y)
+            read -p "Input your docker account username, if any? Or press Y to login using docker account or N to skip." DOCKER_USER
+            read -p "Input your docker account username, if any? Or press Y to login using docker account or N to skip." DOCKER_PASS
+            sudo docker login --username=$DOCKER_USER --password=$DOCKER_PASS
+            res=$?
+            if [[ $res -ne 0 ]] ; then 
+                echo "Login failed." ; 
+            else
+                break
+            fi
+            ;;
+        N)
+            break
+            ;;
+        *)
+            echo "Invalid input. Retry $retry out of $RETRY_MAX"
+            break
+    esac
+    retry=$((retry+1))
+    if [[ $retry -ge $RETRY_MAX ]] ; then echo "Exceeded maximum attempts. Giving up."; fi
+done
+
+
 sudo docker login --username=$DOCKER_USER --password=$DOCKER_PASS
 sudo docker run hello-world
