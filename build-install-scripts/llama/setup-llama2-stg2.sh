@@ -5,6 +5,9 @@
 # only 70gb during installation.
 set -x 
 
+source ./lib.sh
+[[ $? -ne 0 ]] && exit 1
+
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
@@ -80,9 +83,9 @@ ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
 
-sed -i --expression "s@export.*MAGMA_HOME.*@export MAGMA_HOME=$PWD@g" ~/.bashrc
-sed -i --expression "s@export.*MKLROOT.*@export MKLROOT=$CONDA_PREFIX/@g" ~/.bashrc
-sed -i --expression "s@export.*ROCM_PATH.*@export ROCM_PATH=$ROCM_PATH@g" ~/.bashrc
+export_bashrc_delim_alt MAGMA_HOME  $MAGMA_HOME
+export_bashrc MKLROOT $CONDA_PREFIX
+export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
@@ -125,6 +128,6 @@ echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | sudo tee /etc/ld.
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
-sed -i --expression "s@export.*LD_LIBRARY_PATH.*/mkl-2023.1.0-h213fc3f_46344@export LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib@g" ~/.bashrc
+export_bashrc_delim_alt LD_LIBRARY_PATH $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib
 
 

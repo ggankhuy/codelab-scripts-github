@@ -12,6 +12,20 @@ function export_bashrc() {
     if [[ -z $env_name ]] || [[ -z env_value ]] ; then echo "env_name or env_value is empty" ; return 1; fi
 
     [[ `grep "export.*$env_name" ~/.bashrc` ]] && \
+    sed -i --expression "s/export.*${env_name}.*/export ${env_name}=${env_value}/g" ~/.bashrc || \
+    echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | tee -a ~/.bashrc
+
+}
+
+function export_bashrc_delim_alt() {
+    env_name=$1
+    env_value=$2
+
+    export $env_name=$env_value
+
+    if [[ -z $env_name ]] || [[ -z env_value ]] ; then echo "env_name or env_value is empty" ; return 1; fi
+
+    [[ `grep "export.*$env_name" ~/.bashrc` ]] && \
     sed -i --expression "s@export.*${env_name}.*@export ${env_name}=${env_value}@g" ~/.bashrc || \
     echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | tee -a ~/.bashrc
 

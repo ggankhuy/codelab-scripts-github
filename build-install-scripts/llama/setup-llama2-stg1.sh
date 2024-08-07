@@ -54,26 +54,16 @@ yum install sudo tree git wget -y
 #setup  MINICONDA_SRC_DIR
 
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
-#export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
 source ./lib.sh
 [[ $? -ne 0 ]] && exit 1
 
 export_bashrc MINICONDA_SRC_DIR $MINICONDA_SRC_DIR
 env | grep MINICONDA
-exit 0
-
-[[ `grep "export.*MINICONDA_SRC_DIR" ~/.bashrc` ]] && \
-sed -i --expression "s@export.*MINICONDA_SRC_DIR.*@export MINICONDA_SRC_DIR=${MINICONDA_SRC_DIR}@g" ~/.bashrc || \
-echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | tee -a ~/.bashrc
 
 if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
-    export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-
-    [[ `grep "export LLAMA_PREREQ_PKGS" ]] && \
-    sed -i --expression "s@export LLAMA_PREREQ_PKGS@export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS@g" ~/.bashrc || \
-    echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | tee -a ~/.bashrc
+    export_bashrc LLAMA_PREREQ_PKGS $LLAMA_PREREQ_PKGS
     echo "package name is set to: $LLAMA_PREREQ_PKGS"
 fi
 
@@ -101,7 +91,7 @@ fi
 echo "CONDA_ENV_NAME is set to $CONDA_ENV_NAME"
 export CONDA_ENV_NAME=$CONDA_ENV_NAME
 
-sed -i --expression "s@export CONDA_ENV_NAME.*@export CONDA_ENV_NAME=${CONDA_ENV_NAME}@g" ~/.bashrc
+export_bashrc_delim_alt CONDA_ENV_NAME $CONDA_ENV_NAME
 
 $CONDA create --name  $CONDA_ENV_NAME python==3.9 -y
 $CONDA init
