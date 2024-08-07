@@ -7,7 +7,7 @@ function export_bashrc() {
     env_name=$1
     env_value=$2
 
-    export env_name=$env_value
+    export $env_name=$env_value
 
     if [[ -z $env_name ]] || [[ -z env_value ]] ; then echo "env_name or env_value is empty" ; return 1; fi
 
