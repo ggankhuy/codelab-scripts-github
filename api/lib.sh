@@ -13,7 +13,7 @@ function export_bashrc() {
 
     [[ `grep "export.*$env_name" ~/.bashrc` ]] && \
     sed -i --expression "s/export.*${env_name}.*/export ${env_name}=${env_value}/g" ~/.bashrc || \
-    echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | tee -a ~/.bashrc
+    echo "export $env_name=$env_value" | tee -a ~/.bashrc
 
 }
 
