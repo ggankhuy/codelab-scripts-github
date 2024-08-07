@@ -56,20 +56,8 @@ yum install sudo tree git wget -y
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
 export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
-function export_bashrc() {
-    env_name=$1
-    env_value=$2
-
-    if [[ -z $env_name ]] || [[ -z env_value ]] ; then echo "env_name or env_value is empty" ; return 1; fi
-
-    [[ `grep "export.*$env_name" ~/.bashrc` ]] && \
-    sed -i --expression "s@export.*${env_name}.*@export ${env_name}=${env_value}@g" ~/.bashrc || \
-    echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | tee -a ~/.bashrc
-
-}
-
+source ./lib.sh
 export_bashrc MINICONDA_SRC_DIR $MINICONDA_SRC_DIR
-exit 0
 
 [[ `grep "export.*MINICONDA_SRC_DIR" ~/.bashrc` ]] && \
 sed -i --expression "s@export.*MINICONDA_SRC_DIR.*@export MINICONDA_SRC_DIR=${MINICONDA_SRC_DIR}@g" ~/.bashrc || \
