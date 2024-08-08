@@ -90,14 +90,18 @@ export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 # build robust mkl so path using pip paths.
 
 MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
-MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
-MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
-MKLROOT=`dirname $MKLROOT_FULL`
+MKLROOT=$MKLROOT_1
+#MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
+#MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
+#MKLROOT=`dirname $MKLROOT_FULL`
+for i in {0..2}; do
+    MKLROOT=`dirname $MKLROOT`
+done
 export_bashrc_delim_alt MKLROOT $MKLROOT
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
-echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT) -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
+echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
 echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 # build MAGMA
 make -f make.gen.hipMAGMA -j 
@@ -110,15 +114,15 @@ pushd $LLAMA_PREREQ_PKGS
 if [[ $SOFT_LINK == 1 ]] ; then
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
         ln -s \
-        $MKLROOT/$i.so.2 \
-        $MKLROOT/$i.so.1
+        $MKLROOT/lib/$i.so.2 \
+        $MKLROOT/lib/$i.so.1
     done
 else
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        rm -rf $MKLROOT/$i.so.1
+        rm -rf $MKLROOT/lib/$i.so.1
         cp \
-        $MKLROOT/$i.so.2 \
-        $MKLROOT/$i.so.1
+        $MKLROOT/lib/$i.so.2 \
+        $MKLROOT/lib/$i.so.1
     done
 fi
 
@@ -128,7 +132,7 @@ echo "Use following cmd to run:"
 echo 'LD_LIBRARY_PATH=$MKLROOT/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 popd
 
-echo "$MKLROOT/" | sudo tee /etc/ld.so.conf.d/mkl.conf
+echo "$MKLROOT/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
