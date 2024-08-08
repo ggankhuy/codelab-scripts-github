@@ -55,7 +55,7 @@ yum install sudo tree git wget -y
 
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
 
-source ./lib.sh
+source ./lib_bash.sh
 [[ $? -ne 0 ]] && exit 1
 
 export_bashrc MINICONDA_SRC_DIR $MINICONDA_SRC_DIR
