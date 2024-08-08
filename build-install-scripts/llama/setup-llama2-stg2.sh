@@ -85,7 +85,6 @@ ls -l $BASHRC
 
 PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
-export_bashrc MKLROOT $CONDA_PREFIX
 export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
@@ -97,38 +96,41 @@ make -f make.gen.hipMAGMA -j
 HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee make.magma.log
 popd
 
+# build robust mkl so path using pip paths.
+
+MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
+MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64`
+MKLROOT_FULL=${MKLROOT_1}${MKLROOT_2}
+MLKROOT=`dirname $MKLROOT_FULL`
+export_bashrc MKLROOT $MKLROOT
+
 pushd $LLAMA_PREREQ_PKGS
 
 if [[ $SOFT_LINK == 1 ]] ; then
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
         ln -s \
-        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.2 \
-        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+        $MKLROOT/$i.so.2 \
+        $MKLROOT/$i.so.1
     done
 else
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        rm -rf $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+        rm -rf $MKLROOT/$i.so.1
         cp \
-        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.2 \
-        $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/$i.so.1
+        $MKLROOT/$i.so.2 \
+        $MKLROOT/$i.so.1
     done
-fi
-
-if [[ -z $CONDA_PREFIX ]] ; then
-    echo "Error CONDA_PREFIX is empy. Paths are likely not valid"
-    exit 1
 fi
 
 # following does not work for python.  even though ldcache includes those paths.
 chmod 755 *sh
 echo "Use following cmd to run:"
-echo 'LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
+echo 'LD_LIBRARY_PATH=$MKLROOT/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 popd
 
-echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | sudo tee /etc/ld.so.conf.d/mkl.conf
+echo "$MKLROOT/" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
-export_bashrc_delim_alt LD_LIBRARY_PATH $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib
+export_bashrc_delim_alt LD_LIBRARY_PATH $MKLROOT:$MAGMA_HOME/lib
 
 
