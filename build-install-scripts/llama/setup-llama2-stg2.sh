@@ -86,7 +86,7 @@ ls -l $BASHRC
 PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
 export_bashrc MKLROOT $CONDA_PREFIX
-export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
+export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
