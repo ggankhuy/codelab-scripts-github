@@ -74,8 +74,10 @@ popd
 sudo ln -s `sudo find /opt -name clang++` /usr/bin/
 if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
 
-git clone https://bitbucket.org/icl/magma.git
-pushd magma
+git clone https://bitbucket.org/icl/magma.git 
+[[ $? -eq 0 ]] || exit 1
+pushd magma 
+[[ $? -eq 0 ]] || exit 1
 
 BASHRC=~/.bashrc
 BASHRC_EXPORT=./export.md
