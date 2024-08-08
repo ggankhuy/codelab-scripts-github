@@ -75,9 +75,7 @@ sudo ln -s `sudo find /opt -name clang++` /usr/bin/
 if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
 
 git clone https://bitbucket.org/icl/magma.git 
-[[ $? -eq 0 ]] || exit 1
 pushd magma 
-[[ $? -eq 0 ]] || exit 1
 
 BASHRC=~/.bashrc
 BASHRC_EXPORT=./export.md
@@ -95,15 +93,16 @@ MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
 MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
 MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
 MKLROOT=`dirname $MKLROOT_FULL`
-export_bashrc MKLROOT $MKLROOT
+export_bashrc_delim_alt MKLROOT $MKLROOT
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
 echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 # build MAGMA
-make -f make.gen.hipMAGMA -j
+make -f make.gen.hipMAGMA -j 
 HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee make.magma.log
+
 popd
 
 pushd $LLAMA_PREREQ_PKGS
