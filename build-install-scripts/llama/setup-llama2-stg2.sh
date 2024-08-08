@@ -5,7 +5,7 @@
 # only 70gb during installation.
 set -x 
 
-source ./lib.sh
+source ./lib_bash.sh
 [[ $? -ne 0 ]] && exit 1
 
 for i in gfortran libomp; do 
