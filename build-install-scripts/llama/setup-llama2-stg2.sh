@@ -87,6 +87,14 @@ PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
 export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 
+# build robust mkl so path using pip paths.
+
+MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
+MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
+MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
+MKLROOT=`dirname $MKLROOT_FULL`
+export_bashrc MKLROOT $MKLROOT
+
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
@@ -95,14 +103,6 @@ echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 make -f make.gen.hipMAGMA -j
 HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee make.magma.log
 popd
-
-# build robust mkl so path using pip paths.
-
-MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
-MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64`
-MKLROOT_FULL=${MKLROOT_1}${MKLROOT_2}
-MLKROOT=`dirname $MKLROOT_FULL`
-export_bashrc MKLROOT $MKLROOT
 
 pushd $LLAMA_PREREQ_PKGS
 
