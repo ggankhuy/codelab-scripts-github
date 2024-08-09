@@ -33,6 +33,47 @@ if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
     exit 1
 fi
+
+#conda install mkl-service -y
+pip3 install mkl 
+
+tar -xf $LLAMA_PREREQ_PKGS.tar
+pwd
+ls -l 
+
+pushd $LLAMA_PREREQ_PKGS
+mkdir log
+bash install.sh 2>&1 | sudo tee log/install.log
+popd
+
+sudo ln -s `sudo find /opt -name clang++` /usr/bin/
+if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
+
+git clone https://bitbucket.org/icl/magma.git 
+pushd magma 
+
+BASHRC=~/.bashrc
+BASHRC_EXPORT=./export.md
+ROCM_PATH=/opt/rocm/
+
+ls -l $BASHRC
+
+export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
+
+# build robust mkl so path using pip paths.
+
+MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
+MKLROOT=$MKLROOT_1
+#MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
+#MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
+#MKLROOT=`dirname $MKLROOT_FULL`
+for i in {0..2}; do
+    MKLROOT=`dirname $MKLROOT`
+done
+export_bashrc_delim_alt MKLROOT $MKLROOT
+
+# setup wheels in the package;
+
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
 
@@ -59,46 +100,10 @@ pushd $LLAMA_PREREQ_PKGS
     done
 popd
 
-#conda install mkl-service -y
-pip3 install mkl 
-
-tar -xf $LLAMA_PREREQ_PKGS.tar
-pwd
-ls -l 
-
-pushd $LLAMA_PREREQ_PKGS
-mkdir log
-bash install.sh 2>&1 | sudo tee log/install.log
-popd
-
-sudo ln -s `sudo find /opt -name clang++` /usr/bin/
-if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
-
-git clone https://bitbucket.org/icl/magma.git 
-pushd magma 
-
-BASHRC=~/.bashrc
-BASHRC_EXPORT=./export.md
-ROCM_PATH=/opt/rocm/
-
-ls -l $BASHRC
+# magma section
 
 PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
-export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
-
-# build robust mkl so path using pip paths.
-
-MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
-MKLROOT=$MKLROOT_1
-#MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
-#MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
-#MKLROOT=`dirname $MKLROOT_FULL`
-for i in {0..2}; do
-    MKLROOT=`dirname $MKLROOT`
-done
-export_bashrc_delim_alt MKLROOT $MKLROOT
-
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
