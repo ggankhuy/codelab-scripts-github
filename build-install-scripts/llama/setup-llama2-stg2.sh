@@ -141,6 +141,6 @@ echo "$MKLROOT/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
-export_bashrc_delim_alt LD_LIBRARY_PATH $MKLROOT:$MAGMA_HOME/lib
+export_bashrc_delim_alt LD_LIBRARY_PATH $MKLROOT/lib:$MAGMA_HOME/lib
 
 
