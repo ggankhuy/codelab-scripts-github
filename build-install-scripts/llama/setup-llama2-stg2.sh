@@ -37,13 +37,30 @@ fi
 #conda install mkl-service -y
 pip3 install mkl 
 
-tar -xf $LLAMA_PREREQ_PKGS.tar
-pwd
-ls -l 
-
+tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
-mkdir log
 bash install.sh 2>&1 | sudo tee log/install.log
+
+# Force torch to be installed first. 
+
+torchwhl=`find . -name 'rocm_torch*.tar'`
+dirname="torch"
+echo $dirname
+mkdir $dirname ; pushd $dirname
+ln -s ../$torchwhl .
+tar -xvf ./$torchwhl
+pip3 install ./*.whl
+popd
+echo $torchwhl
+
+for i in *tar ; do 
+    dirname=`echo $i | awk '{print $1}' FS=. `
+    mkdir $dirname ; pushd $dirname
+    ln -s ../$i .
+    tar -xvf ./$i 
+    pip3 install ./*.whl
+    popd
+done
 popd
 
 sudo ln -s `sudo find /opt -name clang++` /usr/bin/
@@ -73,32 +90,6 @@ done
 export_bashrc_delim_alt MKLROOT $MKLROOT
 
 # setup wheels in the package;
-
-tar -xvf  $LLAMA_PREREQ_PKGS.tar
-pushd $LLAMA_PREREQ_PKGS
-
-    # Force torch to be installed first. 
-    
-    torchwhl=`find . -name 'rocm_torch*.tar'`
-    dirname="torch"
-    echo $dirname
-    mkdir $dirname ; pushd $dirname
-    ln -s ../$torchwhl .
-    tar -xvf ./$torchwhl
-    pip3 install ./*.whl
-    popd
- 
-    echo $torchwhl
-
-    for i in *tar ; do 
-        dirname=`echo $i | awk '{print $1}' FS=. `
-        mkdir $dirname ; pushd $dirname
-        ln -s ../$i .
-        tar -xvf ./$i 
-        pip3 install ./*.whl
-        popd
-    done
-popd
 
 # magma section
 
