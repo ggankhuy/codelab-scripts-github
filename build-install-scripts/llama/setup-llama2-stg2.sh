@@ -36,7 +36,6 @@ fi
 
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
-bash install.sh 2>&1 | sudo tee log/install.log
 
 # Force torch to be installed first. 
 
@@ -49,7 +48,9 @@ tar -xvf ./$torchwhl
 pip3 install ./*.whl
 popd
 echo $torchwhl
-
+popd
+exit 0
+pushd
 for i in *tar ; do 
     dirname=`echo $i | awk '{print $1}' FS=. `
     mkdir $dirname ; pushd $dirname
