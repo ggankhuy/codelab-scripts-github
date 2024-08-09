@@ -101,11 +101,9 @@ echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$
 echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 # build MAGMA
 make -f make.gen.hipMAGMA -j 
-HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee make.magma.log
+LD_LIBARY_PATH=$MKLROOT/lib HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee ../log/env.$CONDA_DEFAULT_ENV.make.magma.log
 
 popd
-
-pushd $LLAMA_PREREQ_PKGS
 
 if [[ $SOFT_LINK == 1 ]] ; then
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
@@ -126,7 +124,6 @@ fi
 chmod 755 *sh
 echo "Use following cmd to run:"
 echo 'LD_LIBRARY_PATH=$MKLROOT/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
-popd
 
 echo "$MKLROOT/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
