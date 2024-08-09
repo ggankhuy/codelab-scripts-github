@@ -39,7 +39,7 @@ pushd $LLAMA_PREREQ_PKGS
 
 # Force torch to be installed first. 
 
-torchwhl=`find . -name 'rocm_torch*.tar'`
+torchwhl=`find . -name 'rocm_torch*.tar' | head -1`
 dirname="torch"
 echo $dirname
 mkdir $dirname ; pushd $dirname
