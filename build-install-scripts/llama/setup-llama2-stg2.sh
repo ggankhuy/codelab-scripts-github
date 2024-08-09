@@ -34,9 +34,6 @@ if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then
     exit 1
 fi
 
-#conda install mkl-service -y
-pip3 install mkl 
-
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
 bash install.sh 2>&1 | sudo tee log/install.log
@@ -63,6 +60,16 @@ for i in *tar ; do
 done
 popd
 
+conda install mkl-service -y
+pip3 install mkl 
+tar -xf $LLAMA_PREREQ_PKGS.tar
+pwd
+ls -l 
+
+pushd $LLAMA_PREREQ_PKGS
+mkdir log
+bash install.sh 2>&1 | sudo tee log/install.log
+popd
 sudo ln -s `sudo find /opt -name clang++` /usr/bin/
 if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
 
@@ -95,13 +102,15 @@ export_bashrc_delim_alt MKLROOT $MKLROOT
 
 PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
+export_bashrc MKLROOT $MKLROOT
+export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
 echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 # build MAGMA
 make -f make.gen.hipMAGMA -j 
-LD_LIBARY_PATH=$MKLROOT/lib HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee ../log/env.$CONDA_DEFAULT_ENV.make.magma.log
+HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee ../log/env.$CONDA_DEFAULT_ENV.make.magma.log
 
 popd
 
