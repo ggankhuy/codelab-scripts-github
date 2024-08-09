@@ -59,7 +59,7 @@ pushd $LLAMA_PREREQ_PKGS
     done
 popd
 
-conda install mkl-service -y
+#conda install mkl-service -y
 pip3 install mkl 
 
 tar -xf $LLAMA_PREREQ_PKGS.tar
