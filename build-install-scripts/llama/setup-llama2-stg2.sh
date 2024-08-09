@@ -103,7 +103,7 @@ export_bashrc_delim_alt MKLROOT $MKLROOT
 PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
 export_bashrc MKLROOT $MKLROOT
-export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
+export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
