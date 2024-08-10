@@ -6,18 +6,20 @@
 set -x 
 
 CONFIG_DEBUG_TORCH=0
-CONFIG_DEBUG=1
-CONFIG_MAGMA_REBUILD=1
+CONFIG_DEBUG=0
+CONFIG_MAGMA_REBUILD=1 # unused for now.
 source ./lib_bash.sh
 
 function list_mkl_info() {
-    echo "[GG: checkpoint $1]------------ list_mkl_info ----------------"
-    set -x
-    ls -l /home/ggankhuy/miniconda3_src/pkgs | grep mkl
-    ls -l /home/ggankhuy/miniconda3_src/$CONDA_ENV_NAME | grep mkl
-    conda list | grep mkl
-    pip3 list | grep mkl
-    echo "GG: ------------ list_mkl_info ----------------"
+    if [[ $CONFIG_DEBUG_TORCH -eq  1 ]] ; then
+        echo "[DBG: checkpoint $1]------------ list_mkl_info ----------------"
+        set -x
+        ls -l /home/ggankhuy/miniconda3_src/pkgs | grep mkl
+        ls -l /home/ggankhuy/miniconda3_src/$CONDA_ENV_NAME | grep mkl
+        conda list | grep mkl
+        pip3 list | grep mkl
+        echo "DBG: ------------ list_mkl_info ----------------"
+    fi
 }
 
 [[ $? -ne 0 ]] && exit 1
@@ -63,12 +65,9 @@ pip3 install ./*.whl
 popd
 echo $torchwhl
 
-if [[ $CONFIG_DEBUG_TORCH -eq 1 ]] ; then
-	python3 -c "import torch" 	
-	exit 0
-fi
 pushd
 for i in *tar ; do 
+    echo "DBG: -------- Installing $i wheel package... ---------"
     dirname=`echo $i | awk '{print $1}' FS=. `
     mkdir $dirname ; pushd $dirname
     ln -s ../$i .
@@ -79,7 +78,7 @@ done
 popd
 
 list_mkl_info 1
-conda install mkl-service -y
+conda install mkl-service mkl -y
 list_mkl_info 2
 pip3 install mkl 
 list_mkl_info 3
@@ -94,6 +93,7 @@ popd
 sudo ln -s `sudo find /opt -name clang++` /usr/bin/
 if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
 
+[[ $CONFIG_MAGMA_REBUILD -eq 1 ]] && rm -rf magma
 git clone https://bitbucket.org/icl/magma.git 
 pushd magma 
 find . -name libmagma.so
@@ -109,20 +109,25 @@ export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 
 # build robust mkl so path using pip paths.
 
-MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
-MKLROOT=$MKLROOT_1
+# This did not work, so commented out for now.
+#MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
+#MKLROOT=$MKLROOT_1
 #MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
 #MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
 #MKLROOT=`dirname $MKLROOT_FULL`
-for i in {0..2}; do
-    MKLROOT=`dirname $MKLROOT`
-done
+#for i in {0..2}; do
+#    MKLROOT=`dirname $MKLROOT`
+#done
+
 export_bashrc_delim_alt MKLROOT $MKLROOT
 CONDA_PKG_CACHE_DIR=`conda info | grep  "package cache" | head -1  | awk '{print $NF}'`
 CONDA_PKG_CACHE_DIR_MKL=`ls -l $CONDA_PKG_CACHE_DIR | grep "mkl-[0-9]" | grep -v "\.conda" | head -1 | awk '{print $NF}'`
 CONDA_PKG_CACHE_PATH=$CONDA_PKG_CACHE_DIR/$CONDA_PKG_CACHE_DIR_MKL
 MKLROOT=$CONDA_PKG_CACHE_PATH
-[[ -d $CONDA_PKG_CACHE_PATH ]] || exit 1
+if [[ ! -d $MKLROOT ]] ; then
+    echo "Path does not exist for MKLROOT, can not continue: MKLROOT: $MKLROOT"
+    exit 1
+fi
 
 # setup wheels in the package;
 
