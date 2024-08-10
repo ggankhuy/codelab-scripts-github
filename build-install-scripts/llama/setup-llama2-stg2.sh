@@ -69,7 +69,6 @@ for i in *tar ; do
     ln -s ../$i .
     tar -xvf ./$i 
     pip3 install ./*.whl
-    popd
 done
 popd
 
