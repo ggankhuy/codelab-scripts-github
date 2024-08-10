@@ -7,7 +7,7 @@ set -x
 
 CONFIG_DEBUG_TORCH=0
 CONFIG_DEBUG=1
-
+CONFIG_MAGMA_REBUILD=1
 source ./lib_bash.sh
 
 function list_mkl_info() {
@@ -96,6 +96,8 @@ if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in
 
 git clone https://bitbucket.org/icl/magma.git 
 pushd magma 
+find . -name libmagma.so
+[[ $? -eq 0 ]] || exit 1
 
 BASHRC=~/.bashrc
 BASHRC_EXPORT=./export.md
@@ -118,9 +120,10 @@ done
 export_bashrc_delim_alt MKLROOT $MKLROOT
 CONDA_PKG_CACHE_DIR=`conda info | grep  "package cache" | head -1  | awk '{print $NF}'`
 CONDA_PKG_CACHE_DIR_MKL=`ls -l $CONDA_PKG_CACHE_DIR | grep "mkl-[0-9]" | grep -v "\.conda" | head -1 | awk '{print $NF}'`
-CONDA_PKG_CACHE_PATH=$CONDA_PKG_CACHE_DIR/$CONDA_PKG_CACHE_DIR_MKL/lib
+CONDA_PKG_CACHE_PATH=$CONDA_PKG_CACHE_DIR/$CONDA_PKG_CACHE_DIR_MKL
+MKLROOT=$CONDA_PKG_CACHE_PATH
+[[ -d $CONDA_PKG_CACHE_PATH ]] || exit 1
 
-exit 0
 # setup wheels in the package;
 
 # magma section
@@ -142,15 +145,15 @@ popd
 if [[ $SOFT_LINK == 1 ]] ; then
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
         ln -s \
-        $MKLROOT/lib/$i.so.2 \
-        $MKLROOT/lib/$i.so.1
+        $CONDA_PKG_CACHE_PATH/lib/$i.so.2 \
+        $CONDA_PKG_CACHE_PATH/lib/$i.so.1
     done
 else
     for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        rm -rf $MKLROOT/lib/$i.so.1
+        rm -rf $CONDA_PKG_CACHE_PATH/lib/$i.so.1
         cp \
-        $MKLROOT/lib/$i.so.2 \
-        $MKLROOT/lib/$i.so.1
+        $CONDA_PKG_CACHE_PATH/lib/$i.so.2 \
+        $CONDA_PKG_CACHE_PATH/lib/$i.so.1
     done
 fi
 
@@ -159,7 +162,7 @@ chmod 755 *sh
 echo "Use following cmd to run:"
 echo 'LD_LIBRARY_PATH=$MKLROOT/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
 
-echo "$MKLROOT/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
+echo "$MKLROOT/lib:$CONDA_PKG_CACHE_PATH/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
