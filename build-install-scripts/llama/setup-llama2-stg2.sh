@@ -5,7 +5,7 @@
 # only 70gb during installation.
 set -x 
 
-CONFIG_DEBUG_TORCH=1
+CONFIG_DEBUG_TORCH=0
 
 source ./lib_bash.sh
 [[ $? -ne 0 ]] && exit 1
@@ -101,6 +101,7 @@ for i in {0..2}; do
     MKLROOT=`dirname $MKLROOT`
 done
 export_bashrc_delim_alt MKLROOT $MKLROOT
+CONDA_PKG_CACHE_DIR=`conda info | grep  "package cache" | head -1  | awk '{print $NF}'`
 
 # setup wheels in the package;
 
