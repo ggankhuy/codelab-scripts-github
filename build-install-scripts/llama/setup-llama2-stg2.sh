@@ -117,7 +117,10 @@ for i in {0..2}; do
 done
 export_bashrc_delim_alt MKLROOT $MKLROOT
 CONDA_PKG_CACHE_DIR=`conda info | grep  "package cache" | head -1  | awk '{print $NF}'`
+CONDA_PKG_CACHE_DIR_MKL=`ls -l $CONDA_PKG_CACHE_DIR | grep "mkl-[0-9]" | grep -v "\.conda" | head -1 | awk '{print $NF}'`
+CONDA_PKG_CACHE_PATH=$CONDA_PKG_CACHE_DIR/$CONDA_PKG_CACHE_DIR_MKL/lib
 
+exit 0
 # setup wheels in the package;
 
 # magma section
