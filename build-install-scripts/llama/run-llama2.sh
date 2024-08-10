@@ -29,3 +29,4 @@ dmesg | tee $LOG_DMESG_AFTER
 popd
 
 tree -fs $LOG_DIR
+cat $LOG_DIR/$LOG_RUN

@@ -5,6 +5,8 @@
 # only 70gb during installation.
 set -x 
 
+CONFIG_DEBUG_TORCH=1
+
 source ./lib_bash.sh
 [[ $? -ne 0 ]] && exit 1
 
@@ -48,6 +50,11 @@ tar -xvf ./$torchwhl
 pip3 install ./*.whl
 popd
 echo $torchwhl
+
+if [[ $CONFIG_DEBUG_TORCH -eq 1 ]] ; then
+	python3 -c "import torch" 	
+	exit 0
+fi
 pushd
 for i in *tar ; do 
     dirname=`echo $i | awk '{print $1}' FS=. `
