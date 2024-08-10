@@ -31,9 +31,10 @@ COMMIT=commit.md
 
 git branch | tee $COMMIT
 git log | head -1 | tee -a $COMMIT
+COMMIT6=`git log | head -1 | awk '{print $NF}'  | awk '{print substr($0, 0, 6)}'`
 
 [[ -f $p_pkg_name.tar ]] || exit 1
-output_filename=$p_pkg_name.tar.gz
+output_filename=${p_pkg_name}_${COMMIT6}.tar.gz
 cp -v \
     setup-llama2-stg1.sh \
     setup-llama2-stg2.sh \
