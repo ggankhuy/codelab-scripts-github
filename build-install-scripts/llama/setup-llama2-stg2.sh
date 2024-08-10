@@ -48,8 +48,6 @@ tar -xvf ./$torchwhl
 pip3 install ./*.whl
 popd
 echo $torchwhl
-popd
-exit 0
 pushd
 for i in *tar ; do 
     dirname=`echo $i | awk '{print $1}' FS=. `

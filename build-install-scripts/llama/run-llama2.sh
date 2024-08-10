@@ -28,3 +28,4 @@ dmesg | tee $LOG_DMESG_BEFORE
 dmesg | tee $LOG_DMESG_AFTER
 popd
 
+tree -fs $LOG_DIR
