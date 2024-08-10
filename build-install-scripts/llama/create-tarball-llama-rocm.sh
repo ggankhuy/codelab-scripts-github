@@ -54,6 +54,6 @@ tar -cvf $output_filename \
     $COMMIT 
 popd
 tree -fs $TAR_DIR
-tar -tf $output_filename | sudo tee $output_filename.log
+tar -tf $TAR_DIR/$output_filename | sudo tee $output_filename.log
 echo "---- TAR CONTENTS-----"   
 cat $output_filename.log
