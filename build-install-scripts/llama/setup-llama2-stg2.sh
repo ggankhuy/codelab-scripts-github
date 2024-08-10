@@ -24,10 +24,6 @@ function list_mkl_info() {
 
 [[ $? -ne 0 ]] && exit 1
 
-for i in gfortran libomp; do 
-    sudo yum install $i -y ; 
-done
-
 SOFT_LINK=1
 
 # set up ulimit
