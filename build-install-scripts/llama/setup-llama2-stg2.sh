@@ -6,8 +6,20 @@
 set -x 
 
 CONFIG_DEBUG_TORCH=0
+CONFIG_DEBUG=1
 
 source ./lib_bash.sh
+
+function list_mkl_info() {
+    echo "[GG: checkpoint $1]------------ list_mkl_info ----------------"
+    set -x
+    ls -l /home/ggankhuy/miniconda3_src/pkgs | grep mkl
+    ls -l /home/ggankhuy/miniconda3_src/$CONDA_ENV_NAME | grep mkl
+    conda list | grep mkl
+    pip3 list | grep mkl
+    echo "GG: ------------ list_mkl_info ----------------"
+}
+
 [[ $? -ne 0 ]] && exit 1
 
 for i in gfortran libomp; do 
@@ -66,8 +78,11 @@ for i in *tar ; do
 done
 popd
 
+list_mkl_info 1
 conda install mkl-service -y
+list_mkl_info 2
 pip3 install mkl 
+list_mkl_info 3
 tar -xf $LLAMA_PREREQ_PKGS.tar
 pwd
 ls -l 
