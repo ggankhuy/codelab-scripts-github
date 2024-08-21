@@ -14,4 +14,4 @@ ninja -j32 2>&1 | tee $LOG_DIR/rccl.2.make.log
 t2=$SECONDS
 echo build time: $((t2-t1)) | tee $LOG_DIR/rccl.3.buildtime.log
 popd
-ninjatracing `find . -name ./.ninja_log` | tee $LOG_DIR/rccl.4.ninjatracing.json
+ninjatracing `find . -name .ninja_log` | tee $LOG_DIR/rccl.4.ninjatracing.json
