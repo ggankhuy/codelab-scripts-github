@@ -51,7 +51,7 @@ do
 done
 
 for i in sudo tree git wget gfortran libomp which; do
-    yum install -y $i 
+    sudo yum install -y $i 
 done
 
 #setup  MINICONDA_SRC_DIR
