@@ -1,3 +1,5 @@
+LNF= length, batch, features
+
 ch9-p227-enc.py: points to remember:
     - initial hidden state of decode is the encoder's final state.
     - before, in ch8, we only used final hidden state to predict classification output (logits) 
