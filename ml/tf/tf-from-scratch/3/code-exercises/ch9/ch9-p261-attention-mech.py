@@ -32,12 +32,6 @@ def calc_alphas(ks,q):
     alphas=torch.ones(N,1,L).float()*1/L
     return alphas
 
-def calc_alphas(ks,q):
-    # N,1,H x N,H,L=>N,1,L
-    # [batch, 1, hidden] x [batch, hidden, len] => [batch, 1, len]
-    # [1, hidden] x [hidden, len] = [1, len]
-    
-
 full_seq=(torch.tensor([[-1,-1],[1,-1], [1,1],[1,-1]]).float().view(1,4,2))
 source_seq = full_seq[:, :2]
 target_seq = full_seq[:, 2:]

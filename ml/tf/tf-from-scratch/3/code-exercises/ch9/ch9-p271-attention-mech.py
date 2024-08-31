@@ -28,11 +28,18 @@ from plots.chapter9 import sequence_pred
 import matplotlib.pyplot as plt
 
 def calc_alphas(ks,q):
+    N,L,H=ks.size()
+    alphas=torch.ones(N,1,L).float()*1/L
+    return alphas
+
+'''
+def calc_alphas(ks,q):
     # N,1,H x N,H,L=>N,1,L
     # [batch, 1, hidden] x [batch, hidden, len] => [batch, 1, len]
     # [1, hidden] x [hidden, len] = [1, len]
-    products = torch.bmm(q, ks,permute(0,2,1))
-    alphas=F.softmax(dim=-1)
+    products = torch.bmm(q, ks.permute(0,2,1))
+    alphas=F.softmax(products, dim=-1)
+'''
 
 full_seq=(torch.tensor([[-1,-1],[1,-1], [1,1],[1,-1]]).float().view(1,4,2))
 source_seq = full_seq[:, :2]
