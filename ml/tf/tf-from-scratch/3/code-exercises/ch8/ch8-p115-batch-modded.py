@@ -66,7 +66,6 @@ rnn_cell_manual=\
 out_manual=rnn_cell_manual(permuted_batch)
 printTensor(out_manual, globals())
 
-quit(0)
 print("BATCH first...")
 
 print("computing first 3 data points: 3,4,2...")

@@ -40,11 +40,9 @@ rnn_cell=nn.RNNCell(input_size=n_features, hidden_size=hidden_dim)
 if rnn_cell == None:
     print("rnn_cell is None.")
     quit(1)
-rnn_state=rnn_cell.state_dict()
 
-printDbg("nn.RNNCell (library):")
-for k, v in rnn_state.items():
-    printDbg(k, np.array(v).shape, "\n", v)
+
+printModelInfo(rnn_cell, "rnn_cell")
 
 # Lets do above RNNcell manually. However we are copying the values of weigts, bias initialized values
 # so that output can be compared for sanity check!

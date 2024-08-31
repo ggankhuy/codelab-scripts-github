@@ -18,11 +18,8 @@ points, directions = generate_sequences(256,  seed=13)
 
 torch.manual_seed(19)
 rnn_bidirect=nn.RNN(input_size=n_features, hidden_size=hidden_dim, bidirectional=True, batch_first=True)
-state=rnn_bidirect.state_dict()
 
-for k, v in state.items():
-    printDbg("k/v:", k, v)
-
+state=printModelInfo(rnn_bidirect, "rnn_bidirect")
 
 rnn_forward=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)
 rnn_reverse=nn.RNN(input_size=n_features, hidden_size=hidden_dim, batch_first=True)

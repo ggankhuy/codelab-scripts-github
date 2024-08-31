@@ -9,6 +9,14 @@ import torch.nn as nn
 sys.path.append('.')
 from common.settings import *
 
+def printModelInfo(pModel, pModelName=None):
+    if pModelName:
+        printDbg("model info for ", pModelName, ": ")
+    model_state=pModel.state_dict()
+    for k, v in model_state.items():
+        printDbg(k, np.array(v).shape, "\n", v)
+    return model_state
+
 class Linear:
     @printFnc
     def __init__(self, input_size:int, hidden_size:int):

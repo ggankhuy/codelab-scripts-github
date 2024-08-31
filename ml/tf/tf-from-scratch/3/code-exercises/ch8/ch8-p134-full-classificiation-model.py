@@ -46,13 +46,6 @@ test_loader = DataLoader(test_data,  batch_size=16)
 
 printTensor(train_loader, globals())
 printTensor(test_loader, globals())
-'''
-printTensor(train_data.data.numpy(), globals())
-printTensor(test_data.data.numpy(), globals())
-quit(0)
-printTensor(train_loader, globals())
-printTensor(test_loader, globals())
-'''
 
 torch.manual_seed(21)
 model=SquareModel(n_features=n_features, hidden_dim=hidden_dim, n_outputs=1)
@@ -84,13 +77,3 @@ if CONFIG_ENABLE_PLOT_PRED:
     print(numpy.array(sbs_rnn.yhat_acc).shape)
     print(numpy.array(sbs_rnn.yhat_acc)[0:10])
 
-    '''
-    fig, axs = plt.subplots(2,2)
-    hidden_acc=[]
-    fig.suptitle('predicted data coordinates.')
-
-    axs[int(0,0].set_xlim([-10, 10])
-    axs[int(0,0].set_ylim([-10, 10])
-    axs[int(0,0].plot(sbs_rnn.yhat_acc, marker=8)
-    axs[int(0,0].text(x,y+0.5, '({:2.2}, {:2.2})'.format(x, y))
-    '''
