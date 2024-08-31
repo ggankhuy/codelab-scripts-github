@@ -37,4 +37,10 @@ printTensor(k, globals(), "full")
 prod=torch.bmm(q,k.permute(0,2,1))
 printTensor(prod, globals(), "full")
 
+scores=F.softmax(prod, dim=-1)
+printTensor(scores,globals(), "full")
+
+v=k
+context=torch.bmm(scores,v)
+printTensor(context, globals(), "full")
 

@@ -1,3 +1,10 @@
+links:
+1) visualizing attention vector!
+http://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/
+
+2) illustrated attention
+https://towardsdatascience.com/attn-illustrated-attention-5ec4ad276ee3
+
 LNF= length, batch, features
 
 ch9-p227-enc.py: points to remember:

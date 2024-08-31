@@ -29,7 +29,7 @@ points, directions = generate_sequences(256,  seed=13)
 # - weight_ih: [n_features, hidden_dim], bias_ih: [hidden_dim]
 # - weight_hh: [hidden_dim, hidden_dim], bias_hh: [hidden_dim]
 
-CONFIG_ENABLE_PLOT=1
+CONFIG_ENABLE_PLOT=0
 DEBUG=0
 
 torch.manual_seed(19)

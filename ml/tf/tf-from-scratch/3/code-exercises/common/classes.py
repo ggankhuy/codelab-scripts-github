@@ -58,13 +58,16 @@ class RNNCell:
         self.th=self.linear_hidden(self.initial_hidden)
         printDbgRnnCell("RNNCell.__init__: self.th computed to: ", self.th)
 
-    def __call__(self, x, hidden):
-        return self.forward(x, hidden)
+    def __call__(self, x):
+        return self.forward(x)
 
-    def forward(self, x, hidden):
+    def forward(self, x):
         printDbgRnnCell("RNNCell.forward entered(x=" + str(x))
         self.tx = self.linear_input(x)
-        self.th = self.linear_hidden(hidden)
+
+        # this is already done in init().
+        #self.th = self.linear_hidden(hidden)
+
         printDbgRnnCell("RNNCell.forward: self.tx computed to: ", self.tx)
         self.adding = self.th+self.tx
         printDbgRnnCell(self.adding)
@@ -109,6 +112,7 @@ class SquareModel(nn.Module):
         
 class Encoder(nn.Module):
     def __init__(self, n_features, hidden_dim):
+        print("Encoder.init(n_features =", n_features,", hidden_dim =", hidden_dim, ")")
         super().__init__()
         self.hidden_dim = hidden_dim
         self.n_features = n_features
@@ -116,6 +120,7 @@ class Encoder(nn.Module):
         self.basic_rnn =  nn.GRU(self.hidden_dim, self.n_features, batch_first = True)
         
     def forward(self, X):
+        print("Encoder.forward(X=",X.shape,")")
         rnn_out, self.hidden = self.basic_rnn(X)
         return rnn_out # N, L, F.
 

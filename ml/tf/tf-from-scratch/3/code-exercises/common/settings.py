@@ -3,7 +3,7 @@ import numpy
 import torch
 
 n_features=2
-hidden_dim=2
+hidden_dim=5
 
 debug=1
 debug_class=0
