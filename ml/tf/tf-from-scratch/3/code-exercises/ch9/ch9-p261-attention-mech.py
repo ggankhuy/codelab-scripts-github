@@ -46,10 +46,7 @@ printTensor(target_seq, globals(), PRINT_TENSOR_OUTPUT)
 torch.manual_seed(21)
 encoder=Encoder(n_features=N_FEATURES, hidden_dim=HIDDEN_DIM)
 
-printDbg("nn.RNNCell (library):")
-for k, v in rnn_state.items():
-    printDbg(k, np.array(v).shape, "\n", v)
-
+printModelInfo(encoder, "encoder")
 
 hidden_seq=encoder(source_seq)
 values=hidden_seq
