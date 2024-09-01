@@ -39,6 +39,10 @@ printTensor(k, globals(), "full")
 
 # N,1,H x N,L,H.permute(0,2,1) => N,L,H x N,H,L => [n=1, len=1, h=2] x [n=1, h=2, l=3] => [n=1, l(q)=1, l=3(k)]
 # review matrix multiplication sentimental explanation: https://mkang32.github.io/python/2020/08/23/dot-product.html
+# [LEN=1, H=2] X [H=2, L=3] => L=1(Q), L=3(K) => [1,2][2,3]=[1,3]  => 
+# [.55 0.96] x [0.65 0.85 -0.95]
+#              [0.2 -0.4   -0.75] => [0.55*0.65+0.96*0.2 0.55*0.85+0.96*-0.4 0.55*-0.95+0.96*-0.75] = [0.3575+0.192=0.5495 0.4675+-0.384=0.0835 -0.5225+-0.72=-1.24]=
+#                                   = [ 0.5495 0.0835 -1.24]
 
 prod=torch.bmm(q,k.permute(0,2,1))
 printTensor(prod, globals(), "full")
