@@ -3,11 +3,16 @@ import numpy
 import torch
 
 n_features=2
-hidden_dim=5
-
+hidden_dim=2
 debug=1
 debug_class=0
 
+# overridable global vars, we are using dict because it is immutable.
+
+global_vars={\
+    'n_features': 2,\
+    'hidden_dim':2\
+    }
 def printDbg(*argv):
     if debug:
         print("DBG:", end=" ")
