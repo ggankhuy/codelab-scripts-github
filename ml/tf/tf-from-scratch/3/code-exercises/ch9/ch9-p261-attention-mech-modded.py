@@ -36,7 +36,11 @@ def calc_alphas(ks,q):
     alphas=torch.ones(N,1,L).float()*1/L
     return alphas
 
-CONFIG_RANDOM_INIT=1
+# Once enabled, full_seq is created with random values with overriddable settings is applied from global_var.
+# If not random, since full_seq uses 2 for feature and hidden_dim, overridable settings in global_var can no longer 
+# b3 used.
+
+CONFIG_RANDOM_INIT=0
 
 # [rectangle=1, corners=4, coordinates=2]
 
@@ -44,6 +48,8 @@ if CONFIG_RANDOM_INIT:
     print("Full_seq: random init...")
     full_seq=torch.rand(1,4,5)
 else:
+    N_FEATURES=2
+    HIDDEN_DIM=2
     full_seq=(torch.tensor([[-1,-1],[1,-1], [1,1],[1,-1]]).float().view(1,4,2))
 
 source_seq = full_seq[:, :2]
