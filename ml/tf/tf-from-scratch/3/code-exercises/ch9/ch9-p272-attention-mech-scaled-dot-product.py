@@ -27,20 +27,33 @@ from plots.chapter8 import plot_data
 from plots.chapter9 import sequence_pred
 import matplotlib.pyplot as plt
 
-# N,1,H=batch, 1, hidden
+# q=decoder hidden state:       N,L,1: H=batch=1, len=1, H=hidden=2
+
 q=torch.tensor([.55,.95]).view(1,1,2)
 printTensor(q, globals(), "full")
-k=torch.tensor([[0.65, 0.2],[0.85, -0.4],[-0.95, -0.75]]).view(1,3,2) # N,L,H=batch, length, hidden
+
+# k=encoder hidden state:       N,L,H: N=batch=1, L=length=3, H=hidden=2.
+
+k=torch.tensor([[0.65, 0.2],[0.85, -0.4],[-0.95, -0.75]]).view(1,3,2)
 printTensor(k, globals(), "full")
 
-# N,1,H x N,H,L => N,1,L  = batch,1,hidden x batch,hidden,length => batch,1,len
+# N,1,H x N,L,H.permute(0,2,1) => N,L,H x N,H,L => [n=1, len=1, h=2] x [n=1, h=2, l=3] => [n=1, l(q)=1, l=3(k)]
+# review matrix multiplication sentimental explanation: https://mkang32.github.io/python/2020/08/23/dot-product.html
+
 prod=torch.bmm(q,k.permute(0,2,1))
 printTensor(prod, globals(), "full")
 
 scores=F.softmax(prod, dim=-1)
 printTensor(scores,globals(), "full")
+print("sum(scores): ", torch.sum(scores))
 
 v=k
+
+# context=\
+# torch.bmm(scores,                                             v)=\
+# torch.bmm(F.softmax(prod,                         dim=-1),    v)=\
+# torch.bmm(F.softmax(torch.bmm(q,k.permute(0,2,1), dim=-1),    v)
+
 context=torch.bmm(scores,v)
 printTensor(context, globals(), "full")
 
