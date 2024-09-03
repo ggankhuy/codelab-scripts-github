@@ -26,56 +26,66 @@ from stepbystep.v4 import StepByStep
 from plots.chapter8 import plot_data
 from plots.chapter9 import sequence_pred
 import matplotlib.pyplot as plt
-PRINT_TENSOR_OUTPUT="full"
-N_FEATURES=2
-HIDDEN_DIM=2
+
+CONFIG_ALPHAS_SYNTHETIC_CALC=0
+
 def calc_alphas(ks,q):
-    N,L,H=ks.size()
-    alphas=torch.ones(N,1,L).float()*1/L
+    printDbg("calc_alphas entered...")
+    printTensor(ks, globals(),"brief")
+    printTensor(q, globals(), "brief")
+ 
+   if CONFIG_ALPHAS_SYNTHETIC_CALC:
+        N,L,H=ks.size()
+        print("ks.size(): ", ks.size())
+        print("N,L,H: ", N,L,H)
+        alphas=torch.ones(N,1,L).float()*1/L
+    else:
+        # N,1,H x N,H,L=>N,1,L
+        # [batch, 1, hidden] x [batch, hidden, len] => [batch, 1, len]
+        # [1, hidden] x [hidden, len] = [1, len]
+        products = torch.bmm(q, ks.permute(0,2,1))
+        alphas=F.softmax(products, dim=-1)
+
+    printTensor(alphas, globals(), "brief")
     return alphas
 
-# [rectangle=1, corners=4, coordinates=2]
 full_seq=(torch.tensor([[-1,-1],[1,-1], [1,1],[1,-1]]).float().view(1,4,2))
 source_seq = full_seq[:, :2]
 target_seq = full_seq[:, 2:]
-
-printTensor(full_seq, globals(), PRINT_TENSOR_OUTPUT) 
-printTensor(source_seq, globals(), PRINT_TENSOR_OUTPUT) 
-printTensor(target_seq, globals(), PRINT_TENSOR_OUTPUT) 
+printTensor(full_seq, globals(), "full") 
+printTensor(source_seq, globals(), "full") 
+printTensor(target_seq, globals(), "full") 
 
 torch.manual_seed(21)
-encoder=Encoder(n_features=N_FEATURES, hidden_dim=HIDDEN_DIM)
-
-printModelInfo(encoder, "encoder")
-
+encoder=Encoder(n_features=2, hidden_dim=2)
 hidden_seq=encoder(source_seq)
 values=hidden_seq
 keys=hidden_seq
-printTensor(values, globals(), PRINT_TENSOR_OUTPUT)
-#exprintTensor(keys, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(values, globals(), "full")
+#exprintTensor(keys, globals(), "full")
 
 torch.manual_seed(21)
-decoder=Decoder(N_FEATURES, hidden_dim=HIDDEN_DIM)
+decoder=Decoder(n_features=2, hidden_dim=2)
 decoder.init_hidden(hidden_seq)
 inputs=source_seq[:, -1:]
-printTensor(inputs, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(inputs, globals(), "full")
 out=decoder(inputs)
-printTensor(out, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(out, globals(), "full")
 query=decoder.hidden.permute(1,0,2)
-printTensor(query, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(query, globals(), "full")
 
 alphas=calc_alphas(keys, query)
-printTensor(alphas, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(alphas, globals(), "full")
 
 context_vector=torch.bmm(alphas,values)
-printTensor(context_vector, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(context_vector, globals(), "full")
 
 concatenated=torch.cat([context_vector, query], axis=-1)
-printTensor(concatenated, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(concatenated, globals(), "full")
 
 products=torch.bmm(query, keys.permute(0,2,1))
-printTensor(products, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(products, globals(), "full")
 
 alphas=F.softmax(products, dim=-1)
-printTensor(alphas, globals(), PRINT_TENSOR_OUTPUT)
+printTensor(alphas, globals(), "full")
 
