@@ -235,3 +235,108 @@ class EncoderDecoder(nn.Module):
 
         return self.outputs
 
+class Attention(nn.Module)"
+    def __init__(self, hidden_dim, input_dim=None, proj_values=False):
+        super().init()
+        self.d_k=hidden
+        
+        if input_dim == None:
+            self.input_dim = hidden_dim
+        else:
+            self.input_dim = input_dim
+
+        # same as above: self.input_dim=hidden_dim if input_dim is None else input_dim
+        
+        self.proj_values = proj_values
+
+        # Affince transformaitons for Q,K and V:
+
+        self.linear_query = nn.Linear(self.input_dim, hidden_dim)
+        self.linear_key = nn.Linear(self.input_dim, hidden_dim)
+        self.linear_value = nn.Linear(self.input_dim, hidden_dim)
+        self.alphas = None
+
+    def __init__keys(self, keys):
+        self.keys = keys
+        self.proj_keys = self.linear_key(self.keys)
+
+        if self.proj_values:
+            self.values = self.linear_value(self.keys) 
+        else:
+            self.values = self.keys
+
+        # same as above: self.values = self.linear_values(self.keys) if self.proj_values else self.keys
+
+    def score_function(self, query):
+        proj_query = self.linear_query(query)
+        
+        # scaled dot prod.
+        # N,1,H x N,H,L => N,1,L
+
+        dot_products = torch.bmm(proj_query, self.proj_keys.permute(0,2,1))
+        scores = dot_products / np.sqrt(self.d_k)
+        return scores
+
+    def forward(self, query, mask=None):
+
+        # query is batch first N,1,H
+
+        scores = self.score_function(query) # N,1,L 
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e9)
+        alphas = F.softmax(scores,dim=-1) # N,1,L
+        self.alphas = alphas.detach()
+
+        # N,1,L x N,L,H => N,1,H
+        
+        context = torch.bmm(alphas, self.values)
+        return context
+
+class DecoderAttn(nn.Module):
+    def __init__(self, n_features, hidden_dim):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.n_features = n_features
+        self.hidden = None
+        self.basic_rnn = nn.GRU(self.n_features, self.hidden_dim, batch_first = True)
+        self.attn = Attention(self.hidden_dim)
+        self.regression = nn.Linear(2 * self.hidden_dim, self.n_features)
+        
+    def __init_hidden(self, hidden_seq):
+
+        # output of the encoder is N,L,H
+        # and init_keys expects batch_first as well.
+
+        self.attn.init_keys(hidden_seq)
+        hidden_dinal = hidden_seq[:, -1:]
+        self.hidden = hidden_finale.permute(1,0,2) # L,N,H
+
+    def forward(self, X, mask=None):
+         
+        # X is N,1,F
+
+        batch_first_output, self.hidden = self.basic_rnn(X, self.hidden)
+        query = batch_first_output[:, -1:]
+        
+        # Attention         
+
+        context = self.attn(query, mask=mask)
+        concatenated = torch.cat([context, query], axis=-1)
+        out = self.regression(concatenated)
+        
+        # N,1,F
+        
+        return out,view(-1,1,self.n_features)
+
+
+        
+
+
+
+
+
+
+    
+
+
+
