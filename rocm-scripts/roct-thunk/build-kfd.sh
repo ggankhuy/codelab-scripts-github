@@ -5,6 +5,10 @@ rm -rf build
 mkdir build
 mkdir log
 
+git clone https://github.com/ROCm/ROCT-Thunk-Interface.git
+cd ROCT-Thunk-Interface
+git checkout rocm-6.1.x
+
 LOG_DIR=`pwd`/log
 
 for i in ghc-terminfo-devel libzstd-devel.x86_64 rocm-llvm-devel rpm-build dpkg libdrm-devel numactl-devel
