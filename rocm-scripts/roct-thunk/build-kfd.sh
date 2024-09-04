@@ -1,10 +1,5 @@
 
 set -x
-rm -rf log/*
-rm -rf build
-mkdir build
-mkdir log
-
 git clone https://github.com/ROCm/ROCT-Thunk-Interface.git
 cd ROCT-Thunk-Interface
 git checkout rocm-6.1.x
@@ -16,6 +11,10 @@ do
     sudo yum install $i -y
 done
 
+rm -rf log/*
+rm -rf build
+mkdir build
+mkdir log
 pushd build
 cmake ..  2>&1 | tee $LOG_DIR/1.roct.cmake.log
 #make -j16  ..  2>&1 | tee $LOG_DIR/2.roct.make.log
