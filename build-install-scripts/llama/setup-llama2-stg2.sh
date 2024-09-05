@@ -61,16 +61,16 @@ pip3 install ./*.whl
 popd
 echo $torchwhl
 
-pushd
-for i in *tar ; do 
-    echo "DBG: -------- Installing $i wheel package... ---------"
-    dirname=`echo $i | awk '{print $1}' FS=. `
-    mkdir $dirname ; pushd $dirname
-    ln -s ../$i .
-    tar -xvf ./$i 
-    pip3 install ./*.whl
-done
-popd
+#pushd
+#for i in *tar ; do 
+#    echo "DBG: -------- Installing $i wheel package... ---------"
+#    dirname=`echo $i | awk '{print $1}' FS=. `
+#    mkdir $dirname ; pushd $dirname
+#    ln -s ../$i .
+#    tar -xvf ./$i 
+#    pip3 install ./*.whl
+#done
+#popd
 
 list_mkl_info 1
 conda install mkl-service mkl -y
