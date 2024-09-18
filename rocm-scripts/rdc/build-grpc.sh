@@ -11,11 +11,11 @@ set_os_type
 
 case "$OS_NAME" in
 "Ubuntu")
-  PKG_LIST="doxygen  libcap-dev libpcap-dev"
+  PKG_LIST="doxygen libpcap-dev"
   ;;
 "CentOS Stream")
   echo "CentOS is detected..."
-  PKG_LIST="doxygen  libcap-dev libpcap-devel"
+  PKG_LIST="doxygen libpcap-devel"
   ;;
 *)
   echo "Unsupported O/S, exiting..."
@@ -24,8 +24,8 @@ case "$OS_NAME" in
   ;;
 esac
 
-for i in "$PKG_LIST" ; do 
-    echo "building $i ..." ; sudo yum install $i 
+for i in $PKG_LIST ; do 
+    echo "Installing $i ..." ; sudo yum install $i -y
 done
 
 if [[ ! -d grpc ]] ; then 
