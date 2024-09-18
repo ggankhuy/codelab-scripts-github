@@ -6,7 +6,7 @@ CONFIG_BUILD_ROCT=1
 CONFIG_BUILD_KFDTEST=1
 CMAKE_OPTS="--trace" 
 CMAKE_OPTS="" 
-
+LOG_DIR_SUFFIX="ROCT+KFDTEST"
 ROCM_VERSION=6.2
 ROCM_VERSION_INSTALLED=6.2
 if [[ ! -d ROCT-Thunk-Interface ]] ; then
@@ -15,7 +15,8 @@ else
     echo "bypassing git clone as it exists already..."
 fi
 
-LOG_DIR=`pwd`/log
+LOG_DIR=`pwd`/log/$CMAKE_OPTS_$LOG_DIR_SUFFIX
+mkdir $LOG_DIR -p
 pushd ROCT-Thunk-Interface
 git checkout rocm-$ROCM_VERSION.x
 
