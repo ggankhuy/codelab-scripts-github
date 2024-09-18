@@ -1,11 +1,32 @@
 set -x 
 OPTION_CLEAN_BUILD_GRPC=0
+source ../../api/lib.sh
 
 if [[ $OPTION_CLEAN_BUILD_GRPC -eq 1 ]] ; then rm -rf build ; fi
 
+set_os_type
+
 #centos : gcrp part working.
 #ubuntu: in test.
-apt install doxygen  libcap-dev -y
+
+case "$OS_NAME" in
+"Ubuntu")
+  PKG_LIST="doxygen  libcap-dev libpcap-dev"
+  ;;
+"CentOS Stream")
+  echo "CentOS is detected..."
+  PKG_LIST="doxygen  libcap-dev libpcap-devel"
+  ;;
+*)
+  echo "Unsupported O/S, exiting..."
+  PKG_EXEC=""
+  return 1
+  ;;
+esac
+
+for i in "$PKG_LIST" ; do 
+    echo "building $i ..." ; sudo yum install $i 
+done
 
 if [[ ! -d grpc ]] ; then 
     git clone -b v1.61.0 https://github.com/grpc/grpc --depth=1 --shallow-submodules --recurse-submodules
