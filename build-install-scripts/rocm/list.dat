@@ -38,3 +38,4 @@ ROCgdb
 rocm-cmake
 half
 clr
+hip-tests
