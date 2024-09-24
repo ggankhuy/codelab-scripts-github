@@ -1,4 +1,6 @@
 set -x
+CONFIG_DEBUG_ENV_ONLY=1
+
 p1=$1
 TOKEN_DATE=`date +%Y%m%d-%H-%M-%S`
 [[ -z $p1 ]] && p1=$TOKEN_DATE
@@ -23,8 +25,12 @@ echo " ---- $LLAMA_PREREQ_PKGS files ----- " | tee -a $LOG_ENV
 tree -fs $LLAMA_PREREQ_PKGS | tee -a $LOG_ENV
 
 pushd $LLAMA_PREREQ_PKGS
-dmesg | tee $LOG_DMESG_BEFORE
-./run_llama2_70b_bf16.sh 2>&1 | tee $LOG_RUN && echo "---- done ----"   
-dmesg | tee $LOG_DMESG_AFTER
+if [[ $CONFIG_DEBUG_ENV_ONLY  -ne 0 ]] ; then
+    dmesg | tee $LOG_DMESG_BEFORE
+    ./run_llama2_70b_bf16.sh 2>&1 | tee $LOG_RUN && echo "---- done ----"   
+    dmesg | tee $LOG_DMESG_AFTER
+fi
 popd
 
+tree -fs $LOG_DIR
+cat $LOG_DIR/$LOG_RUN
