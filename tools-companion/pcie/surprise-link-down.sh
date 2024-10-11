@@ -39,13 +39,18 @@ counter=0
 while [[ $currCapId != "10" ]] && [[ $counter -lt 4 ]] && [[ $currCapPtr -ne "00" ]] ; 
 do  
     echo "------------ loop $counter ---------"
+
+    # process capID before pointing to next cap.
+
     CAP_ID_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $currCapPtrRow_16: | head -1`
     CAP_ID_2=`echo $CAP_ID_1 | awk -v a=$((currCapPtrCol_16+2)) '{print $a}'`
+    currCapId=$CAP_ID_2
+    if [[ $currCapId == "10" ]] ; then break; fi
+
+    # point to next cap.
 
     NEXT_CAP_PTR_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $currCapPtrRow_16: | head -1`
     NEXT_CAP_PTR_2=`echo $NEXT_CAP_PTR_1 | awk -v b=$((currCapPtrCol_16+3)) '{print $b}'`
-
-    currCapId=$CAP_ID_2
 
     currCapPtr=$NEXT_CAP_PTR_2
     currCapPtr=`echo "ibase=16; $currCapPtr" | bc`
@@ -55,4 +60,27 @@ do
     currCapPtrCol_16=`echo "obase=16; $currCapPtrCol" | bc`
     counter=$((counter+1))
 done 
+
+echo "currCapID: $currCapId"
+echo "currCapPtr: $currCapPtr"
+
+# linkControl is word at 0x10. But since we are setting bit4, due to big indian
+# we are reading 11th byte.
+
+echo rxPcieCapLinkCtrl_b1=$((currCapPtr+0x11))
+echo rxPcieCapLinkCtrl_b2=$((currCapPtr+0x10))
+echo rxPcieCapLinkCtrl=$((currCapPtr+0x10))
+
+# Reading is not necessary just for test purposes.
+
+rxPcieCapLinkCtrlRow=`echo $((rxPcieCapLinkCtrl & 0xf0))`
+rxPcieCapLinkCtrlRow_16=`echo "obase=16; $rxPcieCapLinkCtrlRow" | bc`
+rxPcieCapLinkCtrlCol=`echo $((rxPcieCapLinkCtrl & 0x0f))`
+rxPcieCapLinkCtrlCol_16=`echo "obase=16; $rxPcieCapLinkCtrlCol" | bc`
+rxPcieCapLinkCtrlVal=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $rxPcieCapLinkCtrlVal_16: | head -1`
+rxPcieCapLinkCtrlVal=`echo $CAP_ID_1 | awk -v a=$((rxPcieCapLinkCtrlVal_16+2)) '{print $a}'`
+
+# set the link disable bit 4.
+
+setpci -s $BUS:$DEV.$FCN $rxPcieCapLinkCtrl.w=0x10
 exit 0
