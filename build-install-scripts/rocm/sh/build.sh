@@ -697,6 +697,20 @@ function ROCgdb() {
     build_exit $CURR_BIULD
 }
 
+function hip_tests() {
+    #not sure if this export statement is needed. at the time of this writing
+    # develop branch builds ok on mi300, 6.2.x not, mi250 builds ok.
+    #export HIP_TESTS_DIR="$(readlink -f hip-tests)"
+    CURR_BUILD=hip-tests
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir -p build; cd build
+    cmake ../catch/  -DHIP_PLATFORM=amd
+    make -j$(nproc) build_tests
+    popd
+    popd
+    build_exit $CURR_BIULD
+}
 if [[ $CONFIG_BUILD_PY -eq 1 ]] ; then
     echo "Building and installing python..."
     install_python
