@@ -31,14 +31,28 @@ RX_STD_CAP_PT_ROW=`echo $((RX_STD_CAP_PT & 0xf0))`
 RX_STD_CAP_PT_ROW_16=`echo "obase=16; $RX_STD_CAP_PT_ROW" | bc`
 RX_STD_CAP_PT_COL=`echo $((RX_STD_CAP_PT & 0x0f))`
 RX_STD_CAP_PT_COL_16=`echo "obase=16; $RX_STD_CAP_PT_COL" | bc`
-
+currCapId=$capId
+currCapPtr=$RX_STD_CAP_PT
+currCapPtrRow_16=$RX_STD_CAP_PT_ROW_16
+currCapPtrCol_16=$RX_STD_CAP_PT_COL_16
 counter=0
-while [[ $capId != 0x10 ]] && [[ $counter -lt 3 ]] ; 
+while [[ $currCapId != "10" ]] && [[ $counter -lt 4 ]] && [[ $currCapPtr -ne "00" ]] ; 
 do  
-    CAP_ID_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $RX_STD_CAP_PT_ROW_16: | head -1`
-    CAP_ID_2=`echo $CAP_ID_1 | awk -v a=$((RX_STD_CAP_PT_COL+2)) '{print $a}'`
-    NEXT_CAP_PTR_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $RX_STD_CAP_PT_ROW_16: | head -1`
-    NEXT_CAP_PTR_2=`echo $NEXT_CAP_PTR_1 | awk -v b=$((RX_STD_CAP_PT_COL+3)) '{print $b}'`
+    echo "------------ loop $counter ---------"
+    CAP_ID_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $currCapPtrRow_16: | head -1`
+    CAP_ID_2=`echo $CAP_ID_1 | awk -v a=$((currCapPtrCol_16+2)) '{print $a}'`
+
+    NEXT_CAP_PTR_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $currCapPtrRow_16: | head -1`
+    NEXT_CAP_PTR_2=`echo $NEXT_CAP_PTR_1 | awk -v b=$((currCapPtrCol_16+3)) '{print $b}'`
+
+    currCapId=$CAP_ID_2
+
+    currCapPtr=$NEXT_CAP_PTR_2
+    currCapPtr=`echo "ibase=16; $currCapPtr" | bc`
+    currCapPtrRow=`echo $((currCapPtr & 0xf0))`
+    currCapPtrRow_16=`echo "obase=16; $currCapPtrRow" | bc`
+    currCapPtrCol=`echo $((currCapPtr & 0x0f))`
+    currCapPtrCol_16=`echo "obase=16; $currCapPtrCol" | bc`
     counter=$((counter+1))
 done 
 exit 0
