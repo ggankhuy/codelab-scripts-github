@@ -133,13 +133,10 @@ if [[ ! -z $image ]] ; then
     fi
 else
     echo "Image not specified, will attempt starting container..."
-
     if [[ $gpu == "amd" ]] || [[ $gpu == "rocm" ]] ; then
         sudo modprobe amdgpu
     fi
-
-    sudo systemctl start docker
-    sudo docker start $name ; sudo docker exec -it $name bash
+    sudo systemctl start docker && sudo docker start $name && sudo docker exec -it $name bash
     ret=$? 
     if [[ $ret -ne 0 ]] ; then
         echo "Start docker failed, something wrong! return code: $ret"
