@@ -1,4 +1,4 @@
-set +x
+set -x
 if [[ $? -ne 0 ]] ; then echo "either driver failed to load or docker service failed to start. Check logs" ; exit 1 ;  fi
 
 DEFAULT_GPU="amd"
@@ -133,6 +133,12 @@ if [[ ! -z $image ]] ; then
     fi
 else
     echo "Image not specified, will attempt starting container..."
+
+    if [[ $gpu == "amd" ]] || [[ $gpu == "rocm" ]] ; then
+        sudo modprobe amdgpu
+    fi
+
+    sudo systemctl start docker
     sudo docker start $name ; sudo docker exec -it $name bash
     ret=$? 
     if [[ $ret -ne 0 ]] ; then
