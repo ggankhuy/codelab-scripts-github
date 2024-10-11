@@ -5,5 +5,5 @@
 
 # Ubuntu:22.04 / ROCm-6.2 13680 MI100.
 
-./build-grpc.sh 2>&1 | tee build-grpc.log
+#./build-grpc.sh 2>&1 | tee build-grpc.log
 ./build-rdc.sh 2>&1 | tee build-rdc.log
