@@ -5,8 +5,30 @@ OPTION_CLEAN_BUILD_RDC=1
 OPTION_CREATE_PKG=1
 GRPC_PROTOC_ROOT=/opt/grpc
 
-apt install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl
-apt install -y libyaml-cpp-dev libabsl-dev
+source ../../api/lib.sh 
+set_os_type
+
+#centos : gcrp part working.
+#ubuntu: in test.
+
+case "$OS_NAME" in
+"Ubuntu")
+  PKG_LIST="doxygen libpcap-dev libcap-dev automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl libyaml-cpp-dev libabsl-dev"
+  ;;
+"CentOS Stream")
+  echo "CentOS is detected..."
+  PKG_LIST="doxygen libpcap-devel libcap-devel automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-devel libgtest-devel clang-5.0 libc++-devel curl libyaml-cpp-devel libabsl-devel"
+  ;;
+*)
+  echo "Unsupported O/S, exiting..."
+  PKG_EXEC=""
+  return 1
+  ;;
+esac
+
+for i in $PKG_LIST ; do
+    echo "Installing $i ..." ; sudo yum install $i -y
+done
 
 CMAKE_PARAMS="-DROCM_DIR=/opt/rocm -DGRPC_ROOT=$GRPC_PROTOC_ROOT -DCMAKE_INSTALL_PREFIX=/opt/rocm -DBUILD_RVS=on" 
 

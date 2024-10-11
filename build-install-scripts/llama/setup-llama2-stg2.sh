@@ -5,10 +5,29 @@
 # only 70gb during installation.
 set -x 
 
+source ./lib_bash.sh
+[[ $? -ne 0 ]] && exit 1
+
 for i in gfortran libomp; do 
     sudo yum install $i -y ; 
 done
+
 SOFT_LINK=1
+
+# set up ulimit
+LIMIT="/etc/security/limits.conf"
+SEARCH_STRING="* soft nofile 1048576"
+SEARCH_STRING_2="* hard nofile 1048576"
+SEARCH_STRING_3="* soft memlock unlimited"
+SEARCH_STRING_4="* hard memlock unlimited"
+
+if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
+  sudo sed -i '/# End of file/i \
+  * soft nofile 1048576\n\
+  * hard nofile 1048576\n\
+  * soft memlock unlimited\n\
+  * hard memlock unlimited' "$LIMIT"
+fi
 
 if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then 
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
@@ -63,20 +82,11 @@ BASHRC_EXPORT=./export.md
 ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
-if [[ -z `cat $BASHRC | grep "export.*MAGMA_HOME"` ]] ; then
-    echo "export MAGMA_HOME=$PWD" | sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-    export MAGMA_HOME=$PWD
-fi
 
-if [[  -z `cat $BASHRC | grep "export.*MKLROOT"` ]] ; then
-    echo "export MKLROOT=$CONDA_PREFIX/" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-    export MKLROOT=$CONDA_PREFIX
-fi
-
-if [[ -z `cat $BASHRC | grep "export.*ROCM_PATH"` ]] ; then
-    export ROCM_PATH=$ROCM_PATH
-    echo "export ROCM_PATH=$ROCM_PATH" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-fi
+PWD=`pwd`
+export_bashrc_delim_alt MAGMA_HOME $PWD
+export_bashrc MKLROOT $CONDA_PREFIX
+export_bashrc_delim_alt ROCM_PAHT $ROCM_PATH
 
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
@@ -119,7 +129,6 @@ echo "$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib/" | sudo tee /etc/ld.
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
-if [[ -z `cat $BASHRC | grep "export.*LD_LIBRARY_PATH.*/mkl-2023.1.0-h213fc3f_46344"` ]] ; then
-    echo "export LD_LIBRARY_PATH=$CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib" |  sudo tee -a $BASHRC | sudo tee -a $BASHRC_EXPORT
-fi
+export_bashrc_delim_alt LD_LIBRARY_PATH $CONDA_PREFIX_1/pkgs/mkl-2023.1.0-h213fc3f_46344/lib:$MAGMA_HOME/lib
+
 

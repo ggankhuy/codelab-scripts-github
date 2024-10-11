@@ -54,18 +54,16 @@ yum install sudo tree git wget -y
 #setup  MINICONDA_SRC_DIR
 
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
-export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR
 
-if [[ -z `cat ~/.bashrc | egrep "export.*MINICONDA_SRC_DIR"` ]] ; then
-    echo "export MINICONDA_SRC_DIR=$MINICONDA_SRC_DIR" | sudo tee -a ~/.bashrc
-fi
+source ./lib_bash.sh
+[[ $? -ne 0 ]] && exit 1
+
+export_bashrc MINICONDA_SRC_DIR $MINICONDA_SRC_DIR
+env | grep MINICONDA
 
 if [[ $p_pkg_name ]] ; then
     LLAMA_PREREQ_PKGS=$p_pkg_name
-    export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS
-    if [[ -z `cat ~\.bashrc | grep LLAMA_PREREQ_PKGS` ]] ; then
-        echo "export LLAMA_PREREQ_PKGS=$LLAMA_PREREQ_PKGS" | sudo tee -a ~/.bashrc
-    fi
+    export_bashrc LLAMA_PREREQ_PKGS $LLAMA_PREREQ_PKGS
     echo "package name is set to: $LLAMA_PREREQ_PKGS"
 fi
 
@@ -79,22 +77,6 @@ rm -rf ./miniconda.sh
 
 ln -s $MINICONDA_SRC_DIR /$HOME/
 
-
-# set up ulimit
-LIMIT="/etc/security/limits.conf"
-SEARCH_STRING="* soft nofile 1048576"
-SEARCH_STRING_2="* hard nofile 1048576"
-SEARCH_STRING_3="* soft memlock unlimited"
-SEARCH_STRING_4="* hard memlock unlimited"
-
-if ! grep -qF "$SEARCH_STRING" "$LIMIT" && ! grep -qF "$SEARCH_STRING_2" "$LIMIT" && ! grep -qF "$SEARCH_STRING_3" "$LIMIT" && ! grep -qF "$SEARCH_STRING_4" "$LIMIT"; then
-  sudo sed -i '/# End of file/i \
-  * soft nofile 1048576\n\
-  * hard nofile 1048576\n\
-  * soft memlock unlimited\n\
-  * hard memlock unlimited' "$LIMIT"
-fi
-
 # setup CONDA_ENV_NAME
 
 CONDA_ENV_NAME="llama2"
@@ -107,19 +89,16 @@ else
 fi
 
 echo "CONDA_ENV_NAME is set to $CONDA_ENV_NAME"
-
 export CONDA_ENV_NAME=$CONDA_ENV_NAME
 
-if [[ -z `cat ~/.bashrc | egrep "export.*CONDA_ENV_NAME"` ]] ; then
-    echo "export CONDA_ENV_NAME=$CONDA_ENV_NAME" | tee -a ~/.bashrc
-fi
+export_bashrc_delim_alt CONDA_ENV_NAME $CONDA_ENV_NAME
 
 $CONDA create --name  $CONDA_ENV_NAME python==3.9 -y
 $CONDA init
 
-if [[ -z `cat ~/.bashrc | egrep "export.*env_name"` ]] ; then
-    echo "export env_name=$CONDA_ENV_NAME" | tee -a ~/.bashrc
-fi
+sed -i "s/export env_name.*/export env_name=${p_env_name}/g" ~/.bashrc
+
+sed -i 's/conda activate.*//g' ~/.bashrc
 
 echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
 
