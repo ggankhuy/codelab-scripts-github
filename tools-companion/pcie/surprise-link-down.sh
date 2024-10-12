@@ -84,5 +84,5 @@ rxPcieCapLinkCtrlVal=`echo $CAP_ID_1 | awk -v a=$((rxPcieCapLinkCtrlVal_16+2)) '
 rxPcieCapLinkCtrl_16=`echo "obase=16; $rxPcieCapLinkCtrl"| bc`
 echo "GG: rxPcieCapLinkCtrl: $rxPcieCapLinkCtrl"
 echo "GG: rxPcieCapLinkCtrl_16: $rxPcieCapLinkCtrl_16"
-setpci -s $BUS:$DEV.$FCN $((rxPcieCapLinkCtrl_16)).w=0x10
+setpci -s $BUS:$DEV.$FCN $rxPcieCapLinkCtrl_16.w=0x10
 exit 0
