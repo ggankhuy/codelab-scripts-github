@@ -14,6 +14,12 @@
 # ./surprise-link-down.sh 0 08 03 (cause SLD in bus 0, device 08, function 03)
 # ./surprise-link-down.sh 0 12 03 (cause SLD in bus 0, device 12 (0xc), function 03)
 
+# usage pointer:
+# for GPU device, dont use on the GPU itself is LinkCtrl register appears Read-only.
+# instead use this script for upstream bridge:
+# i.e. GPU 1a:00.0 with upstream bridge: 19:00.0
+# ./<this_script> 19 00 00
+
 BUS=$1
 DEV=$2
 FCN=$3
