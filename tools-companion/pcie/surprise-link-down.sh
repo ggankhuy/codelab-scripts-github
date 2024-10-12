@@ -67,9 +67,9 @@ echo "currCapPtr: $currCapPtr"
 # linkControl is word at 0x10. But since we are setting bit4, due to big indian
 # we are reading 11th byte.
 
-echo rxPcieCapLinkCtrl_b1=$((currCapPtr+0x11))
-echo rxPcieCapLinkCtrl_b2=$((currCapPtr+0x10))
-echo rxPcieCapLinkCtrl=$((currCapPtr+0x10))
+rxPcieCapLinkCtrl_b1=$((currCapPtr+0x11))
+rxPcieCapLinkCtrl_b2=$((currCapPtr+0x10))
+rxPcieCapLinkCtrl=$((currCapPtr+0x10))
 
 # Reading is not necessary just for test purposes.
 
@@ -81,6 +81,8 @@ rxPcieCapLinkCtrlVal=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $rxPcieCapLinkCtr
 rxPcieCapLinkCtrlVal=`echo $CAP_ID_1 | awk -v a=$((rxPcieCapLinkCtrlVal_16+2)) '{print $a}'`
 
 # set the link disable bit 4.
-
-setpci -s $BUS:$DEV.$FCN $rxPcieCapLinkCtrl.w=0x10
+rxPcieCapLinkCtrl_16=`echo "obase=16; $rxPcieCapLinkCtrl"| bc`
+echo "GG: rxPcieCapLinkCtrl: $rxPcieCapLinkCtrl"
+echo "GG: rxPcieCapLinkCtrl_16: $rxPcieCapLinkCtrl_16"
+setpci -s $BUS:$DEV.$FCN $((rxPcieCapLinkCtrl_16)).w=0x10
 exit 0
