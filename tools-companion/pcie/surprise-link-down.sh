@@ -20,11 +20,13 @@
 # i.e. GPU 1a:00.0 with upstream bridge: 19:00.0
 # ./<this_script> 19 00 00
 
+CONFIG_DISABLE_SET_PCI=1
+DEBUG=1
 BUS=$1
 DEV=$2
 FCN=$3
 
-set -x 
+[[ $DEBUG -eq 1 ]] && set -x 
 [[ ! -z $BUS ]] || exit 1 
 [[ ! -z $DEV ]] || exit 1 
 [[ ! -z $FCN ]] || exit 1 
@@ -51,6 +53,7 @@ do
     CAP_ID_1=`sudo lspci -s $BUS:$DEV.$FCN -xxx | grep $currCapPtrRow_16: | head -1`
     CAP_ID_2=`echo $CAP_ID_1 | awk -v a=$((currCapPtrCol_16+2)) '{print $a}'`
     currCapId=$CAP_ID_2
+    echo "found capID: $currCapId"
     if [[ $currCapId == "10" ]] ; then break; fi
 
     # point to next cap.
@@ -65,6 +68,7 @@ do
     currCapPtrCol=`echo $((currCapPtr & 0x0f))`
     currCapPtrCol_16=`echo "obase=16; $currCapPtrCol" | bc`
     counter=$((counter+1))
+    echo "Next capability pointer: $currCapPtr"
 done 
 
 echo "currCapID: $currCapId"
@@ -88,7 +92,23 @@ rxPcieCapLinkCtrlVal=`echo $CAP_ID_1 | awk -v a=$((rxPcieCapLinkCtrlVal_16+2)) '
 
 # set the link disable bit 4.
 rxPcieCapLinkCtrl_16=`echo "obase=16; $rxPcieCapLinkCtrl"| bc`
-echo "GG: rxPcieCapLinkCtrl: $rxPcieCapLinkCtrl"
-echo "GG: rxPcieCapLinkCtrl_16: $rxPcieCapLinkCtrl_16"
-setpci -s $BUS:$DEV.$FCN $rxPcieCapLinkCtrl_16.w=0x10
+echo "rxPcieCapLinkCtrl: $rxPcieCapLinkCtrl"
+echo "rxPcieCapLinkCtrl_16(hex): $rxPcieCapLinkCtrl_16"
+read -p "Press y to continue disabling the link for device: $BUS:$DEV.$FCN otherwise press N or Ctrl+C:" setpci
+
+case $setpci in 
+    y)
+        echo "Disabling the link..." 
+        [[ $DEBUG -eq 1 ]] || setpci -s $BUS:$DEV.$FCN $rxPcieCapLinkCtrl_16.w=0x10
+        exit 0
+        ;;
+    n)
+        echo "Skipping, not disabling the link..."
+        exit 1
+        ;;
+    *)  
+        echo "Unknown choice, exiting..."
+        exit 1
+        ;;
+esac
 exit 0
