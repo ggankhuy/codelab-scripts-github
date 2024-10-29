@@ -38,4 +38,8 @@ ROCgdb
 rocm-cmake
 half
 clr
+<<<<<<< HEAD
 hip-tests
+=======
+composable_kernel
+>>>>>>> dev-tmp

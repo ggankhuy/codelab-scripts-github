@@ -21,6 +21,7 @@ printHelp() {
     echo "--amdgpu-build: amdgpu build number."
     echo "--no-dkms: bypass dkms installation."
     echo "--no-install: skip whole installation, only do prereq steps"
+    echo "--nogpgcheck: bypass gpg check" 
     echo "Usage: examples"
     echo "$0 --ga --rocm-ver=6.0 / use ga version of rocm version 6.0"
     echo "$0 --int --mainline --rocm-build=13435 --rocm-ver=6.1 --amdgpu-build=1720120 / use internal version of rocm"
@@ -67,6 +68,9 @@ do
             ;;
         *--no-dkms*)
             p_dkms="--no-dkms"
+            ;;
+        *--nogpgcheck)
+            p_nogpgcheck="--nogpgcheck"
             ;;
         *--root)
             p_root=1
@@ -132,7 +136,7 @@ echo "url_amdgpu: $url_amdgpu"
 #if [[ ! -z $? ]] ; then "echo wget unsuccessful..."  ; exit 1 ; fi
 
 amdgpu_installer_rpm_path=`find . -name "amdgpu-install*" | head -1`
-yum install $amdgpu_installer_rpm_path  -y
+yum install $amdgpu_installer_rpm_path  -y $p_nogpgcheck
 popd
 echo "$rhel_ver" > /etc/dnf/vars/amdgpudistro
 
@@ -146,7 +150,7 @@ if [[ ! -z $p_int ]] ; then
     fi
 fi 
 
-amdgpu-install --usecase=rocm $p_dkms -y
+amdgpu-install --usecase=rocm $p_dkms -y $p_nogpgcheck
 
 
 
