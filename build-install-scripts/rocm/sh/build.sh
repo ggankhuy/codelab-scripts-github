@@ -186,7 +186,7 @@ function ROCm_Device_Lib() {
     DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir -p "$DEVICE_LIBS/build"
     cd "$DEVICE_LIBS/build"
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -194,6 +194,22 @@ function ROCm_Device_Lib() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     #cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
     build_exit $CURR_BUILD
+}
+
+function composable_kernel() {
+    CURR_BUILD=composable_kernel    
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    mkdir build ; cd build
+    cmake -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D CMAKE_BUILD_TYPE=Release .. 2>&1 | \
+        tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
+    build_exit $CURR_BUILD
+    popd
 }
 
 function rocm_cmake() {
@@ -588,6 +604,7 @@ function f5() {
     #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
     #popd
     build_exit $CURR_BIULD
+    popd
 }
 
 function rocALUTION () {
