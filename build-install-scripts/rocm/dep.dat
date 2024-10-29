@@ -14,4 +14,7 @@ rocALUTION: hipAMD rocBLAS rocRAND
 rocRAND: hipAMD
 clr: COMGR ROCR-Runtime
 ROCR-Runtime: ROCT-Thunk-Interface
+<<<<<<< HEAD
 #roctThrust: rocPRIM
+=======
+>>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362

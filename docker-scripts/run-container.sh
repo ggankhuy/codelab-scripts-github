@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 set -x
+=======
+set +x
+>>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 if [[ $? -ne 0 ]] ; then echo "either driver failed to load or docker service failed to start. Check logs" ; exit 1 ;  fi
 
 DEFAULT_GPU="amd"

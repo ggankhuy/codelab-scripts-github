@@ -2,7 +2,11 @@
 
 ## This script only supports FBGEMM setup with ROCm ver 6.2 ~ 6.0
 
+<<<<<<< HEAD
 set -x
+=======
+#set -x
+>>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 
 usage() {
   echo "Usage: $0 --repo <pytorch/rocm> [--fbgemm-branch <FBGEMM-branch>] "

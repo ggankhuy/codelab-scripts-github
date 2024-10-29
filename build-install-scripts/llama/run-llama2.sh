@@ -28,9 +28,12 @@ pushd $LLAMA_PREREQ_PKGS
 if [[ $CONFIG_DEBUG_ENV_ONLY  -ne 0 ]] ; then
     dmesg | tee $LOG_DMESG_BEFORE
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     chmod 755 *sh
 >>>>>>> dev-tmp
+=======
+>>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
     ./run_llama2_70b_bf16.sh 2>&1 | tee $LOG_RUN && echo "---- done ----"   
     dmesg | tee $LOG_DMESG_AFTER
 fi
