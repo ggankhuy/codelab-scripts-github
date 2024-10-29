@@ -186,11 +186,7 @@ function ROCm_Device_Lib() {
     DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir -p "$DEVICE_LIBS/build"
     cd "$DEVICE_LIBS/build"
-<<<<<<< HEAD
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-=======
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. | tee $LOG_DIR/$CURR_BUILD.log
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -200,7 +196,6 @@ function ROCm_Device_Lib() {
     build_exit $CURR_BUILD
 }
 
-<<<<<<< HEAD
 function composable_kernel() {
     CURR_BUILD=composable_kernel    
     BUILD_TARGET "examples tests ckProfiler"
@@ -218,8 +213,6 @@ function composable_kernel() {
     popd
 }
 
-=======
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 function rocm_cmake() {
     f4 rocm_cmake
 }
@@ -489,11 +482,7 @@ function f2() {
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
     mkdir build; cd build
-<<<<<<< HEAD
     CXX=hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
-=======
-    CXX=/opt/rocm/hip/bin/hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -514,11 +503,7 @@ function f2a() {
     pushd $ROCM_SRC_FOLDER/$i
     mkdir build; cd build
     rm -rf ./*
-<<<<<<< HEAD
     CXX=hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-=======
-    CXX=/opt/rocm/hip/bin/hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
@@ -620,11 +605,7 @@ function f5() {
     #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
     #popd
     build_exit $CURR_BIULD
-<<<<<<< HEAD
     popd
-=======
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
-}
 
 function rocALUTION () {
     i=rocALUTION
