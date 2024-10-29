@@ -198,6 +198,7 @@ function ROCm_Device_Lib() {
 
 function composable_kernel() {
     CURR_BUILD=composable_kernel    
+    BUILD_TARGET "examples tests ckProfiler"
     build_entry $CURR_BUILD
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build ; cd build
