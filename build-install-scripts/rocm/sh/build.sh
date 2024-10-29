@@ -606,6 +606,7 @@ function f5() {
     #popd
     build_exit $CURR_BIULD
     popd
+}
 
 function rocALUTION () {
     i=rocALUTION
