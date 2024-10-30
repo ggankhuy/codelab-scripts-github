@@ -225,7 +225,7 @@ def buildDag(depFileContent):
     # we havent implemented partial dag base on component specified.
     if DEBUG:
         print("---------------------")
-        print("buildDag entered: p1: ")
+        print("buildDag entered: depFileContent: ", depFileContent)
     found=0
 
     if not depFileContent:
