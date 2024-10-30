@@ -190,7 +190,7 @@ function setup_root_rocm_softlink () {
 
 function rocm_source_dw() {
     p1=$1
-    SUDO='echo amd1234 | sudo'
+    SUDO=sudo
     CONFIG_VERSION=4.1
     DATE=`date +%Y%m%d-%H-%M-%S`
     HOME_DIR=`pwd`
