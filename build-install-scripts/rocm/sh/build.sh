@@ -1,4 +1,4 @@
-set -x
+#set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
