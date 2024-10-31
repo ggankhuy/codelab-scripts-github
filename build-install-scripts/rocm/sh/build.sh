@@ -119,7 +119,7 @@ else
             echo "Unable to determine PKG_EXEC or unsupport/unknown package installer: $PKG_EXEC. Installing linux packages are skipped."
         ;;    
     esac
-    install_pip_libs CppHeaderParser
+    install_pip_libs CppHeaderParser joblib
 fi
 
 CONFIG_INSTALL_PREFIX="/opt/rocm"
