@@ -59,6 +59,7 @@ rocmVersionMajor=""
 rocmVersionMinor=""
 nopkg=""
 install_path=""
+dagno=""
 
 for i in sys.argv:
     print("Processing ", i)
