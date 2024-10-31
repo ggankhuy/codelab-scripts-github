@@ -13,18 +13,18 @@ ERROR_ROCM_SRC_REPO_SYNC=302
 
 function print_single_bar() {
     local i
-    set +x
+    #set +x
     for i in {1..50} ; do echo -ne "-" ; done
     echo ""
-    set -x
+    #set -x
 }
 
 function print_double_bar() {
     local i
-    set +x
+    #set +x
     for i in {1..50} ; do echo -ne "=" ; done
     echo ""
-    set -x
+    #set -x
 }
 
 #   This function is also called by python code and parses its stdout, therefore
