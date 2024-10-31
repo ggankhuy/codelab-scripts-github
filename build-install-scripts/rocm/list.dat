@@ -22,6 +22,7 @@ hipCUB
 rocThrust
 rocSOLVER 
 hipBLAS 
+hipBLASLt
 hipSPARSE 
 rocSPARSE 
 rocFFT 

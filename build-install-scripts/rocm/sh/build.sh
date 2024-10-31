@@ -520,6 +520,9 @@ function rocSOLVER() {
 function hipBLAS() { 
     f1 hipBLAS 
 }
+function hipBLASLt() { 
+    f1 hipBLASLt 
+}
 function hipSPARSE() { 
     f1 hipSPARSE 
 }
