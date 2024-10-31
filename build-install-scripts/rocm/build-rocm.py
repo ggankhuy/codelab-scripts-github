@@ -67,8 +67,8 @@ for i in sys.argv:
         if re.search("--dep=", i):
            depFile=i.split('=')[1].strip()
 
-        if re.search("--dagno=", i):
-           dagno=i.split('=')[1].strip()
+        if re.search("--dagno", i):
+           dagno=1
 
         if re.search("--pyno=", i):
            build_py=i.split('=')[1].strip()
