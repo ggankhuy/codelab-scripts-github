@@ -176,6 +176,7 @@ function build_exit() {
     echo "Build took $((t2-t1)) seconds" 2>&1 | tee -a $LOG_SUMMARY
     echo -ne "$((t2-t1))," | tee -a $LOG_SUMMARY_CSV
     echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV
+    return $L_BUILD_RESULT
 }
 
 function setup_root_rocm_softlink () {
