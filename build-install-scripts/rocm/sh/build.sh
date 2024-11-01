@@ -110,7 +110,8 @@ else
             install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config rpm
           ;;
        "yum")
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel
+            # rocprof: rocm-llvm-devel, libdwarf-devel (not sure if this is needed).
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel
           ;;
        "yum")
             install_packages cmake 
@@ -120,8 +121,8 @@ else
         ;;    
     esac
     # hipBlastLT: joblib
-    # rocprofiler: lxml
-    install_pip_libs CppHeaderParser joblib lxml
+    # rocprofiler: lxml barectf LibDw
+    install_pip_libs CppHeaderParser joblib lxml barectf LibDw
 fi
 
 CONFIG_INSTALL_PREFIX="/opt/rocm"
@@ -239,7 +240,7 @@ function rocm_smi_lib () {
 }
 
 function rocprofiler() {
-    f3 rocprofiler
+    f6 rocprofiler
 }
 
 function rocr_debug_agent() {
@@ -677,6 +678,18 @@ function f4 () {
     make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; fi
     make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
+    popd
+    build_exit $CURR_BIULD
+}
+
+function f6() {
+    i=$1
+    CURR_BUILD=$i
+    pushd $ROCM_SRC_FOLDER/$i
+    pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    ./build.sh 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
     popd
     build_exit $CURR_BIULD
 }
