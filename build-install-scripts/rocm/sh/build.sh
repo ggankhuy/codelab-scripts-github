@@ -171,12 +171,10 @@ function f3 () {
     pushd $COMP_OLD
     mkdir build; cd build
     cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT="FAIL" ; fi
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT="FAIL" ; fi
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT="FAIL" ; fi
-    build_exit $i $BUILD_RESULT
 }
 
 function rocminfo()  {
@@ -746,11 +744,14 @@ function hip_tests() {
     build_entry $CURR_BUILD
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir -p build; cd build
+    BUILD_RESULT=$BUILD_RESULT_PASS
     cmake ../catch/  -DHIP_PLATFORM=amd
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make -j$(nproc) build_tests
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
-    popd
-    build_exit $CURR_BIULD
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    build_exit $CURR_BUILD $BUILD_RESULT
 }
 if [[ $CONFIG_BUILD_PY -eq 1 ]] ; then
     echo "Building and installing python..."
