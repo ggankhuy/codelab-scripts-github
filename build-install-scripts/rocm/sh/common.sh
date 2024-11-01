@@ -13,18 +13,18 @@ ERROR_ROCM_SRC_REPO_SYNC=302
 
 function print_single_bar() {
     local i
-    #set +x
+    set +x
     for i in {1..50} ; do echo -ne "-" ; done
     echo ""
-    #set -x
+    set -x
 }
 
 function print_double_bar() {
     local i
-    #set +x
+    set +x
     for i in {1..50} ; do echo -ne "=" ; done
     echo ""
-    #set -x
+    set -x
 }
 
 #   This function is also called by python code and parses its stdout, therefore
@@ -172,9 +172,21 @@ function build_exit() {
     t2=$SECONDS
     L_BUILD_ENTRY=$1
     L_BUILD_RESULT=$2
-    if [[ -z $L_BUILD_RESULT  ]] ; then L_BUILD_RESULT="UNKNOWN" ; fi
+    if [[ -z $L_BUILD_RESULT  ]] ; then L_BUILD_RESULT=2 ; fi
     echo "Build took $((t2-t1)) seconds" 2>&1 | tee -a $LOG_SUMMARY
     echo -ne "$((t2-t1))," | tee -a $LOG_SUMMARY_CSV
+    case "$L_BUILD_RESULT" in
+        0)
+       echo "PASS" | tee -a $LOG_SUMMARY_CSV
+            ;;
+        1)
+       echo "FAIL" | tee -a $LOG_SUMMARY_CSV
+            ;;
+        *)
+       echo "UNKNOWN" | tee -a $LOG_SUMMARY_CSV
+            ;;
+    esac
+
     echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV
     return $L_BUILD_RESULT
 }

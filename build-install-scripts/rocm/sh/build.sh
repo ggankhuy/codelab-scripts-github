@@ -1,4 +1,4 @@
-#set -x
+set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
@@ -11,6 +11,10 @@ CONFIG_BUILD_PACKAGE=0
 CONFIG_TEST_MODE=0
 CONFIG_INSTALL_PATH=""
 CONFIG_BYPASS_PACKAGES_INSTALL=0
+
+BUILD_RESULT_PASS=0
+BUILD_RESULT_FAIL=1
+BUILD_RESULT_UNKNOWN=2
 
 for var in "$@"
 do
@@ -161,7 +165,8 @@ function f3 () {
     CURR_BUILD=$i
     BUILD_TARGET=package
     pwd 
-    BUILD_RESULT="PASS"
+
+    BUILD_RESULT=$BUILD_RESULT_PASS
     #pushd $CURR_BUILD
     pushd $COMP_OLD
     mkdir build; cd build
