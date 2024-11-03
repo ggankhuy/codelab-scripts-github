@@ -463,13 +463,18 @@ function clr_old() {
     build_exit $CURR_BUILD $BUILD_RESULT 
 }
 
+# temporarily removing -i option as install.sh does not support allowerasing and -i causes allowerasing 
+# to be needed.
+
 function f1() {
     i=$1
     CURR_BUILD=$i
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
     pwd
-    ./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    BUILD_RESULT=0
+    ./install.sh -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     build_exit $CURR_BUILD $BUILD_RESULT
