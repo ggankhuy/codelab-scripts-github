@@ -4,7 +4,6 @@ HIP-Examples: hipAMD
 rocSOLVER: rocBLAS
 rocFFT: rocBLAS rocRAND
 ROCmValidationSuite: hipAMD rocBLAS
-ROCT-Thunk-Interface: 
 MIOpen: rocBLAS
 AMDMIGraphX: protobuf rocBLAS MIOpen
 hipBLAS: rocBLAS rocSOLVER

@@ -16,7 +16,7 @@ protobuf
 AMDMIGraphX
 rocBLAS
 MIOpen
-hipAMD
+#hipAMD - obsolete, replaced by clr.
 rocPRIM
 hipCUB
 rocThrust
