@@ -1,5 +1,5 @@
 rocBLAS: hipAMD
-hipAMD: COMGR
+#hipAMD: COMGR
 HIP-Examples: hipAMD
 rocSOLVER: rocBLAS
 rocFFT: rocBLAS rocRAND

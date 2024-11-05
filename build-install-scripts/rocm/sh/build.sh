@@ -423,11 +423,13 @@ function clr() {
     set -x
     CURR_BUILD=clr
     build_entry $CURR_BUILD
+    PWD=`pwd`
+    HIP_FOLDER=$ROCM_SRC_FOLDER/HIP
     cd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build
     pushd build
-    if [[ ! -d "../../HIP" ]] ; then echo "Fail: Unable to find DHIP_COMMON_DIR: ../../HIP:" >> $LOG_SUMMARY ; fi
-    cmake .. -DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=../../HIP
+    if [[ ! -d $HIP_FOLDER ]] ; then echo "Fail: Unable to find DHIP_COMMON_DIR: $HIP_FOLDER:" >> $LOG_SUMMARY ; fi
+    cmake .. -DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER
     make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
