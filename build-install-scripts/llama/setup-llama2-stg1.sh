@@ -49,14 +49,10 @@ do
             ;;
     esac
 done
-<<<<<<< HEAD
 
 for i in sudo tree git wget gfortran libomp which; do
     sudo yum install -y $i 
 done
-=======
-yum install sudo tree git wget -y
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 
 #setup  MINICONDA_SRC_DIR
 
