@@ -115,7 +115,8 @@ else
           ;;
        "yum")
             # rocprof: rocm-llvm-devel, libdwarf-devel (not sure if this is needed).
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel
+            # rocSolver: fmt-devel
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel
           ;;
        "yum")
             install_packages cmake 
@@ -493,10 +494,11 @@ function f2() {
     i=$1
     CURR_BUILD=$i
     build_entry $i
+    INSTALL_TARGET=package
     pushd $ROCM_SRC_FOLDER/$i
     mkdir build; cd build
     BUILD_RESULT=0
-    CXX=hipcc cmake -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
+    HIP_CXX_COMPILER=hipcc cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -516,6 +518,7 @@ function f2a() {
     build_entry $i
     pushd $ROCM_SRC_FOLDER/$i
     mkdir build; cd build
+    BUILD_RESULT=0
     rm -rf ./*
     CXX=hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
