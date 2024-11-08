@@ -527,7 +527,9 @@ function f2a() {
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
-
+function MIVisionX() {
+    f2a MIVisionX
+}
 function rocSOLVER() { 
     f1 rocSOLVER 
 }
