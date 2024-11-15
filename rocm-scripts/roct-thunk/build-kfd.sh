@@ -45,9 +45,11 @@ if [[ $CONFIG_BUILD_KFDTEST == 1 ]] ; then
     mkdir build
     cd build
 
-    #export LIBHSAKMT_PATH=/opt/rocm/lib64/libhsakmt.so
+    export LIBHSAKMT_PATH=/opt/rocm/lib64/libhsakmt.so
+    export LIBHSAKMT_PATH=libhsa
+    env | grep LIBHSAKMT
     CMAKE_PREFIX_PATH=/opt/rocm/lib/llvm/lib/cmake/llvm/ cmake $CMAKE_OPTS .. 2>&1  | tee $LOG_DIR/3.kfdtest.cmake.log &&
-    make -j16  2>&1  | tee $LOG_DIR/4.kfdtest.make.log
+    LIBHSAKMT_PATH=libhsa make -j16  2>&1  | tee $LOG_DIR/4.kfdtest.make.log
     popd
 fi
 popd

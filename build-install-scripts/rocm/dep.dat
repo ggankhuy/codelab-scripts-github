@@ -1,10 +1,10 @@
-rocBLAS: hipAMD
+#rocBLAS: clr
 #hipAMD: COMGR
 HIP-Examples: hipAMD
 rocSOLVER: rocBLAS
 rocFFT: rocBLAS rocRAND
 ROCmValidationSuite: hipAMD rocBLAS
-MIOpen: rocBLAS
+#MIOpen: rocBLAS
 AMDMIGraphX: protobuf rocBLAS MIOpen
 hipBLAS: rocBLAS rocSOLVER
 hipSPARSE: rocSPARSE

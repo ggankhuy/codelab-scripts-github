@@ -16,6 +16,9 @@ BUILD_RESULT_PASS=0
 BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
 
+CONFIG_BUILD_TARGET_GPU_ONLY=1
+TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+
 for var in "$@"
 do
     echo var: $var
@@ -298,9 +301,14 @@ function protobuf() {
     git checkout v3.16.0
     git submodule update --init --recursive
     mkdir build ; cd build
+
+    BUILD_RESULT=0
     cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+
     make -j`nproc` 
     make $INSTALL_TARGET    
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     cd ../..
     build_exit $CURR_BUILD $BUILD_RESULT
 }
@@ -313,6 +321,7 @@ function AMDMIGraphX() {
     pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
 
+    BUILD_RESULT=0
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -334,8 +343,11 @@ function rocBLAS() {
 
     # checkout tensile 
 
+    BUILD_RESULT=0
     pushd $ROCM_SRC_FOLDER/$i
     tensileTag=`cat ./tensile_tag.txt`
+
+    CONFIG_TENSILE_INSTALL_PIP=0
 
     if [[ $tensileTag ]] ; then
         if [[ $CONFIG_TENSILE_INSTALL_PIP -eq 1 ]] ; then
@@ -359,8 +371,6 @@ function rocBLAS() {
             popd
         fi
     fi
-    echo "rocBLAS build/install cmd:" 
-    echo ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
