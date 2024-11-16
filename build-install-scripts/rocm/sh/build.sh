@@ -16,10 +16,11 @@ BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
 
 CONFIG_BUILD_TARGET_GPU_ONLY=1
-
+TARGET_GFX=""
+TARGET_GFX_OPTION=""
 if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
     TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
-    TARGET_GFX_OPTION=" -a $TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION=" -a $TARGET_GFX"
 fi
     
 
@@ -489,7 +490,7 @@ function f1() {
     pushd $ROCM_SRC_FOLDER/$i
     pwd
     BUILD_RESULT=0
-    ./install.sh -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh $TARGET_GFX_OPTION -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
