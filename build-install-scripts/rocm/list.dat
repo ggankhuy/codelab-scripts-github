@@ -2,7 +2,7 @@
 llvm
 rocminfo
 MIOpenGEMM
-ROCm_Device_Lib
+#ROCm_Device_Lib (deprecated, part of llvm)
 ROCmValidationSuite
 ROCT-Thunk-Interface
 rocm_bandwidth_test

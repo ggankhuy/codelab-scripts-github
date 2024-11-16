@@ -1,4 +1,3 @@
-set -x
 echo "build.sh entered..."
 
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
@@ -17,7 +16,12 @@ BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
 
 CONFIG_BUILD_TARGET_GPU_ONLY=1
-TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+
+if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
+    TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+    TARGET_GFX_OPTION=" -a $TARGET_GFX"
+fi
+    
 
 for var in "$@"
 do
@@ -119,6 +123,7 @@ else
        "yum")
             # rocprof: rocm-llvm-devel, libdwarf-devel (not sure if this is needed).
             # rocSolver: fmt-devel
+            # rocblas: python3-joblib
             install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel
           ;;
        "yum")
@@ -371,7 +376,7 @@ function rocBLAS() {
             popd
         fi
     fi
-    ./install.sh $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh -a $TARGET_GFX $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     
@@ -431,7 +436,6 @@ function hipAMD() {
 }
 
 function clr() {
-    set -x
     CURR_BUILD=clr
     build_entry $CURR_BUILD
     PWD=`pwd`
@@ -448,7 +452,6 @@ function clr() {
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     build_exit $CURR_BUILD $BUILD_RESULT
-    set +x
 }
 function clr_old() {
     CURR_BUILD=clr
@@ -615,6 +618,7 @@ function rocRAND() {
 }
 
 function rccl() {
+    TARGET_GFX_OPTION=' -l'
     f5 rccl
 }
 function f5() {
@@ -628,7 +632,7 @@ function f5() {
     if [[ $CURR_BUILD == "rocRAND" ]] ; then
         ./install -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     else
-        ./install.sh -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install.sh $TARGET_GFX_OPTION -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
