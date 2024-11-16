@@ -224,6 +224,7 @@ function composable_kernel() {
 
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build ; cd build
+    BUILD_RESULT=0
     TARGET_GFX_OPTION=" -D GPU_TARGETS=$TARGET_GFX"
     cmake $TARGET_GFX_OPTION -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D CMAKE_BUILD_TYPE=Release .. 2>&1 | \
         tee $LOG_DIR/$CURR_BUILD.log
