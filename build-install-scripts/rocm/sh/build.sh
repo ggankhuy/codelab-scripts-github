@@ -125,7 +125,8 @@ else
             # rocprof: rocm-llvm-devel, libdwarf-devel (not sure if this is needed).
             # rocSolver: fmt-devel
             # rocblas: python3-joblib
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel
+            # MIOpenGEMM: yaml-cpp
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel yaml-cpp
           ;;
        "yum")
             install_packages cmake 
