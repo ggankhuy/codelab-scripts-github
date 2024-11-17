@@ -622,86 +622,13 @@ function MIOpen() {
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
-function hipAMD() {
-    CURR_BUILD=hipamd
-    build_entry $CURR_BUILD
-    cd $ROCM_SRC_FOLDER/$CURR_BUILD
-    mkdir build ; cd build
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd ../..
-    export HIPAMD_DIR="$(readlink -f hipamd)"
-    export HIP_DIR="$(readlink -f hip)"
-    export ROCclr_DIR="$(readlink -f ROCclr)"
-    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
-    echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
-    popd
-    sudo ln -s $ROCM_SRC_FOLDER/HIP $ROCM_SRC_FOLDER/hip
-    #cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" -DCMAKE_INSTALL_P$
-    cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" .. 2>&1 | tee $LOG$
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
 function clr() {
     HIP_FOLDER=$ROCM_SRC_FOLDER/HIP
     f0 clr cmake  "params=-DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER"
 }
-function clr_0() {
-    CURR_BUILD=clr
-    build_entry $CURR_BUILD
-    PWD=`pwd`
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    cd $ROCM_SRC_FOLDER/$CURR_BUILD
-    mkdir build
-    pushd build
-    if [[ ! -d $HIP_FOLDER ]] ; then echo "Fail: Unable to find DHIP_COMMON_DIR: $HIP_FOLDER:" >> $LOG_SUMMARY ; fi
-    cmake .. -DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER
-    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    #make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    make -j$NPROC 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-function clr_old() {
-    CURR_BUILD=clr
-    build_entry $CURR_BUILD
-    cd $ROCM_SRC_FOLDER/$CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    mkdir build ; cd build
-
-    pushd ../..
-    export HIPAMD_DIR="$(readlink -f hipamd)"
-    export HIP_DIR="$(readlink -f hip)"
-    export ROCCLR_DIR="$(readlink -f ROCclr)"
-    export OPENCL_DIR="$(readlink -f ROCm-OpenCL-Runtime)"
-    echo HIPAMD_DIR: $HIPAMD_DIR, HIP_DIR: $HIP_DIR, ROCclr_DIR: $ROCclr_DIR, OPENCL_DIR: $OPENCL_DIR
-    popd
-
-    HIP_CLANG_PATH=$CONFIG_INSTALL_PREFIX/llvm/bin CXX=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ cmake .. \
-        -DCMAKE_CXX_COMPILER=$CONFIG_INSTALL_PREFIX/llvm/bin/clang++ \
-        -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX \
-        -DClang_DIR=$CONFIG_INSTALL_PREFIX/llvm/lib/cmake/clang/ \
-        -DCLR_BUILD_HIP=ON \
-        -DHIP_COMMON_DIR=$ROCM_SRC_FOLDER/HIP \
-        -DROCCLR_PATH=$ROCM_SRC_FOLDER/clr/rocclr \
-        -DHIPCC_BIN_DIR=$ROCM_SRC_FOLDER/HIPCC/bin 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    make -j`nproc`  | tee -a $LOG_DIR/$CURR_BUILD.log
-    build_exit $CURR_BUILD $BUILD_RESULT 
-}
 
 function rocPRIM() {
-    f5 rocPRIM "-icp"
+    f0 rocPRIM install "params=-icp"
 }
 function hipCUB() {
     f2 hipCUB
