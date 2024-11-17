@@ -15,12 +15,14 @@ BUILD_RESULT_PASS=0
 BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
 
-CONFIG_BUILD_TARGET_GPU_ONLY=0
+CONFIG_BUILD_TARGET_GPU_ONLY=1
 TARGET_GFX=""
-TARGET_GFX_OPTION=""
+TARGET_GFX_OPTION1=""
 if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
     TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
-    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION=" -a $TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION1=" -a $TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION2=" -D AMDGPU_TARGETS=$TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION3=" -D GPU_TARGETS=$TARGET_GFX"
 fi
     
 
@@ -225,8 +227,7 @@ function composable_kernel() {
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     mkdir build ; cd build
     BUILD_RESULT=0
-    TARGET_GFX_OPTION=" -D GPU_TARGETS=$TARGET_GFX"
-    cmake $TARGET_GFX_OPTION -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D CMAKE_BUILD_TYPE=Release .. 2>&1 | \
+    cmake $TARGET_GFX_OPTION3 -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D CMAKE_BUILD_TYPE=Release .. 2>&1 | \
         tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
@@ -389,7 +390,7 @@ function rocBLAS() {
             popd
         fi
     fi
-    ./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh $TARGET_GFX_OPTION1 $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     
@@ -509,7 +510,7 @@ function f1() {
     BUILD_RESULT=$BUILD_RESULT_PASS
 
     pushd $ROCM_SRC_FOLDER/$i
-    ./install.sh $TARGET_GFX_OPTION -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    ./install.sh $TARGET_GFX_OPTION1 -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
@@ -527,7 +528,7 @@ function f2() {
     i=$1
     CURR_BUILD=$i
     build_entry $i
-    INSTALL_TARGET=package
+    INSTALL_TARGET
     pushd $ROCM_SRC_FOLDER/$i
     mkdir build; cd build
     BUILD_RESULT=$BUILD_RESULT_PASS
@@ -639,15 +640,15 @@ function rocRAND() {
     #cmake -DHIP_COMMON_DIR=$HIP_DIR -DAMD_OPENCL_PATH=$OPENCL_DIR -DROCCLR_PATH=$ROCCLR_DIR -DCMAKE_PREFIX_PATH="/opt/rocm/" .. 2>&1 | tee $LOG$
 
     hip_DIR="$ROCM_SRC_FOLDER/hipamd"
-    CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    CXX=hipcc cmake -DBUILD_HIPRAND=OFF -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    #CXX=hipcc cmake -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    CXX=hipcc cmake $TARGET_GFX_OPTION2 -DBUILD_HIPRAND=OFF -DCMAKE_PREFIX_PATH="$ROCM_SRC_FOLDER/hipAMD/" -DBUILD_BENCHMARK=ON .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     make -j`nproc` install | tee $LOG_DIR/$CURR_BUILD.log
 #   f5 rocRAND
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
 function rccl() {
-    TARGET_GFX_OPTION=' -l'
+    TARGET_GFX_OPTION1=' -l'
     f5 rccl
 }
 function f5() {
@@ -663,7 +664,7 @@ function f5() {
     if [[ $CURR_BUILD == "rocRAND" ]] ; then
         ./install -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     else
-        ./install.sh $TARGET_GFX_OPTION -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install.sh $TARGET_GFX_OPTION1 -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.

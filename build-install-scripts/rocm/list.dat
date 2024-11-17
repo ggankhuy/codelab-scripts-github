@@ -2,7 +2,6 @@
 llvm
 rocminfo
 MIOpenGEMM
-#ROCm_Device_Lib (deprecated, part of llvm)
 ROCmValidationSuite
 ROCT-Thunk-Interface
 rocm_bandwidth_test
@@ -11,12 +10,10 @@ rocm_smi_lib
 rocprofiler
 rocr_debug_agent
 clang-ocl
-COMGR
 protobuf
 AMDMIGraphX
 rocBLAS
 MIOpen
-#hipAMD - obsolete, replaced by clr.
 rocPRIM
 hipCUB
 rocThrust
