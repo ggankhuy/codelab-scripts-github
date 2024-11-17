@@ -530,12 +530,13 @@ function f1() {
 }
 
 function rocPRIM() {
-    f2 rocPRIM
+    f5 rocPRIM "-icp"
 }
 function hipCUB() {
     f2 hipCUB
 }
 
+# cmake.. + make is used
 function f2() {
     i=$1
     CURR_BUILD=$i
@@ -663,20 +664,30 @@ function rccl() {
     TARGET_GFX_OPTION1=' -l'
     f5 rccl
 }
+
+# 1) ./install.sh -idt is used
+# p1 = rocm component to build
+# p2 = install parameters (install or install.sh)
+# 
 function f5() {
+    set -x
     CURR_BUILD=$1
     build_entry $CURR_BUILD
     BUILD_RESULT=$BUILD_RESULT_PASS
+    P2=$2
+
+    [[ -z $P2 ]] || INSTALL_PARAMS="-icd"  && INSTALL_PARAMS=$P2
 
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
     # this no longer working.
 
     CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
+    [[ $CURR_BUILD == "rocPRIM" ]] && CONFIG_INSTALL_PREFIX=""
 
-    if [[ $CURR_BUILD == "rocRAND" ]] ; then
-        ./install -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $CURR_BUILD == "rocRAND" ]] || [[ $CURR_BUILD == "rocPRIM" ]] ; then
+        ./install $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     else
-        ./install.sh $TARGET_GFX_OPTION1 -idt $CONFIG_INSTALL_PREFIX $INSTALL_SH_PACKAGE 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+        ./install.sh $TARGET_GFX_OPTION1 $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     fi
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
