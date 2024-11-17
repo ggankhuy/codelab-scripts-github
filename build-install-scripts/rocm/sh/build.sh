@@ -380,6 +380,10 @@ function rocBLAS() {
             popd
         fi
     fi
+
+    # temporary patch for bug, supposedly fixed in ROCm6.3 issue # 1519
+    sed -i 's/\"python3-joblib\"//g' ./install.sh
+
     ./install.sh -a $TARGET_GFX $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
