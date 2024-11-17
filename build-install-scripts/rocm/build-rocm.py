@@ -17,6 +17,7 @@ def dispHelp():
     print("----------build-rocm.py v1.0")
     print("Usage:")
     print("--help: display this help menu.")
+    print("--gfx: specify gfx arch: i.e. gfx90a, gfx908")
     print("--dagno: ignore dependency build, mostly used for CI TeamCity.")
     print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
     print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
@@ -54,6 +55,7 @@ build_cmake=''
 build_llvm=''
 build_package=''
 build_fast=''
+gfx=""
 component=None
 rocmVersionMajor=""
 rocmVersionMinor=""
@@ -66,6 +68,9 @@ for i in sys.argv:
     try:
         if re.search("--dep=", i):
            depFile=i.split('=')[1].strip()
+
+        if re.search("--gfx=", i):
+           gfx=i.split('=')[1].strip()
 
         if re.search("--dagno", i):
            dagno=1
@@ -381,11 +386,13 @@ for j in finalList:
             out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                     build_fast, build_package, build_llvm, build_py, build_cmake, \
                     'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
+                    'gfx=' + str(gfx), \
                     nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         else:
                 out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                 build_fast, build_package, '--llvmno', build_py, build_cmake, \
                 'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
+                'gfx=' + str(gfx), \
                 nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         print("out: ", out)
 

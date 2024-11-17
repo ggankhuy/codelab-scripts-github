@@ -18,11 +18,7 @@ BUILD_RESULT_UNKNOWN=2
 CONFIG_BUILD_TARGET_GPU_ONLY=0
 TARGET_GFX=""
 TARGET_GFX_OPTION=""
-if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
-    TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
-    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION=" -a $TARGET_GFX"
-fi
-    
+CONFIG_GFX_OVERRIDE=""
 
 for var in "$@"
 do
@@ -62,6 +58,11 @@ do
             CONFIG_BUILD_CMAKE=0
             ;;
 
+        *--gfx*)
+            echo "Will bypass cmake build."
+            CONFIG_GFX_OVERRIDE=`echo $var | cut -d '=' -f2`
+            ;;
+
         *--cmake*)
             echo "Will force cmake build."
             CONFIG_BUILD_CMAKE=1
@@ -98,6 +99,14 @@ done
 
 source sh/common.sh 
 source sh/prebuild.sh
+
+if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
+    TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+    [[ -z $CONFIG_GFX_OVERRIDE ]] || TARGET_GFX=$COFNIG_GFX_OVERRIDE
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION=" -a $TARGET_GFX"
+fi
+   
+
 ERROR_CODE=$?
 if [[ $ERROR_CODE -ne 0 ]] ; then 
     echo "Error during prebuild stage: error code: $ERROR_CODE" ;
