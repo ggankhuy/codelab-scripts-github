@@ -33,7 +33,6 @@ ROCmValidationSuite
 ROCR-Runtime
 roctracer
 ROCgdb
-rocm-cmake
 half
 clr
 hip-tests

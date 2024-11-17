@@ -31,7 +31,11 @@ do
             COMP=$comp
             COMP_OLD=$comp
             echo COMP old: $COMP
-            COMP=$(echo $COMP | sed "s/-/_/g")
+
+            # does not work well with rocm-cmake folder.
+            if [[ $COMP != "rocm-cmake" ]] ; then
+                COMP=$(echo $COMP | sed "s/-/_/g")
+            fi
             echo COMP new: $COMP
             ;;
 
@@ -444,28 +448,9 @@ function composable_kernel() {
         gfx=$TARGET_GFX_OPTION3 \
         params=" -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D BUILD_TYPE=Release"
 }
-function composable_kernel_0 () {
-    CURR_BUILD=composable_kernel    
-    BUILD_TARGET "examples tests ckProfiler"
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
 
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    mkdir build ; cd build
-    BUILD_RESULT=0
-    cmake $TARGET_GFX_OPTION3 -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D CMAKE_BUILD_TYPE=Release .. 2>&1 | \
-        tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function rocm_cmake() {
-    f4 rocm_cmake
+function rocm-cmake() {
+    f0 rocm-cmake cmake 
 }
 function ROCmValidationSuite() {
     f4 ROCmValidationSuite
