@@ -215,8 +215,6 @@ function f0() {
         install*)
             INSTALLER=$INSTALL_OPTION
             if [[ -f ./$INSTALLER ]] ; then
-                 echo ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-                 sleep 10
                  ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
             else
                 echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
@@ -794,7 +792,7 @@ function rocRAND() {
 
 function rccl() {
     TARGET_GFX_OPTION1=' -l'
-    f0 rccl "install.sh" "params=-cdp" "gfx=$TARGET_GFX_OPTION1"
+    f0 rccl "install.sh" "params=-dpt" "gfx=$TARGET_GFX_OPTION1"
 }
 
 function rocALUTION () {
