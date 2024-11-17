@@ -1,5 +1,5 @@
 echo "build.sh entered..."
-
+set -x
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
 
 CONFIG_BUILD_LLVM=1
@@ -10,7 +10,7 @@ CONFIG_BUILD_PACKAGE=0
 CONFIG_TEST_MODE=0
 CONFIG_INSTALL_PATH=""
 CONFIG_BYPASS_PACKAGES_INSTALL=0
-
+CONFIG_CLEAN_BUILD=1
 BUILD_RESULT_PASS=0
 BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
@@ -176,6 +176,7 @@ fi
 function f0() {
     set -x
     counter=0
+    PARAMS=""; BUILD_TARGET=""; GFX=""
     for var in "$@"
     do
         echo var: $var, counter: $counter
@@ -184,7 +185,7 @@ function f0() {
 
         case "$var" in
             params=*)
-                PARAMS=`echo $var | cut -d '=' -f2`
+                PARAMS=`echo $var | cut -d '=' -f2-`
                 ;;
             target=*)
                 BUILD_TARGET=`echo $var | cut -d '=' -f2`
@@ -203,7 +204,9 @@ function f0() {
     BUILD_RESULT=$BUILD_RESULT_PASS
     case "$INSTALL_OPTION" in
         cmake)
+            [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
             mkdir build ; pushd build
+            pwd
             HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
@@ -215,6 +218,7 @@ function f0() {
         install*)
             INSTALLER=$INSTALL_OPTION
             if [[ -f ./$INSTALLER ]] ; then
+                [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
                  ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
             else
                 echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
@@ -363,6 +367,23 @@ function f6() {
 # 
 
 function llvm() {
+    CONFIG_INSTALL_PREFIX_LLVM=/opt/rocm-$VERSION_MAJOR.$VERSION_MINOR/llvm
+    if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
+        echo "Installing llvm into non-standard location: $CONFIG_INSTALL_PATH..."
+        sleep 10
+        CONFIG_INSTALL_PREFIX_LLVM=$CONFIG_INSTALL_PATH/llvm
+    fi
+
+    f0 llvm-project "cmake" \
+    "params= \
+        -G \"Unix Makefiles\" \
+        -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM \
+        -DCMAKE_BUILD_TYPE=Release"
+        -DLLVM_ENABLE_PROJECTS=\"clang;lld;lldb;clang-tools-extra;compiler-rt\"
+}
+
+# phasing out in favor of f0, once works, get rid of it.
+function llvm_0() {    
     CURR_BUILD=llvm-project
     build_entry $CURR_BUILD
     pushd $CURR_BUILD
@@ -376,7 +397,8 @@ function llvm() {
         CONFIG_INSTALL_PREFIX_LLVM=$CONFIG_INSTALL_PATH/llvm
     fi
     echo "cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM -DCMAKE_BUILD_TYPE=Release"
-    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX_LLVM -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_ENABLE_PROJECTS="clang;lld;lldb;clang-tools-extra;compiler-rt" ../llvm 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     make -j$NPROC 2>&1 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -388,11 +410,13 @@ function llvm() {
 # cmake .. + make
 
 function rocminfo()  {
-    f3 rocminfo
+    f0 rocminfo cmake "params=-DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX"
+#   f3 rocminfo
 }
 
 function MIOpenGEMM() {
-    f3 MIOpenGEMM
+    f0 MIOpenGEMM cmake
+#   f3 MIOpenGEMM
 }
 
 # obsolete, here only in case needed. 
@@ -416,6 +440,11 @@ function ROCm_Device_Lib() {
 }
 
 function composable_kernel() {
+    f0 composable_kernel cmake \
+        gfx=$TARGET_GFX_OPTION3 \
+        params=" -D CMAKE_PREFIX_PATH=/opt/rocm -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc -D BUILD_TYPE=Release"
+}
+function composable_kernel_0 () {
     CURR_BUILD=composable_kernel    
     BUILD_TARGET "examples tests ckProfiler"
     build_entry $CURR_BUILD
@@ -791,8 +820,7 @@ function rocRAND() {
 }
 
 function rccl() {
-    TARGET_GFX_OPTION1=' -l'
-    f0 rccl "install.sh" "params=-dpt" "gfx=$TARGET_GFX_OPTION1"
+    f0 rccl "install.sh" "params=-dpt" "gfx=-l"
 }
 
 function rocALUTION () {
