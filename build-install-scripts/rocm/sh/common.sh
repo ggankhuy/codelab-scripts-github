@@ -16,7 +16,6 @@ function print_single_bar() {
     set +x
     for i in {1..50} ; do echo -ne "-" ; done
     echo ""
-    set -x
 }
 
 function print_double_bar() {
@@ -24,7 +23,6 @@ function print_double_bar() {
     set +x
     for i in {1..50} ; do echo -ne "=" ; done
     echo ""
-    set -x
 }
 
 #   This function is also called by python code and parses its stdout, therefore
@@ -84,7 +82,7 @@ function install_packages() {
         echo "installing $i..."
         case "$PKG_EXEC" in
         "yum")
-            $PKG_EXEC install -y $i
+            $PKG_EXEC install -y $i --nogpgcheck
             ;;
         "apt")
             $PKG_EXEC install -y $i

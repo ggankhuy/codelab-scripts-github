@@ -1,5 +1,4 @@
 echo "build.sh entered..."
-set -x
 #   Command line variables passed down from python script. Do not put any other declaration of variables here.
 
 CONFIG_BUILD_LLVM=1
@@ -136,14 +135,14 @@ else
        "apt")
             # vim-common: rocm5.5 rocr-runtime.
             # libnuma-dev: rocm5.5 roct-thunk-interface.
-            install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config rpm
+            install_packages cmake chrpath libpci-dev libstdc++-12-dev cmake make half vim-common libnuma-dev pkg-config rpm 
           ;;
        "yum")
             # rocprof: rocm-llvm-devel, libdwarf-devel (not sure if this is needed).
             # rocSolver: fmt-devel
             # rocblas: python3-joblib
             # MIOpenGEMM: yaml-cpp
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel yaml-cpp
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel yaml-cpp dpkg
           ;;
        "yum")
             install_packages cmake 
@@ -178,7 +177,6 @@ fi
 # cmake 
 
 function f0() {
-    set -x
     counter=0
     PARAMS=""; BUILD_TARGET=""; GFX=""
     for var in "$@"
@@ -232,7 +230,6 @@ function f0() {
         *)
             echo "Warning : Unknown install option: INSTALL_OPTION: $INSTALL_OPTION"
     esac
-    set +x
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
@@ -251,7 +248,6 @@ function f1() {
 }
 
 function f5() {
-    set -x
     CURR_BUILD=$1
     build_entry $CURR_BUILD
     BUILD_RESULT=$BUILD_RESULT_PASS
@@ -453,7 +449,7 @@ function rocm-cmake() {
     f0 rocm-cmake cmake 
 }
 function ROCmValidationSuite() {
-    f4 ROCmValidationSuite
+    f0 ROCmValidationSuite cmake
 }
 
 function ROCT_Thunk_Interface() {
@@ -567,47 +563,35 @@ function AMDMIGraphX() {
 }
 
 function rocBLAS() {
-    i=rocBLAS
-    CURR_BUILD=$i
-    build_entry $i
 
     # checkout tensile 
 
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    pushd $ROCM_SRC_FOLDER/$i
-    tensileTag=`cat ./tensile_tag.txt`
-
-    CONFIG_TENSILE_INSTALL_PIP=0
+    tensileTag=`cat $ROCM_SRC_FOLDER/$i/tensile_tag.txt`
+    [[ ! -z $tensile_tag ]] || BUILD_RESULT=$BUILD_RESULT_FAIL
+    return $BUILD_RESULT_FAIL
 
     if [[ $tensileTag ]] ; then
-        if [[ $CONFIG_TENSILE_INSTALL_PIP -eq 1 ]] ; then
-            pushd ..
-            mkdir Tensile
-            python3 -m pip install git+https://github.com/ROCmSoftwarePlatform/Tensile.git@5aec08937473b27865fa969bb38a83bcf9463c2b -t ./Tensile
-            FAST_BUILD_ROCBLAS_OPT=$FAST_BUILD_ROCBLAS_OPT" -t $ROCM_SRC_FOLDER/Tensile/Tensile "
-            popd
-        else
-            pushd ..
-            git clone https://github.com/ROCmSoftwarePlatform/Tensile.git
-            cd Tensile
-            git checkout $tensileTag
-            tensileTagOK=`git log | grep $tensileTag`
-            if [[ -z $tensileTagOK ]] ; then
-                echo "Warning: unable to checkout Tensile with commit tag: $tensileTag, will do a full build"
-            else 
-                FAST_BUILD_ROCBLAS_OPT=$FAST_BUILD_ROCBLAS_OPT" -t $ROCM_SRC_FOLDER/Tensile "
-            fi
-            cd ..
-            popd
+        [[ ! -z $CONFIG_CLEAN_BUILD ]] || rm -rf Tensile
+        git clone https://github.com/ROCmSoftwarePlatform/Tensile.git
+        pushd Tensile
+        git checkout $tensileTag
+        tensileTagOK=`git log | grep $tensileTag`
+        if [[ -z $tensileTagOK ]] ; then
+            echo "Warning: unable to checkout Tensile with commit tag: $tensileTag, will do a full build"
+        else 
+            FAST_BUILD_ROCBLAS_OPT=$FAST_BUILD_ROCBLAS_OPT" -t $ROCM_SRC_FOLDER/Tensile "
         fi
+        popd
     fi
     sed -i 's/\"python3-joblib\"//g' ./install.sh
-    ./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
+
+    f0 install.sh gfx=$TARGET_GFX_OPTION params="$FAST_BUILD_ROCBLAS_OPT -cd"
+    #./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
+    #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    #popd
     
-    $PKG_EXEC install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.$PKG_EXT 2>&1 | tee -a $CURR_BUILD.log
-    build_exit $CURR_BUILD $BUILD_RESULT
+    #$PKG_EXEC install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.$PKG_EXT 2>&1 | tee -a $CURR_BUILD.log
+    #build_exit $CURR_BUILD $BUILD_RESULT
 }
 
 function MIOpen() {
@@ -665,10 +649,13 @@ function hipAMD() {
 }
 
 function clr() {
+    HIP_FOLDER=$ROCM_SRC_FOLDER/HIP
+    f0 clr cmake  "params=-DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER"
+}
+function clr_0() {
     CURR_BUILD=clr
     build_entry $CURR_BUILD
     PWD=`pwd`
-    HIP_FOLDER=$ROCM_SRC_FOLDER/HIP
     BUILD_RESULT=$BUILD_RESULT_PASS
 
     cd $ROCM_SRC_FOLDER/$CURR_BUILD
