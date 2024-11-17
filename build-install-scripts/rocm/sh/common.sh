@@ -164,7 +164,7 @@ function build_entry () {
     print_double_bar | tee -a $LOG_SUMMARY
     echo "Building entry: $L_CURR_BUILD" 2>&1 | tee -a $LOG_SUMMARY
     echo -ne "$L_CURR_BUILD," | tee -a $LOG_SUMMARY_CSV
-    sleep 3
+    sleep 1
     print_double_bar
 }
 

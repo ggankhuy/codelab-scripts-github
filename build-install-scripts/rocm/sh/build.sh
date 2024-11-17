@@ -174,40 +174,37 @@ fi
 # cmake 
 
 function f0() {
-    CURR_BUILD=$1
-    build_entry $CURR_BUILD
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    INSTALL_OPTION=$2
+    set -x
     counter=0
-
-    #default cmake params
-    CMAKE_PARAMS=""
-
     for var in "$@"
     do
-        echo var: $var
-        if [[ $counter == 0 ]] || [[ $counter == 1 ]] ; then continue ; fi
+        echo var: $var, counter: $counter
+        if [[ $counter -eq 0 ]] ; then CURR_BUILD=$var ; counter=$((counter+1)) ; continue ; fi
+        if [[ $counter -eq 1 ]] ; then INSTALL_OPTION=$var ; counter=$((counter+1)) ; continue ; fi
+
         case "$var" in
-            *params=*)
+            params=*)
                 PARAMS=`echo $var | cut -d '=' -f2`
                 ;;
-            *target=*)
+            target=*)
                 BUILD_TARGET=`echo $var | cut -d '=' -f2`
                 ;;
-            *gfx=*)
+            gfx=*)
                 GFX=`echo $var | cut -d '=' -f2`
                 ;;
             *)
-                echo "Warning: Unknown cmdline parameter: $var"
+               [[ $counter == 1 ]] || [[ $counter == 0 ]] || echo "Warning: Unknown cmdline parameter: $var"
         esac
-        counter=$((counter))+1
+        counter=$((counter+1))
     done
 
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    BUILD_RESULT=$BUILD_RESULT_PASS
     case "$INSTALL_OPTION" in
         cmake)
             mkdir build ; pushd build
-            HIP_CXX_COMPILER=hipcc cmake $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -218,7 +215,9 @@ function f0() {
         install*)
             INSTALLER=$INSTALL_OPTION
             if [[ -f ./$INSTALLER ]] ; then
-                 ./$INSTALLER $gfx $params 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+                 echo ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+                 sleep 10
+                 ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
             else
                 echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
                 BUILD_RESULT=$BUILD_RESULT_FAIL
@@ -227,6 +226,7 @@ function f0() {
         *)
             echo "Warning : Unknown install option: INSTALL_OPTION: $INSTALL_OPTION"
     esac
+    set +x
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
