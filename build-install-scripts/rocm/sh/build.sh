@@ -18,13 +18,9 @@ BUILD_RESULT_UNKNOWN=2
 CONFIG_BUILD_TARGET_GPU_ONLY=1
 TARGET_GFX=""
 TARGET_GFX_OPTION1=""
-if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
-    TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
-    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION1=" -a $TARGET_GFX"
-    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION2=" -D AMDGPU_TARGETS=$TARGET_GFX"
-    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION3=" -D GPU_TARGETS=$TARGET_GFX"
-fi
-    
+TARGET_GFX_OPTION2=""
+TARGET_GFX_OPTION3=""
+CONFIG_GFX_OVERRIDE=""
 
 for var in "$@"
 do
@@ -64,6 +60,11 @@ do
             CONFIG_BUILD_CMAKE=0
             ;;
 
+        *--gfx*)
+            echo "Will bypass cmake build."
+            CONFIG_GFX_OVERRIDE=`echo $var | cut -d '=' -f2`
+            ;;
+
         *--cmake*)
             echo "Will force cmake build."
             CONFIG_BUILD_CMAKE=1
@@ -100,6 +101,16 @@ done
 
 source sh/common.sh 
 source sh/prebuild.sh
+
+if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
+     TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+    [[ -z $CONFIG_GFX_OVERRIDE ]] || TARGET_GFX=$COFNIG_GFX_OVERRIDE
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION1=" -a $TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION2=" -D AMDGPU_TARGETS=$TARGET_GFX"
+    [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION3=" -D GPU_TARGETS=$TARGET_GFX"
+fi
+
+
 ERROR_CODE=$?
 if [[ $ERROR_CODE -ne 0 ]] ; then 
     echo "Error during prebuild stage: error code: $ERROR_CODE" ;
@@ -390,7 +401,8 @@ function rocBLAS() {
             popd
         fi
     fi
-    ./install.sh $TARGET_GFX_OPTION1 $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
+    sed -i 's/\"python3-joblib\"//g' ./install.sh
+    ./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     
