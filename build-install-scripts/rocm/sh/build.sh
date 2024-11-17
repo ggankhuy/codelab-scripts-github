@@ -84,7 +84,7 @@ do
             echo "Will create package whenever possible."
             CONFIG_BUILD_PACKAGE=1
             ;;
-        *--nopkg*)
+        *--pkgno*)
             echo "Will create package whenever possible."
             CONFIG_BYPASS_PACKAGES_INSTALL=1
             ;;
@@ -161,6 +161,208 @@ if [[ ! -z $CONFIG_INSTALL_PATH ]] ; then
     sleep 1
 fi
 
+# temporarily removing -i option as install.sh does not support allowerasing and -i causes allowerasing 
+# to be needed.
+
+# p1 - rocm component
+# p2 - cmake or install or install.sh
+# p3 and on
+#   params=parameters for p2.
+#   gfx=target gpu
+#   target=build target for make.
+
+# cmake 
+
+function f0() {
+    CURR_BUILD=$1
+    build_entry $CURR_BUILD
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    BUILD_RESULT=$BUILD_RESULT_PASS
+    INSTALL_OPTION=$2
+    counter=0
+
+    #default cmake params
+    CMAKE_PARAMS=""
+
+    for var in "$@"
+    do
+        echo var: $var
+        if [[ $counter == 0 ]] || [[ $counter == 1 ]] ; then continue ; fi
+        case "$var" in
+            *params=*)
+                PARAMS=`echo $var | cut -d '=' -f2`
+                ;;
+            *target=*)
+                BUILD_TARGET=`echo $var | cut -d '=' -f2`
+                ;;
+            *gfx=*)
+                GFX=`echo $var | cut -d '=' -f2`
+                ;;
+            *)
+                echo "Warning: Unknown cmdline parameter: $var"
+        esac
+        counter=$((counter))+1
+    done
+
+    case "$INSTALL_OPTION" in
+        cmake)
+            mkdir build ; pushd build
+            HIP_CXX_COMPILER=hipcc cmake $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+            make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+            if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+            make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+            if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+            popd
+            ;;        
+        install*)
+            INSTALLER=$INSTALL_OPTION
+            if [[ -f ./$INSTALLER ]] ; then
+                 ./$INSTALLER $gfx $params 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+            else
+                echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
+                BUILD_RESULT=$BUILD_RESULT_FAIL
+            fi
+            ;;
+        *)
+            echo "Warning : Unknown install option: INSTALL_OPTION: $INSTALL_OPTION"
+    esac
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+function f1() {
+    i=$1
+    CURR_BUILD=$i
+    build_entry $i
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    pushd $ROCM_SRC_FOLDER/$i
+    ./install.sh $TARGET_GFX_OPTION1 -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+function f5() {
+    set -x
+    CURR_BUILD=$1
+    build_entry $CURR_BUILD
+    BUILD_RESULT=$BUILD_RESULT_PASS
+    P2=$2
+
+    [[ -z $P2 ]] || INSTALL_PARAMS="-icd"  && INSTALL_PARAMS=$P2
+
+    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    # this no longer working.
+
+    CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
+    [[ $CURR_BUILD == "rocPRIM" ]] && CONFIG_INSTALL_PREFIX=""
+
+    if [[ $CURR_BUILD == "rocRAND" ]] || [[ $CURR_BUILD == "rocPRIM" ]] ; then
+        ./install $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    else
+        ./install.sh $TARGET_GFX_OPTION1 $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    fi
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+
+
+# build helper functions
+# cmake.. + make is used
+function f2() {
+    i=$1
+    CURR_BUILD=$i
+    build_entry $i
+    INSTALL_TARGET
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build; cd build
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    HIP_CXX_COMPILER=hipcc cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+function f2a() {
+    i=$1
+    CURR_BUILD=$i
+    build_entry $i
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build; cd build
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    rm -rf ./*
+    CXX=hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+function f3 () {
+    i=$1
+    build_entry $i
+    CURR_BUILD=$i
+    BUILD_TARGET=package
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    pushd $COMP_OLD
+    mkdir build; cd build
+    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
+
+}
+function f4 () {
+    i=$1
+    CURR_BUILD=$i
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    pushd $ROCM_SRC_FOLDER/$i
+    mkdir build ; cd build
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+    make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
+    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+function f6() {
+    i=$1
+    CURR_BUILD=$i
+    BUILD_RESULT=$BUILD_RESULT_PASS
+
+    pushd $ROCM_SRC_FOLDER/$i
+    pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
+    ./build.sh 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
+    popd
+    build_exit $CURR_BUILD $BUILD_RESULT
+}
+
+# 1) ./install.sh -idt is used
+# p1 = rocm component to build
+# p2 = install parameters (install or install.sh)
+# 
 
 function llvm() {
     CURR_BUILD=llvm-project
@@ -185,21 +387,7 @@ function llvm() {
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
-function f3 () {
-    i=$1
-    build_entry $i
-    CURR_BUILD=$i
-    BUILD_TARGET=package
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $COMP_OLD
-    mkdir build; cd build
-    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-}
+# cmake .. + make
 
 function rocminfo()  {
     f3 rocminfo
@@ -512,23 +700,6 @@ function clr_old() {
     build_exit $CURR_BUILD $BUILD_RESULT 
 }
 
-# temporarily removing -i option as install.sh does not support allowerasing and -i causes allowerasing 
-# to be needed.
-
-function f1() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    ./install.sh $TARGET_GFX_OPTION1 -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
 function rocPRIM() {
     f5 rocPRIM "-icp"
 }
@@ -536,47 +707,8 @@ function hipCUB() {
     f2 hipCUB
 }
 
-# cmake.. + make is used
-function f2() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    INSTALL_TARGET
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build; cd build
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    HIP_CXX_COMPILER=hipcc cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
 function rocThrust() {
     f2a rocThrust
-}
-
-function f2a() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build; cd build
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    rm -rf ./*
-    CXX=hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
 }
 
 function MIVisionX() {
@@ -662,41 +794,7 @@ function rocRAND() {
 
 function rccl() {
     TARGET_GFX_OPTION1=' -l'
-    f5 rccl
-}
-
-# 1) ./install.sh -idt is used
-# p1 = rocm component to build
-# p2 = install parameters (install or install.sh)
-# 
-function f5() {
-    set -x
-    CURR_BUILD=$1
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    P2=$2
-
-    [[ -z $P2 ]] || INSTALL_PARAMS="-icd"  && INSTALL_PARAMS=$P2
-
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    # this no longer working.
-
-    CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
-    [[ $CURR_BUILD == "rocPRIM" ]] && CONFIG_INSTALL_PREFIX=""
-
-    if [[ $CURR_BUILD == "rocRAND" ]] || [[ $CURR_BUILD == "rocPRIM" ]] ; then
-        ./install $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    else
-        ./install.sh $TARGET_GFX_OPTION1 $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    fi
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    # fixed install.sh by adding chrpath in yum. keep for a while and delete afterward.
-    #mkdir build ; cd build 
-    #CXX=/opt/rocm/bin/hipcc cmake .. 2>&1 | tee -a $CURR_BUILD
-    #make -j`nproc` install 2>&1 | tee -a $CURR_BUILD
-    #popd
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 rccl "install.sh" "params=-cdp" "gfx=$TARGET_GFX_OPTION1"
 }
 
 function rocALUTION () {
@@ -753,37 +851,6 @@ function ROCm_OpenCL_Runtime() {
 
 function ROCmValidationSuite() {
     f4 ROCmValidationSuite
-}
-
-function f4 () {
-    i=$1
-    CURR_BUILD=$i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build ; cd build
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
-    cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
-    make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f6() {
-    i=$1
-    CURR_BUILD=$i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
-    ./build.sh 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
 }
 
 function ROCR_Runtime() {
@@ -882,3 +949,4 @@ else
     exit $ret
 fi
 popd
+

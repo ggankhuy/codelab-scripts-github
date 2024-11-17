@@ -30,7 +30,7 @@ def dispHelp():
     print("--cmake: Force build and install cmake.")
     print("--package: Build packages whenever possible.")
     print("--path: non-standard location other than default /opt/rocm")
-    print("--nopkg: bypass linux and pip packages installation")
+    print("--pkgno: bypass linux and pip packages installation")
     print("Example:")
     print("Build rocBLAS only: python3 build-rocm.py --component=rocBLAS")
     print("Build everything:   python3 build-rocm.py")
@@ -59,7 +59,7 @@ gfx=""
 component=None
 rocmVersionMajor=""
 rocmVersionMinor=""
-nopkg=""
+pkgno=""
 install_path=""
 dagno=""
 
@@ -108,8 +108,8 @@ for i in sys.argv:
         if re.search("--package",i):
             build_package="--package"
 
-        if re.search("--nopkg",i):
-            nopkg="--nopkg"
+        if re.search("--pkgno",i):
+            pkgno="--pkgno"
 
         if re.search("--fast",i):
             build_fast="--fast"
@@ -387,13 +387,13 @@ for j in finalList:
                     build_fast, build_package, build_llvm, build_py, build_cmake, \
                     'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
                     'gfx=' + str(gfx), \
-                    nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                    pkgno, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         else:
                 out = subprocess.call([shell,'./sh/build.sh', 'comp=' + str(j), \
                 build_fast, build_package, '--llvmno', build_py, build_cmake, \
                 'vermajor=' + str(rocmVersionMajor), '--path=' + str(install_path), \
                 'gfx=' + str(gfx), \
-                nopkg, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
+                pkgno, '--testmode=' + str(TEST_MODE), 'verminor=' + str(rocmVersionMinor)])
         print("out: ", out)
         # Commenting for now, for some reason it only stops at rocprim.
         #if out != 0:
