@@ -102,17 +102,21 @@ do
         
 done
 
-source sh/common.sh 
-source sh/prebuild.sh
-
+set -x
 if [[ $CONFIG_BUILD_TARGET_GPU_ONLY -eq 1 ]] ; then
      TARGET_GFX=`sudo rocminfo | grep gfx | head -1 | awk {'print $2'}`
+    if [[ -z $TARGET_GFX ]] ; then
+        echo "Warning: unable to set TARGET_GFX, rocminfo returned nothing!!"
+    fi
     [[ -z $CONFIG_GFX_OVERRIDE ]] || TARGET_GFX=$COFNIG_GFX_OVERRIDE
     [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION1=" -a $TARGET_GFX"
     [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION2=" -D AMDGPU_TARGETS=$TARGET_GFX"
     [[ -z $TARGET_GFX ]] || TARGET_GFX_OPTION3=" -D GPU_TARGETS=$TARGET_GFX"
 fi
+set +x
 
+source sh/common.sh 
+source sh/prebuild.sh
 
 ERROR_CODE=$?
 if [[ $ERROR_CODE -ne 0 ]] ; then 
@@ -227,6 +231,7 @@ function f0() {
             INSTALLER=$INSTALL_OPTION
             if [[ -f ./$INSTALLER ]] ; then
                 [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
+                 echo $ENV ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
                  $ENV ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
             else
                 echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
@@ -378,7 +383,7 @@ function rocBLAS() {
     fi
 
     if [[ $tensileTag ]] ; then
-        [[ ! -z $CONFIG_CLEAN_BUILD ]] || rm -rf Tensile
+        [[ ! -z $CONFIG_CLEAN_BUILD ]] || rm -rf $ROCM_SRC_FOLDER/Tensile
         git clone https://github.com/ROCmSoftwarePlatform/Tensile.git
         pushd Tensile
         git checkout $tensileTag
@@ -390,9 +395,9 @@ function rocBLAS() {
         fi
         popd
     fi
-    sed -i 's/\"python3-joblib\"//g' ./install.sh
+    sed -i 's/\"python3-joblib\"//g' $ROCM_SRC_FOLDER/rocBLAS/install.sh
 
-    f0 rocBLAS install.sh gfx=$TARGET_GFX_OPTION params="$FAST_BUILD_ROCBLAS_OPT -cd"
+    f0 rocBLAS install.sh gfx="$TARGET_GFX_OPTION1" params="$FAST_BUILD_ROCBLAS_OPT -cd"
     #./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     #popd
