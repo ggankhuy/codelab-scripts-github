@@ -369,12 +369,13 @@ function AMDMIGraphX() {
 }
 
 function rocBLAS() {
-
     # checkout tensile 
-
-    tensileTag=`cat $ROCM_SRC_FOLDER/$i/tensile_tag.txt`
-    [[ ! -z $tensile_tag ]] || BUILD_RESULT=$BUILD_RESULT_FAIL
-    return $BUILD_RESULT_FAIL
+    set -x
+    tensileTag=`cat $ROCM_SRC_FOLDER/rocBLAS/tensile_tag.txt`
+    if [[ -z $tensileTag ]] ; then
+        BUILD_RESULT=$BUILD_RESULT_FAIL 
+        return $BUILD_RESULT
+    fi
 
     if [[ $tensileTag ]] ; then
         [[ ! -z $CONFIG_CLEAN_BUILD ]] || rm -rf Tensile
@@ -391,13 +392,14 @@ function rocBLAS() {
     fi
     sed -i 's/\"python3-joblib\"//g' ./install.sh
 
-    f0 install.sh gfx=$TARGET_GFX_OPTION params="$FAST_BUILD_ROCBLAS_OPT -cd"
+    f0 rocBLAS install.sh gfx=$TARGET_GFX_OPTION params="$FAST_BUILD_ROCBLAS_OPT -cd"
     #./install.sh $TARGET_GFX_OPTION $FAST_BUILD_ROCBLAS_OPT | tee $LOG_DIR/$CURR_BUILD.log
     #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     #popd
     
     #$PKG_EXEC install -y $ROCM_SRC_FOLDER/rocBLAS/build/release/*.$PKG_EXT 2>&1 | tee -a $CURR_BUILD.log
     #build_exit $CURR_BUILD $BUILD_RESULT
+    set +x
 }
 
 function MIOpen() {
@@ -602,6 +604,7 @@ else
     echo "build.sh: building $COMP..."
     $COMP
     ret=$?
+    [[ $ret -eq 0 ]] || echo "Error executing $COMP..."
     exit $ret
 fi
 popd
