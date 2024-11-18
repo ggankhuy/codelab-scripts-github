@@ -465,22 +465,23 @@ function hipBLAS() {
     #f1 hipBLAS 
 }
 function hipBLASLt() { 
-    f0 hipBLASLt install "params=-cd"
+    f0 hipBLASLt "install.sh" "params=-cd" "gfx=$TARGET_GFX_OPTION1"
     #f1 hipBLASLt 
 }
 function hipSPARSE() { 
-    f0 hipSPARSE install "params=-cd"
+    f0 hipSPARSE "install.sh" "params=-cd"
     #f1 hipSPARSE 
 }
 function rocSPARSE() { 
-    f0 rocSPARSE install "params=-cd"
+    f0 rocSPARSE "install.sh" "params=-cd"
 #   f1 rocSPARSE 
 }
 function rocFFT() { 
     # this does not support -a
-    #f0 rocFFT install.sh "params=-cd"
-    f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2"
-#   f1 rocFFT 
+    f0 rocFFT install.sh "params=-cd"
+
+    # build still failing.
+    #f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2"
 }
 
 function HIP_Examples() {
