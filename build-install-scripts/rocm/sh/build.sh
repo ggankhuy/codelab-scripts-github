@@ -201,7 +201,7 @@ function f0() {
                 ENV=`echo $var | cut -d '=' -f2-`
                 ;;
             gfx=*)
-                GFX=`echo $var | cut -d '=' -f2`
+                GFX=`echo $var | cut -d '=' -f2-`
                 ;;
             *)
                [[ $counter == 1 ]] || [[ $counter == 0 ]] || echo "Warning: Unknown cmdline parameter: $var"
@@ -477,7 +477,9 @@ function rocSPARSE() {
 #   f1 rocSPARSE 
 }
 function rocFFT() { 
-    f0 rocFFT install "params=-cd"
+    # this does not support -a
+    #f0 rocFFT install.sh "params=-cd"
+    f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2"
 #   f1 rocFFT 
 }
 
