@@ -317,15 +317,15 @@ function ROCmValidationSuite() {
 }
 
 function ROCT_Thunk_Interface() {
-    f3 ROCT-Thunk-Interface cmake
+    f0 ROCT-Thunk-Interface cmake
 }
 
 function rocm_bandwidth_test() {
-    f3 rocm_bandwidth_test cmake
+    f0 rocm_bandwidth_test cmake
 }
 
 function rocm_smi_lib () {
-    f3 rocm_smi_lib cmake
+    f0 rocm_smi_lib cmake
 }
 
 function rocprofiler() {
@@ -336,11 +336,11 @@ function rocprofiler() {
 }
 
 function rocr_debug_agent() {
-    f3 rocprofiler cmake
+    f0 rocr_debug_agent cmake
 }
 
 function clang_ocl() {
-    f3 clang_ocl cmake
+    f0 clang_ocl cmake
 }
 
 function protobuf() {
@@ -448,7 +448,7 @@ function hipCUB() {
 }
 
 function rocThrust() {
-    f0 rocThrust cmake "env=CXX=hipcc"
+    f0 rocThrust cmake "env=CXX=hipcc" "gfx=$TARGET_GFX_OPTION3"
 #   f2a rocThrust
 }
 
@@ -457,7 +457,7 @@ function MIVisionX() {
 #   f2a MIVisionX
 }
 function rocSOLVER() { 
-    f0 rocSOLVER install "params=-cd"
+    f0 rocSOLVER "install.sh" "params=-cd" "gfx=$TARGET_GFX_OPTION1"
     #f1 rocSOLVER 
 }
 function hipBLAS() { 
