@@ -218,8 +218,9 @@ function f0() {
             mkdir build ; pushd build
             pwd
             export HIP_CXX_COMPILER=hipcc
-            echo $ENV cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
-            $ENV cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            export $ENV
+            echo cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -452,7 +453,7 @@ function rocThrust() {
 }
 
 function MIVisionX() {
-    f0 rocThrust MIVisionX "env=CXX=hipcc"
+    f0 MIVisionX cmake "env=CXX=hipcc"
 #   f2a MIVisionX
 }
 function rocSOLVER() { 

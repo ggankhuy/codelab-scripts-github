@@ -24,7 +24,6 @@ hipSPARSE
 rocSPARSE 
 rocFFT 
 HIP-Examples
-MIVisionX
 rocRAND
 rccl
 rocALUTION 

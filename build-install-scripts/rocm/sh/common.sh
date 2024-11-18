@@ -185,7 +185,7 @@ function build_exit() {
             ;;
     esac
 
-    echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV
+    echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV | tee -a $LOG_SUMMARY  
     return $L_BUILD_RESULT
 }
 
