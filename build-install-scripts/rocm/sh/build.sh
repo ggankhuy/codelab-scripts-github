@@ -523,7 +523,7 @@ function rccl() {
 }
 
 function rocALUTION () {
-    f0 cmake "params=-DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON"
+    f0 rocALUTION cmake "params=-DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON"
 }
 
 function ROCm_OpenCL_Runtime() {

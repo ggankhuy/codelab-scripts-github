@@ -18,7 +18,7 @@ def dispHelp():
     print("Usage:")
     print("--help: display this help menu.")
     print("--gfx: specify gfx arch: i.e. gfx90a, gfx908")
-    print("--dagno: ignore dependency build, mostly used for CI TeamCity.")
+    print("--depno: ignore dependency build, mostly used for CI TeamCity.")
     print("--component=<rocm_component_name>: build specific component. If not specified, builds every rocm component.")
     print("--dep=<fileName>: specifyc graph file. If not specified, uses default graph file graph.dat")
     print("--vermajor=<RocmVersion> force specify rocm version. i.e. 5.2")
@@ -61,7 +61,7 @@ rocmVersionMajor=""
 rocmVersionMinor=""
 pkgno=""
 install_path=""
-dagno=""
+depno=""
 
 for i in sys.argv:
     print("Processing ", i)
@@ -72,8 +72,8 @@ for i in sys.argv:
         if re.search("--gfx=", i):
            gfx=i.split('=')[1].strip()
 
-        if re.search("--dagno", i):
-           dagno=1
+        if re.search("--depno", i):
+           depno=1
 
         if re.search("--pyno=", i):
            build_py=i.split('=')[1].strip()
@@ -161,7 +161,7 @@ indent=""
 # Enable directed aclyctic graph implementation of depdendencies wip.
 
 CONFIG_DAG_ENABLE=1
-if dagno:
+if depno:
     CONFIG_DAG_ENABLE=0
 
 # determine version
