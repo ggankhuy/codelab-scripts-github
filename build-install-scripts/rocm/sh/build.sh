@@ -194,7 +194,7 @@ function f0() {
                 BUILD_TARGET=`echo $var | cut -d '=' -f2`
                 ;;
             env=*)
-                ENV=`echo $var | cut -d '=' -f2`
+                ENV=`echo $var | cut -d '=' -f2-`
                 ;;
             gfx=*)
                 GFX=`echo $var | cut -d '=' -f2`
