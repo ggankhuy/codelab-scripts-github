@@ -142,7 +142,8 @@ else
             # rocSolver: fmt-devel
             # rocblas: python3-joblib
             # MIOpenGEMM: yaml-cpp
-            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel yaml-cpp dpkg
+            # roctracer: rpm
+            install_packages cmake libstdc++-devel libpci-devel gcc g++ elfutils-libelf-devel numactl-devel libdrm-devel pciutils-devel vim-common libX11-devel mesa-libGL-devel libdwarf-devel rocm-llvm-devel fmt-devel yaml-cpp dpkg rpm
           ;;
        "yum")
             install_packages cmake 
@@ -178,7 +179,7 @@ fi
 
 function f0() {
     counter=0
-    PARAMS=""; BUILD_TARGET=""; GFX=""
+    PARAMS=""; BUILD_TARGET=""; GFX=""; ENV=""
     for var in "$@"
     do
         echo var: $var, counter: $counter
@@ -191,6 +192,9 @@ function f0() {
                 ;;
             target=*)
                 BUILD_TARGET=`echo $var | cut -d '=' -f2`
+                ;;
+            env=*)
+                ENV=`echo $var | cut -d '=' -f2`
                 ;;
             gfx=*)
                 GFX=`echo $var | cut -d '=' -f2`
@@ -209,8 +213,8 @@ function f0() {
             [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
             mkdir build ; pushd build
             pwd
-            echo HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
-            HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            echo $ENV HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            $ENV HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -218,11 +222,11 @@ function f0() {
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             popd
             ;;        
-        install*)
+        install*|configure*|build*)
             INSTALLER=$INSTALL_OPTION
             if [[ -f ./$INSTALLER ]] ; then
                 [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
-                 ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
+                 $ENV ./$INSTALLER $GFX $PARAMS 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
             else
                 echo "Error: Installer doesnot exist: INSTALLER: $INSTALLER"
                 BUILD_RESULT=$BUILD_RESULT_FAIL
@@ -231,134 +235,6 @@ function f0() {
         *)
             echo "Warning : Unknown install option: INSTALL_OPTION: $INSTALL_OPTION"
     esac
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f1() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    ./install.sh $TARGET_GFX_OPTION1 -cd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    #./install.sh -icd 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f5() {
-    CURR_BUILD=$1
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    P2=$2
-
-    [[ -z $P2 ]] || INSTALL_PARAMS="-icd"  && INSTALL_PARAMS=$P2
-
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    # this no longer working.
-
-    CONFIG_INSTALL_PREFIX="--prefix=/opt/rocm"
-    [[ $CURR_BUILD == "rocPRIM" ]] && CONFIG_INSTALL_PREFIX=""
-
-    if [[ $CURR_BUILD == "rocRAND" ]] || [[ $CURR_BUILD == "rocPRIM" ]] ; then
-        ./install $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    else
-        ./install.sh $TARGET_GFX_OPTION1 $INSTALL_PARAMS $CONFIG_INSTALL_PREFIX  2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    fi
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-
-
-# build helper functions
-# cmake.. + make is used
-function f2() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    INSTALL_TARGET
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build; cd build
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    HIP_CXX_COMPILER=hipcc cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_BENCHMARK=on .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f2a() {
-    i=$1
-    CURR_BUILD=$i
-    build_entry $i
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build; cd build
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    rm -rf ./*
-    CXX=hipcc cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f3 () {
-    i=$1
-    build_entry $i
-    CURR_BUILD=$i
-    BUILD_TARGET=package
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $COMP_OLD
-    mkdir build; cd build
-    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_INSTALL_PREFIX=$CONFIG_INSTALL_PREFIX .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-
-}
-function f4 () {
-    i=$1
-    CURR_BUILD=$i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build ; cd build
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
-    cmake ..  2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
-    make -j`nproc` | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make install | tee -a $LOG_DIR/$CURR_BUILD-3.log
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function f6() {
-    i=$1
-    CURR_BUILD=$i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-1" >> $LOG_SUMMARY ; fi
-    ./build.sh 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail-2" >> $LOG_SUMMARY ; fi
-    popd
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
@@ -420,26 +296,6 @@ function MIOpenGEMM() {
 #   f3 MIOpenGEMM
 }
 
-# obsolete, here only in case needed. 
-
-function ROCm_Device_Lib() {
-    setup_root_rocm_softlink
-    CURR_BUILD=ROCm-Device-Libs
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    DEVICE_LIBS=$ROCM_SRC_FOLDER/$CURR_BUILD
-    mkdir -p "$DEVICE_LIBS/build"
-    cd "$DEVICE_LIBS/build"
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" -DCMAKE_INSTALL_PREFIX=/opt/rocm/ .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    #cp *deb *rpm $CONFIG_BUILD_PKGS_LOC/
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
 function composable_kernel() {
     f0 composable_kernel cmake \
         gfx=$TARGET_GFX_OPTION3 \
@@ -454,113 +310,60 @@ function ROCmValidationSuite() {
 }
 
 function ROCT_Thunk_Interface() {
-    f3 ROCT-Thunk-Interface
+    f3 ROCT-Thunk-Interface cmake
 }
 
 function rocm_bandwidth_test() {
-    f3 rocm_bandwidth_test
-}
-
-function rocm_cmake () {
-    f3 rocm_cmake
+    f3 rocm_bandwidth_test cmake
 }
 
 function rocm_smi_lib () {
-    f3 rocm_smi_lib
+    f3 rocm_smi_lib cmake
 }
 
 function rocprofiler() {
-    f6 rocprofiler
+    pushd $ROCM_SRC_FOLDER/rocprofiler
+    pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
+    popd
+    f6 rocprofiler build.sh
 }
 
 function rocr_debug_agent() {
-    f3 rocprofiler
+    f3 rocprofiler cmake
 }
 
 function clang_ocl() {
-    f3 clang_ocl
-}
-
-function COMGR() {
-
-    CURR_BUILD=ROCm-CompilerSupport
-    build_entry $CURR_BUILD
-    LLVM_PROJECT=$ROCM_SRC_FOLDER/llvm-project
-    DEVICE_LIBS=$ROCM_SRC_FOLDER/ROCm-Device-Libs
-    COMGR=$ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr
-
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    mkdir -p "$DEVICE_LIBS/build"
-    pushd "$DEVICE_LIBS/build"
-    pwd
-
-    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
-    make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-
-    mkdir -p $ROCM_SRC_FOLDER/$CURR_BUILD/lib/comgr/build
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    cd lib/comgr/build
-    pwd
-    echo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$LLVM_PROJECT/build;$DEVICE_LIBS/build" .. | tee  -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET  2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    #make test 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    #if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f3 clang_ocl cmake
 }
 
 function protobuf() {
     CURR_BUILD=protobuf
-    build_entry $CURR_BUILD
-
     git clone https://github.com/protocolbuffers/protobuf.git
     cd $CURR_BUILD 
     git checkout v3.16.0
     git submodule update --init --recursive
-    mkdir build ; cd build
 
-    BUILD_RESULT=$BUILD_RESULT_PASS
-    cmake ../cmake -Dprotobuf_BUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_POSITION_INDEPENDENT_CODE=ON -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-
-    make -j`nproc` 
-    make $INSTALL_TARGET    
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    cd ../..
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 protobuf cmake "params=\
+        -Dprotobuf_BUILD_SHARED_LIBS=OFF \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_SYSCONFDIR=/etc \
+        -Dprotobuf_BUILD_TESTS=OFF \
+         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DCMAKE_BUILD_TYPE=Release"
 }
 
 function AMDMIGraphX() {
-    #./tools/install_prereqs.sh
-
     CURR_BUILD=AMDMIGraphX
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
+    #./tools/install_prereqs.sh
     # following commented lines replaced by install_prereqs.sh, hopefully, intest.
     pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz | tee  $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
 
-    BUILD_RESULT=$BUILD_RESULT_PASS
     pushd $ROCM_SRC_FOLDER/$CURR_BUILD
+    BUILD_RESULT=$BUILD_RESULT_PASS
     rbuild build -d depend --cxx=/opt/rocm/llvm/bin/clang++ | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    mkdir build; cd build
-    CXX=/opt/rocm/llvm/bin/clang++ cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+
+    f0 AMDMIGraphX cmake "env=CXX=/opt/rocm/llvm/bin/clang++"
+
 }
 
 function rocBLAS() {
@@ -631,36 +434,42 @@ function rocPRIM() {
     f0 rocPRIM install "params=-icp"
 }
 function hipCUB() {
-    f2 hipCUB
+    f0 hipCUB install "params=-pbdc"
 }
 
 function rocThrust() {
-    f2a rocThrust
+    f0 rocThrust cmake "env=CXX=hipcc"
+#   f2a rocThrust
 }
 
 function MIVisionX() {
-    f2a MIVisionX
+    f0 rocThrust MIVisionX "env=CXX=hipcc"
+#   f2a MIVisionX
 }
 function rocSOLVER() { 
-    f1 rocSOLVER 
+    f0 rocSOLVER install "params=-cd"
+    #f1 rocSOLVER 
 }
 function hipBLAS() { 
-    f1 hipBLAS 
+    f0 hipBLAS install "params=-cd"
+    #f1 hipBLAS 
 }
 function hipBLASLt() { 
-    f1 hipBLASLt 
+    f0 hipBLASLt install "params=-cd"
+    #f1 hipBLASLt 
 }
 function hipSPARSE() { 
-    f1 hipSPARSE 
+    f0 hipSPARSE install "params=-cd"
+    #f1 hipSPARSE 
 }
 function rocSPARSE() { 
-    f1 rocSPARSE 
+    f0 rocSPARSE install "params=-cd"
+#   f1 rocSPARSE 
 }
 function rocFFT() { 
-    f1 rocFFT 
+    f0 rocFFT install "params=-cd"
+#   f1 rocFFT 
 }
-
-#-DCMAKE_PREFIX_PATH
 
 function HIP_Examples() {
     CURR_BUILD=HIP-Examples
@@ -670,26 +479,6 @@ function HIP_Examples() {
 
     pushd $ROCM_SRC_FOLDER/$i
     ./test_all.sh | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
-}
-
-function MIVisionX() {
-    CURR_BUILD=MIVisionX
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-
-    mkdir build; cd build
-    #python MIVisionX-setup.py
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    cmake .. | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
     popd
     build_exit $CURR_BUILD $BUILD_RESULT
@@ -724,22 +513,7 @@ function rccl() {
 }
 
 function rocALUTION () {
-    i=rocALUTION
-    CURR_BUILD=$i
-    build_entry $i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i
-    mkdir build ; cd build
-
-    cmake .. -DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON | tee $LOG_DIR/$CURR_BUILD-1.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1" >> $LOG_SUMMARY ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 2" >> $LOG_SUMMARY ; fi
-    make install 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-3.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 3" >> $LOG_SUMMARY ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 cmake "params=-DROCM_PATH=$ROCM_INST_FOLDER -DSUPPORT_HIP=ON"
 }
 
 function ROCm_OpenCL_Runtime() {
@@ -775,54 +549,16 @@ function ROCm_OpenCL_Runtime() {
     build_exit $CURR_BUILD $BUILD_RESULT
 }
 
-function ROCmValidationSuite() {
-    f4 ROCmValidationSuite
-}
-
 function ROCR_Runtime() {
-    i=ROCR-Runtime
-    CURR_BUILD=$i
-    build_entry $i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$i/src
-    mkdir build; cd build
-    cmake -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DIMAGE_SUPPORT=OFF .. 2>&1 | tee $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make $INSTALL_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 ROCR_Runtime cmake "params= -DCMAKE_PREFIX_PATH=$CONFIG_INSTALL_PREFIX -DIMAGE_SUPPORT=OFF"
 }
 
 function roctracer() {
-    i=roctracer
-    CURR_BUILD=$i
-    build_entry $i
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    $PKG_EXEC install rpm -y
-    pushd $ROCM_SRC_FOLDER/$i
-    ./build.sh
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 roctracer build.sh
 }
 
 function ROCgdb() {
-    CURR_BUILD=ROCgdb
-    build_entry $CURR_BUILD
-    BUILD_RESULT=$BUILD_RESULT_PASS
-
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    ./configure
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$NPROC
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 ROCgdb configure
 }
 
 function hip_tests() {
@@ -832,17 +568,9 @@ function hip_tests() {
     CURR_BUILD=hip-tests
     BUILD_RESULT=$BUILD_RESULT_PASS
 
-    build_entry $CURR_BUILD
-    pushd $ROCM_SRC_FOLDER/$CURR_BUILD
-    mkdir -p build; cd build
-    cmake ../catch/  -DHIP_PLATFORM=amd
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    make -j$(nproc) build_tests
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    popd
-    if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
-    build_exit $CURR_BUILD $BUILD_RESULT
+    f0 cmake "params=../catch/  -DHIP_PLATFORM=amd" "target=build_tests"
 }
+
 if [[ $CONFIG_BUILD_PY -eq 1 ]] ; then
     echo "Building and installing python..."
     install_python
