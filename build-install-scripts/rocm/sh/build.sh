@@ -213,8 +213,9 @@ function f0() {
             [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
             mkdir build ; pushd build
             pwd
-            echo $ENV HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
-            $ENV HIP_CXX_COMPILER=hipcc cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            export HIP_CXX_COMPILER=hipcc
+            echo $ENV cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            $ENV cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -344,6 +345,7 @@ function protobuf() {
     git submodule update --init --recursive
 
     f0 protobuf cmake "params=\
+        ../cmake \
         -Dprotobuf_BUILD_SHARED_LIBS=OFF \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_SYSCONFDIR=/etc \
