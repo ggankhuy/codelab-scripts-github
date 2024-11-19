@@ -203,6 +203,12 @@ function f0() {
             gfx=*)
                 GFX=`echo $var | cut -d '=' -f2-`
                 ;;
+    
+            # only supports one level of directory i.e. release, if there is a value more than 
+            # one-level, build will likely fails i.e. release/doc.
+            builddir=*)
+                BUILDDIR=`echo $var | cut -d '=' -f2-`
+                ;;
             *)
                [[ $counter == 1 ]] || [[ $counter == 0 ]] || echo "Warning: Unknown cmdline parameter: $var"
         esac
@@ -216,11 +222,15 @@ function f0() {
         cmake)
             [[ -z $CONFIG_CLEAN_BUILD ]] || rm -rf build
             mkdir build ; pushd build
+            if [[ $BUILDDIR ]] ; then mkdir $BUILDDIR ; cd $BUILDDIR ; fi
             pwd
+            CMAKE_DIR=..
+            if [[ $BUILDDIR ]] ; then CMAKE_DIR=../.. ; fi
             export HIP_CXX_COMPILER=hipcc
             export $ENV
-            echo cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
-            cmake $GFX $PARAMS .. | tee $LOG_DIR/$CURR_BUILD.log
+            echo "env: "; env | egrep hipcc
+            echo cmake $GFX $PARAMS $CMAKE_DIR | tee $LOG_DIR/$CURR_BUILD.log
+            cmake $GFX $PARAMS $CMAKE_DIR | tee $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
             make -j$NPROC $BUILD_TARGET 2>&1 | tee -a $LOG_DIR/$CURR_BUILD.log
             if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail" >> $LOG_SUMMARY ; BUILD_RESULT=$BUILD_RESULT_FAIL ; fi
@@ -329,6 +339,7 @@ function rocm_smi_lib () {
 }
 
 function rocprofiler() {
+    CURR_BUILD=rocprofiler
     pushd $ROCM_SRC_FOLDER/rocprofiler
     pip3 install -r requirements.txt 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-1.log
     popd
@@ -415,12 +426,20 @@ function MIOpen() {
     BUILD_RESULT=$BUILD_RESULT_PASS
 
     pushd $i
-    cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD-1.log
+    cmake -P install_deps.cmake --minimum | tee $LOG_DIR/$CURR_BUILD_deps.log
     mkdir build; cd build
     rm -rf ./*
     echo "current dir: "  | tee $LOG_DIR/$CURR_BUILD-2.log
     pwd 2>&1 | tee $LOG_DIR/$CURR_BUILD-2.log
-    CXX=/opt/rocm/llvm/bin/clang++ cmake $CONFIG_MIOPEN_BUILD_ROCBLAS -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. 2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+
+    f0 cmake "env=CXX=/opt/rocm/llvm/bin/clang++" \
+        "params=-DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++"
+}
+function miopen_0 () {
+    CXX=/opt/rocm/llvm/bin/clang++ cmake $CONFIG_MIOPEN_BUILD_ROCBLAS \
+        -DMIOPEN_BACKEND=HIP -DMIOPEN_HIP_COMPILER=/opt/rocm/llvm/bin/clang++ .. \
+        2>&1 | tee -a $LOG_DIR/$CURR_BUILD-2.log
+
     if [[ $? -ne 0 ]] ; then echo "$CURR_BUILD fail 1." >> $LOG_SUMMARY ; fi
 
     echo "make -j$NPROC $BUILD_TARGET 2>&1" | tee $LOG_DIR/$CURR_BUILD-3.log
@@ -441,10 +460,18 @@ function clr() {
 }
 
 function rocPRIM() {
-    f0 rocPRIM install "params=-icp"
+    f0 rocPRIM cmake  "gfx=$TARGET_GFX_OPTION2" \
+        "params=-DBUILD_BENCHMARK=on -DBUILD_TEST=on --toolchain=toolchain-linux.cmake" \
+        "builddir=release" 
+    #f0 rocPRIM install "params=-icp"
 }
 function hipCUB() {
-    f0 hipCUB install "params=-pbdc"
+    f0 hipCUB cmake \
+        "gfx=$TARGET_GFX_OPTION3" \
+        "builddir=release" \
+        "params=-DBUILD_TEST=ON --toolchain=toolchain-linux.cmake"
+#   f0 hipCUB install "params=-pbdc"
+    
 }
 
 function rocThrust() {
@@ -478,10 +505,16 @@ function rocSPARSE() {
 }
 function rocFFT() { 
     # this does not support -a
-    f0 rocFFT install.sh "params=-cd"
+    #f0 rocFFT install.sh "params=-cd"
 
     # build still failing.
-    #f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2"
+    f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2" "builddir=release" \
+        "params=\
+        -DBUILD_FILE_REORG_BACKWARD_COMPATIBILITY=OFF \
+        -DCMAKE_BUILD_TYPE=Release -DBUILD_CLIENTS_SAMPLES=ON \
+        -DBUILD_CLIENTS_TESTS=ON -DBUILD_CLIENTS_BENCH=ON \
+        -DCPACK_SET_DESTDIR=OFF -DCMAKE_INSTALL_PREFIX=rocfft-install \
+        -DCPACK_PACKAGING_INSTALL_PREFIX=/opt/rocm"
 }
 
 function HIP_Examples() {
