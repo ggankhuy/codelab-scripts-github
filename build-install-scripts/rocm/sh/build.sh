@@ -14,7 +14,7 @@ BUILD_RESULT_PASS=0
 BUILD_RESULT_FAIL=1
 BUILD_RESULT_UNKNOWN=2
 
-CONFIG_BUILD_TARGET_GPU_ONLY=1
+CONFIG_BUILD_TARGET_GPU_ONLY=0
 TARGET_GFX=""
 TARGET_GFX_OPTION1=""
 TARGET_GFX_OPTION2=""
@@ -500,7 +500,7 @@ function hipSPARSE() {
     #f1 hipSPARSE 
 }
 function rocSPARSE() { 
-    f0 rocSPARSE "install.sh" "params=-cd"
+    f0 rocSPARSE "install.sh" "params=-c"
 #   f1 rocSPARSE 
 }
 function rocFFT() { 
@@ -510,6 +510,8 @@ function rocFFT() {
     # build still failing.
     f0 rocFFT cmake gfx="$TARGET_GFX_OPTION2" "builddir=release" \
         "params=\
+        -DCMAKE_CXX_COMPILER=/opt/rocm/bin/amdclang++" \
+        -DCMAKE_C_COMPILER=/opt/rocm/bin/amdclang" \
         -DBUILD_FILE_REORG_BACKWARD_COMPATIBILITY=OFF \
         -DCMAKE_BUILD_TYPE=Release -DBUILD_CLIENTS_SAMPLES=ON \
         -DBUILD_CLIENTS_TESTS=ON -DBUILD_CLIENTS_BENCH=ON \
