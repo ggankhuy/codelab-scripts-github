@@ -500,7 +500,7 @@ function hipSPARSE() {
     #f1 hipSPARSE 
 }
 function rocSPARSE() { 
-    f0 rocSPARSE "install.sh" "params=-c"
+    f0 rocSPARSE "install.sh" "params=-c" "gfx=$TARGET_GFX_OPTION1"
 #   f1 rocSPARSE 
 }
 function rocFFT() { 
