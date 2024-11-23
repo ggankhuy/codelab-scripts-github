@@ -175,18 +175,17 @@ function build_exit() {
     echo -ne "$((t2-t1))," | tee -a $LOG_SUMMARY_CSV
     case "$L_BUILD_RESULT" in
         0)
-       echo "PASS" | tee -a $LOG_SUMMARY_CSV
+       L_BUILD_RESULT_VERBAL="PASS"
             ;;
         1)
-       echo "FAIL" | tee -a $LOG_SUMMARY_CSV
+       L_BUILD_RESULT_VERBAL="FAIL"
             ;;
         *)
-       echo "UNKNOWN" | tee -a $LOG_SUMMARY_CSV
+       L_BUILD_RESULT_VERBAL="UNKNOWN"
             ;;
     esac
 
-    echo "," | tee -a $LOG_SUMMARY_CSV
-    echo "$L_BUILD_RESULT" | tee -a $LOG_SUMMARY_CSV | tee -a $LOG_SUMMARY  
+    echo "$L_BUILD_RESULT_VERBAL" | tee -a $LOG_SUMMARY | tee -a $LOG_SUMMARY_CSV
     return $L_BUILD_RESULT
 }
 
