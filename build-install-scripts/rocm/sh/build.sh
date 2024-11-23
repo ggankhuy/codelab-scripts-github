@@ -456,7 +456,7 @@ function miopen_0 () {
 
 function clr() {
     HIP_FOLDER=$ROCM_SRC_FOLDER/HIP
-    f0 clr cmake  "params=-DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER"
+    f0 clr cmake  "params=-DCLR_BUILD_HIP=ON -DHIP_COMMON_DIR=$HIP_FOLDER -DPython3_EXECUTABLE=/usr/bin/python3"
 }
 
 function rocPRIM() {
