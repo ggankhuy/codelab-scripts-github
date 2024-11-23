@@ -602,7 +602,7 @@ function ROCR_Runtime() {
 }
 
 function roctracer() {
-    f0 roctracer build.sh
+    f0 roctracer cmake "params= -DPython3_EXECUTABLE=/usr/bin/python3"
 }
 
 function ROCgdb() {
