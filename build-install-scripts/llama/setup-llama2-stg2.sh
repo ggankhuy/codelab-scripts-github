@@ -1,11 +1,10 @@
-# assumes rocm is installed.
+assumes rocm is installed.
 # assumes wheel are present in build/ folder: vllm, gradlib, triton, flash-attn.
 
 # changing the actual instalaltion folder to /home/miniconda3 because centos by default alloc-s 
 # only 70gb during installation.
 set -x 
 
-<<<<<<< HEAD
 CONFIG_DEBUG_TORCH=0
 CONFIG_DEBUG=0
 CONFIG_MAGMA_REBUILD=1 # unused for now.
@@ -25,15 +24,6 @@ function list_mkl_info() {
 
 [[ $? -ne 0 ]] && exit 1
 
-=======
-source ./lib_bash.sh
-[[ $? -ne 0 ]] && exit 1
-
-for i in gfortran libomp; do 
-    sudo yum install $i -y ; 
-done
-
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 SOFT_LINK=1
 
 # set up ulimit
@@ -55,7 +45,6 @@ if [[ ! -f $LLAMA_PREREQ_PKGS.tar ]]; then
     echo "$LLAMA_PREREQ_PKGS.tar does not exist." 
     exit 1
 fi
-<<<<<<< HEAD
 
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
@@ -72,53 +61,22 @@ pip3 install ./*.whl
 popd
 echo $torchwhl
 
-#pushd
-#for i in *tar ; do 
-#    echo "DBG: -------- Installing $i wheel package... ---------"
-#    dirname=`echo $i | awk '{print $1}' FS=. `
-#    mkdir $dirname ; pushd $dirname
-#    ln -s ../$i .
-#    tar -xvf ./$i 
-#    pip3 install ./*.whl
-#done
-#popd
+pushd
+for i in *tar ; do 
+    echo "DBG: -------- Installing $i wheel package... ---------"
+    dirname=`echo $i | awk '{print $1}' FS=. `
+    mkdir $dirname ; pushd $dirname
+    ln -s ../$i .
+    tar -xvf ./$i 
+    pip3 install ./*.whl
+done
+popd
 
 list_mkl_info 1
 conda install mkl-service mkl -y
 list_mkl_info 2
 pip3 install mkl 
 list_mkl_info 3
-=======
-tar -xvf  $LLAMA_PREREQ_PKGS.tar
-pushd $LLAMA_PREREQ_PKGS
-
-    # Force torch to be installed first. 
-    
-    torchwhl=`find . -name 'rocm_torch*.tar'`
-    dirname="torch"
-    echo $dirname
-    mkdir $dirname ; pushd $dirname
-    ln -s ../$torchwhl .
-    tar -xvf ./$torchwhl
-    pip3 install ./*.whl
-    popd
- 
-    echo $torchwhl
-
-    for i in *tar ; do 
-        dirname=`echo $i | awk '{print $1}' FS=. `
-        mkdir $dirname ; pushd $dirname
-        ln -s ../$i .
-        tar -xvf ./$i 
-        pip3 install ./*.whl
-        popd
-    done
-popd
-
-#conda install mkl-service -y
-pip3 install mkl 
-
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 tar -xf $LLAMA_PREREQ_PKGS.tar
 pwd
 ls -l 
@@ -127,23 +85,15 @@ pushd $LLAMA_PREREQ_PKGS
 mkdir log
 bash install.sh 2>&1 | sudo tee log/install.log
 popd
-<<<<<<< HEAD
 sudo ln -s `sudo find /opt -name clang++` /usr/bin/
 if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
 
 [[ $CONFIG_MAGMA_REBUILD -eq 1 ]] && rm -rf magma
-git clone https://bitbucket.org/icl/magma.git 
+#git clone https://bitbucket.org/icl/magma.git 
+git clone https://github.com/icl-utk-edu/magma.git
 pushd magma 
 find . -name libmagma.so
 [[ $? -eq 0 ]] || exit 1
-=======
-
-sudo ln -s `sudo find /opt -name clang++` /usr/bin/
-if [[ -z `which clang++` ]] ; then echo "Error: can not setup or find clang++ in default path" ; exit 1 ; fi
-
-git clone https://bitbucket.org/icl/magma.git 
-pushd magma 
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 
 BASHRC=~/.bashrc
 BASHRC_EXPORT=./export.md
@@ -151,16 +101,10 @@ ROCM_PATH=/opt/rocm/
 
 ls -l $BASHRC
 
-<<<<<<< HEAD
-=======
-PWD=`pwd`
-export_bashrc_delim_alt MAGMA_HOME $PWD
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
 
 # build robust mkl so path using pip paths.
 
-<<<<<<< HEAD
 # This did not work, so commented out for now.
 #MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
 #MKLROOT=$MKLROOT_1
@@ -189,25 +133,12 @@ PWD=`pwd`
 export_bashrc_delim_alt MAGMA_HOME $PWD
 export_bashrc MKLROOT $MKLROOT
 export_bashrc_delim_alt ROCM_PATH $ROCM_PATH
-=======
-MKLROOT_1=`pip3 show -f mkl | grep Location: | awk '{print $NF}'`
-MKLROOT=$MKLROOT_1
-#MKLROOT_2=`pip3 show -f mkl | grep libmkl_intel_lp64 | awk '{print $NF}'` 
-#MKLROOT_FULL=${MKLROOT_1}/${MKLROOT_2}
-#MKLROOT=`dirname $MKLROOT_FULL`
-for i in {0..2}; do
-    MKLROOT=`dirname $MKLROOT`
-done
-export_bashrc_delim_alt MKLROOT $MKLROOT
-
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo "LIBDIR += -L\$(MKLROOT)/lib" >> make.inc
 echo "LIB += -Wl,--enable-new-dtags -Wl,--rpath,\$(ROCM_PATH)/lib -Wl,--rpath,\$(MKLROOT)/lib -Wl,--rpath,\$(MAGMA_HOME)/lib" >> make.inc
 echo "DEVCCFLAGS += --amdgpu-target=gfx942" >> make.inc
 # build MAGMA
 make -f make.gen.hipMAGMA -j 
-<<<<<<< HEAD
 HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee ../log/env.$CONDA_DEFAULT_ENV.make.magma.log
 
 popd
@@ -224,26 +155,6 @@ else
         cp \
         $CONDA_PKG_CACHE_PATH/lib/$i.so.2 \
         $CONDA_PKG_CACHE_PATH/lib/$i.so.1
-=======
-HIPDIR=$ROCM_PATH GPU_TARGET=gfx942 make lib -j 2>&1 | tee make.magma.log
-
-popd
-
-pushd $LLAMA_PREREQ_PKGS
-
-if [[ $SOFT_LINK == 1 ]] ; then
-    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        ln -s \
-        $MKLROOT/lib/$i.so.2 \
-        $MKLROOT/lib/$i.so.1
-    done
-else
-    for i in  libmkl_intel_lp64 libmkl_gnu_thread libmkl_core; do
-        rm -rf $MKLROOT/lib/$i.so.1
-        cp \
-        $MKLROOT/lib/$i.so.2 \
-        $MKLROOT/lib/$i.so.1
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
     done
 fi
 
@@ -251,21 +162,9 @@ fi
 chmod 755 *sh
 echo "Use following cmd to run:"
 echo 'LD_LIBRARY_PATH=$MKLROOT/lib:$MAGMA_HOME/lib ./run_llama2_70b.sh'
-<<<<<<< HEAD
 
 echo "$MKLROOT/lib:$CONDA_PKG_CACHE_PATH/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
 echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
 ls -l /etc/ld.so.conf.d/
 
 export_bashrc_delim_alt LD_LIBRARY_PATH $MKLROOT/lib:$MAGMA_HOME/lib
-=======
-popd
-
-echo "$MKLROOT/lib" | sudo tee /etc/ld.so.conf.d/mkl.conf
-echo "$MAGMA_HOME/lib" | sudo tee /etc/ld.so.conf.d/magma.conf
-ls -l /etc/ld.so.conf.d/
-
-export_bashrc_delim_alt LD_LIBRARY_PATH $MKLROOT:$MAGMA_HOME/lib
->>>>>>> 0d653266ab71cfdb5b0a9c1b5d3e0e6224399362
-
-
