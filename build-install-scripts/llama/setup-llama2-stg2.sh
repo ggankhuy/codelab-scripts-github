@@ -1,4 +1,4 @@
-assumes rocm is installed.
+# assumes rocm is installed.
 # assumes wheel are present in build/ folder: vllm, gradlib, triton, flash-attn.
 
 # changing the actual instalaltion folder to /home/miniconda3 because centos by default alloc-s 
@@ -9,6 +9,10 @@ CONFIG_DEBUG_TORCH=0
 CONFIG_DEBUG=0
 CONFIG_MAGMA_REBUILD=1 # unused for now.
 source ./lib_bash.sh
+function CHECK_ERR() {
+    ret=$?
+    if [[ $ret -ne 0 ]] ; then echo "Error. Code: $ret" ; exit 1; fi
+}
 
 function list_mkl_info() {
     if [[ $CONFIG_DEBUG_TORCH -eq  1 ]] ; then
@@ -49,27 +53,39 @@ fi
 tar -xvf  $LLAMA_PREREQ_PKGS.tar
 pushd $LLAMA_PREREQ_PKGS
 
-# Force torch to be installed first. 
+    # Force torch to be installed first. 
 
-torchwhl=`find . -name 'rocm_torch*.tar' | head -1`
-dirname="torch"
-echo $dirname
-mkdir $dirname ; pushd $dirname
-ln -s ../$torchwhl .
-tar -xvf ./$torchwhl
-pip3 install ./*.whl
-popd
-echo $torchwhl
+    torchwhl_path=`find . -name 'rocm_torch*.tar' | head -1`
+    torchwhl=`basename $torchwhl_path`
+    dirname="torch"
+    echo $dirname
+    mkdir $dirname ; 
+        pushd $dirname
+        pwd
+        ln -s ../$torchwhl .
+        tar -xvf ./$torchwhl
+        pip3 install ./*.whl
+        CHECK_ERR
+        popd
+    echo $torchwhl
 
-pushd
-for i in *tar ; do 
-    echo "DBG: -------- Installing $i wheel package... ---------"
-    dirname=`echo $i | awk '{print $1}' FS=. `
-    mkdir $dirname ; pushd $dirname
-    ln -s ../$i .
-    tar -xvf ./$i 
-    pip3 install ./*.whl
-done
+    for i in *tar ; do 
+        set +x
+        echo "DBG: --------     Installing $i wheel package... ---------"
+        set -x
+        dirname=`echo $i | awk '{print $1}' FS=. `
+        if [[ $dirname == "rocm_torch" ]] ; then
+            continue
+        fi
+        mkdir $dirname ; 
+            pushd $dirname
+            pwd
+            ln -s ../$i .
+            tar -xvf ./$i 
+            pip3 install ./*.whl
+            CHECK_ERR
+            popd
+    done
 popd
 
 list_mkl_info 1
