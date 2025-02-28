@@ -58,6 +58,10 @@ done
 
 MINICONDA_SRC_DIR=/$HOME/miniconda3_src
 
+# this made it worse
+#if [[ $HOME == "/root" ]] ; then
+#    MINICONDA_SRC_DIR=/miniconda3_src
+#fi
 source ./lib_bash.sh
 [[ $? -ne 0 ]] && exit 1
 
@@ -97,6 +101,8 @@ export CONDA_ENV_NAME=$CONDA_ENV_NAME
 export_bashrc_delim_alt CONDA_ENV_NAME $CONDA_ENV_NAME
 
 $CONDA create --name  $CONDA_ENV_NAME python==3.9 -y
+# this made it even worse for root account so commenting.
+#$CONDA create --name  $CONDA_ENV_NAME python==3.12 -y
 $CONDA init
 
 sed -i "s/export env_name.*/export env_name=${p_env_name}/g" ~/.bashrc
@@ -104,5 +110,3 @@ sed -i "s/export env_name.*/export env_name=${p_env_name}/g" ~/.bashrc
 sed -i 's/conda activate.*//g' ~/.bashrc
 
 echo "conda activate $CONDA_ENV_NAME" | tee -a ~/.bashrc
-
-
